@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Elemap Examples - Square Rectangle</title>
+  <script src="/js/elemap.js"></script>
+  <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+  <div id="elemap-container"></div>
+  <script>
+    var config = {
+      type: 'rectangle'
+    }
+    var style = {
+      surface: {
+        inner: {
+          regular: {
+            borderRadius: '6px'
+          }
+        }
+      },
+      grid: {
+        outer: {
+          regular: {
+            borderRadius: '6px'
+          }
+        },
+        inner: {
+          regular: {
+            borderRadius: '4px' 
+          }
+        }
+      }
+    }
+  </script>
+  <script src="/js/elemap-init.js"></script>
+</body>
+</html>

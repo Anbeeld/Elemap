@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+}
+
+body > #tilted-container {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
