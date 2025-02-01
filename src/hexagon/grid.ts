@@ -123,11 +123,11 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     }
 
     return `` +
-    this.selector.tile + `{` +
+    this.selector.innerTile + `{` +
       `clip-path:path('${generateHexagonPath(this.orientation, this.hexagonSize.outer, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))}');` +
     `}` +
 
-    this.selector.outerTile + `:before{` +
+    this.selector.outerTile + `{` +
       `clip-path:path('${generateHexagonPath(this.orientation, hexagonSizeMiddle, 0)}');` +
     `}` +
 

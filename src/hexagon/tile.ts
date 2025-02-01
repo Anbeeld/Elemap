@@ -9,4 +9,8 @@ export default class HexagonTile extends AbstractTile {
     super(gridId, index, style);
     this._coords = coords;
   }
+  
+  public get selector() : string {
+    return `[data-elemap-r="${this._coords.r}"][data-elemap-q="${this._coords.q}"]`;
+  }
 }

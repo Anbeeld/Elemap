@@ -69,11 +69,6 @@ export abstract class AbstractMap {
 
   public get cssStatic() : string {
     return `` +
-    `.elemap-grid-${this.id}{` +
-      `width:max-content;` +
-      `overflow:hidden;` +
-    `}` +
-
     `.elemap-container-${this.id}{` +
       `width:max-content;` +
     `}` +

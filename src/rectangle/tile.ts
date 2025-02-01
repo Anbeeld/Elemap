@@ -9,4 +9,8 @@ export default class RectangleTile extends AbstractTile {
     super(gridId, index, style);
     this._coords = coords;
   }
+  
+  public get selector() : string {
+    return `[data-elemap-x="${this._coords.x}"][data-elemap-y="${this._coords.y}"]`;
+  }
 }
