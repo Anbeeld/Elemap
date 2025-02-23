@@ -186,10 +186,6 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       `z-index:170;` + 
     `}` +
 
-    this.selector.innerTile + `:before{` +
-      `z-index:180;` + 
-    `}` +
-
     this.selector.innerTile + `:after{` +
       `z-index:190;` + 
     `}` +
@@ -234,7 +230,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   }
 
   protected cssTileOuterMargin() : string {
-    return subtractCssLength('0px', divideCssLength(this.style.self.outer.regular.spacing.length, 2));
+    return divideCssLength(this.style.self.outer.regular.spacing.length, 2);
   }
   protected cssTileInnerMargin() : string {
     return this.style.self.outer.regular.spacing.length;
@@ -255,19 +251,11 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     `}` +
 
     this.selector.innerTile + `{` +
-      `width:${this.tileSize.outer.width};` + 
-      `height:${this.tileSize.outer.height};` + 
-      `margin:${this.cssTileOuterMargin()};` + 
-    `}` +
-
-    this.selector.innerTile + `:before{` + 
-      `content:"";` + 
-      `display:block;` + 
-      `position:absolute;` + 
       `width:${this.tileSize.inner.width};` + 
       `height:${this.tileSize.inner.height};` + 
+      `margin:${this.cssTileOuterMargin()};` +
       this.style.self.inner.regular.css + 
-      `margin:${this.cssTileInnerMargin()};` + 
+      this.style.tile.inner.regular.css + 
     `}` +
 
     this.selector.innerTile + `:hover:after{` + 
@@ -295,15 +283,12 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       `}`;
     }
 
-    css += `` + 
-    this.selector.innerTile + `${selector}:before{` + 
-      style.inner.regular.css + 
-    `}` + 
-    this.selector.innerTile + `${selector}:hover:before{` + 
-      style.inner.hover.css + 
-    `}` + 
+    css += `` +
+    this.selector.innerTile + `${selector}:hover{` + 
+      style.inner.hover.css +
+    `}` +
     this.selector.innerTile + `${selector}:hover:after{` + 
-      style.contour.hover.background.css + 
+      style.contour.hover.background.css +
     `}`;
 
     return css;

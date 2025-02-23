@@ -124,15 +124,11 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
 
     return `` +
     this.selector.innerTile + `{` +
-      `clip-path:path('${generateHexagonPath(this.orientation, this.hexagonSize.outer, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))}');` +
+      `clip-path:path('${generateHexagonPath(this.orientation, this.hexagonSize.inner, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))}');` +
     `}` +
 
     this.selector.outerTile + `{` +
       `clip-path:path('${generateHexagonPath(this.orientation, hexagonSizeMiddle, 0)}');` +
-    `}` +
-
-    this.selector.innerTile + `:before{` +
-      `clip-path:path('${generateHexagonPath(this.orientation, this.hexagonSize.inner, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius))}');` +
     `}` +
 
     this.selector.innerTile + `:hover:after{` +
