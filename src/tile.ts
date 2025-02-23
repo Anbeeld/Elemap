@@ -14,11 +14,8 @@ export abstract class AbstractTile {
   protected _style: TileStyleSet;
   public get style() : TileStyleSet { return this._style; }
 
-  protected elements?: {
-    outer?: HTMLElement,
-    inner: HTMLElement
-  }
-  public get element() : HTMLElement|undefined { return this.elements?.inner; }
+  protected _element?: HTMLElement;
+  public get element() : HTMLElement|undefined { return this._element; }
 
   protected _index: Index;
   public get index() : Index { return this._index; }
@@ -46,34 +43,18 @@ export abstract class AbstractTile {
   }
 
   protected initElements() : void {
-    if (!this.elements) {
-      this.elements = {
-        inner: document.createElement('div')
-      }
-    }
-    if (!this.elements.outer) {
-      let grid = getGridById(this.gridId);
-      if (grid && grid.style.tile !== this.style) {
-        this.elements.outer = document.createElement('div');
-      }
+    if (!this._element) {
+      this._element = document.createElement('div');
     }
   }
 
-  public render(outer: HTMLElement, inner: HTMLElement) : void {
+  public render(row: HTMLElement) : void {
     this.initElements();
     for (const [key, value] of Object.entries(this.coords)) {
-      if (this.elements!.outer) {
-        this.elements!.outer.dataset['elemap' + capitalizeFirstLetter(key)] = value.toString();
-      }
-      this.elements!.inner.dataset['elemap' + capitalizeFirstLetter(key)] = value.toString();
+      this._element!.dataset['elemap' + capitalizeFirstLetter(key)] = value.toString();
     }
-    if (this.elements!.outer) {
-      if (!outer.contains(this.elements!.outer)) {
-        outer.appendChild(this.elements!.outer);
-      }
-    }
-    if (!inner.contains(this.elements!.inner)) {
-      inner.appendChild(this.elements!.inner);
+    if (!row.contains(this._element!)) {
+      row.appendChild(this._element!);
     }
   }
 

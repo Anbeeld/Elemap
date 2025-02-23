@@ -1,8 +1,8 @@
 import { AbstractGrid } from "../grid.js";
 import RectangleTile from "./tile.js";
-import { Config, generateRectanglePath, indexToOrthogonalCoords, orthogonalCoordsToIndex, tileSize } from "../utils.js";
+import { Config, generateRectanglePath, indexToOrthogonalCoords, orthogonalCoordsToIndex, /* tileSize */ } from "../utils.js";
 import { GridStyleGroup } from "../style/set.js";
-import { cssValueToNumber, multiplyCssLength, subtractCssLength } from "../style/css/utils.js";
+import { cssValueToNumber, /* multiplyCssLength, subtractCssLength */ } from "../style/css/utils.js";
 
 export default class RectangleGrid extends AbstractGrid<RectangleTile> {
   constructor(mapId: number, config: Config, style: GridStyleGroup) {
@@ -28,15 +28,15 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
   -------- */
 
   protected override cssType() : string {
-    let tileSizeContour: tileSize = {
-      width: subtractCssLength(this.tileSize.outer.width, multiplyCssLength(this.style.tile.contour.hover.width.length, 2)),
-      height: subtractCssLength(this.tileSize.outer.height, multiplyCssLength(this.style.tile.contour.hover.width.length, 2))
-    }
+    // let tileSizeContour: tileSize = {
+    //   width: subtractCssLength(this.tileSize.outer.width, multiplyCssLength(this.style.tile.contour.hover.width.length, 2)),
+    //   height: subtractCssLength(this.tileSize.outer.height, multiplyCssLength(this.style.tile.contour.hover.width.length, 2))
+    // }
 
     return ``
-    + this.selector.innerTile + `:hover:after{` +
-      `clip-path:path(evenodd,'${generateRectanglePath(this.tileSize.outer, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))} ${generateRectanglePath(tileSizeContour, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius), {top: cssValueToNumber(this.style.tile.contour.hover.width.length), left: cssValueToNumber(this.style.tile.contour.hover.width.length)})}');` +
-    `}`;
+    // + this.selector.innerTile + `:hover:after{` +
+    //   `clip-path:path(evenodd,'${generateRectanglePath(this.tileSize.outer, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))} ${generateRectanglePath(tileSizeContour, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius), {top: cssValueToNumber(this.style.tile.contour.hover.width.length), left: cssValueToNumber(this.style.tile.contour.hover.width.length)})}');` +
+    // `}`;
   }
   
   protected override cssFrameClipPath() {

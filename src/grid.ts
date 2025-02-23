@@ -5,11 +5,10 @@ import { addCssLength, divideCssLength, multiplyCssLength, subtractCssLength } f
 import Raoi from 'raoi';
 
 interface GridElements {
-  outer: HTMLElement;
-  inner: HTMLElement;
-  outerRows: HTMLElement[];
-  innerRows: HTMLElement[];
+  grid: HTMLElement;
+  rows: HTMLElement[];
   frame: HTMLElement;
+  contour: HTMLElement;
 }
 
 export abstract class AbstractGrid<Tile extends AbstractTile> {
@@ -80,20 +79,17 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   protected initElements() : void {
     if (!this.elements) {
       this.elements = {
-        outer: document.createElement('div'),
-        inner: document.createElement('div'),
-        outerRows: [],
-        innerRows: [],
-        frame: document.createElement('div')
+        grid: document.createElement('div'),
+        rows: [],
+        frame: document.createElement('div'),
+        contour: document.createElement('div')
       }
 
       this.elements.frame.classList.add('elemap-grid-frame-' + this.mapId);
 
-      this.elements.outer.classList.add('elemap-grid-' + this.mapId);
-      this.elements.outer.classList.add('elemap-grid-outer-' + this.mapId);
+      this.elements.grid.classList.add('elemap-grid-' + this.mapId);
 
-      this.elements.inner.classList.add('elemap-grid-' + this.mapId);
-      this.elements.inner.classList.add('elemap-grid-inner-' + this.mapId);
+      this.elements.contour.classList.add('elemap-grid-contour-' + this.mapId);
     }
   }
 
@@ -103,22 +99,18 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     container.innerHTML = '';
 
     for (let i in this._tiles) {
-      if (typeof this.elements!.outerRows[i] === 'undefined') {
-        this.elements!.outerRows[i] = document.createElement('div');
-        this.elements!.outer.appendChild(this.elements!.outerRows[i]);
-      }
-      if (typeof this.elements!.innerRows[i] === 'undefined') {
-        this.elements!.innerRows[i] = document.createElement('div');
-        this.elements!.inner.appendChild(this.elements!.innerRows[i]);
+      if (typeof this.elements!.rows[i] === 'undefined') {
+        this.elements!.rows[i] = document.createElement('div');
+        this.elements!.grid.appendChild(this.elements!.rows[i]);
       }
       for (let j in this._tiles[i]) {
-        this._tiles[Number(i)]![Number(j)]!.render(this.elements!.outerRows[i], this.elements!.innerRows[i]);
+        this._tiles[Number(i)]![Number(j)]!.render(this.elements!.rows[i]);
       }
     }
 
     container.appendChild(this.elements!.frame);
-    container.appendChild(this.elements!.outer);
-    container.appendChild(this.elements!.inner);
+    container.appendChild(this.elements!.grid);
+    container.appendChild(this.elements!.contour);
   }
 
   /* --------
@@ -133,12 +125,15 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       `z-index:50;` + 
     `}` +
 
-
     this.selector.grid + `{` +
+      `position:relative;` +
+      `width:max-content;` +
+      `z-index:150;` +
       `overflow:hidden;` + 
-    `}` +
+    `}` + 
 
     this.selector.row + `{` +
+      `z-index:160;` + 
       `display:flex;` +
       `width:max-content;` +
       `position:relative;` +
@@ -146,51 +141,17 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     `}` +
 
     this.selector.tile + `{` +
+      `position:relative;` + 
+      `z-index:170;` + 
       `pointer-events:auto;` + 
       `float:left;` + // To collapse margins
     `}` +
 
-    this.selector.outerGrid + `{` +
-      `position:absolute;` + 
-      `z-index:100;` + 
-    `}` +
-
-    this.selector.outerRow + `{` +
-      `z-index:110;` + 
-    `}` +
-
-    this.selector.outerTile + `{` +
-    `position:absolute;` + 
-      `z-index:120;` + 
-    `}` +
-
-    this.selector.outerTile + `:before{` + 
-      `z-index:130;` + 
-    `}` +
-
-    this.selector.outerTile + `:after{` + 
-      `z-index:140;` + 
-    `}` +
-
-    this.selector.innerGrid + `{` +
-      `position:relative;` +
-      `width:max-content;` +
-      `z-index:150;` +
-    `}` + 
-    this.selector.innerRow + `{` +
-      `z-index:160;` + 
-    `}` +
-
-    this.selector.innerTile + `{` +
-      `position:relative;` + 
-      `z-index:170;` + 
-    `}` +
-
-    this.selector.innerTile + `:after{` +
+    this.selector.tile + `:after{` +
       `z-index:190;` + 
     `}` +
 
-    this.selector.innerTile + `>*{` +
+    this.selector.tile + `>*{` +
       `position:relative;` + 
       `z-index:200;` + 
     `}`;
@@ -213,17 +174,6 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       `padding: ${divideCssLength(this.style.self.outer.regular.spacing.length, 2)};` + 
     `}` +
 
-    this.selector.outerGrid + `{` +
-      `top: ${mapPadding.top};` + 
-      `right: ${mapPadding.right};` + 
-      `bottom: ${mapPadding.bottom};` + 
-      `left: ${mapPadding.left};` + 
-    `}` +
-
-    this.selector.outerRow + `{` +
-      `width: ${subtractCssLength(multiplyCssLength(this.tileSize.outer.width, this.size.width), multiplyCssLength(this.style.self.outer.regular.spacing.length, this.size.width))};` +
-    `}` +
-
     this.cssGrid() +
     this.cssType() +
     this.cssDeviatingTiles();
@@ -244,13 +194,15 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       `height:${subtractCssLength(this.tileSize.outer.height, this.style.self.outer.regular.spacing.length)};` +
     `}` +
 
-    this.selector.outerTile + `{` + 
+    this.selector.tile + `{` + 
       `width:${this.tileSizeMiddle.width};` + 
       `height:${this.tileSizeMiddle.height};` + 
       this.style.tile.outer.regular.css + 
     `}` +
 
-    this.selector.innerTile + `{` +
+    this.selector.tile + `:before{` +
+      `content:"";` + 
+      `display:block;` + 
       `width:${this.tileSize.inner.width};` + 
       `height:${this.tileSize.inner.height};` + 
       `margin:${this.cssTileOuterMargin()};` +
@@ -258,36 +210,36 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       this.style.tile.inner.regular.css + 
     `}` +
 
-    this.selector.innerTile + `:hover:after{` + 
-      `content:"";` + 
-      `display:block;` + 
-      `position:absolute;` + 
-      this.style.self.inner.regular.borderRadius.css + 
-      `top:0;` + 
-      `left:0;` + 
-      `width:${this.tileSize.outer.width};` + 
-      `height:${this.tileSize.outer.height};` + 
-    `}`
-
-    + this.cssTile(this.style.tile);
+    // this.selector.innerTile + `:hover:after{` + 
+    //   `content:"";` + 
+    //   `display:block;` + 
+    //   `position:absolute;` + 
+    //   this.style.self.inner.regular.borderRadius.css + 
+    //   `top:0;` + 
+    //   `left:0;` + 
+    //   `width:${this.tileSize.outer.width};` + 
+    //   `height:${this.tileSize.outer.height};` + 
+    // `}` +
+    
+    this.cssTile(this.style.tile);
   }
 
   protected cssTile(style: TileStyleSet, selector: string = '', index?: Index) : string {
     let css = ``;
+    index; // TODO
 
     if (style !== this.style.tile) {
       css += `` + 
-      this.selector.outerTile + `${selector}{` +
-        style.outer.regular.css + 
-        `left:${multiplyCssLength(this.tileSizeMiddle.width, index!.j)};` +
+      this.selector.tile + `${selector}{` +
+        style.outer.regular.css +
       `}`;
     }
 
     css += `` +
-    this.selector.innerTile + `${selector}:hover{` + 
+    this.selector.tile + `${selector}:before:hover{` + 
       style.inner.hover.css +
     `}` +
-    this.selector.innerTile + `${selector}:hover:after{` + 
+    this.selector.tile + `${selector}:hover:after{` + 
       style.contour.hover.background.css +
     `}`;
 
@@ -312,12 +264,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       grid: `.elemap-grid-${this.mapId}`,
       row: `.elemap-grid-${this.mapId}>div`,
       tile: `.elemap-grid-${this.mapId}>div>div`,
-      outerGrid: `.elemap-grid-outer-${this.mapId}`,
-      innerGrid: `.elemap-grid-inner-${this.mapId}`,
-      outerRow: `.elemap-grid-outer-${this.mapId}>div`,
-      innerRow: `.elemap-grid-inner-${this.mapId}>div`,
-      outerTile: `.elemap-grid-outer-${this.mapId}>div>div`,
-      innerTile: `.elemap-grid-inner-${this.mapId}>div>div`
+      contour: `.elemap-grid-contour-${this.mapId}`
     }
   }
 
