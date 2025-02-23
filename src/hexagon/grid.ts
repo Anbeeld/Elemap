@@ -1,6 +1,6 @@
 import { AbstractGrid } from "../grid.js";
 import HexagonTile from "./tile.js";
-import { Config, GridOrientation, generateHexagonPath, hexagonSizeRatio, hexagonSizeSet, /* hexagonSize, */ indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset } from "../utils.js";
+import { Config, GridOrientation, generateHexagonPath, hexagonSizeRatio, hexagonSizeSet, hexagonSize, indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset } from "../utils.js";
 import { GridStyleGroup } from "../style/set.js";
 import { cssValueToNumber, addCssLength, multiplyCssLength, divideCssLength, subtractCssLength } from "../style/css/utils.js";
 
@@ -115,28 +115,27 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
       short: divideCssLength(addCssLength(this.hexagonSize.outer.short, this.hexagonSize.inner.short), 2)
     }
 
-    // let hexagonSizeContourLong = subtractCssLength(this.hexagonSize.outer.long, multiplyCssLength(this.style.tile.contour.hover.width.length, 2));
-    // let hexagonSizeContour: hexagonSize = {
-    //   side: divideCssLength(hexagonSizeContourLong, 2),
-    //   long: hexagonSizeContourLong,
-    //   short: subtractCssLength(this.hexagonSize.outer.short, multiplyCssLength(this.style.tile.contour.hover.width.length, 2))
-    // }
+    let hexagonSizeContourLong = subtractCssLength(this.hexagonSize.outer.long, multiplyCssLength(this.style.tile.contour.hover.width.length, 2));
+    let hexagonSizeContour: hexagonSize = {
+      side: divideCssLength(hexagonSizeContourLong, 2),
+      long: hexagonSizeContourLong,
+      short: subtractCssLength(this.hexagonSize.outer.short, multiplyCssLength(this.style.tile.contour.hover.width.length, 2))
+    }
 
     return `` +
-    this.selector.tile + `{` +
-      `clip-path:path('${generateHexagonPath(this.orientation, hexagonSizeMiddle, 0)}');` +
-    `}` +
-
-    this.selector.tile + `:before{` +
+    this.selector.innerTile + `{` +
       `clip-path:path('${generateHexagonPath(this.orientation, this.hexagonSize.inner, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))}');` +
     `}` +
 
-    // this.selector.innerTile + `:hover:after{` +
-    //   `clip-path:path(evenodd,'${generateHexagonPath(this.orientation, this.hexagonSize.outer, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))} ${generateHexagonPath(this.orientation, hexagonSizeContour, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius), {top: cssValueToNumber(this.style.tile.contour.hover.width.length), left: cssValueToNumber(this.style.tile.contour.hover.width.length)})}');` +
-    // `}` +
-    
-    this.cssTileRecess() +
-    this.cssTileIntendation();
+    this.selector.outerTile + `{` +
+      `clip-path:path('${generateHexagonPath(this.orientation, hexagonSizeMiddle, 0)}');` +
+    `}` +
+
+    this.selector.innerTile + `:hover:after{` +
+      `clip-path:path(evenodd,'${generateHexagonPath(this.orientation, this.hexagonSize.outer, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))} ${generateHexagonPath(this.orientation, hexagonSizeContour, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius), {top: cssValueToNumber(this.style.tile.contour.hover.width.length), left: cssValueToNumber(this.style.tile.contour.hover.width.length)})}');` +
+    `}`
+    + this.cssTileRecess()
+    + this.cssTileIntendation();
   }
 
   /* NOTE: for pointy grids recess and intendation are made on rows, for flat grids on tiles because there are no columns in html */
