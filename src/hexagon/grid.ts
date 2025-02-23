@@ -96,8 +96,8 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
 
   protected override cssFrameClipPath() {
     let path = '';
-    let topPerTile: number = cssValueToNumber(this.tileSize.spaced.height) - cssValueToNumber(this.tileRecess.vertical) - cssValueToNumber(this.style.self.outer.regular.spacing.length);
-    let leftPerTile: number = cssValueToNumber(this.tileSize.spaced.width) - cssValueToNumber(this.tileRecess.horizontal) - cssValueToNumber(this.style.self.outer.regular.spacing.length);
+    let topPerTile: number = cssValueToNumber(this.tileSize.spaced.height) - cssValueToNumber(this.tileRecess.vertical) - cssValueToNumber(this._spacing);
+    let leftPerTile: number = cssValueToNumber(this.tileSize.spaced.width) - cssValueToNumber(this.tileRecess.horizontal) - cssValueToNumber(this._spacing);
     for (let i = 0; i < this._size.width; i++) {
       for (let j = 0; j < this._size.height; j++) {
         if (path !== '') {

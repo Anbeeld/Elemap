@@ -41,18 +41,22 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   protected _offset: GridOffset;
   public get offset() : GridOffset { return this._offset; }
 
+  protected get _spacing(): string {
+    return this.style.self.outer.regular.spacing.length;
+  }
+
   public get tileSize() : tileSizeSet {
     let inner = {
       width: this.style.self.inner.regular.width.length,
       height: this.style.self.inner.regular.height.length
     };
     let spaced = {
-      width: addCssLength(inner.width, multiplyCssLength(this.style.self.outer.regular.spacing.length, 2)),
-      height: addCssLength(inner.height, multiplyCssLength(this.style.self.outer.regular.spacing.length, 2))
+      width: addCssLength(inner.width, multiplyCssLength(this._spacing, 2)),
+      height: addCssLength(inner.height, multiplyCssLength(this._spacing, 2))
     };
     let outer = {
-      width: addCssLength(inner.width, this.style.self.outer.regular.spacing.length),
-      height: addCssLength(inner.height, this.style.self.outer.regular.spacing.length)
+      width: addCssLength(inner.width, this._spacing),
+      height: addCssLength(inner.height, this._spacing)
     };
 
     return { spaced, outer, inner };
@@ -207,7 +211,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     `}` +
     
     this.selector.grid + `{` + 
-      `padding: ${divideCssLength(this.style.self.outer.regular.spacing.length, 2)};` + 
+      `padding: ${divideCssLength(this._spacing, 2)};` + 
     `}` +
 
     this.selector.outerGrid + `{` +
@@ -218,7 +222,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     `}` +
 
     this.selector.outerRow + `{` +
-      `width: ${subtractCssLength(multiplyCssLength(this.tileSize.outer.width, this.size.width), multiplyCssLength(this.style.self.outer.regular.spacing.length, this.size.width))};` +
+      `width: ${subtractCssLength(multiplyCssLength(this.tileSize.outer.width, this.size.width), multiplyCssLength(this._spacing, this.size.width))};` +
     `}` +
 
     this.cssGrid() +
@@ -227,10 +231,10 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   }
 
   protected cssTileOuterMargin() : string {
-    return divideCssLength(this.style.self.outer.regular.spacing.length, 2);
+    return divideCssLength(this._spacing, 2);
   }
   protected cssTileInnerMargin() : string {
-    return this.style.self.outer.regular.spacing.length;
+    return this._spacing;
   }
 
   protected abstract cssFrameClipPath() : string;

@@ -48,8 +48,8 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
           this.tileSize.outer,
           cssValueToNumber(this.style.self.outer.regular.borderRadius.radius),
           {
-            top: i * (cssValueToNumber(this.tileSize.outer.height) - cssValueToNumber(this.style.self.outer.regular.spacing.length)),
-            left: j * (cssValueToNumber(this.tileSize.outer.width) - cssValueToNumber(this.style.self.outer.regular.spacing.length)) 
+            top: i * (cssValueToNumber(this.tileSize.outer.height) - cssValueToNumber(this._spacing)),
+            left: j * (cssValueToNumber(this.tileSize.outer.width) - cssValueToNumber(this._spacing)) 
           }
         );
       }
