@@ -42,23 +42,20 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   public get offset() : GridOffset { return this._offset; }
 
   public get tileSize() : tileSizeSet {
-    return {
-      outer: {
-        width: this.style.self.outer.regular.width.length,
-        height: this.style.self.outer.regular.height.length
-      },
-      inner: {
-        width: subtractCssLength(this.style.self.outer.regular.width.length, multiplyCssLength(this.style.self.outer.regular.spacing.length, 2)),
-        height: subtractCssLength(this.style.self.outer.regular.height.length, multiplyCssLength(this.style.self.outer.regular.spacing.length, 2))
-      }
+    let inner = {
+      width: this.style.self.inner.regular.width.length,
+      height: this.style.self.inner.regular.height.length
     };
-  }
-  public get tileSizeMiddle() : any {
-    return {
-      width: divideCssLength(addCssLength(this.tileSize.outer.width, this.tileSize.inner.width), 2),
-      height: divideCssLength(addCssLength(this.tileSize.outer.height, this.tileSize.inner.height), 2),
-      spacing: this.style.self.outer.regular.spacing.length
-    }
+    let spaced = {
+      width: addCssLength(inner.width, multiplyCssLength(this.style.self.outer.regular.spacing.length, 2)),
+      height: addCssLength(inner.height, multiplyCssLength(this.style.self.outer.regular.spacing.length, 2))
+    };
+    let outer = {
+      width: addCssLength(inner.width, this.style.self.outer.regular.spacing.length),
+      height: addCssLength(inner.height, this.style.self.outer.regular.spacing.length)
+    };
+
+    return { spaced, outer, inner };
   }
 
   protected elements?: GridElements;
@@ -241,12 +238,12 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   protected cssGrid() : string {
     return `` + 
     this.selector.row + `{` +
-      `height:${subtractCssLength(this.tileSize.outer.height, this.style.self.outer.regular.spacing.length)};` +
+      `height:${this.tileSize.outer.height};` +
     `}` +
 
     this.selector.outerTile + `{` + 
-      `width:${this.tileSizeMiddle.width};` + 
-      `height:${this.tileSizeMiddle.height};` + 
+      `width:${this.tileSize.outer.width};` + 
+      `height:${this.tileSize.outer.height};` + 
       this.style.tile.outer.regular.css + 
     `}` +
 
@@ -279,7 +276,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       css += `` + 
       this.selector.outerTile + `${selector}{` +
         style.outer.regular.css + 
-        `left:${multiplyCssLength(this.tileSizeMiddle.width, index!.j)};` +
+        `left:${multiplyCssLength(this.tileSize.outer.width, index!.j)};` +
       `}`;
     }
 

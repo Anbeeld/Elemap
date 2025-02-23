@@ -8,6 +8,11 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
   public get hexagonSize() : hexagonSizeSet {
     if (this.orientation === GridOrientation.Pointy) {
       return {
+        spaced: {
+          side: divideCssLength(this.tileSize.spaced.height, 2),
+          long: this.tileSize.spaced.height,
+          short: this.tileSize.spaced.width
+        },
         outer: {
           side: divideCssLength(this.tileSize.outer.height, 2),
           long: this.tileSize.outer.height,
@@ -21,6 +26,11 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
       };
     } else {
       return {
+        spaced: {
+          side: divideCssLength(this.tileSize.spaced.width, 2),
+          long: this.tileSize.spaced.width,
+          short: this.tileSize.spaced.height
+        },
         outer: {
           side: divideCssLength(this.tileSize.outer.width, 2),
           long: this.tileSize.outer.width,
@@ -86,8 +96,8 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
 
   protected override cssFrameClipPath() {
     let path = '';
-    let topPerTile: number = cssValueToNumber(this.tileSize.outer.height) - cssValueToNumber(this.tileRecess.vertical) - cssValueToNumber(this.style.self.outer.regular.spacing.length);
-    let leftPerTile: number = cssValueToNumber(this.tileSize.outer.width) - cssValueToNumber(this.tileRecess.horizontal) - cssValueToNumber(this.style.self.outer.regular.spacing.length);
+    let topPerTile: number = cssValueToNumber(this.tileSize.spaced.height) - cssValueToNumber(this.tileRecess.vertical) - cssValueToNumber(this.style.self.outer.regular.spacing.length);
+    let leftPerTile: number = cssValueToNumber(this.tileSize.spaced.width) - cssValueToNumber(this.tileRecess.horizontal) - cssValueToNumber(this.style.self.outer.regular.spacing.length);
     for (let i = 0; i < this._size.width; i++) {
       for (let j = 0; j < this._size.height; j++) {
         if (path !== '') {
@@ -95,7 +105,7 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
         }
         path += generateHexagonPath(
           this.orientation,
-          this.hexagonSize.outer,
+          this.hexagonSize.spaced,
           cssValueToNumber(this.style.self.outer.regular.borderRadius.radius),
           {
             top: i * topPerTile + (this.hasIntendation(j) ? 1 : 0) * cssValueToNumber(this.tileIntendation.vertical),
@@ -108,13 +118,6 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
   }
 
   protected override cssType() : string {
-    let hexagonSizeMiddleLong = divideCssLength(addCssLength(this.hexagonSize.outer.long, this.hexagonSize.inner.long), 2);
-    let hexagonSizeMiddle = {
-      side: divideCssLength(hexagonSizeMiddleLong, 2),
-      long: hexagonSizeMiddleLong,
-      short: divideCssLength(addCssLength(this.hexagonSize.outer.short, this.hexagonSize.inner.short), 2)
-    }
-
     let hexagonSizeContourLong = subtractCssLength(this.hexagonSize.outer.long, multiplyCssLength(this.style.tile.contour.hover.width.length, 2));
     let hexagonSizeContour: hexagonSize = {
       side: divideCssLength(hexagonSizeContourLong, 2),
@@ -128,7 +131,7 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     `}` +
 
     this.selector.outerTile + `{` +
-      `clip-path:path('${generateHexagonPath(this.orientation, hexagonSizeMiddle, 0)}');` +
+      `clip-path:path('${generateHexagonPath(this.orientation, this.hexagonSize.outer, 0)}');` +
     `}` +
 
     this.selector.innerTile + `:hover:after{` +
@@ -158,13 +161,13 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
   private get tileRecess() : {vertical: string, horizontal: string} {
     if (this.orientation === GridOrientation.Pointy) {
       return {
-        vertical: divideCssLength(subtractCssLength(this.style.self.outer.regular.height.length, this.cssTileInnerMargin()), 4),
+        vertical: divideCssLength(subtractCssLength(this.tileSize.spaced.height, this.cssTileInnerMargin()), 4),
         horizontal: '0px'
       };
     } else {
       return {
         vertical: '0px',
-        horizontal: divideCssLength(subtractCssLength(this.style.self.outer.regular.width.length, this.cssTileInnerMargin()), 4)
+        horizontal: divideCssLength(subtractCssLength(this.tileSize.spaced.width, this.cssTileInnerMargin()), 4)
       };
     }
   }
@@ -192,11 +195,11 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     if (this.orientation === GridOrientation.Pointy) {
       return {
         vertical: '0px',
-        horizontal: divideCssLength(subtractCssLength(this.style.self.outer.regular.width.length, this.cssTileInnerMargin()), 2)
+        horizontal: divideCssLength(subtractCssLength(this.tileSize.spaced.width, this.cssTileInnerMargin()), 2)
       };
     } else {
       return {
-        vertical: divideCssLength(subtractCssLength(this.style.self.outer.regular.height.length, this.cssTileInnerMargin()), 2),
+        vertical: divideCssLength(subtractCssLength(this.tileSize.spaced.height, this.cssTileInnerMargin()), 2),
         horizontal: '0px'
       };
     }

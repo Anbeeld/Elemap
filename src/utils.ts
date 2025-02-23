@@ -277,6 +277,7 @@ export type tileSize = {
 }
 
 export type tileSizeSet = {
+  spaced: tileSize,
   outer: tileSize,
   inner: tileSize
 }
@@ -288,6 +289,7 @@ export type hexagonSize = {
 }
 
 export type hexagonSizeSet = {
+  spaced: hexagonSize,
   outer: hexagonSize,
   inner: hexagonSize
 }

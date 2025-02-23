@@ -5,15 +5,11 @@ import { BorderRadius, BorderRadiusValues } from './css/border-radius.js';
 /* OUTER */
 
 export interface GridOuterStyleDecls extends StyleDecls {
-  width?: SizeValues|string;
-  height?: SizeValues|string;
   spacing?: SizeValues|string;
   borderRadius?: BorderRadiusValues|string;
 }
 
 export interface GridOuterStyleProps extends StyleProps {
-  width: Width;
-  height: Height;
   spacing: Spacing;
   borderRadius: BorderRadius;
 }
@@ -21,8 +17,6 @@ export interface GridOuterStyleProps extends StyleProps {
 export class GridOuterStyle extends Style<GridOuterStyleDecls, GridOuterStyleProps> {
   constructor(values: GridOuterStyleDecls) {
     const types: StyleTypes = {
-      width: Width,
-      height: Height,
       spacing: Spacing,
       borderRadius: BorderRadius,
     };
@@ -34,16 +28,22 @@ export class GridOuterStyle extends Style<GridOuterStyleDecls, GridOuterStylePro
 /* INNER */
 
 export interface GridInnerStyleDecls extends StyleDecls {
+  width?: SizeValues|string;
+  height?: SizeValues|string;
   borderRadius?: BorderRadiusValues|string;
 }
 
 export interface GridInnerStyleProps extends StyleProps {
+  width: Width;
+  height: Height;
   borderRadius: BorderRadius;
 }
 
 export class GridInnerStyle extends Style<GridInnerStyleDecls, GridInnerStyleProps> {
   constructor(values: GridInnerStyleDecls) {
     const types: StyleTypes = {
+      width: Width,
+      height: Height,
       borderRadius: BorderRadius,
     };
 

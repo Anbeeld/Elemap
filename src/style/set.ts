@@ -136,8 +136,6 @@ export const defaultSurfaceStyleDeclsGroup: SurfaceStyleDeclsGroup = {
     self: {
       outer: {
         regular: {
-          width: '100px',
-          height: '100px',
           spacing: '4px',
           borderRadius: '6px',
           custom: ''
@@ -145,6 +143,8 @@ export const defaultSurfaceStyleDeclsGroup: SurfaceStyleDeclsGroup = {
       },
       inner: {
         regular: {
+          width: '100px',
+          height: '100px',
           borderRadius: '6px',
           custom: ''
         }
