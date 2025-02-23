@@ -64,7 +64,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   protected elements?: GridElements;
 
   constructor(mapId: number, config: Config, style: GridStyleGroup) {
-    this._id = Raoi.new(this);
+    this._id = Raoi.push(this);
     this._mapId = mapId;
     this._style = style;
     this._size = config.size!; // TODO

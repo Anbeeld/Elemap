@@ -24,7 +24,7 @@ export abstract class AbstractMap {
   public get style() : SurfaceStyleSet { return this._style; }
 
   constructor(config: Config, style: SurfaceStyleSet) {
-    this._id = Raoi.new(this);
+    this._id = Raoi.push(this);
     config; // TODO
     this._style = style;
     this._elements = this.initElements();

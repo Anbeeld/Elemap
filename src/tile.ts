@@ -27,7 +27,7 @@ export abstract class AbstractTile {
   public get coords() : Coords { return this._coords; }
 
   constructor(gridId: number, index: Index, style: TileStyleSet) {
-    this._id = Raoi.new(this);
+    this._id = Raoi.push(this);
     this._gridId = gridId;
     this._index = index;
     this._style = style;
