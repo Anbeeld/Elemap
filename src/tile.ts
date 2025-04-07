@@ -94,22 +94,19 @@ export abstract class AbstractTile {
   protected get _elementOffset() : OrthogonalCoords {
     let grid = getGridById(this.gridId);
     if (grid) {
-      // let map = getMapById(grid.mapId);
-      // if (map) {
-        let element = this._elements!.inner;
-        let offset: OrthogonalCoords = {x: 0, y: 0};
-        while (element) {
-          offset.x += element.offsetLeft;
-          offset.y += element.offsetTop;
-          element = element.parentElement as HTMLElement;
-          if (element === grid.elements!.inner) {
-            return {
-              x: offset.x - cssValueToNumber(grid.spacing),
-              y: offset.y - cssValueToNumber(grid.spacing)
-            }
+      let element = this._elements!.inner;
+      let offset: OrthogonalCoords = {x: 0, y: 0};
+      while (element) {
+        offset.x += element.offsetLeft;
+        offset.y += element.offsetTop;
+        element = element.parentElement as HTMLElement;
+        if (element === grid.elements!.inner) {
+          return {
+            x: offset.x - cssValueToNumber(grid.spacing),
+            y: offset.y - cssValueToNumber(grid.spacing)
           }
         }
-      // }
+      }
     }
     return {
       x: 0,

@@ -95,15 +95,15 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
         contourHover: document.createElement('div')
       }
 
-      this._elements.frame.classList.add('elemap-grid-frame-' + this.mapId);
+      this._elements.frame.classList.add('elemap-' + this.mapId + '-grid-frame');
 
-      this._elements.outer.classList.add('elemap-grid-' + this.mapId);
-      this._elements.outer.classList.add('elemap-grid-outer-' + this.mapId);
+      this._elements.outer.classList.add('elemap-' + this.mapId + '-grid');
+      this._elements.outer.classList.add('elemap-' + this.mapId + '-grid-outer');
 
-      this._elements.inner.classList.add('elemap-grid-' + this.mapId);
-      this._elements.inner.classList.add('elemap-grid-inner-' + this.mapId);
+      this._elements.inner.classList.add('elemap-' + this.mapId + '-grid');
+      this._elements.inner.classList.add('elemap-' + this.mapId + '-grid-inner');
 
-      this._elements.contour.classList.add('elemap-grid-contour-' + this.mapId);
+      this._elements.contour.classList.add('elemap-' + this.mapId + '-grid-contour');
       this._elements.contour.appendChild(this._elements.contourHover);
     }
   }
@@ -133,14 +133,14 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     container.appendChild(this._elements!.contour);
 
     this._elements!.inner.addEventListener('mouseover', e => {
-      let tileElement = (e.target as HTMLElement).closest('.elemap-grid-inner-0 > div > div');
+      let tileElement = (e.target as HTMLElement).closest(this._selector.innerTile);
       if (tileElement) {
         this.tileByElement(tileElement as HTMLElement)!.hover();
       }
     });
     
     this._elements!.inner.addEventListener('mouseout', e => {
-      let tileElement = (e.target as HTMLElement).closest('.elemap-grid-inner-0 > div > div');
+      let tileElement = (e.target as HTMLElement).closest(this._selector.innerTile);
       if (tileElement) {
         this.tileByElement(tileElement as HTMLElement)!.unhover();
       }
@@ -360,17 +360,17 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
 
   protected get _selector() {
     return {
-      frame: `.elemap-grid-frame-${this.mapId}`,
-      grid: `.elemap-grid-${this.mapId}`,
-      row: `.elemap-grid-${this.mapId}>div`,
-      tile: `.elemap-grid-${this.mapId}>div>div`,
-      outerGrid: `.elemap-grid-outer-${this.mapId}`,
-      innerGrid: `.elemap-grid-inner-${this.mapId}`,
-      outerRow: `.elemap-grid-outer-${this.mapId}>div`,
-      innerRow: `.elemap-grid-inner-${this.mapId}>div`,
-      outerTile: `.elemap-grid-outer-${this.mapId}>div>div`,
-      innerTile: `.elemap-grid-inner-${this.mapId}>div>div`,
-      contour: `.elemap-grid-contour-${this.mapId}`
+      frame: `.elemap-${this.mapId}-grid-frame`,
+      grid: `.elemap-${this.mapId}-grid`,
+      row: `.elemap-${this.mapId}-grid>div`,
+      tile: `.elemap-${this.mapId}-grid>div>div`,
+      outerGrid: `.elemap-${this.mapId}-grid-outer`,
+      innerGrid: `.elemap-${this.mapId}-grid-inner`,
+      outerRow: `.elemap-${this.mapId}-grid-outer>div`,
+      innerRow: `.elemap-${this.mapId}-grid-inner>div`,
+      outerTile: `.elemap-${this.mapId}-grid-outer>div>div`,
+      innerTile: `.elemap-${this.mapId}-grid-inner>div>div`,
+      contour: `.elemap-${this.mapId}-grid-contour`
     }
   }
 

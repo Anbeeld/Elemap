@@ -34,11 +34,11 @@ export abstract class AbstractMap {
 
   private _initElements() : MapElements {
     let elementStyleStatic = document.createElement('style');
-    elementStyleStatic.classList.add('elemap-css-static-' + this.id);
+    elementStyleStatic.classList.add('elemap-' + this.id + '-css-static');
     document.head.appendChild(elementStyleStatic);
 
     let elementStyleDynamic = document.createElement('style');
-    elementStyleDynamic.classList.add('elemap-css-dynamic-' + this.id);
+    elementStyleDynamic.classList.add('elemap-' + this.id + '-css-dynamic');
     document.head.appendChild(elementStyleDynamic);
 
     return {
@@ -48,20 +48,20 @@ export abstract class AbstractMap {
   }
 
   public initRender(container: HTMLElement) {
-    for (let element of document.getElementsByClassName('elemap-container-' + this.id)) {
+    for (let element of document.getElementsByClassName('elemap-' + this.id + '-container')) {
       if (element === container) {
         continue;
       }
-      element.classList.remove('elemap-container-' + this.id);
+      element.classList.remove('elemap-' + this.id + '-container');
     }
     if (this.elements.container !== container) {
       this.elements.container = container;
-      this.elements.container.classList.add('elemap-container-' + this.id);
+      this.elements.container.classList.add('elemap-' + this.id + '-container');
     }
     
     if (!this.elements.surface) {
       this.elements.surface = document.createElement('div');
-      this.elements.surface.classList.add('elemap-surface-' + this.id);
+      this.elements.surface.classList.add('elemap-' + this.id + '-surface');
     }
 
     this.elements.container.appendChild(this.elements.surface);
@@ -69,11 +69,11 @@ export abstract class AbstractMap {
 
   public get cssStatic() : string {
     return `` +
-    `.elemap-container-${this.id}{` +
+    `.elemap-${this.id}-container{` +
       `width:max-content;` +
     `}` +
 
-    `.elemap-surface-${this.id}{` +
+    `.elemap-${this.id}-surface{` +
       `position:relative;` +
       `width:max-content;` +
       `z-index:10;` +
@@ -82,11 +82,11 @@ export abstract class AbstractMap {
 
   public get cssDynamic() : string {
     return `` +
-    `.elemap-surface-${this.id}{` +
+    `.elemap-${this.id}-surface{` +
       this.style.outer.regular.css +
     `}` +
 
-    `.elemap-surface-${this.id}>*{` +
+    `.elemap-${this.id}-surface>*{` +
       this.style.inner.regular.css +
     `}`;
   }
