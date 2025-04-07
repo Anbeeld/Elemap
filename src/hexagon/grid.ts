@@ -82,6 +82,16 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     return this.tileByIndex(index.i, index.j);
   }
 
+  public override tileByElement(element: HTMLElement) : HexagonTile|undefined {
+    if (element.hasAttribute('data-elemap-r') && element.hasAttribute('data-elemap-q')) {
+      return this.tileByCoords(
+        Number(element.getAttribute('data-elemap-r')!),
+        Number(element.getAttribute('data-elemap-q')!)
+      );
+    }
+    return undefined;
+  }
+
   protected hasIntendation(i: number) : boolean {
     if (this.offset === GridOffset.Odd) {
       return i % 2 === 1;

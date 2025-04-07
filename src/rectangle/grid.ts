@@ -22,6 +22,16 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
     let index = orthogonalCoordsToIndex({x: firstCoord, y: secondCoord});
     return this.tileByIndex(index.i, index.j);
   }
+  
+  public override tileByElement(element: HTMLElement) : RectangleTile|undefined {
+    if (element.hasAttribute('data-elemap-i') && element.hasAttribute('data-elemap-j')) {
+      return this.tileByCoords(
+        Number(element.getAttribute('data-elemap-i')!),
+        Number(element.getAttribute('data-elemap-j')!)
+      );
+    }
+    return undefined;
+  }
 
   /* --------
       CSS 

@@ -29,6 +29,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     return this.tileByCoords(firstCoord, secondCoord);
   }
   public abstract tileByCoords(firstCoord: number, secondCoord: number) : Tile|undefined;
+  public abstract tileByElement(element: HTMLElement) : Tile|undefined;
   public tileByIndex(i: number, j: number) : Tile|undefined {
     return this._tiles[i]?.[j];
   }
