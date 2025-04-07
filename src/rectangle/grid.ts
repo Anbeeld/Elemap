@@ -29,13 +29,13 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
 
   protected override cssType() : string {
     let tileSizeContour: tileSize = {
-      width: subtractCssLength(this.tileSize.outer.width, multiplyCssLength(this.style.tile.contour.hover.width.length, 2)),
-      height: subtractCssLength(this.tileSize.outer.height, multiplyCssLength(this.style.tile.contour.hover.width.length, 2))
+      width: subtractCssLength(this.tileSize.spaced.width, multiplyCssLength(this.style.tile.contour.hover.width.length, 2)),
+      height: subtractCssLength(this.tileSize.spaced.height, multiplyCssLength(this.style.tile.contour.hover.width.length, 2))
     }
 
-    return ``
-    + this.selector.innerTile + `:hover:after{` +
-      `clip-path:path(evenodd,'${generateRectanglePath(this.tileSize.outer, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))} ${generateRectanglePath(tileSizeContour, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius), {top: cssValueToNumber(this.style.tile.contour.hover.width.length), left: cssValueToNumber(this.style.tile.contour.hover.width.length)})}');` +
+    return `` +
+    this.selector.contour + `>div{` +
+      `clip-path:path(evenodd,'${generateRectanglePath(this.tileSize.spaced, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))} ${generateRectanglePath(tileSizeContour, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius), {top: cssValueToNumber(this.style.tile.contour.hover.width.length), left: cssValueToNumber(this.style.tile.contour.hover.width.length)})}');` +
     `}`;
   }
   

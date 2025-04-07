@@ -5,11 +5,12 @@ import { addCssLength, divideCssLength, multiplyCssLength, subtractCssLength } f
 import Raoi from 'raoi';
 
 interface GridElements {
+  frame: HTMLElement;
   outer: HTMLElement;
   inner: HTMLElement;
   outerRows: HTMLElement[];
   innerRows: HTMLElement[];
-  frame: HTMLElement;
+  contour: HTMLElement;
 }
 
 export abstract class AbstractGrid<Tile extends AbstractTile> {
@@ -81,11 +82,12 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   protected initElements() : void {
     if (!this.elements) {
       this.elements = {
+        frame: document.createElement('div'),
         outer: document.createElement('div'),
         inner: document.createElement('div'),
         outerRows: [],
         innerRows: [],
-        frame: document.createElement('div')
+        contour: document.createElement('div')
       }
 
       this.elements.frame.classList.add('elemap-grid-frame-' + this.mapId);
@@ -95,6 +97,10 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
 
       this.elements.inner.classList.add('elemap-grid-' + this.mapId);
       this.elements.inner.classList.add('elemap-grid-inner-' + this.mapId);
+
+      this.elements.contour.classList.add('elemap-grid-contour-' + this.mapId);
+      let contourElement = document.createElement('div');
+      this.elements.contour.appendChild(contourElement);
     }
   }
 
@@ -120,6 +126,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     container.appendChild(this.elements!.frame);
     container.appendChild(this.elements!.outer);
     container.appendChild(this.elements!.inner);
+    container.appendChild(this.elements!.contour);
   }
 
   /* --------
@@ -133,7 +140,6 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       `position:absolute;` + 
       `z-index:50;` + 
     `}` +
-
 
     this.selector.grid + `{` +
       `overflow:hidden;` + 
@@ -184,45 +190,65 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
 
     this.selector.innerTile + `{` +
       `position:relative;` + 
-      `z-index:170;` + 
+      `z-index:170;` +
     `}` +
 
     this.selector.innerTile + `:after{` +
-      `z-index:190;` + 
+      `z-index:190;` +
     `}` +
 
     this.selector.innerTile + `>*{` +
-      `position:relative;` + 
-      `z-index:200;` + 
+      `position:relative;` +
+      `z-index:200;` +
+    `}` +
+
+    this.selector.contour + `{` +
+      `display:block;` +
+      `position:absolute;` +
+      `z-index:210;` +
+      `pointer-events:none;` +
+    `}` +
+
+    this.selector.contour + `>div{` +
+      `display:block;` +
+      `position:absolute;` +
+      `z-index:220;` +
     `}`;
   }
 
   public get cssDynamic() : string {
     let mapPadding = getMapById(this.mapId)!.style.outer.regular.padding;
-    return `` + 
+    return `` +
     
-    this.selector.frame + `{` + 
-      `top: ${mapPadding.top};` + 
-      `right: ${mapPadding.right};` + 
-      `bottom: ${mapPadding.bottom};` + 
-      `left: ${mapPadding.left};` + 
-      this.style.tile.outer.regular.background.css + 
-      `clip-path: path('${this.cssFrameClipPath()}');` + 
+    this.selector.frame + `{` +
+      `top: ${mapPadding.top};` +
+      `right: ${mapPadding.right};` +
+      `bottom: ${mapPadding.bottom};` +
+      `left: ${mapPadding.left};` +
+      this.style.tile.outer.regular.background.css +
+      `clip-path: path('${this.cssFrameClipPath()}');` +
     `}` +
     
-    this.selector.grid + `{` + 
-      `padding: ${divideCssLength(this._spacing, 2)};` + 
+    this.selector.grid + `{` +
+      `padding: ${divideCssLength(this._spacing, 2)};` +
     `}` +
 
     this.selector.outerGrid + `{` +
-      `top: ${mapPadding.top};` + 
-      `right: ${mapPadding.right};` + 
-      `bottom: ${mapPadding.bottom};` + 
-      `left: ${mapPadding.left};` + 
+      `top: ${mapPadding.top};` +
+      `right: ${mapPadding.right};` +
+      `bottom: ${mapPadding.bottom};` +
+      `left: ${mapPadding.left};` +
     `}` +
 
     this.selector.outerRow + `{` +
       `width: ${subtractCssLength(multiplyCssLength(this.tileSize.outer.width, this.size.width), multiplyCssLength(this._spacing, this.size.width))};` +
+    `}` +
+    
+    this.selector.contour + `{` +
+      `top: ${mapPadding.top};` +
+      `right: ${mapPadding.right};` +
+      `bottom: ${mapPadding.bottom};` +
+      `left: ${mapPadding.left};` +
     `}` +
 
     this.cssGrid() +
@@ -259,18 +285,15 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       this.style.tile.inner.regular.css + 
     `}` +
 
-    this.selector.innerTile + `:hover:after{` + 
-      `content:"";` + 
-      `display:block;` + 
-      `position:absolute;` + 
-      this.style.self.inner.regular.borderRadius.css + 
-      `top:0;` + 
-      `left:0;` + 
-      `width:${this.tileSize.outer.width};` + 
-      `height:${this.tileSize.outer.height};` + 
-    `}`
+    this.selector.contour + `>div{` +
+      this.style.self.inner.regular.borderRadius.css +
+      `top:0;` +
+      `left:0;` +
+      `width:${this.tileSize.spaced.width};` +
+      `height:${this.tileSize.spaced.height};` +
+    `}` +
 
-    + this.cssTile(this.style.tile);
+    this.cssTile(this.style.tile);
   }
 
   protected cssTile(style: TileStyleSet, selector: string = '', index?: Index) : string {
@@ -288,7 +311,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     this.selector.innerTile + `${selector}:hover{` + 
       style.inner.hover.css +
     `}` +
-    this.selector.innerTile + `${selector}:hover:after{` + 
+    this.selector.contour + `>div{` + 
       style.contour.hover.background.css +
     `}`;
 
@@ -318,7 +341,8 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       outerRow: `.elemap-grid-outer-${this.mapId}>div`,
       innerRow: `.elemap-grid-inner-${this.mapId}>div`,
       outerTile: `.elemap-grid-outer-${this.mapId}>div>div`,
-      innerTile: `.elemap-grid-inner-${this.mapId}>div>div`
+      innerTile: `.elemap-grid-inner-${this.mapId}>div>div`,
+      contour: `.elemap-grid-contour-${this.mapId}`
     }
   }
 

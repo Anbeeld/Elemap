@@ -118,11 +118,11 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
   }
 
   protected override cssType() : string {
-    let hexagonSizeContourLong = subtractCssLength(this.hexagonSize.outer.long, multiplyCssLength(this.style.tile.contour.hover.width.length, 2));
+    let hexagonSizeContourLong = subtractCssLength(this.hexagonSize.spaced.long, multiplyCssLength(this.style.tile.contour.hover.width.length, 2));
     let hexagonSizeContour: hexagonSize = {
       side: divideCssLength(hexagonSizeContourLong, 2),
       long: hexagonSizeContourLong,
-      short: subtractCssLength(this.hexagonSize.outer.short, multiplyCssLength(this.style.tile.contour.hover.width.length, 2))
+      short: subtractCssLength(this.hexagonSize.spaced.short, multiplyCssLength(this.style.tile.contour.hover.width.length, 2))
     }
 
     return `` +
@@ -134,8 +134,8 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
       `clip-path:path('${generateHexagonPath(this.orientation, this.hexagonSize.outer, 0)}');` +
     `}` +
 
-    this.selector.innerTile + `:hover:after{` +
-      `clip-path:path(evenodd,'${generateHexagonPath(this.orientation, this.hexagonSize.outer, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))} ${generateHexagonPath(this.orientation, hexagonSizeContour, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius), {top: cssValueToNumber(this.style.tile.contour.hover.width.length), left: cssValueToNumber(this.style.tile.contour.hover.width.length)})}');` +
+    this.selector.contour + `>div{` +
+      `clip-path:path(evenodd,'${generateHexagonPath(this.orientation, this.hexagonSize.spaced, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))} ${generateHexagonPath(this.orientation, hexagonSizeContour, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius), {top: cssValueToNumber(this.style.tile.contour.hover.width.length), left: cssValueToNumber(this.style.tile.contour.hover.width.length)})}');` +
     `}`
     + this.cssTileRecess()
     + this.cssTileIntendation();
