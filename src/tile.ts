@@ -1,8 +1,9 @@
-import { getGridById, Coords, Index, capitalizeFirstLetter } from './utils.js';
+import { getGridById, Coords, Index, capitalizeFirstLetter, OrthogonalCoords } from './utils.js';
 import Raoi from 'raoi';
 
 import { TileStyleSet, TileStyleSetFromDecls, TileStyleSetToDecls } from './style/set.js';
 import { PropValues } from './style/css/prop.js';
+import { cssValueToNumber } from './style/css/utils.js';
 
 export abstract class AbstractTile {
   protected _id: number;
@@ -75,6 +76,45 @@ export abstract class AbstractTile {
     if (!inner.contains(this.elements!.inner)) {
       inner.appendChild(this.elements!.inner);
     }
+  }
+
+  public hover() : void {
+    let grid = getGridById(this.gridId);
+    if (grid) {
+      grid.setContourPosition(this.elementOffset)
+    }
+  }
+  public unhover() : void {
+    let grid = getGridById(this.gridId);
+    if (grid) {
+      grid.setContourPosition(false);
+    }
+  }
+
+  protected get elementOffset() : OrthogonalCoords {
+    let grid = getGridById(this.gridId);
+    if (grid) {
+      // let map = getMapById(grid.mapId);
+      // if (map) {
+        let element = this.elements!.inner;
+        let offset: OrthogonalCoords = {x: 0, y: 0};
+        while (element) {
+          offset.x += element.offsetLeft;
+          offset.y += element.offsetTop;
+          element = element.parentElement as HTMLElement;
+          if (element === grid.elements!.inner) {
+            return {
+              x: offset.x - cssValueToNumber(grid.spacing),
+              y: offset.y - cssValueToNumber(grid.spacing)
+            }
+          }
+        }
+      // }
+    }
+    return {
+      x: 0,
+      y: 0
+    };
   }
 
   public abstract get selector() : string;

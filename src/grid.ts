@@ -1,5 +1,5 @@
 import { AbstractTile } from "./tile.js";
-import { Size, Config, tileSizeSet, GridOrientation, GridOffset, getMapById, Index } from "./utils.js";
+import { Size, Config, tileSizeSet, GridOrientation, GridOffset, getMapById, Index, OrthogonalCoords } from "./utils.js";
 import { GridStyleGroup, TileStyleSet } from "./style/set.js";
 import { addCssLength, divideCssLength, multiplyCssLength, subtractCssLength } from "./style/css/utils.js";
 import Raoi from 'raoi';
@@ -11,6 +11,7 @@ interface GridElements {
   outerRows: HTMLElement[];
   innerRows: HTMLElement[];
   contour: HTMLElement;
+  contourHover: HTMLElement;
 }
 
 export abstract class AbstractGrid<Tile extends AbstractTile> {
@@ -46,6 +47,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   protected get _spacing(): string {
     return this.style.self.outer.regular.spacing.length;
   }
+  public get spacing() : string { return this._spacing; }
 
   public get tileSize() : tileSizeSet {
     let inner = {
@@ -64,7 +66,8 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     return { spaced, outer, inner };
   }
 
-  protected elements?: GridElements;
+  protected _elements?: GridElements;
+  public get elements() : GridElements|undefined { return this._elements; }
 
   constructor(mapId: number, config: Config, style: GridStyleGroup) {
     this._id = Raoi.push(this);
@@ -81,27 +84,27 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   protected abstract initTiles(): void;
 
   protected initElements() : void {
-    if (!this.elements) {
-      this.elements = {
+    if (!this._elements) {
+      this._elements = {
         frame: document.createElement('div'),
         outer: document.createElement('div'),
         inner: document.createElement('div'),
         outerRows: [],
         innerRows: [],
-        contour: document.createElement('div')
+        contour: document.createElement('div'),
+        contourHover: document.createElement('div')
       }
 
-      this.elements.frame.classList.add('elemap-grid-frame-' + this.mapId);
+      this._elements.frame.classList.add('elemap-grid-frame-' + this.mapId);
 
-      this.elements.outer.classList.add('elemap-grid-' + this.mapId);
-      this.elements.outer.classList.add('elemap-grid-outer-' + this.mapId);
+      this._elements.outer.classList.add('elemap-grid-' + this.mapId);
+      this._elements.outer.classList.add('elemap-grid-outer-' + this.mapId);
 
-      this.elements.inner.classList.add('elemap-grid-' + this.mapId);
-      this.elements.inner.classList.add('elemap-grid-inner-' + this.mapId);
+      this._elements.inner.classList.add('elemap-grid-' + this.mapId);
+      this._elements.inner.classList.add('elemap-grid-inner-' + this.mapId);
 
-      this.elements.contour.classList.add('elemap-grid-contour-' + this.mapId);
-      let contourElement = document.createElement('div');
-      this.elements.contour.appendChild(contourElement);
+      this._elements.contour.classList.add('elemap-grid-contour-' + this.mapId);
+      this._elements.contour.appendChild(this._elements.contourHover);
     }
   }
 
@@ -111,23 +114,46 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     container.innerHTML = '';
 
     for (let i in this._tiles) {
-      if (typeof this.elements!.outerRows[i] === 'undefined') {
-        this.elements!.outerRows[i] = document.createElement('div');
-        this.elements!.outer.appendChild(this.elements!.outerRows[i]);
+      if (typeof this._elements!.outerRows[i] === 'undefined') {
+        this._elements!.outerRows[i] = document.createElement('div');
+        this._elements!.outer.appendChild(this._elements!.outerRows[i]);
       }
-      if (typeof this.elements!.innerRows[i] === 'undefined') {
-        this.elements!.innerRows[i] = document.createElement('div');
-        this.elements!.inner.appendChild(this.elements!.innerRows[i]);
+      if (typeof this._elements!.innerRows[i] === 'undefined') {
+        this._elements!.innerRows[i] = document.createElement('div');
+        this._elements!.inner.appendChild(this._elements!.innerRows[i]);
       }
       for (let j in this._tiles[i]) {
-        this._tiles[Number(i)]![Number(j)]!.render(this.elements!.outerRows[i], this.elements!.innerRows[i]);
+        this._tiles[Number(i)]![Number(j)]!.render(this._elements!.outerRows[i], this._elements!.innerRows[i]);
       }
     }
 
-    container.appendChild(this.elements!.frame);
-    container.appendChild(this.elements!.outer);
-    container.appendChild(this.elements!.inner);
-    container.appendChild(this.elements!.contour);
+    container.appendChild(this._elements!.frame);
+    container.appendChild(this._elements!.outer);
+    container.appendChild(this._elements!.inner);
+    container.appendChild(this._elements!.contour);
+
+    this._elements!.inner.addEventListener('mouseover', e => {
+      let tileElement = (e.target as HTMLElement).closest('.elemap-grid-inner-0 > div > div');
+      if (tileElement) {
+        this.tileByElement(tileElement as HTMLElement)!.hover();
+      }
+    });
+    
+    this._elements!.inner.addEventListener('mouseout', e => {
+      let tileElement = (e.target as HTMLElement).closest('.elemap-grid-inner-0 > div > div');
+      if (tileElement) {
+        this.tileByElement(tileElement as HTMLElement)!.unhover();
+      }
+    });
+  }
+
+  public setContourPosition(position: OrthogonalCoords|false) {
+    if (position === false) {
+      this._elements!.contourHover.removeAttribute('style');
+    } else {
+      this._elements!.contourHover.style.display = `block`;
+      this._elements!.contourHover.style.transform = `translate(${position.x}px, ${position.y}px)`;
+    }
   }
 
   /* --------
@@ -287,6 +313,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     `}` +
 
     this.selector.contour + `>div{` +
+      `display:none;` +
       this.style.self.inner.regular.borderRadius.css +
       `top:0;` +
       `left:0;` +
