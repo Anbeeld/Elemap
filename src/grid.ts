@@ -78,12 +78,12 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     this._orientation = config.grid!.orientation!;
     this._offset = config.grid!.offset!;
 
-    this.initTiles();
+    this._initTiles();
   }
 
-  protected abstract initTiles(): void;
+  protected abstract _initTiles(): void;
 
-  protected initElements() : void {
+  protected _initElements() : void {
     if (!this._elements) {
       this._elements = {
         frame: document.createElement('div'),
@@ -109,7 +109,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   }
 
   public render(container: HTMLElement) {
-    this.initElements();
+    this._initElements();
 
     container.innerHTML = '';
 
@@ -162,81 +162,81 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
 
   public get cssStatic() : string {
     return `` +
-    this.selector.frame + `{` +
+    this._selector.frame + `{` +
       `display:block;` + 
       `position:absolute;` + 
       `z-index:50;` + 
     `}` +
 
-    this.selector.grid + `{` +
+    this._selector.grid + `{` +
       `overflow:hidden;` + 
     `}` +
 
-    this.selector.row + `{` +
+    this._selector.row + `{` +
       `display:flex;` +
       `width:max-content;` +
       `position:relative;` +
       `pointer-events:none;` +
     `}` +
 
-    this.selector.tile + `{` +
+    this._selector.tile + `{` +
       `pointer-events:auto;` + 
       `float:left;` + // To collapse margins
     `}` +
 
-    this.selector.outerGrid + `{` +
+    this._selector.outerGrid + `{` +
       `position:absolute;` + 
       `z-index:100;` + 
     `}` +
 
-    this.selector.outerRow + `{` +
+    this._selector.outerRow + `{` +
       `z-index:110;` + 
     `}` +
 
-    this.selector.outerTile + `{` +
+    this._selector.outerTile + `{` +
     `position:absolute;` + 
       `z-index:120;` + 
     `}` +
 
-    this.selector.outerTile + `:before{` + 
+    this._selector.outerTile + `:before{` + 
       `z-index:130;` + 
     `}` +
 
-    this.selector.outerTile + `:after{` + 
+    this._selector.outerTile + `:after{` + 
       `z-index:140;` + 
     `}` +
 
-    this.selector.innerGrid + `{` +
+    this._selector.innerGrid + `{` +
       `position:relative;` +
       `width:max-content;` +
       `z-index:150;` +
     `}` + 
-    this.selector.innerRow + `{` +
+    this._selector.innerRow + `{` +
       `z-index:160;` + 
     `}` +
 
-    this.selector.innerTile + `{` +
+    this._selector.innerTile + `{` +
       `position:relative;` + 
       `z-index:170;` +
     `}` +
 
-    this.selector.innerTile + `:after{` +
+    this._selector.innerTile + `:after{` +
       `z-index:190;` +
     `}` +
 
-    this.selector.innerTile + `>*{` +
+    this._selector.innerTile + `>*{` +
       `position:relative;` +
       `z-index:200;` +
     `}` +
 
-    this.selector.contour + `{` +
+    this._selector.contour + `{` +
       `display:block;` +
       `position:absolute;` +
       `z-index:210;` +
       `pointer-events:none;` +
     `}` +
 
-    this.selector.contour + `>div{` +
+    this._selector.contour + `>div{` +
       `display:block;` +
       `position:absolute;` +
       `z-index:220;` +
@@ -247,72 +247,72 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     let mapPadding = getMapById(this.mapId)!.style.outer.regular.padding;
     return `` +
     
-    this.selector.frame + `{` +
+    this._selector.frame + `{` +
       `top: ${mapPadding.top};` +
       `right: ${mapPadding.right};` +
       `bottom: ${mapPadding.bottom};` +
       `left: ${mapPadding.left};` +
       this.style.tile.outer.regular.background.css +
-      `clip-path: path('${this.cssFrameClipPath()}');` +
+      `clip-path: path('${this._cssFrameClipPath()}');` +
     `}` +
     
-    this.selector.grid + `{` +
+    this._selector.grid + `{` +
       `padding: ${divideCssLength(this._spacing, 2)};` +
     `}` +
 
-    this.selector.outerGrid + `{` +
+    this._selector.outerGrid + `{` +
       `top: ${mapPadding.top};` +
       `right: ${mapPadding.right};` +
       `bottom: ${mapPadding.bottom};` +
       `left: ${mapPadding.left};` +
     `}` +
 
-    this.selector.outerRow + `{` +
+    this._selector.outerRow + `{` +
       `width: ${subtractCssLength(multiplyCssLength(this.tileSize.outer.width, this.size.width), multiplyCssLength(this._spacing, this.size.width))};` +
     `}` +
     
-    this.selector.contour + `{` +
+    this._selector.contour + `{` +
       `top: ${mapPadding.top};` +
       `right: ${mapPadding.right};` +
       `bottom: ${mapPadding.bottom};` +
       `left: ${mapPadding.left};` +
     `}` +
 
-    this.cssGrid() +
-    this.cssType() +
-    this.cssDeviatingTiles();
+    this._cssGrid() +
+    this._cssType() +
+    this._cssDeviatingTiles();
   }
 
-  protected cssTileOuterMargin() : string {
+  protected _cssTileOuterMargin() : string {
     return divideCssLength(this._spacing, 2);
   }
-  protected cssTileInnerMargin() : string {
+  protected _cssTileInnerMargin() : string {
     return this._spacing;
   }
 
-  protected abstract cssFrameClipPath() : string;
+  protected abstract _cssFrameClipPath() : string;
 
-  protected cssGrid() : string {
+  protected _cssGrid() : string {
     return `` + 
-    this.selector.row + `{` +
+    this._selector.row + `{` +
       `height:${this.tileSize.outer.height};` +
     `}` +
 
-    this.selector.outerTile + `{` + 
+    this._selector.outerTile + `{` + 
       `width:${this.tileSize.outer.width};` + 
       `height:${this.tileSize.outer.height};` + 
       this.style.tile.outer.regular.css + 
     `}` +
 
-    this.selector.innerTile + `{` +
+    this._selector.innerTile + `{` +
       `width:${this.tileSize.inner.width};` + 
       `height:${this.tileSize.inner.height};` + 
-      `margin:${this.cssTileOuterMargin()};` +
+      `margin:${this._cssTileOuterMargin()};` +
       this.style.self.inner.regular.css + 
       this.style.tile.inner.regular.css + 
     `}` +
 
-    this.selector.contour + `>div{` +
+    this._selector.contour + `>div{` +
       `display:none;` +
       this.style.self.inner.regular.borderRadius.css +
       `top:0;` +
@@ -321,44 +321,44 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       `height:${this.tileSize.spaced.height};` +
     `}` +
 
-    this.cssTile(this.style.tile);
+    this._cssTile(this.style.tile);
   }
 
-  protected cssTile(style: TileStyleSet, selector: string = '', index?: Index) : string {
+  protected _cssTile(style: TileStyleSet, _selector: string = '', index?: Index) : string {
     let css = ``;
 
     if (style !== this.style.tile) {
       css += `` + 
-      this.selector.outerTile + `${selector}{` +
+      this._selector.outerTile + `${_selector}{` +
         style.outer.regular.css + 
         `left:${multiplyCssLength(this.tileSize.outer.width, index!.j)};` +
       `}`;
     }
 
     css += `` +
-    this.selector.innerTile + `${selector}:hover{` + 
+    this._selector.innerTile + `${_selector}:hover{` + 
       style.inner.hover.css +
     `}` +
-    this.selector.contour + `>div{` + 
+    this._selector.contour + `>div{` + 
       style.contour.hover.background.css +
     `}`;
 
     return css;
   }
 
-  protected cssDeviatingTiles() : string {
+  protected _cssDeviatingTiles() : string {
     let css = '';
     for (const row of this._tiles) {
       for (const tile of row) {
         if (tile.style !== this.style.tile) {
-          css += this.cssTile(tile.style, tile.selector, tile.index);
+          css += this._cssTile(tile.style, tile.selector, tile.index);
         }
       }
     }
     return css;
   }
 
-  protected get selector() {
+  protected get _selector() {
     return {
       frame: `.elemap-grid-frame-${this.mapId}`,
       grid: `.elemap-grid-${this.mapId}`,
@@ -374,5 +374,5 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
     }
   }
 
-  protected abstract cssType() : string;
+  protected abstract _cssType() : string;
 }

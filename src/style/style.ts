@@ -14,12 +14,12 @@ export interface StyleDecls {
 export abstract class Style<D extends StyleDecls, P extends StyleProps> {
   [key: string]: any;
 
-  protected types: StyleTypes;
+  protected _types: StyleTypes;
 
   constructor(types: StyleTypes, values: D) {
-    this.types = types;
+    this._types = types;
 
-    for (const key of Object.keys(this.types)) {
+    for (const key of Object.keys(this._types)) {
       let propValues: PropValues|string;
       if (values[key]) {
         propValues = values[key];
@@ -31,8 +31,8 @@ export abstract class Style<D extends StyleDecls, P extends StyleProps> {
   }
 
   public setProp(key: keyof P, values: PropValues|string) : void {
-    if (!this.types.hasOwnProperty(key as any)) return;
-    this[key as string] = this.newProp(this.types[key as any] as any, values);
+    if (!this._types.hasOwnProperty(key as any)) return;
+    this[key as string] = this._newProp(this._types[key as any] as any, values);
   }
   public setProps(decls: StyleDecls) : void {
     for (const [key, values] of Object.entries(decls)) {
@@ -40,7 +40,7 @@ export abstract class Style<D extends StyleDecls, P extends StyleProps> {
     }
   }
 
-  private newProp<T extends Prop<Vs>, Vs extends PropValues>(prop: new (values: Vs|string) => T, values: Vs|string) : T {
+  private _newProp<T extends Prop<Vs>, Vs extends PropValues>(prop: new (values: Vs|string) => T, values: Vs|string) : T {
     return new prop(values);
   }
 

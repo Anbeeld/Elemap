@@ -15,11 +15,11 @@ export abstract class AbstractTile {
   protected _style: TileStyleSet;
   public get style() : TileStyleSet { return this._style; }
 
-  protected elements?: {
+  protected _elements?: {
     outer?: HTMLElement,
     inner: HTMLElement
   }
-  public get element() : HTMLElement|undefined { return this.elements?.inner; }
+  public get element() : HTMLElement|undefined { return this._elements?.inner; }
 
   protected _index: Index;
   public get index() : Index { return this._index; }
@@ -34,7 +34,7 @@ export abstract class AbstractTile {
     this._style = style;
   }
 
-  protected deviateStyle() : void {
+  protected _deviateStyle() : void {
     let grid = getGridById(this.gridId);
     if (grid && grid.style.tile === this.style) {
       this._style = TileStyleSetFromDecls(TileStyleSetToDecls(this._style));
@@ -42,46 +42,46 @@ export abstract class AbstractTile {
   }
 
   public setProp(element: 'outer'|'inner'|'contour', selector: 'regular'|'hover', prop: string, value: PropValues|string) : void {
-    this.deviateStyle();
+    this._deviateStyle();
     (this._style[element] as any)[selector].setProp(prop, value); // TODO
   }
 
-  protected initElements() : void {
-    if (!this.elements) {
-      this.elements = {
+  protected _initElements() : void {
+    if (!this._elements) {
+      this._elements = {
         inner: document.createElement('div')
       }
     }
-    if (!this.elements.outer) {
+    if (!this._elements.outer) {
       let grid = getGridById(this.gridId);
       if (grid && grid.style.tile !== this.style) {
-        this.elements.outer = document.createElement('div');
+        this._elements.outer = document.createElement('div');
       }
     }
   }
 
   public render(outer: HTMLElement, inner: HTMLElement) : void {
-    this.initElements();
+    this._initElements();
     for (const [key, value] of Object.entries(this.coords)) {
-      if (this.elements!.outer) {
-        this.elements!.outer.dataset['elemap' + capitalizeFirstLetter(key)] = value.toString();
+      if (this._elements!.outer) {
+        this._elements!.outer.dataset['elemap' + capitalizeFirstLetter(key)] = value.toString();
       }
-      this.elements!.inner.dataset['elemap' + capitalizeFirstLetter(key)] = value.toString();
+      this._elements!.inner.dataset['elemap' + capitalizeFirstLetter(key)] = value.toString();
     }
-    if (this.elements!.outer) {
-      if (!outer.contains(this.elements!.outer)) {
-        outer.appendChild(this.elements!.outer);
+    if (this._elements!.outer) {
+      if (!outer.contains(this._elements!.outer)) {
+        outer.appendChild(this._elements!.outer);
       }
     }
-    if (!inner.contains(this.elements!.inner)) {
-      inner.appendChild(this.elements!.inner);
+    if (!inner.contains(this._elements!.inner)) {
+      inner.appendChild(this._elements!.inner);
     }
   }
 
   public hover() : void {
     let grid = getGridById(this.gridId);
     if (grid) {
-      grid.setContourPosition(this.elementOffset)
+      grid.setContourPosition(this._elementOffset)
     }
   }
   public unhover() : void {
@@ -91,12 +91,12 @@ export abstract class AbstractTile {
     }
   }
 
-  protected get elementOffset() : OrthogonalCoords {
+  protected get _elementOffset() : OrthogonalCoords {
     let grid = getGridById(this.gridId);
     if (grid) {
       // let map = getMapById(grid.mapId);
       // if (map) {
-        let element = this.elements!.inner;
+        let element = this._elements!.inner;
         let offset: OrthogonalCoords = {x: 0, y: 0};
         while (element) {
           offset.x += element.offsetLeft;

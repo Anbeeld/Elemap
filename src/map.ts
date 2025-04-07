@@ -27,12 +27,12 @@ export abstract class AbstractMap {
     this._id = Raoi.push(this);
     config; // TODO
     this._style = style;
-    this._elements = this.initElements();
+    this._elements = this._initElements();
 
     this._elements.cssStatic.innerHTML = this.cssStatic;
   }
 
-  private initElements() : MapElements {
+  private _initElements() : MapElements {
     let elementStyleStatic = document.createElement('style');
     elementStyleStatic.classList.add('elemap-css-static-' + this.id);
     document.head.appendChild(elementStyleStatic);

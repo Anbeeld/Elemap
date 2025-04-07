@@ -47,10 +47,10 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
 
   constructor(mapId: number, config: Config, style: GridStyleGroup) {
     super(mapId, config, style);
-    this.initHexagonSize();
+    this._initHexagonSize();
   }
 
-  private initHexagonSize() : void {
+  private _initHexagonSize() : void {
     let longSize: string;
     let difference: string;
     if (this.orientation === GridOrientation.Pointy) {
@@ -68,7 +68,7 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     }
   }
 
-  protected override initTiles() : void {
+  protected override _initTiles() : void {
     for (let i = 0; i < this._size.width; i++) {
       this._tiles[i] = [];
       for (let j = 0; j < this._size.height; j++) {
@@ -92,7 +92,7 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     return undefined;
   }
 
-  protected hasIntendation(i: number) : boolean {
+  protected _hasIntendation(i: number) : boolean {
     if (this.offset === GridOffset.Odd) {
       return i % 2 === 1;
     } else {
@@ -104,10 +104,10 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
       CSS 
   -------- */
 
-  protected override cssFrameClipPath() {
+  protected override _cssFrameClipPath() {
     let path = '';
-    let topPerTile: number = cssValueToNumber(this.tileSize.spaced.height) - cssValueToNumber(this.tileRecess.vertical) - cssValueToNumber(this._spacing);
-    let leftPerTile: number = cssValueToNumber(this.tileSize.spaced.width) - cssValueToNumber(this.tileRecess.horizontal) - cssValueToNumber(this._spacing);
+    let topPerTile: number = cssValueToNumber(this.tileSize.spaced.height) - cssValueToNumber(this._tileRecess.vertical) - cssValueToNumber(this._spacing);
+    let leftPerTile: number = cssValueToNumber(this.tileSize.spaced.width) - cssValueToNumber(this._tileRecess.horizontal) - cssValueToNumber(this._spacing);
     for (let i = 0; i < this._size.width; i++) {
       for (let j = 0; j < this._size.height; j++) {
         if (path !== '') {
@@ -118,8 +118,8 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
           this.hexagonSize.spaced,
           cssValueToNumber(this.style.self.outer.regular.borderRadius.radius),
           {
-            top: i * topPerTile + (this.hasIntendation(j) ? 1 : 0) * cssValueToNumber(this.tileIntendation.vertical),
-            left: j * leftPerTile + (this.hasIntendation(i) ? 1 : 0) * cssValueToNumber(this.tileIntendation.horizontal)
+            top: i * topPerTile + (this._hasIntendation(j) ? 1 : 0) * cssValueToNumber(this._tileIntendation.vertical),
+            left: j * leftPerTile + (this._hasIntendation(i) ? 1 : 0) * cssValueToNumber(this._tileIntendation.horizontal)
           }
         );
       }
@@ -127,7 +127,7 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     return path;
   }
 
-  protected override cssType() : string {
+  protected override _cssType() : string {
     let hexagonSizeContourLong = subtractCssLength(this.hexagonSize.spaced.long, multiplyCssLength(this.style.tile.contour.hover.width.length, 2));
     let hexagonSizeContour: hexagonSize = {
       side: divideCssLength(hexagonSizeContourLong, 2),
@@ -136,80 +136,80 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     }
 
     return `` +
-    this.selector.innerTile + `{` +
+    this._selector.innerTile + `{` +
       `clip-path:path('${generateHexagonPath(this.orientation, this.hexagonSize.inner, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))}');` +
     `}` +
 
-    this.selector.outerTile + `{` +
+    this._selector.outerTile + `{` +
       `clip-path:path('${generateHexagonPath(this.orientation, this.hexagonSize.outer, 0)}');` +
     `}` +
 
-    this.selector.contour + `>div{` +
+    this._selector.contour + `>div{` +
       `clip-path:path(evenodd,'${generateHexagonPath(this.orientation, this.hexagonSize.spaced, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))} ${generateHexagonPath(this.orientation, hexagonSizeContour, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius), {top: cssValueToNumber(this.style.tile.contour.hover.width.length), left: cssValueToNumber(this.style.tile.contour.hover.width.length)})}');` +
     `}`
-    + this.cssTileRecess()
-    + this.cssTileIntendation();
+    + this._cssTileRecess()
+    + this._cssTileIntendation();
   }
 
   /* NOTE: for pointy grids recess and intendation are made on rows, for flat grids on tiles because there are no columns in html */
 
   // 1/4 of height; height is longer diagonal, side is 1/2 of diagonal, thus triangles are 1/2 of 1/2 high each
-  private cssTileRecess() : string {
+  private _cssTileRecess() : string {
     if (this.orientation === GridOrientation.Pointy) {
       return `` +
-      this.selector.row + `:not(:first-child){` +
-        `margin-top:${subtractCssLength('0px', this.tileRecess.vertical)};` +
+      this._selector.row + `:not(:first-child){` +
+        `margin-top:${subtractCssLength('0px', this._tileRecess.vertical)};` +
       `}`;
     } else {
       return `` +
-      this.selector.tile + `:not(:first-child){` +
-        `margin-left:${subtractCssLength(this.cssTileOuterMargin(), this.tileRecess.horizontal)};` +
+      this._selector.tile + `:not(:first-child){` +
+        `margin-left:${subtractCssLength(this._cssTileOuterMargin(), this._tileRecess.horizontal)};` +
       `}`;
     }
   }
 
-  private get tileRecess() : {vertical: string, horizontal: string} {
+  private get _tileRecess() : {vertical: string, horizontal: string} {
     if (this.orientation === GridOrientation.Pointy) {
       return {
-        vertical: divideCssLength(subtractCssLength(this.tileSize.spaced.height, this.cssTileInnerMargin()), 4),
+        vertical: divideCssLength(subtractCssLength(this.tileSize.spaced.height, this._cssTileInnerMargin()), 4),
         horizontal: '0px'
       };
     } else {
       return {
         vertical: '0px',
-        horizontal: divideCssLength(subtractCssLength(this.tileSize.spaced.width, this.cssTileInnerMargin()), 4)
+        horizontal: divideCssLength(subtractCssLength(this.tileSize.spaced.width, this._cssTileInnerMargin()), 4)
       };
     }
   }
 
-  private cssTileIntendation() : string {
+  private _cssTileIntendation() : string {
     let intendationRule: string = this.offset === 'even' ? '2n - 1' : '2n';
     if (this.orientation === GridOrientation.Pointy) {
       return `` +
-      this.selector.row + `:nth-child(${intendationRule}){` +
-        `margin-left:${/*addCssLength('0px', */this.tileIntendation.horizontal/*)*/};` +
+      this._selector.row + `:nth-child(${intendationRule}){` +
+        `margin-left:${/*addCssLength('0px', */this._tileIntendation.horizontal/*)*/};` +
       `}`;
     } else {
       return `` +
-      this.selector.row + `:last-child{` +
-        `padding-bottom:${this.tileIntendation.vertical};` +
+      this._selector.row + `:last-child{` +
+        `padding-bottom:${this._tileIntendation.vertical};` +
       `}` +
-      this.selector.tile + `:nth-child(${intendationRule}){` +
-        `margin-top:${addCssLength(this.cssTileOuterMargin(), this.tileIntendation.vertical)};` +
-        `margin-bottom:${addCssLength(this.cssTileOuterMargin(), subtractCssLength('0px', this.tileIntendation.vertical))};` +
+      this._selector.tile + `:nth-child(${intendationRule}){` +
+        `margin-top:${addCssLength(this._cssTileOuterMargin(), this._tileIntendation.vertical)};` +
+        `margin-bottom:${addCssLength(this._cssTileOuterMargin(), subtractCssLength('0px', this._tileIntendation.vertical))};` +
       `}`;
     }
   }
 
-  private get tileIntendation() : {vertical: string, horizontal: string} {
+  private get _tileIntendation() : {vertical: string, horizontal: string} {
     if (this.orientation === GridOrientation.Pointy) {
       return {
         vertical: '0px',
-        horizontal: divideCssLength(subtractCssLength(this.tileSize.spaced.width, this.cssTileInnerMargin()), 2)
+        horizontal: divideCssLength(subtractCssLength(this.tileSize.spaced.width, this._cssTileInnerMargin()), 2)
       };
     } else {
       return {
-        vertical: divideCssLength(subtractCssLength(this.tileSize.spaced.height, this.cssTileInnerMargin()), 2),
+        vertical: divideCssLength(subtractCssLength(this.tileSize.spaced.height, this._cssTileInnerMargin()), 2),
         horizontal: '0px'
       };
     }

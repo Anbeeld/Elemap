@@ -9,7 +9,7 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
     super(mapId, config, style);
   }
 
-  protected override initTiles() : void {
+  protected override _initTiles() : void {
     for (let i = 0; i < this._size.width; i++) {
       this._tiles[i] = [];
       for (let j = 0; j < this._size.height; j++) {
@@ -37,19 +37,19 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
       CSS 
   -------- */
 
-  protected override cssType() : string {
+  protected override _cssType() : string {
     let tileSizeContour: tileSize = {
       width: subtractCssLength(this.tileSize.spaced.width, multiplyCssLength(this.style.tile.contour.hover.width.length, 2)),
       height: subtractCssLength(this.tileSize.spaced.height, multiplyCssLength(this.style.tile.contour.hover.width.length, 2))
     }
 
     return `` +
-    this.selector.contour + `>div{` +
+    this._selector.contour + `>div{` +
       `clip-path:path(evenodd,'${generateRectanglePath(this.tileSize.spaced, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))} ${generateRectanglePath(tileSizeContour, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius), {top: cssValueToNumber(this.style.tile.contour.hover.width.length), left: cssValueToNumber(this.style.tile.contour.hover.width.length)})}');` +
     `}`;
   }
   
-  protected override cssFrameClipPath() {
+  protected override _cssFrameClipPath() {
     let path = '';
     for (let i = 0; i < this._size.width; i++) {
       for (let j = 0; j < this._size.height; j++) {
