@@ -1,16 +1,13 @@
-import { getGridById, Coords, Index, capitalizeFirstLetter, OrthogonalCoords } from './utils.js';
-import Raoi from 'raoi';
+import { Coords, Index, capitalizeFirstLetter, OrthogonalCoords } from './utils.js';
 
 import { TileStyleSet, TileStyleSetFromDecls, TileStyleSetToDecls } from './style/set.js';
 import { PropValues } from './style/css/prop.js';
 import { cssValueToNumber } from './style/css/utils.js';
+import { GridIds, Register, TileIds } from './register.js';
 
 export abstract class AbstractTile {
-  protected _id: number;
-  public get id() : number { return this._id; }
-
-  protected _gridId: number;
-  public get gridId() : number { return this._gridId; }
+  protected _ids: TileIds;
+  public get ids() : TileIds { return this._ids; }
 
   protected _style: TileStyleSet;
   public get style() : TileStyleSet { return this._style; }
@@ -27,15 +24,14 @@ export abstract class AbstractTile {
   protected abstract _coords: Coords;
   public get coords() : Coords { return this._coords; }
 
-  constructor(gridId: number, index: Index, style: TileStyleSet) {
-    this._id = Raoi.push(this);
-    this._gridId = gridId;
+  constructor(gridIds: GridIds, index: Index, style: TileStyleSet) {
+    this._ids = new TileIds(gridIds, Register.id());
     this._index = index;
     this._style = style;
   }
 
   protected _deviateStyle() : void {
-    let grid = getGridById(this.gridId);
+    let grid = Register.grid(this.ids);
     if (grid && grid.style.tile === this.style) {
       this._style = TileStyleSetFromDecls(TileStyleSetToDecls(this._style));
     }
@@ -53,7 +49,7 @@ export abstract class AbstractTile {
       }
     }
     if (!this._elements.outer) {
-      let grid = getGridById(this.gridId);
+      let grid = Register.grid(this.ids);
       if (grid && grid.style.tile !== this.style) {
         this._elements.outer = document.createElement('div');
       }
@@ -79,20 +75,20 @@ export abstract class AbstractTile {
   }
 
   public hover() : void {
-    let grid = getGridById(this.gridId);
+    let grid = Register.grid(this.ids);
     if (grid) {
       grid.setContourPosition(this._elementOffset)
     }
   }
   public unhover() : void {
-    let grid = getGridById(this.gridId);
+    let grid = Register.grid(this.ids);
     if (grid) {
       grid.setContourPosition(false);
     }
   }
 
   protected get _elementOffset() : OrthogonalCoords {
-    let grid = getGridById(this.gridId);
+    let grid = Register.grid(this.ids);
     if (grid) {
       let element = this._elements!.inner;
       let offset: OrthogonalCoords = {x: 0, y: 0};

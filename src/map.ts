@@ -1,10 +1,9 @@
-import Raoi from 'raoi';
-
 import { AbstractTile } from './tile.js';
 import { AbstractGrid } from './grid.js';
 import { Config } from "./utils.js";
 
 import { SurfaceStyleGroup, SurfaceStyleSet, GridStyleGroup } from './style/set.js';
+import { MapIds, Register } from './register.js';
 
 interface MapElements {
   container?: HTMLElement,
@@ -14,8 +13,8 @@ interface MapElements {
 }
 
 export abstract class AbstractMap {
-  protected _id: number;
-  public get id() : number { return this._id; }
+  protected _ids: MapIds;
+  public get ids() : MapIds { return this._ids; }
 
   protected _elements: MapElements;
   public get elements() : MapElements { return this._elements; }
@@ -24,7 +23,8 @@ export abstract class AbstractMap {
   public get style() : SurfaceStyleSet { return this._style; }
 
   constructor(config: Config, style: SurfaceStyleSet) {
-    this._id = Raoi.push(this);
+    this._ids = new MapIds(Register.id());
+    Register.add(this);
     config; // TODO
     this._style = style;
     this._elements = this._initElements();
@@ -34,11 +34,11 @@ export abstract class AbstractMap {
 
   private _initElements() : MapElements {
     let elementStyleStatic = document.createElement('style');
-    elementStyleStatic.classList.add('elemap-' + this.id + '-css-static');
+    elementStyleStatic.classList.add('elemap-' + this.ids.self + '-css-static');
     document.head.appendChild(elementStyleStatic);
 
     let elementStyleDynamic = document.createElement('style');
-    elementStyleDynamic.classList.add('elemap-' + this.id + '-css-dynamic');
+    elementStyleDynamic.classList.add('elemap-' + this.ids.self + '-css-dynamic');
     document.head.appendChild(elementStyleDynamic);
 
     return {
@@ -48,20 +48,20 @@ export abstract class AbstractMap {
   }
 
   public initRender(container: HTMLElement) {
-    for (let element of document.getElementsByClassName('elemap-' + this.id + '-container')) {
+    for (let element of document.getElementsByClassName('elemap-' + this.ids.self + '-container')) {
       if (element === container) {
         continue;
       }
-      element.classList.remove('elemap-' + this.id + '-container');
+      element.classList.remove('elemap-' + this.ids.self + '-container');
     }
     if (this.elements.container !== container) {
       this.elements.container = container;
-      this.elements.container.classList.add('elemap-' + this.id + '-container');
+      this.elements.container.classList.add('elemap-' + this.ids.self + '-container');
     }
     
     if (!this.elements.surface) {
       this.elements.surface = document.createElement('div');
-      this.elements.surface.classList.add('elemap-' + this.id + '-surface');
+      this.elements.surface.classList.add('elemap-' + this.ids.self + '-surface');
     }
 
     this.elements.container.appendChild(this.elements.surface);
@@ -69,11 +69,11 @@ export abstract class AbstractMap {
 
   public get cssStatic() : string {
     return `` +
-    `.elemap-${this.id}-container{` +
+    `.elemap-${this.ids.self}-container{` +
       `width:max-content;` +
     `}` +
 
-    `.elemap-${this.id}-surface{` +
+    `.elemap-${this.ids.self}-surface{` +
       `position:relative;` +
       `width:max-content;` +
       `z-index:10;` +
@@ -82,11 +82,11 @@ export abstract class AbstractMap {
 
   public get cssDynamic() : string {
     return `` +
-    `.elemap-${this.id}-surface{` +
+    `.elemap-${this.ids.self}-surface{` +
       this.style.outer.regular.css +
     `}` +
 
-    `.elemap-${this.id}-surface>*{` +
+    `.elemap-${this.ids.self}-surface>*{` +
       this.style.inner.regular.css +
     `}`;
   }
@@ -96,9 +96,9 @@ export abstract class AbstractGridMap<Grid extends AbstractGrid<AbstractTile>> e
   protected _grid: Grid;
   public get grid() : Grid { return this._grid; }
 
-  constructor(config: Config, style: SurfaceStyleGroup, gridClass: new (mapId: number, config: Config, style: GridStyleGroup) => Grid) {
+  constructor(config: Config, style: SurfaceStyleGroup, gridClass: new (mapIds: MapIds, config: Config, style: GridStyleGroup) => Grid) {
     super(config, style.self);
-    this._grid = new gridClass(this.id, config, style.grid);
+    this._grid = new gridClass(this.ids, config, style.grid);
 
     this.elements.cssStatic.innerHTML = this.cssStatic + this.grid.cssStatic;
   }

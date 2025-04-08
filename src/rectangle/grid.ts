@@ -3,17 +3,18 @@ import RectangleTile from "./tile.js";
 import { Config, generateRectanglePath, indexToOrthogonalCoords, orthogonalCoordsToIndex, tileSize } from "../utils.js";
 import { GridStyleGroup } from "../style/set.js";
 import { cssValueToNumber, multiplyCssLength, subtractCssLength } from "../style/css/utils.js";
+import { MapIds } from "src/register.js";
 
 export default class RectangleGrid extends AbstractGrid<RectangleTile> {
-  constructor(mapId: number, config: Config, style: GridStyleGroup) {
-    super(mapId, config, style);
+  constructor(mapIds: MapIds, config: Config, style: GridStyleGroup) {
+    super(mapIds, config, style);
   }
 
   protected override _initTiles() : void {
     for (let i = 0; i < this._size.width; i++) {
       this._tiles[i] = [];
       for (let j = 0; j < this._size.height; j++) {
-        this._tiles[i]![j] = new RectangleTile(this.id, {i, j}, indexToOrthogonalCoords({i, j}), this.style.tile);
+        this._tiles[i]![j] = new RectangleTile(this.ids, {i, j}, indexToOrthogonalCoords({i, j}), this.style.tile);
       }
     }
   }
@@ -24,10 +25,10 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
   }
   
   public override tileByElement(element: HTMLElement) : RectangleTile|undefined {
-    if (element.hasAttribute('data-elemap-i') && element.hasAttribute('data-elemap-j')) {
+    if (element.hasAttribute('data-elemap-x') && element.hasAttribute('data-elemap-y')) {
       return this.tileByCoords(
-        Number(element.getAttribute('data-elemap-i')!),
-        Number(element.getAttribute('data-elemap-j')!)
+        Number(element.getAttribute('data-elemap-x')!),
+        Number(element.getAttribute('data-elemap-y')!)
       );
     }
     return undefined;

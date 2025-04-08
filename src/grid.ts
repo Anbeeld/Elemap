@@ -1,8 +1,8 @@
 import { AbstractTile } from "./tile.js";
-import { Size, Config, tileSizeSet, GridOrientation, GridOffset, getMapById, Index, OrthogonalCoords } from "./utils.js";
+import { Size, Config, tileSizeSet, GridOrientation, GridOffset, Index, OrthogonalCoords } from "./utils.js";
 import { GridStyleGroup, TileStyleSet } from "./style/set.js";
 import { addCssLength, divideCssLength, multiplyCssLength, subtractCssLength } from "./style/css/utils.js";
-import Raoi from 'raoi';
+import { GridIds, MapIds, Register } from "./register.js";
 
 interface GridElements {
   frame: HTMLElement;
@@ -15,11 +15,8 @@ interface GridElements {
 }
 
 export abstract class AbstractGrid<Tile extends AbstractTile> {
-  protected _id: number;
-  public get id() : number { return this._id; }
-
-  protected _mapId: number;
-  public get mapId() : number { return this._mapId; }
+  protected _ids: GridIds;
+  public get ids() : GridIds { return this._ids; }
 
   protected _size: Size;
   public get size() : Size { return this._size; }
@@ -69,9 +66,8 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   protected _elements?: GridElements;
   public get elements() : GridElements|undefined { return this._elements; }
 
-  constructor(mapId: number, config: Config, style: GridStyleGroup) {
-    this._id = Raoi.push(this);
-    this._mapId = mapId;
+  constructor(mapIds: MapIds, config: Config, style: GridStyleGroup) {
+    this._ids = new GridIds(mapIds, Register.id());
     this._style = style;
     this._size = config.size!; // TODO
 
@@ -95,15 +91,15 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
         contourHover: document.createElement('div')
       }
 
-      this._elements.frame.classList.add('elemap-' + this.mapId + '-grid-frame');
+      this._elements.frame.classList.add('elemap-' + this.ids.map + '-grid-frame');
 
-      this._elements.outer.classList.add('elemap-' + this.mapId + '-grid');
-      this._elements.outer.classList.add('elemap-' + this.mapId + '-grid-outer');
+      this._elements.outer.classList.add('elemap-' + this.ids.map + '-grid');
+      this._elements.outer.classList.add('elemap-' + this.ids.map + '-grid-outer');
 
-      this._elements.inner.classList.add('elemap-' + this.mapId + '-grid');
-      this._elements.inner.classList.add('elemap-' + this.mapId + '-grid-inner');
+      this._elements.inner.classList.add('elemap-' + this.ids.map + '-grid');
+      this._elements.inner.classList.add('elemap-' + this.ids.map + '-grid-inner');
 
-      this._elements.contour.classList.add('elemap-' + this.mapId + '-grid-contour');
+      this._elements.contour.classList.add('elemap-' + this.ids.map + '-grid-contour');
       this._elements.contour.appendChild(this._elements.contourHover);
     }
   }
@@ -244,7 +240,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   }
 
   public get cssDynamic() : string {
-    let mapPadding = getMapById(this.mapId)!.style.outer.regular.padding;
+    let mapPadding = Register.map(this.ids)!.style.outer.regular.padding;
     return `` +
     
     this._selector.frame + `{` +
@@ -360,17 +356,17 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
 
   protected get _selector() {
     return {
-      frame: `.elemap-${this.mapId}-grid-frame`,
-      grid: `.elemap-${this.mapId}-grid`,
-      row: `.elemap-${this.mapId}-grid>div`,
-      tile: `.elemap-${this.mapId}-grid>div>div`,
-      outerGrid: `.elemap-${this.mapId}-grid-outer`,
-      innerGrid: `.elemap-${this.mapId}-grid-inner`,
-      outerRow: `.elemap-${this.mapId}-grid-outer>div`,
-      innerRow: `.elemap-${this.mapId}-grid-inner>div`,
-      outerTile: `.elemap-${this.mapId}-grid-outer>div>div`,
-      innerTile: `.elemap-${this.mapId}-grid-inner>div>div`,
-      contour: `.elemap-${this.mapId}-grid-contour`
+      frame: `.elemap-${this.ids.map}-grid-frame`,
+      grid: `.elemap-${this.ids.map}-grid`,
+      row: `.elemap-${this.ids.map}-grid>div`,
+      tile: `.elemap-${this.ids.map}-grid>div>div`,
+      outerGrid: `.elemap-${this.ids.map}-grid-outer`,
+      innerGrid: `.elemap-${this.ids.map}-grid-inner`,
+      outerRow: `.elemap-${this.ids.map}-grid-outer>div`,
+      innerRow: `.elemap-${this.ids.map}-grid-inner>div`,
+      outerTile: `.elemap-${this.ids.map}-grid-outer>div>div`,
+      innerTile: `.elemap-${this.ids.map}-grid-inner>div>div`,
+      contour: `.elemap-${this.ids.map}-grid-contour`
     }
   }
 

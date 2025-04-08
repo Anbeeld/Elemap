@@ -1,19 +1,7 @@
-import { AbstractGrid } from './grid.js';
-import { AbstractTile } from './tile.js';
-import Raoi from 'raoi';
 import { cssValueToNumber } from './style/css/utils.js';
-import { AbstractMap } from './map.js';
 
 export type Size = {width: number, height: number};
 export type Index = {i: number, j: number};
-
-export function getGridById(gridId: number) : AbstractGrid<AbstractTile>|undefined {
-  return Raoi.get(gridId, AbstractGrid<AbstractTile>);
-}
-
-export function getMapById(mapId: number) : AbstractMap|undefined {
-  return Raoi.get(mapId, AbstractMap);
-}
 
 export enum MapType {
   Plain = 'plain',

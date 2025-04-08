@@ -3,6 +3,7 @@ import HexagonTile from "./tile.js";
 import { Config, GridOrientation, generateHexagonPath, hexagonSizeRatio, hexagonSizeSet, hexagonSize, indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset } from "../utils.js";
 import { GridStyleGroup } from "../style/set.js";
 import { cssValueToNumber, addCssLength, multiplyCssLength, divideCssLength, subtractCssLength } from "../style/css/utils.js";
+import { MapIds } from "src/register.js";
 
 export default class HexagonGrid extends AbstractGrid<HexagonTile> {
   public get hexagonSize() : hexagonSizeSet {
@@ -45,8 +46,8 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     }
   }
 
-  constructor(mapId: number, config: Config, style: GridStyleGroup) {
-    super(mapId, config, style);
+  constructor(mapIds: MapIds, config: Config, style: GridStyleGroup) {
+    super(mapIds, config, style);
     this._initHexagonSize();
   }
 
@@ -72,7 +73,7 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     for (let i = 0; i < this._size.width; i++) {
       this._tiles[i] = [];
       for (let j = 0; j < this._size.height; j++) {
-        this._tiles[i]![j] = new HexagonTile(this.id, {i, j}, indexToAxialCoords({i, j}, this.orientation, this.offset), this.style.tile);
+        this._tiles[i]![j] = new HexagonTile(this.ids, {i, j}, indexToAxialCoords({i, j}, this.orientation, this.offset), this.style.tile);
       }
     }
   }
