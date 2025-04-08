@@ -56,11 +56,11 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
       for (let j = 0; j < this._size.height; j++) {
         if (path !== '') path += ' ';
         path += generateRectanglePath(
-          this.tileSize.outer,
+          this.tileSize.spaced,
           cssValueToNumber(this.style.self.outer.regular.borderRadius.radius),
           {
-            top: i * (cssValueToNumber(this.tileSize.outer.height) - cssValueToNumber(this._spacing)),
-            left: j * (cssValueToNumber(this.tileSize.outer.width) - cssValueToNumber(this._spacing)) 
+            top: i * (cssValueToNumber(this.tileSize.spaced.height) - cssValueToNumber(this._spacing)),
+            left: j * (cssValueToNumber(this.tileSize.spaced.width) - cssValueToNumber(this._spacing)) 
           }
         );
       }
