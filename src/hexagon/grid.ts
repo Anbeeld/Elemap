@@ -193,7 +193,7 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     } else {
       return `` +
       this._selector.row + `:last-child{` +
-        `padding-bottom:${this._tileIntendation.vertical};` +
+        `height:${addCssLength(this.tileSize.outer.height, this._tileIntendation.vertical)};` +
       `}` +
       this._selector.tile + `:nth-child(${intendationRule}){` +
         `margin-top:${addCssLength(this._cssTileOuterMargin(), this._tileIntendation.vertical)};` +
