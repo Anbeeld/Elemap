@@ -1,27 +1,32 @@
 {
   "name": "elemap",
   "version": "0.1.0",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "scripts": {
-    "build": "npx webpack",
-    "examples": "npm run build && node examples/app.js"
-  },
-  "author": "Anbeeld <anbeeld@gmail.com>",
-  "license": "MIT",
   "description": "Elemap is a TS library allowing to create interactive game maps of various types, rendered using HTML elements and CSS.",
   "keywords": [
     "game",
     "map",
     "hexagon"
   ],
+  "homepage": "https://anbeeld.com/elemap",
   "repository": "github:Anbeeld/Elemap",
+  "bugs": {
+    "url": "https://github.com/Anbeeld/Elemap/issues",
+    "email": "anbeeld@gmail.com"
+  },
+  "license": "MIT",
+  "author": "Anbeeld <anbeeld@gmail.com> (https://anbeeld.com)",
   "funding": "http://anbeeld.com/support",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "npx webpack",
+    "examples": "npm run build && node examples/app.js"
+  },
   "devDependencies": {
     "@types/node": "^22.14.0",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.3",
     "webpack-cli": "^6.0.1"
-  },
-  "type": "module"
+  }
 }
