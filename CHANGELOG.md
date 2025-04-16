@@ -1,3 +1,8 @@
+## 0.1.2
+
+- Reduced default values for width and height (as in the amount of tiles) of a grid.
+- Fixed grid width and height being mixed up in a few places in the code.
+
 ## 0.1.1
 
 - Merged functionality of :before CSS pseudo-elements of inner tiles into their main elements, removing unnecessary HTML elements.

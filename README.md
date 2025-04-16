@@ -1,12 +1,14 @@
+![Elemap cover image](https://anbeeld.com/images/elemap-cover.jpg)
+
 [![NPM](https://img.shields.io/npm/v/elemap?label=NPM)](https://www.npmjs.com/package/elemap)
 
 # Elemap
 
-Elemap is a TS library allowing to create interactive game maps of various types, rendered using HTML elements and CSS. This means you can easily populate it by adding your own HTML and extend its functionality by attaching JS function to its elements.
-
-It goes well with my other library, [Tilted](https://github.com/anbeeld/Tilted), made for displaying content like game maps in a modern way.
+Elemap is a no-dependency TS library for creating interactive game maps, rendered using HTML elements and CSS. This way you can easily populate them by adding your own HTML and manipulate everything hassle-free with JS/TS.
 
 Live demo is available [on my website](https://anbeeld.com/elemap).
+
+It goes well with my other library, [Tilted](https://github.com/anbeeld/Tilted), made for displaying content like game maps in a modern 2.5D way.
 
 [![Support my work!](https://anbeeld.com/images/support.jpg)](https://anbeeld.com/support)
 
@@ -50,3 +52,5 @@ More sophisticated documentation will be provided in the future.
 - Ensure best possible performance.
 - Improve overall code quality.
 - ...more to come
+
+[![Support my work!](https://anbeeld.com/images/support.jpg)](https://anbeeld.com/support)
