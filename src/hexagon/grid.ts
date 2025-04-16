@@ -70,9 +70,9 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
   }
 
   protected override _initTiles() : void {
-    for (let i = 0; i < this._size.width; i++) {
+    for (let i = 0; i < this._size.height; i++) {
       this._tiles[i] = [];
-      for (let j = 0; j < this._size.height; j++) {
+      for (let j = 0; j < this._size.width; j++) {
         this._tiles[i]![j] = new HexagonTile(this.ids, {i, j}, indexToAxialCoords({i, j}, this.orientation, this.offset), this.style.tile);
       }
     }
@@ -109,8 +109,8 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     let path = '';
     let topPerTile: number = cssValueToNumber(this.tileSize.spaced.height) - cssValueToNumber(this._tileRecess.vertical) - cssValueToNumber(this._spacing);
     let leftPerTile: number = cssValueToNumber(this.tileSize.spaced.width) - cssValueToNumber(this._tileRecess.horizontal) - cssValueToNumber(this._spacing);
-    for (let i = 0; i < this._size.width; i++) {
-      for (let j = 0; j < this._size.height; j++) {
+    for (let i = 0; i < this._size.height; i++) {
+      for (let j = 0; j < this._size.width; j++) {
         if (path !== '') {
           path += ' ';
         }

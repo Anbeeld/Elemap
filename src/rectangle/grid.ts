@@ -11,9 +11,9 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
   }
 
   protected override _initTiles() : void {
-    for (let i = 0; i < this._size.width; i++) {
+    for (let i = 0; i < this._size.height; i++) {
       this._tiles[i] = [];
-      for (let j = 0; j < this._size.height; j++) {
+      for (let j = 0; j < this._size.width; j++) {
         this._tiles[i]![j] = new RectangleTile(this.ids, {i, j}, indexToOrthogonalCoords({i, j}), this.style.tile);
       }
     }
@@ -52,8 +52,8 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
   
   protected override _cssFrameClipPath() {
     let path = '';
-    for (let i = 0; i < this._size.width; i++) {
-      for (let j = 0; j < this._size.height; j++) {
+    for (let i = 0; i < this._size.height; i++) {
+      for (let j = 0; j < this._size.width; j++) {
         if (path !== '') path += ' ';
         path += generateRectanglePath(
           this.tileSize.spaced,
