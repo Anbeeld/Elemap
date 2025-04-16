@@ -5,7 +5,7 @@ export function validateConfig(config: Config) : Config {
     config.type = MapType.Rectangle;
   }
   if (!config.size) {
-    config.size = {width: 50, height: 50};
+    config.size = {width: 32, height: 18};
   }
   if (!config.grid) {
     config.grid = {};
