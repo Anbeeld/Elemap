@@ -10,11 +10,11 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
     super(mapIds, config, style);
   }
 
-  protected override _initTiles() : void {
-    for (let i = 0; i < this._size.height; i++) {
-      this._tiles[i] = [];
-      for (let j = 0; j < this._size.width; j++) {
-        this._tiles[i]![j] = new RectangleTile(this.ids, {i, j}, indexToOrthogonalCoords({i, j}), this.style.tile);
+  protected override initTiles() : void {
+    for (let i = 0; i < this.size.height; i++) {
+      this.tiles[i] = [];
+      for (let j = 0; j < this.size.width; j++) {
+        this.tiles[i]![j] = new RectangleTile(this.ids, {i, j}, indexToOrthogonalCoords({i, j}), this.style.tile);
       }
     }
   }
@@ -38,29 +38,29 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
       CSS 
   -------- */
 
-  protected override _cssType() : string {
+  protected override cssType() : string {
     let tileSizeContour: tileSize = {
       width: subtractCssLength(this.tileSize.spaced.width, multiplyCssLength(this.style.tile.contour.hover.width.length, 2)),
       height: subtractCssLength(this.tileSize.spaced.height, multiplyCssLength(this.style.tile.contour.hover.width.length, 2))
     }
 
     return `` +
-    this._selector.contour + `>div{` +
+    this.selector.contour + `>div{` +
       `clip-path:path(evenodd,'${generateRectanglePath(this.tileSize.spaced, cssValueToNumber(this.style.self.outer.regular.borderRadius.radius))} ${generateRectanglePath(tileSizeContour, cssValueToNumber(this.style.self.inner.regular.borderRadius.radius), {top: cssValueToNumber(this.style.tile.contour.hover.width.length), left: cssValueToNumber(this.style.tile.contour.hover.width.length)})}');` +
     `}`;
   }
   
-  protected override _cssFrameClipPath() {
+  protected override cssFrameClipPath() {
     let path = '';
-    for (let i = 0; i < this._size.height; i++) {
-      for (let j = 0; j < this._size.width; j++) {
+    for (let i = 0; i < this.size.height; i++) {
+      for (let j = 0; j < this.size.width; j++) {
         if (path !== '') path += ' ';
         path += generateRectanglePath(
           this.tileSize.spaced,
           cssValueToNumber(this.style.self.outer.regular.borderRadius.radius),
           {
-            top: i * (cssValueToNumber(this.tileSize.spaced.height) - cssValueToNumber(this._spacing)),
-            left: j * (cssValueToNumber(this.tileSize.spaced.width) - cssValueToNumber(this._spacing)) 
+            top: i * (cssValueToNumber(this.tileSize.spaced.height) - cssValueToNumber(this.spacing)),
+            left: j * (cssValueToNumber(this.tileSize.spaced.width) - cssValueToNumber(this.spacing)) 
           }
         );
       }

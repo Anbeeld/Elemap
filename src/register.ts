@@ -35,12 +35,12 @@ export class Register {
   private static _id: number = 0;
   public static id() : number { return Register._id++; }
   
-  private static _maps: Map<number, AbstractMap> = new Map();
+  private static maps: Map<number, AbstractMap> = new Map();
   public static add(map: AbstractMap) : void {
-    Register._maps.set(map.ids.self, map);
+    Register.maps.set(map.ids.self, map);
   }
   public static map(ids: MapIds) : AbstractMap|undefined {
-    return Register._maps.get(ids.map);
+    return Register.maps.get(ids.map);
   }
   public static grid(ids: MapIds) : AbstractGrid<AbstractTile>|undefined {
     let map = Register.map(ids);

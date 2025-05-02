@@ -7,77 +7,82 @@ import { GridIds, Register, TileIds } from './register.js';
 
 export abstract class AbstractTile {
   protected _ids: TileIds;
+  protected set ids(value: TileIds) { this._ids = value; }
   public get ids() : TileIds { return this._ids; }
 
   protected _style: TileStyleSet;
+  protected set style(value: TileStyleSet) { this._style = value; }
   public get style() : TileStyleSet { return this._style; }
 
-  protected _elements?: {
+  protected elements?: {
     outer?: HTMLElement,
     inner: HTMLElement
   }
-  public get element() : HTMLElement|undefined { return this._elements?.inner; }
+
+  public get element() : HTMLElement|undefined { return this.elements?.inner; }
 
   protected _index: Index;
+  protected set index(value: Index) { this._index = value; }
   public get index() : Index { return this._index; }
 
   protected abstract _coords: Coords;
-  public get coords() : Coords { return this._coords; }
+  protected abstract set coords(value: Coords);
+  public abstract get coords() : Coords;
 
   constructor(gridIds: GridIds, index: Index, style: TileStyleSet) {
-    this._ids = new TileIds(gridIds, Register.id());
-    this._index = index;
-    this._style = style;
+    this.ids = new TileIds(gridIds, Register.id());
+    this.index = index;
+    this.style = style;
   }
 
-  protected _deviateStyle() : void {
+  protected deviateStyle() : void {
     let grid = Register.grid(this.ids);
     if (grid && grid.style.tile === this.style) {
-      this._style = TileStyleSetFromDecls(TileStyleSetToDecls(this._style));
+      this.style = TileStyleSetFromDecls(TileStyleSetToDecls(this.style));
     }
   }
 
   public setProp(element: 'outer'|'inner'|'contour', selector: 'regular'|'hover', prop: string, value: PropValues|string) : void {
-    this._deviateStyle();
-    (this._style[element] as any)[selector].setProp(prop, value); // TODO
+    this.deviateStyle();
+    (this.style[element] as any)[selector].setProp(prop, value); // TODO
   }
 
-  protected _initElements() : void {
-    if (!this._elements) {
-      this._elements = {
+  protected initElements() : void {
+    if (!this.elements) {
+      this.elements = {
         inner: document.createElement('div')
       }
     }
-    if (!this._elements.outer) {
+    if (!this.elements.outer) {
       let grid = Register.grid(this.ids);
       if (grid && grid.style.tile !== this.style) {
-        this._elements.outer = document.createElement('div');
+        this.elements.outer = document.createElement('div');
       }
     }
   }
 
   public render(outer: HTMLElement, inner: HTMLElement) : void {
-    this._initElements();
+    this.initElements();
     for (const [key, value] of Object.entries(this.coords)) {
-      if (this._elements!.outer) {
-        this._elements!.outer.dataset['elemap' + capitalizeFirstLetter(key)] = value.toString();
+      if (this.elements!.outer) {
+        this.elements!.outer.dataset['elemap' + capitalizeFirstLetter(key)] = value.toString();
       }
-      this._elements!.inner.dataset['elemap' + capitalizeFirstLetter(key)] = value.toString();
+      this.elements!.inner.dataset['elemap' + capitalizeFirstLetter(key)] = value.toString();
     }
-    if (this._elements!.outer) {
-      if (!outer.contains(this._elements!.outer)) {
-        outer.appendChild(this._elements!.outer);
+    if (this.elements!.outer) {
+      if (!outer.contains(this.elements!.outer)) {
+        outer.appendChild(this.elements!.outer);
       }
     }
-    if (!inner.contains(this._elements!.inner)) {
-      inner.appendChild(this._elements!.inner);
+    if (!inner.contains(this.elements!.inner)) {
+      inner.appendChild(this.elements!.inner);
     }
   }
 
   public hover() : void {
     let grid = Register.grid(this.ids);
     if (grid) {
-      grid.setContourPosition(this._elementOffset)
+      grid.setContourPosition(this.elementOffset)
     }
   }
   public unhover() : void {
@@ -87,10 +92,10 @@ export abstract class AbstractTile {
     }
   }
 
-  protected get _elementOffset() : OrthogonalCoords {
+  protected get elementOffset() : OrthogonalCoords {
     let grid = Register.grid(this.ids);
     if (grid) {
-      let element = this._elements!.inner;
+      let element = this.elements!.inner;
       let offset: OrthogonalCoords = {x: 0, y: 0};
       while (element) {
         offset.x += element.offsetLeft;

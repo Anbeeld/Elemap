@@ -14,25 +14,28 @@ interface MapElements {
 
 export abstract class AbstractMap {
   protected _ids: MapIds;
+  protected set ids(value: MapIds) { this._ids = value; }
   public get ids() : MapIds { return this._ids; }
 
   protected _elements: MapElements;
+  protected set elements(value: MapElements) { this._elements = value; }
   public get elements() : MapElements { return this._elements; }
 
   protected _style: SurfaceStyleSet;
+  protected set style(value: SurfaceStyleSet) { this._style = value; }
   public get style() : SurfaceStyleSet { return this._style; }
 
   constructor(config: Config, style: SurfaceStyleSet) {
-    this._ids = new MapIds(Register.id());
+    this.ids = new MapIds(Register.id());
     Register.add(this);
     config; // TODO
-    this._style = style;
-    this._elements = this._initElements();
+    this.style = style;
+    this.elements = this.initElements();
 
-    this._elements.cssStatic.innerHTML = this.cssStatic;
+    this.elements.cssStatic.innerHTML = this.cssStatic;
   }
 
-  private _initElements() : MapElements {
+  private initElements() : MapElements {
     let elementStyleStatic = document.createElement('style');
     elementStyleStatic.classList.add('elemap-' + this.ids.self + '-css-static');
     document.head.appendChild(elementStyleStatic);
@@ -94,11 +97,12 @@ export abstract class AbstractMap {
 
 export abstract class AbstractGridMap<Grid extends AbstractGrid<AbstractTile>> extends AbstractMap {
   protected _grid: Grid;
+  protected set grid(value: Grid) { this._grid = value; }
   public get grid() : Grid { return this._grid; }
 
   constructor(config: Config, style: SurfaceStyleGroup, gridClass: new (mapIds: MapIds, config: Config, style: GridStyleGroup) => Grid) {
     super(config, style.self);
-    this._grid = new gridClass(this.ids, config, style.grid);
+    this.grid = new gridClass(this.ids, config, style.grid);
 
     this.elements.cssStatic.innerHTML = this.cssStatic + this.grid.cssStatic;
   }

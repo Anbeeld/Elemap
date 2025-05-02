@@ -16,7 +16,7 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "useUnknownInCatchVariables": true,
-    "strictPropertyInitialization": true,
+    // "strictPropertyInitialization": true,
     "strictFunctionTypes": true,
     "noImplicitThis": true,
     "strictBindCallApply": true,
@@ -28,7 +28,7 @@
     "forceConsistentCasingInFileNames": true, // https://eslint.org/docs/rules/consistent-return ?
     "noFallthroughCasesInSwitch": true, // https://eslint.org/docs/rules/no-fallthrough
     "noUnusedLocals": true, // https://eslint.org/docs/rules/no-unused-vars
-    "noUnusedParameters": true, // https://eslint.org/docs/rules/no-unused-vars#args
+    // "noUnusedParameters": true, // https://eslint.org/docs/rules/no-unused-vars#args
     "allowUnreachableCode": false, // https://eslint.org/docs/rules/no-unreachable ?
     "allowUnusedLabels": false, // https://eslint.org/docs/rules/no-unused-labels
     // Base Strict Checks

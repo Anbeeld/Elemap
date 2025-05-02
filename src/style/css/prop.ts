@@ -7,6 +7,7 @@ export interface PropValues {
 export abstract class Prop<V extends PropValues> {
   [key: string]: string|undefined
   protected abstract _name: string;
+  protected set name(value: string) { this._name = value; }
   public get name() : string { return this._name; }
 
   constructor(defaults: V, values: V|string) {
