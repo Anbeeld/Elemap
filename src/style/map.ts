@@ -1,4 +1,4 @@
-import { MapIds, Register, MapStyleIds, GridIds } from "../register.js";
+import { MapIds, Register, MapStyleIds } from "../register.js";
 import { MapStyleDecls, StyleDecls } from "./set.js";
 import Style from "./style.js";
 import GridStyle from "./grid.js";
@@ -13,7 +13,7 @@ type MapComputed = {
   map: CSSStyleDeclaration,
 }
 
-export class MapStyle extends Style {
+export abstract class MapStyle extends Style {
   protected _ids: MapStyleIds;
   protected set ids(value: MapStyleIds) { this._ids = value; }
   public get ids() : MapStyleIds { return this._ids; }
@@ -109,17 +109,19 @@ export class MapStyle extends Style {
   protected get dynamic() : string { return ``; };
 }
 
-export class GridMapStyle extends MapStyle {
+export abstract class GridMapStyle extends MapStyle {
   protected _grid: GridStyle;
   protected set grid(value: GridStyle) { this._grid = value; }
   public get grid() : GridStyle { return this._grid; }
 
   public override get owner() { return Register.map.grid(this.ids.owner)!; }
 
-  public constructor(mapIds: MapIds, decls: StyleDecls, gridClass: new (ownerIds: GridIds, mapIds: MapStyleIds, decls: StyleDecls) => GridStyle) {
+  public constructor(mapIds: MapIds, decls: StyleDecls) {
     super(mapIds, decls);
-    this.grid = new gridClass(this.owner.grid.ids, this.ids, decls);
+    this.initGrid(decls);
   }
+
+  protected abstract initGrid(decls: StyleDecls) : void;
 
   public override render() {
     this.elements.static.innerHTML = this.static + this.grid.static + this.grid.tile.static;

@@ -162,7 +162,7 @@ export default class HexagonGridStyle extends GridStyle {
     }
   }
 
-  private get tileRecess() : {vertical: string, horizontal: string} {
+  public get tileRecess() : {vertical: string, horizontal: string} {
     if (this.owner.orientation === GridOrientation.Pointy) {
       return {
         vertical: calc.div(this.tile.size.outer.height, 4),

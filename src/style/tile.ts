@@ -107,21 +107,25 @@ export default class TileStyle extends Style {
         `border:none;` +
       `}`;
 
-      // Outer elements use absolute positioning
-      for (let rows of this.owner.grid.tiles) {
-        for (let tile of rows) {
-          css +=
-          this.selectors.outerTile + tile.selectors.data + `{` +
-            `left:${calc.mult(this.size.outer.width, tile.index!.j)};` +
-          `}`; 
-        }
-      }
+      css += this.outerPosition;
     }
 
     return css;
   }
 
-  
+  // Outer elements use absolute positioning
+  public get outerPosition() : string {
+    let css = ``;
+    for (let rows of this.owner.grid.tiles) {
+      for (let tile of rows) {
+        css +=
+        this.selectors.outerTile + tile.selectors.data + `{` +
+          `left:${calc.mult(this.size.outer.width, tile.index!.j)};` +
+        `}`; 
+      }
+    }
+    return css;
+  }
 
   public compute() : void {
     this.computed = {

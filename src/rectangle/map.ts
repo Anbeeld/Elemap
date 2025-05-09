@@ -2,10 +2,9 @@ import { AbstractGridMap } from "../map.js";
 import RectangleGrid from "./grid.js";
 // import RectangleTile from "./tile.js";
 import { Config } from "../utils.js";
-import RectangleGridStyle from "../style/rectangle/grid.js";
 
 import { StyleDecls } from '../style/set.js';
-import { GridMapStyle } from "../style/map.js";
+import RectangleMapStyle from "../style/rectangle/map.js";
 
 export default class RectangleMap extends AbstractGridMap<RectangleGrid> {
   constructor(config: Config, style: StyleDecls) {
@@ -13,6 +12,6 @@ export default class RectangleMap extends AbstractGridMap<RectangleGrid> {
   }
 
   protected override initStyle(style: StyleDecls) : void {
-    this.style = new GridMapStyle(this.ids, style, RectangleGridStyle);
+    this.style = new RectangleMapStyle(this.ids, style);
   }
 }

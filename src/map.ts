@@ -39,9 +39,7 @@ export abstract class AbstractMap {
     this.elements = this.initElements();
   }
 
-  protected initStyle(style: StyleDecls) : void {
-    this.style = new MapStyle(this.ids, style);
-  }
+  protected abstract initStyle(style: StyleDecls) : void;
 
   private initElements() : MapElements {    
     let elementMap = document.createElement('div');

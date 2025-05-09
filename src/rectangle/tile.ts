@@ -12,7 +12,7 @@ export default class RectangleTile extends AbstractTile {
     this.coords = coords;
   }
 
-  protected override setDataAttributes() {    
+  protected override setCoordsAttributes() {    
     if (this.elements!.outer) {
       this.elements!.outer.dataset['elemapX'] = this.coords.x.toString();
       this.elements!.outer.dataset['elemapY'] = this.coords.y.toString();
