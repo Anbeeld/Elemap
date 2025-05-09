@@ -8,30 +8,25 @@ import { AbstractTile } from "./tile.js";
 
 export abstract class Ids {
   public readonly map: number;
-  constructor(self: number) {
-    this.map = self;
+  constructor(mapId: number) {
+    this.map = mapId;
   }
 }
-
 export class MapIds extends Ids {
-  public get self() { return this.map; }
 }
-
 export class GridIds extends MapIds {
   public readonly grid: number;
-  public override get self() { return this.grid; }
-  constructor(mapIds: MapIds, self: number) {
+  constructor(mapIds: MapIds, gridId: number) {
     super(mapIds.map);
-    this.grid = self;
+    this.grid = gridId;
   }
 }
 
 export class TileIds extends GridIds {
   public readonly tile: number;
-  public override get self() { return this.tile; }
-  constructor(gridIds: GridIds, self: number) {
+  constructor(gridIds: GridIds, tileId: number) {
     super(gridIds as MapIds, gridIds.grid);
-    this.tile = self;
+    this.tile = tileId;
   }
 }
 
@@ -43,10 +38,8 @@ export abstract class StyleIds {
     this.map = mapId;
   }
 }
-
 export class MapStyleIds extends StyleIds {
 }
-
 export class GridStyleIds extends MapStyleIds {
   public readonly grid: number;
   constructor(mapIds: MapStyleIds, gridId: number) {
@@ -54,7 +47,6 @@ export class GridStyleIds extends MapStyleIds {
     this.grid = gridId;
   }
 }
-
 export class TileStyleIds extends GridStyleIds {
   public readonly tile: number;
   constructor(gridIds: GridStyleIds, tileId: number) {
@@ -69,7 +61,7 @@ export class Register {
   
   private static maps: Map<number, AbstractMap> = new Map();
   public static add(map: AbstractMap) : void {
-    Register.maps.set(map.ids.self, map);
+    Register.maps.set(map.ids.map, map);
   }
   public static map(ids: MapIds) : AbstractMap|undefined {
     return Register.maps.get(ids.map);

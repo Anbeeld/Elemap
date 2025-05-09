@@ -54,15 +54,15 @@ export abstract class AbstractMap {
   }
 
   public initRender(container: HTMLElement) {
-    for (let element of document.getElementsByClassName('elemap-' + this.ids.self + '-container')) {
+    for (let element of document.getElementsByClassName('elemap-' + this.ids.map + '-container')) {
       if (element === container) {
         continue;
       }
-      element.classList.remove('elemap-' + this.ids.self + '-container');
+      element.classList.remove('elemap-' + this.ids.map + '-container');
     }
     if (this.elements.container !== container) {
       this.elements.container = container;
-      this.elements.container.classList.add('elemap-' + this.ids.self + '-container');
+      this.elements.container.classList.add('elemap-' + this.ids.map + '-container');
     }
 
     this.elements.container.appendChild(this.elements.map);
