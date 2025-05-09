@@ -4,6 +4,7 @@ import { AbstractGridMap, AbstractMap } from "./map.js";
 import RectangleGrid from "./rectangle/grid.js";
 import GridStyle from "./style/grid.js";
 import { GridMapStyle } from "./style/map.js";
+import TileStyle from "./style/tile.js";
 import { AbstractTile } from "./tile.js";
 
 export abstract class Ids {
@@ -127,6 +128,15 @@ export class Register {
       let map = Register.map.abstract(ids);
       if (map && map instanceof AbstractGridMap) {
         return map.style.grid;
+      }
+      return undefined;
+    },
+    tile: (ids: MapIds) : TileStyle|undefined => {
+      let map = Register.map.abstract(ids);
+      if (map && map instanceof AbstractGridMap) {
+        if (map.style.grid && map.style.grid instanceof GridStyle) {
+          return map.style.grid.tile;
+        }
       }
       return undefined;
     }
