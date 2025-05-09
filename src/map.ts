@@ -32,11 +32,10 @@ export abstract class AbstractMap {
     };
   }
 
-  constructor(config: Config, style: StyleDecls) {
+  constructor(config: Config) {
     this.ids = new MapIds(Register.id());
     Register.add(this);
     config; // TODO
-    this.initStyle(style);
     this.elements = this.initElements();
   }
 
@@ -84,8 +83,9 @@ export abstract class AbstractGridMap<Grid extends AbstractGrid<AbstractTile>> e
   public override get style() : GridMapStyle { return this._style; }
 
   constructor(config: Config, style: StyleDecls, gridClass: new (mapIds: MapIds, config: Config, style: StyleDecls) => Grid) {
-    super(config, style);
+    super(config);
     this.grid = new gridClass(this.ids, config, style);
+    this.initStyle(style);
   }
 
   public override render(container: HTMLElement) {
