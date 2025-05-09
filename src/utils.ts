@@ -334,10 +334,6 @@ export function indexToAxialCoords(index: Index, orientation: GridOrientation, o
   return orthogonalCoordsToAxial(indexToOrthogonalCoords(index), orientation, offset);
 }
 
-export function capitalizeFirstLetter(val: string) : string {
-  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
-}
-
 function isObject(item: any) {
   return (item && typeof item === 'object' && !Array.isArray(item));
 }

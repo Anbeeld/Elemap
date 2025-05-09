@@ -1,4 +1,4 @@
-import { Coords, Index, capitalizeFirstLetter, OrthogonalCoords, unshield } from './utils.js';
+import { Coords, Index, OrthogonalCoords } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIds, Register, TileIds } from './register.js';
 import TileStyle from './style/tile.js';
@@ -75,17 +75,16 @@ export abstract class AbstractTile {
     }
   }
 
+  protected abstract setDataAttributes() : void;
+
   public render() : void {
     let outer = this.grid.elements!.outerRows[this.index.i]!;
     let inner = this.grid.elements!.innerRows[this.index.i]!;
 
     this.initElements();
-    for (const [key, value] of Object.entries(this.coords)) {
-      if (this.elements!.outer) {
-        this.elements!.outer.dataset['elemap' + capitalizeFirstLetter(unshield(key))] = value.toString();
-      }
-      this.elements!.inner.dataset['elemap' + capitalizeFirstLetter(unshield(key))] = value.toString();
-    }
+
+    this.setDataAttributes();
+
     if (this.elements!.style) {
       this.elements.style.innerHTML = this.style.static + this.style.rules + this.style.dynamic;
       document.head.appendChild(this.elements.style);

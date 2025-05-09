@@ -11,6 +11,15 @@ export default class HexagonTile extends AbstractTile {
     super(gridIds, index);
     this.coords = coords;
   }
+
+  protected override setDataAttributes() {    
+    if (this.elements!.outer) {
+      this.elements!.outer.dataset['elemapR'] = this.coords.$r.toString();
+      this.elements!.outer.dataset['elemapQ'] = this.coords.$q.toString();
+    }
+    this.elements!.inner.dataset['elemapR'] = this.coords.$r.toString();
+    this.elements!.inner.dataset['elemapQ'] = this.coords.$q.toString();
+  }
   
   public get selectors() {
     return {
