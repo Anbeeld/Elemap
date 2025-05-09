@@ -25,17 +25,24 @@ export type MapStyleDecls = {
 
 export type GridStyleDecls = {
   frame: StyleDecl,
-  spacing: StyleDecl
+  spacing: StyleDecl,
+  contour: StyleDecl
 }
 
 export type TileStyleDecls = {
   outer: StyleDecl,
   inner: StyleDecl,
-  contour: StyleDecl,
   hover: {
     outer: StyleDecl,
     inner: StyleDecl,
-    contour: StyleDecl,
+  }
+}
+export type CustomTileStyleDecls = {
+  outer?: StyleDecl,
+  inner?: StyleDecl,
+  hover?: {
+    outer?: StyleDecl,
+    inner?: StyleDecl,
   }
 }
 
@@ -47,16 +54,15 @@ export function userStyleToStyle(userStyle: UserStyle) : StyleDecls {
     },
     grid: {
       frame: 'background-color:#222222;',
-      spacing: '4px'
+      spacing: '4px',
+      contour: 'border: 2px solid transparent;background-color:#f5f5f5;',
     },
     tile: {
       outer: 'border-radius:6px;background-color:#222222;',
       inner: 'width:100px;height:100px;border-radius:6px;background-color:#b2e090;',
-      contour: 'border: 2px solid transparent;background-color:#f5f5f5;',
       hover: {
         outer: 'background-color:#f5f5f5;',
         inner: '',
-        contour: ''
       }
     }
   }
@@ -69,15 +75,14 @@ export function userStyleToStyle(userStyle: UserStyle) : StyleDecls {
     $grid: {
       $frame: '',
       $spacing: '',
+      $contour: '',
     },
     $tile: {
       $outer: '',
       $inner: '',
-      $contour: '',
       $hover: {
         $outer: '',
         $inner: '',
-        $contour: '',
       }
     }
   }
@@ -103,7 +108,11 @@ export function userStyleToStyle(userStyle: UserStyle) : StyleDecls {
       spacing: {
         default: defaultStyle.grid.spacing,
         custom: customStyle.$grid.$spacing
-      }
+      },
+      contour: {
+        default: defaultStyle.grid.contour,
+        custom: customStyle.$grid.$contour
+      },
     },
     tile: {
       outer: {
@@ -114,10 +123,6 @@ export function userStyleToStyle(userStyle: UserStyle) : StyleDecls {
         default: defaultStyle.tile.inner,
         custom: customStyle.$tile.$inner,
       },
-      contour: {
-        default: defaultStyle.tile.contour,
-        custom: customStyle.$tile.$contour
-      },
       hover: {
         outer: {
           default: defaultStyle.tile.hover.outer,
@@ -127,11 +132,67 @@ export function userStyleToStyle(userStyle: UserStyle) : StyleDecls {
           default: defaultStyle.tile.hover.inner,
           custom: customStyle.$tile.$hover.$inner,
         },
-        contour: {
-          default: defaultStyle.tile.hover.contour,
-          custom: customStyle.$tile.$hover.$contour
-        }
       }
+    }
+  }
+}
+
+
+
+
+
+
+const initialTileStyle: TileStyleDecls = {
+  outer: {
+    default: 'border-radius:6px;background-color:#222222;',
+    custom: ''
+  },
+  inner: {
+    default: 'width:100px;height:100px;border-radius:6px;background-color:#b2e090;',
+    custom: ''
+  },
+  hover: {
+    outer: {
+      default: 'background-color:#f5f5f5;',
+      custom: ''
+    },
+    inner: {
+      default: '',
+      custom: ''
+    },
+  }
+}
+
+export function addCustomTileStyleToDefault(unshielded: CustomTileStyleDecls, initial = initialTileStyle) : TileStyleDecls {
+  let shielded = {
+    $outer: '',
+    $inner: '',
+    $hover: {
+      $outer: '',
+      $inner: '',
+    }
+  }
+
+  copyUnshieldedToShielded(shielded, unshielded, false);
+
+  return {
+    outer: {
+      default: initial.outer.default,
+      custom: shielded.$outer,
+    },
+    inner: {
+      default: initial.inner.default,
+      custom: shielded.$inner,
+    },
+    hover: {
+      outer: {
+        default: initial.hover.outer.default,
+        custom: shielded.$hover.$outer,
+      },
+      inner: {
+        default: initial.hover.inner.default,
+        custom: shielded.$hover.$inner,
+      },
     }
   }
 }
