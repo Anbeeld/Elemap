@@ -52,7 +52,7 @@ export class GridStyleIds extends MapStyleIds {
 export class TileStyleIds extends GridStyleIds {
   public override readonly owner: TileIds;
   public readonly tile: number;
-  constructor(ownerIds: GridIds|TileIds, gridIds: GridStyleIds, tileId: number) {
+  constructor(ownerIds: TileIds, gridIds: GridStyleIds, tileId: number) {
     super(ownerIds, gridIds, tileId);
     this.tile = tileId;
   }
