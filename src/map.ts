@@ -82,9 +82,9 @@ export abstract class AbstractGridMap<Grid extends AbstractGrid<AbstractTile>> e
   protected override set style(value: GridMapStyle) { this._style = value; }
   public override get style() : GridMapStyle { return this._style; }
 
-  constructor(config: Config, style: StyleDecls, gridClass: new (mapIds: MapIds, config: Config, style: StyleDecls) => Grid) {
+  constructor(config: Config, style: StyleDecls, gridClass: new (mapIds: MapIds, config: Config) => Grid) {
     super(config);
-    this.grid = new gridClass(this.ids, config, style);
+    this.grid = new gridClass(this.ids, config);
     this.initStyle(style);
   }
 
