@@ -1,10 +1,13 @@
 import { Coords, Index, capitalizeFirstLetter, OrthogonalCoords, unshield } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIds, Register, TileIds } from './register.js';
+import TileStyle from './style/tile.js';
+import { addCustomTileStyleToDefault, CustomTileStyleDecls } from './style/set.js';
 
 type TileElements = {
   outer?: HTMLElement,
-  inner: HTMLElement
+  inner: HTMLElement,
+  style?: HTMLElement
 }
 
 export abstract class AbstractTile {
@@ -14,14 +17,15 @@ export abstract class AbstractTile {
 
   public get grid() { return Register.grid.abstract(this.ids)!; }
 
-  // protected _style: TileStyleDecls;
-  // protected set style(value: TileStyleDecls) { this._style = value; }
-  // public get style() : TileStyleDecls { return this._style; }
-  public get style() { return (Register.map.abstract(this.ids)! as any).style.grid.tile; }
-
-  // protected elements?: TileElements;
-
-  // public get element() : HTMLElement|undefined { return this.elements?.inner; }
+  protected _style: TileStyle|undefined;
+  protected set style(value: TileStyle) { this._style = value; }
+  public get style() : TileStyle {
+    if (this._style !== undefined) {
+      return this._style;
+    } else {
+      return Register.style.tile(this.ids)!;
+    }
+  }
 
   protected _elements: TileElements;
   protected set elements(value: TileElements) { this._elements = value; }
@@ -38,20 +42,22 @@ export abstract class AbstractTile {
   constructor(gridIds: GridIds, index: Index) {
     this.ids = new TileIds(gridIds, Register.id());
     this.index = index;
-    // this.style = style;
   }
 
-  /* protected deviateStyle() : void {
-    let grid = Register.grid(this.ids);
-    if (grid && grid.style.tile === this.style) {
-      this.style = TileStyleDeclsFromDecls(TileStyleDeclsToDecls(this.style));
+  public deviateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
+    if (this.style === undefined || replace) {
+      this.style = new TileStyle(this.ids, this.grid.style.ids, addCustomTileStyleToDefault(decls));
+    } else {
+      this.style = new TileStyle(this.ids, this.grid.style.ids, addCustomTileStyleToDefault(decls, this.style.decls));
+    }
+
+    if (this.elements!.style === undefined) {
+      this.elements.style = document.createElement('style');
+      this.elements.style.classList.add('elemap-' + this.ids.map + '-css-tile-' + this.ids.tile);
+      this.elements.style.innerHTML = this.style.static + this.style.rules + this.style.dynamic;
+      document.head.appendChild(this.elements.style);
     }
   }
-
-  public setProp(element: 'outer'|'inner'|'contour', selectors: 'regular'|'hover', prop: string, value: PropValues|string) : void {
-    this.deviateStyle();
-    (this.style[element] as any)[selectors].setProp(prop, value); // TODO
-  } */
 
   protected initElements() : void {
     if (!this.elements) {
@@ -121,5 +127,5 @@ export abstract class AbstractTile {
     };
   }
 
-  public abstract get selectors() : string;
+  public abstract get selectors() : {[key: string]: string};
 }

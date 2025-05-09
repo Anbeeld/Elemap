@@ -12,7 +12,9 @@ export default class HexagonTile extends AbstractTile {
     this.coords = coords;
   }
   
-  public get selectors() : string {
-    return `[data-elemap-r="${this.coords.$r}"][data-elemap-q="${this.coords.$q}"]`;
+  public get selectors() {
+    return {
+      data: `[data-elemap-r="${this.coords.$r}"][data-elemap-q="${this.coords.$q}"]`
+    };
   }
 }

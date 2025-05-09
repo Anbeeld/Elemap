@@ -12,7 +12,9 @@ export default class RectangleTile extends AbstractTile {
     this.coords = coords;
   }
   
-  public get selectors() : string {
-    return `[data-elemap-x="${this.coords.$x}"][data-elemap-y="${this.coords.$y}"]`;
+  public get selectors() {
+    return {
+      data: `[data-elemap-x="${this.coords.$x}"][data-elemap-y="${this.coords.$y}"]`
+    };
   }
 }

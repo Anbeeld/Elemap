@@ -152,14 +152,8 @@ export default abstract class GridStyle extends Style {
       `padding:${calc.div(this.spacing, 2)};` +
     `}` +
 
-    this.selectors.outerTile + `{` +
-      printStyleDecl(this.tile.decls.outer) +
-    `}` +
-
-    this.selectors.innerTile + `{` +
-      printStyleDecl(this.tile.decls.inner) +
-
-      `margin:${calc.div(this.spacing, 2)};` +
+    this.selectors.contour + `>div{` + 
+      printStyleDecl(this.decls.contour) +
     `}`;
   }
 

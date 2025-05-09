@@ -26,7 +26,12 @@ export default class TileStyle extends Style {
   protected set computed(value: TileComputed) { this._computed = value; }
   public get computed() : TileComputed { return this._computed; }
 
-  public override get selectors() { return this.grid.selectors; }
+  public override get selectors() {
+    return {
+      ...this.grid.selectors,
+      data: this.initial ? `` : this.owner.selectors.data
+    };
+  }
 
   protected _decls: TileStyleDecls;
   protected set decls(value: TileStyleDecls) { this._decls = value; }
@@ -58,22 +63,24 @@ export default class TileStyle extends Style {
 
   public get static() : string { return ''; }
   public get rules() : string {
-    return `` + 
-    this.selectors.outerTile + `{` +
+    return `` +
+    this.selectors.outerTile + this.selectors.data + `{` +
+      printStyleDecl(this.decls.outer) +
+    `}` +
+
+    this.selectors.innerTile + this.selectors.data + `{` +
+      printStyleDecl(this.decls.inner) +
+
+      `margin:${calc.div(this.spacing, 2)};` +
+    `}` +
+
+    this.selectors.outerTile + this.selectors.data + `{` +
       printStyleDecl(this.decls.outer) + 
       /* `left:${calc.mult(this.size.outer.width, index!.j)};` + */
     `}` +
 
-    this.selectors.innerTile + `:hover{` + 
+    this.selectors.innerTile + this.selectors.data + `:hover{` + 
       printStyleDecl(this.decls.hover.inner) +
-    `}` +
-
-    this.selectors.contour + `>div{` + 
-      printStyleDecl(this.decls.contour) +
-    `}` +
-
-    this.selectors.contour + `>div:hover{` + 
-      printStyleDecl(this.decls.hover.contour) +
     `}`;
   }
   public get dynamic() : string {
