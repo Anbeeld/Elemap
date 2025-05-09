@@ -39,6 +39,8 @@ export abstract class AbstractTile {
   protected abstract set coords(value: Coords);
   public abstract get coords() : Coords;
 
+  protected rendered: boolean = false;
+
   constructor(gridIds: GridIds, index: Index) {
     this.ids = new TileIds(gridIds, Register.id());
     this.index = index;
@@ -60,7 +62,9 @@ export abstract class AbstractTile {
     this.elements.style.innerHTML = this.style.static + this.style.rules + this.style.dynamic;
     document.head.appendChild(this.elements.style);
 
-    this.render();
+    if (this.rendered) {
+      this.render();
+    }
   }
 
   protected initElements() : void {
@@ -96,6 +100,8 @@ export abstract class AbstractTile {
     if (!inner.contains(this.elements!.inner)) {
       inner.appendChild(this.elements!.inner);
     }
+
+    this.rendered = true;
   }
 
   public hover() : void {
