@@ -47,20 +47,11 @@ export abstract class AbstractTile {
   }
 
   public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
-    console.log(addCustomTileStyleToDefault(decls));
     if (this._style === undefined || replace) {
       this.style = new TileStyle(this.ids, this.grid.style.ids, addCustomTileStyleToDefault(decls));
     } else {
       this.style = new TileStyle(this.ids, this.grid.style.ids, addCustomTileStyleToDefault(decls, this.style.decls));
-    }
-
-    if (this.elements!.style === undefined) {
-      this.elements.style = document.createElement('style');
-      this.elements.style.classList.add('elemap-' + this.ids.map + '-css-tile-' + this.ids.tile);
-    }
-
-    this.elements.style.innerHTML = this.style.static + this.style.rules + this.style.dynamic;
-    document.head.appendChild(this.elements.style);
+    }    
 
     if (this.rendered) {
       this.render();
@@ -73,9 +64,12 @@ export abstract class AbstractTile {
         inner: document.createElement('div')
       }
     }
-    if (!this.elements.outer) {
-      if (this._style !== undefined && !this.style.initial
-          && (this.style.decls.outer.length || this.style.decls.hover.outer.length)) {
+    if (this._style !== undefined && !this.style.initial) {
+      if (!this.elements.style) {
+        this.elements.style = document.createElement('style');
+        this.elements.style.classList.add('elemap-' + this.ids.map + '-css-tile-' + this.ids.tile);
+      }
+      if (!this.elements.outer && (this.style.decls.outer.length || this.style.decls.hover.outer.length)) {
         this.elements.outer = document.createElement('div');
       }
     }
@@ -91,6 +85,10 @@ export abstract class AbstractTile {
         this.elements!.outer.dataset['elemap' + capitalizeFirstLetter(unshield(key))] = value.toString();
       }
       this.elements!.inner.dataset['elemap' + capitalizeFirstLetter(unshield(key))] = value.toString();
+    }
+    if (this.elements!.style) {
+      this.elements.style.innerHTML = this.style.static + this.style.rules + this.style.dynamic;
+      document.head.appendChild(this.elements.style);
     }
     if (this.elements!.outer) {
       if (!outer.contains(this.elements!.outer)) {

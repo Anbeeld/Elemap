@@ -42,7 +42,6 @@ export default class TileStyle extends Style {
     this.ids = new TileStyleIds(ownerIds, gridIds, Register.id());
     this.initial = initial;
     this.decls = decls.hasOwnProperty('tile') ? (decls as StyleDecls).tile : decls as TileStyleDecls;
-    console.log(this.decls);
   }
 
   public get size() : TileSizeSet {
