@@ -178,20 +178,20 @@ export function addCustomTileStyleToDefault(unshielded: CustomTileStyleDecls, in
   return {
     outer: {
       default: initial.outer.default,
-      custom: shielded.$outer,
+      custom: initial.outer.custom + shielded.$outer,
     },
     inner: {
       default: initial.inner.default,
-      custom: shielded.$inner,
+      custom: initial.inner.custom + shielded.$inner,
     },
     hover: {
       outer: {
         default: initial.hover.outer.default,
-        custom: shielded.$hover.$outer,
+        custom: initial.hover.outer.custom + shielded.$hover.$outer,
       },
       inner: {
         default: initial.hover.inner.default,
-        custom: shielded.$hover.$inner,
+        custom: initial.hover.inner.custom + shielded.$hover.$inner,
       },
     }
   }
