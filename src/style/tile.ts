@@ -70,7 +70,6 @@ export default class TileStyle extends Style {
       css +=
       this.selectors.outerTile + this.selectors.data + `{` +
         this.decls.outer +
-        /* `left:${calc.mult(this.size.outer.width, index!.j)};` + */
       `}`;
     }
 
@@ -107,6 +106,16 @@ export default class TileStyle extends Style {
       this.selectors.contour + `>div{` + 
         `border:none;` +
       `}`;
+
+      // Outer elements use absolute positioning
+      for (let rows of this.owner.grid.tiles) {
+        for (let tile of rows) {
+          css +=
+          this.selectors.outerTile + tile.selectors.data + `{` +
+            `left:${calc.mult(this.size.outer.width, tile.index!.j)};` +
+          `}`; 
+        }
+      }
     }
 
     return css;

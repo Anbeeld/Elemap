@@ -21,7 +21,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   protected set size(value: Size) { this._size = value; }
   public get size() : Size { return this._size; }
 
-  protected tiles: Tile[][] = [];
+  public tiles: Tile[][] = [];
 
   public tile(firstCoord: number, secondCoord: number) {
     return this.tileByCoords(firstCoord, secondCoord);
