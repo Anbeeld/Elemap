@@ -9,27 +9,28 @@ import { AbstractTile } from "./tile.js";
 // import { AbstractTile } from "./tile.js";
 
 export default class Elemap {
-  private map: AbstractMap;
+  private _: AbstractMap;
 
   constructor(configCustom: any, userStyle: UserStyle) {
     let config = validateConfig(configCustom);
     let style = userStyleToStyle(userStyle);
 
     if (config.type === MapType.Rectangle) {
-      this.map = new RectangleMap(config, style);
+      this._ = new RectangleMap(config, style);
     } else if (config.type === MapType.Hexagon) {
-      this.map = new HexagonMap(config, style);
+      this._ = new HexagonMap(config, style);
     }
 
+    this["_"];
     this["render"];
   }
 
   public render(container: HTMLElement) : void {
-    this.map.render(container);
+    this._.render(container);
   }
 
   public tileByIndex(i: number, j: number) : ElemapTile|undefined {
-    let tile = (this.map as AbstractGridMap<AbstractGrid<AbstractTile>>).grid.tileByIndex(i, j);
+    let tile = (this._ as AbstractGridMap<AbstractGrid<AbstractTile>>).grid.tileByIndex(i, j);
     if (tile) {
       return new ElemapTile(tile);
     }
@@ -38,16 +39,16 @@ export default class Elemap {
 }
 
 class ElemapTile {
-  private tile: AbstractTile;
+  private _: AbstractTile;
 
-  constructor(tile: AbstractTile) {
-    this.tile = tile;
-    this.tile;
+  constructor(map: AbstractTile) {
+    this._ = map;
 
-    this["style"];
+    this["_"];
+    this["updateStyle"];
   }
 
-  public style(decls: CustomTileStyleDecls) : void {
-    this.tile.updateStyle(decls);
+  public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
+    this._.updateStyle(decls, replace);
   }
 }
