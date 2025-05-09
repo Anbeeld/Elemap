@@ -18,6 +18,8 @@ export default class TileStyle extends Style {
 
   public get grid() { return Register.style.grid(this.ids.owner)!; }
 
+  protected initial: boolean;
+
   protected get spacing() : string { return this.grid.spacing; }
 
   protected _computed: TileComputed;
@@ -30,9 +32,10 @@ export default class TileStyle extends Style {
   protected set decls(value: TileStyleDecls) { this._decls = value; }
   public get decls() : TileStyleDecls { return this._decls; }
 
-  public constructor(ownerIds: TileIds, gridIds: GridStyleIds, decls: StyleDecls|TileStyleDecls) {
+  public constructor(ownerIds: TileIds, gridIds: GridStyleIds, decls: StyleDecls|TileStyleDecls, initial: boolean = false) {
     super();
     this.ids = new TileStyleIds(ownerIds, gridIds, Register.id());
+    this.initial = initial;
     this.decls = decls.hasOwnProperty('tile') ? (decls as StyleDecls).tile : decls as TileStyleDecls;
   }
 

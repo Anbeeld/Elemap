@@ -33,7 +33,7 @@ export default abstract class GridStyle extends Style {
   public constructor(ownerIds: GridIds, mapIds: MapStyleIds, decls: StyleDecls) {
     super();
     this.ids = new GridStyleIds(ownerIds, mapIds, Register.id());
-    this.tile = new TileStyle(this.owner.tileByIndex(0, 0)!.ids, this.ids, decls);
+    this.tile = new TileStyle(this.owner.tileByIndex(0, 0)!.ids, this.ids, decls, true);
     this.decls = decls.grid;
   }
 
