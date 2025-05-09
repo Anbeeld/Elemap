@@ -1,4 +1,4 @@
-import { MapIds, Register, MapStyleIds } from "../register.js";
+import { MapIds, Register, MapStyleIds, GridIds } from "../register.js";
 import { MapStyleDecls, StyleDecls } from "./set.js";
 import Style from "./style.js";
 import GridStyle from "./grid.js";
@@ -120,9 +120,9 @@ export class GridMapStyle extends MapStyle {
 
   public override get owner() { return Register.map(this.ids.owner)! as AbstractGridMap<AbstractGrid<AbstractTile>>; }
 
-  public constructor(mapIds: MapIds, decls: StyleDecls, gridClass: new (mapIds: MapStyleIds, decls: StyleDecls) => GridStyle) {
+  public constructor(mapIds: MapIds, decls: StyleDecls, gridClass: new (ownerIds: GridIds, mapIds: MapStyleIds, decls: StyleDecls) => GridStyle) {
     super(mapIds, decls);
-    this.grid = new gridClass(this.ids, decls);
+    this.grid = new gridClass(this.owner.grid.ids, this.ids, decls);
   }
 
   public override render() {

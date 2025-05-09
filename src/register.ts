@@ -33,24 +33,26 @@ export class TileIds extends GridIds {
 export abstract class StyleIds {
   public readonly owner: MapIds;
   public readonly map: number;
-  constructor(owner: MapIds, mapId: number) {
-    this.owner = owner;
+  constructor(ownerIds: MapIds, mapId: number) {
+    this.owner = ownerIds;
     this.map = mapId;
   }
 }
 export class MapStyleIds extends StyleIds {
 }
 export class GridStyleIds extends MapStyleIds {
+  public override readonly owner: GridIds;
   public readonly grid: number;
-  constructor(mapIds: MapStyleIds, gridId: number) {
-    super(mapIds.owner, mapIds.map);
+  constructor(ownerIds: GridIds, mapIds: MapIds, gridId: number) {
+    super(ownerIds, mapIds.map);
     this.grid = gridId;
   }
 }
 export class TileStyleIds extends GridStyleIds {
+  public override readonly owner: GridIds|TileIds;
   public readonly tile: number;
-  constructor(gridIds: GridStyleIds, tileId: number) {
-    super(gridIds as MapStyleIds, gridIds.grid);
+  constructor(ownerIds: GridIds|TileIds, gridIds: GridStyleIds, tileId: number) {
+    super(ownerIds, gridIds, tileId);
     this.tile = tileId;
   }
 }
