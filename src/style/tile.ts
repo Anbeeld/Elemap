@@ -30,10 +30,10 @@ export default class TileStyle extends Style {
   protected set decls(value: TileStyleDecls) { this._decls = value; }
   public get decls() : TileStyleDecls { return this._decls; }
 
-  public constructor(ownerIds: TileIds, gridIds: GridStyleIds, decls: StyleDecls) {
+  public constructor(ownerIds: TileIds, gridIds: GridStyleIds, decls: StyleDecls|TileStyleDecls) {
     super();
     this.ids = new TileStyleIds(ownerIds, gridIds, Register.id());
-    this.decls = decls.tile;
+    this.decls = decls.hasOwnProperty('tile') ? (decls as StyleDecls).tile : decls as TileStyleDecls;
   }
 
   public get size() : TileSizeSet {
