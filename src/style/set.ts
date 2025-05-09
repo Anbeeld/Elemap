@@ -53,7 +53,7 @@ export function userStyleToStyle(userStyle: UserStyle) : StyleDecls {
       contour: 'border: 2px solid transparent;background-color:#f5f5f5;',
     },
     tile: {
-      outer: 'border-radius:6px;background-color:#222222;',
+      outer: 'background-color:#222222;',
       inner: 'width:100px;height:100px;border-radius:6px;background-color:#b2e090;margin:2px;',
       hover: {
         outer: 'background-color:#f5f5f5;',
