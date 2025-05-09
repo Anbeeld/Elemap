@@ -48,6 +48,6 @@ class ElemapTile {
   }
 
   public style(decls: CustomTileStyleDecls) : void {
-    this.tile.deviateStyle(decls);
+    this.tile.updateStyle(decls);
   }
 }

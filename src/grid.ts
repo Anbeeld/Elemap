@@ -121,7 +121,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
         this.elements!.inner.appendChild(this.elements!.innerRows[i]);
       }
       for (let j in this.tiles[i]) {
-        this.tiles[Number(i)]![Number(j)]!.render(this.elements!.outerRows[i], this.elements!.innerRows[i]);
+        this.tiles[Number(i)]![Number(j)]!.render();
       }
     }
 

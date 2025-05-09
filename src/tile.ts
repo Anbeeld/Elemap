@@ -44,7 +44,7 @@ export abstract class AbstractTile {
     this.index = index;
   }
 
-  public deviateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
+  public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
     console.log(addCustomTileStyleToDefault(decls));
     if (this._style === undefined || replace) {
       this.style = new TileStyle(this.ids, this.grid.style.ids, addCustomTileStyleToDefault(decls));
@@ -55,9 +55,12 @@ export abstract class AbstractTile {
     if (this.elements!.style === undefined) {
       this.elements.style = document.createElement('style');
       this.elements.style.classList.add('elemap-' + this.ids.map + '-css-tile-' + this.ids.tile);
-      this.elements.style.innerHTML = this.style.static + this.style.rules + this.style.dynamic;
-      document.head.appendChild(this.elements.style);
     }
+
+    this.elements.style.innerHTML = this.style.static + this.style.rules + this.style.dynamic;
+    document.head.appendChild(this.elements.style);
+
+    this.render();
   }
 
   protected initElements() : void {
@@ -66,15 +69,18 @@ export abstract class AbstractTile {
         inner: document.createElement('div')
       }
     }
-    // if (!this.elements.outer) {
-    //   let grid = Register.grid(this.ids);
-    //   if (grid && grid.style.tile !== this.style) {
-    //     this.elements.outer = document.createElement('div');
-    //   }
-    // }
+    if (!this.elements.outer) {
+      if (this._style !== undefined && !this.style.initial
+          && (this.style.decls.outer.length || this.style.decls.hover.outer.length)) {
+        this.elements.outer = document.createElement('div');
+      }
+    }
   }
 
-  public render(outer: HTMLElement, inner: HTMLElement) : void {
+  public render() : void {
+    let outer = this.grid.elements!.outerRows[this.index.i]!;
+    let inner = this.grid.elements!.innerRows[this.index.i]!;
+
     this.initElements();
     for (const [key, value] of Object.entries(this.coords)) {
       if (this.elements!.outer) {

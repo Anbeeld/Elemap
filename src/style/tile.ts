@@ -18,7 +18,7 @@ export default class TileStyle extends Style {
 
   public get grid() { return Register.style.grid(this.ids.owner)!; }
 
-  protected initial: boolean;
+  public initial: boolean;
 
   protected get spacing() : string { return this.grid.spacing; }
 
@@ -63,7 +63,7 @@ export default class TileStyle extends Style {
   }
 
   public get static() : string { return ''; }
-  
+
   public get rules() : string {
     let css = ``;
 
