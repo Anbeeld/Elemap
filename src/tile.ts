@@ -46,11 +46,13 @@ export abstract class AbstractTile {
     this.index = index;
   }
 
+  protected abstract createStyle(decls: CustomTileStyleDecls) : TileStyle;
+
   public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
     if (this._style === undefined || replace) {
-      this.style = new TileStyle(this.ids, this.grid.style.ids, addCustomTileStyleToDefault(decls));
+      this.style = this.createStyle(addCustomTileStyleToDefault(decls));
     } else {
-      this.style = new TileStyle(this.ids, this.grid.style.ids, addCustomTileStyleToDefault(decls, this.style.decls));
+      this.style = this.createStyle(addCustomTileStyleToDefault(decls, this.style.decls));
     }    
 
     if (this.rendered) {

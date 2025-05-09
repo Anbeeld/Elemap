@@ -1,6 +1,8 @@
 import { AbstractTile } from '../tile.js';
 import { AxialCoords, Index } from '../utils.js';
-import { GridIds } from '../register.js';
+import { GridIds, Register } from '../register.js';
+import { TileStyleDecls } from '../style/set.js';
+import HexagonTileStyle from '../style/hexagon/tile.js';
 
 export default class HexagonTile extends AbstractTile {  
   protected override _coords: AxialCoords;
@@ -10,6 +12,20 @@ export default class HexagonTile extends AbstractTile {
   constructor(gridIds: GridIds, index: Index, coords: AxialCoords) {
     super(gridIds, index);
     this.coords = coords;
+  }
+    
+  protected override _style: HexagonTileStyle|undefined;
+  protected override set style(value: HexagonTileStyle) { this._style = value; }
+  public override get style() : HexagonTileStyle {
+    if (this._style !== undefined) {
+      return this._style;
+    } else {
+      return Register.style.tile(this.ids)!;
+    }
+  }
+
+  protected override createStyle(decls: TileStyleDecls) : HexagonTileStyle {
+    return new HexagonTileStyle(this.ids, this.grid.style.ids, decls);
   }
 
   protected override setCoordsAttributes() {    

@@ -1,9 +1,9 @@
-import TileStyle from '../tile.ts';
-// import HexagonGridStyle from './grid.ts';
-// import { calc } from '../utils.ts';
+import TileStyle from '../tile.js';
+// import HexagonGridStyle from './grid.js';
+// import { calc } from '../utils.js';
 
 export default class HexagonTileStyle extends TileStyle {
-  /* public override get outerPosition() : string {
+  /*public override get outerPosition() : string {
     let css = ``;
     // Outer elements use absolute positioning
     for (let rows of this.owner.grid.tiles) {
@@ -15,5 +15,5 @@ export default class HexagonTileStyle extends TileStyle {
       }
     }
     return css;
-  } */
+  }*/
 }

@@ -1,6 +1,8 @@
 import { AbstractTile } from '../tile.js';
 import { OrthogonalCoords, Index } from '../utils.js';
-import { GridIds } from '../register.js';
+import { GridIds, Register } from '../register.js';
+import RectangleTileStyle from '../style/rectangle/tile.js';
+import { TileStyleDecls } from '../style/set.js';
 
 export default class RectangleTile extends AbstractTile {
   protected override _coords: OrthogonalCoords;
@@ -10,6 +12,20 @@ export default class RectangleTile extends AbstractTile {
   constructor(gridIds: GridIds, index: Index, coords: OrthogonalCoords) {
     super(gridIds, index);
     this.coords = coords;
+  }
+  
+  protected override _style: RectangleTileStyle|undefined;
+  protected override set style(value: RectangleTileStyle) { this._style = value; }
+  public override get style() : RectangleTileStyle {
+    if (this._style !== undefined) {
+      return this._style;
+    } else {
+      return Register.style.tile(this.ids)!;
+    }
+  }
+
+  protected override createStyle(decls: TileStyleDecls) : RectangleTileStyle {
+    return new RectangleTileStyle(this.ids, this.grid.style.ids, decls);
   }
 
   protected override setCoordsAttributes() {    

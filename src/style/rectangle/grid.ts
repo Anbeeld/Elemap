@@ -1,8 +1,21 @@
+import { Register } from "../../register.js";
 import { generateRectanglePath, roundFloat, TileSize } from "../../utils.js";
 import GridStyle from "../grid.js";
+import { StyleDecls } from "../set.js";
 import { calc, cssValueToNumber } from "../utils.js";
+import RectangleTileStyle from "./tile.js";
 
 export default class RectangleGridStyle extends GridStyle {
+  public override get owner() { return Register.grid.rectangle(this.ids.owner)!; }
+
+  protected override _tile: RectangleTileStyle;
+  protected override set tile(value: RectangleTileStyle) { this._tile = value; }
+  public override get tile() : RectangleTileStyle { return this._tile; }
+
+  public override initTile(decls: StyleDecls) : void {
+    this.tile = new RectangleTileStyle(this.owner.tileByIndex(0, 0)!.ids, this.ids, decls, true);
+  }
+
   public override get dynamicSpecific() : string {
     let contourWidth = roundFloat(cssValueToNumber(this.computed.contourHover.borderWidth), 0) + 'px';
 

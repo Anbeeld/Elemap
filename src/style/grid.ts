@@ -33,9 +33,11 @@ export default abstract class GridStyle extends Style {
   public constructor(ownerIds: GridIds, mapIds: MapStyleIds, decls: StyleDecls) {
     super();
     this.ids = new GridStyleIds(ownerIds, mapIds, Register.id());
-    this.tile = new TileStyle(this.owner.tileByIndex(0, 0)!.ids, this.ids, decls, true);
+    this.initTile(decls);
     this.decls = decls.grid;
   }
+
+  public abstract initTile(decls: StyleDecls) : void;
 
   public override get selectors() {
     let base = `.elemap-${this.ids.owner.map}`;

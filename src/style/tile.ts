@@ -9,7 +9,7 @@ type TileComputed = {
   inner: CSSStyleDeclaration,
 }
 
-export default class TileStyle extends Style {
+export default abstract class TileStyle extends Style {
   protected _ids: TileStyleIds;
   protected set ids(value: TileStyleIds) { this._ids = value; }
   public get ids() : TileStyleIds { return this._ids; }
