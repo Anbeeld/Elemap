@@ -1,12 +1,8 @@
-// import { Tile.size } from "../utils.js";
-import { AbstractGridMap } from "../map.js";
 import { GridIds, GridStyleIds, MapStyleIds, Register } from "../register.js";
 import { GridStyleDecls, StyleDecls } from "./set.js";
 import TileStyle from "./tile.js";
 import Style from "./style.js";
 import { calc, printStyleDecl } from "./utils.js";
-import { AbstractGrid } from "../grid.js";
-import { AbstractTile } from "../tile.js";
 
 type GridComputed = {
   outer: CSSStyleDeclaration,
@@ -19,7 +15,7 @@ export default abstract class GridStyle extends Style {
   protected set ids(value: GridStyleIds) { this._ids = value; }
   public get ids() : GridStyleIds { return this._ids; }
 
-  public override get owner() { return (Register.map(this.ids.owner)! as AbstractGridMap<AbstractGrid<AbstractTile>>).grid; }
+  public override get owner() { return Register.grid.abstract(this.ids.owner)!; }
   public get map() { return Register.style.map.grid(this.ids.owner)!; }
 
   protected _decls: GridStyleDecls;
@@ -37,7 +33,7 @@ export default abstract class GridStyle extends Style {
   public constructor(ownerIds: GridIds, mapIds: MapStyleIds, decls: StyleDecls) {
     super();
     this.ids = new GridStyleIds(ownerIds, mapIds, Register.id());
-    this.tile = new TileStyle(this.owner.ids, this.ids, decls);
+    this.tile = new TileStyle(this.owner.tileByIndex(0, 0)!.ids, this.ids, decls);
     this.decls = decls.grid;
   }
 

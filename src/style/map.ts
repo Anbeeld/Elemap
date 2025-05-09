@@ -2,9 +2,6 @@ import { MapIds, Register, MapStyleIds, GridIds } from "../register.js";
 import { MapStyleDecls, StyleDecls } from "./set.js";
 import Style from "./style.js";
 import GridStyle from "./grid.js";
-import { AbstractGridMap } from "../map.js";
-import { AbstractGrid } from "../grid.js";
-import { AbstractTile } from "../tile.js";
 import { printStyleDecl } from "./utils.js";
 
 type StyleElements = {
@@ -118,7 +115,7 @@ export class GridMapStyle extends MapStyle {
   protected set grid(value: GridStyle) { this._grid = value; }
   public get grid() : GridStyle { return this._grid; }
 
-  public override get owner() { return Register.map(this.ids.owner)! as AbstractGridMap<AbstractGrid<AbstractTile>>; }
+  public override get owner() { return Register.map.grid(this.ids.owner)!; }
 
   public constructor(mapIds: MapIds, decls: StyleDecls, gridClass: new (ownerIds: GridIds, mapIds: MapStyleIds, decls: StyleDecls) => GridStyle) {
     super(mapIds, decls);

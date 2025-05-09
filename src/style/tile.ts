@@ -1,10 +1,7 @@
 import { TileSizeSet } from "../utils.js";
-import { TileStyleIds, GridStyleIds, Register, GridIds, TileIds } from "../register.js";
+import { TileStyleIds, GridStyleIds, Register, TileIds } from "../register.js";
 import { StyleDecls, TileStyleDecls } from "./set.js";
 import Style from "./style.js";
-import { AbstractGridMap } from "../map.js";
-import { AbstractGrid } from "../grid.js";
-import { AbstractTile } from "../tile.js";
 import { calc, printStyleDecl } from "./utils.js";
 
 type TileComputed = {
@@ -17,7 +14,7 @@ export default class TileStyle extends Style {
   protected set ids(value: TileStyleIds) { this._ids = value; }
   public get ids() : TileStyleIds { return this._ids; }
 
-  public override get owner() { return Register.map(this.ids.owner)! as AbstractGridMap<AbstractGrid<AbstractTile>>; }
+  public override get owner() { return Register.tile.abstract(this.ids.owner)!; }
 
   public get grid() { return Register.style.grid(this.ids.owner)!; }
 
@@ -33,7 +30,7 @@ export default class TileStyle extends Style {
   protected set decls(value: TileStyleDecls) { this._decls = value; }
   public get decls() : TileStyleDecls { return this._decls; }
 
-  public constructor(ownerIds: GridIds|TileIds, gridIds: GridStyleIds, decls: StyleDecls) {
+  public constructor(ownerIds: TileIds, gridIds: GridStyleIds, decls: StyleDecls) {
     super();
     this.ids = new TileStyleIds(ownerIds, gridIds, Register.id());
     this.decls = decls.tile;

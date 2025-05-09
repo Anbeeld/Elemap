@@ -12,10 +12,12 @@ export abstract class AbstractTile {
   protected set ids(value: TileIds) { this._ids = value; }
   public get ids() : TileIds { return this._ids; }
 
+  public get grid() { return Register.grid.abstract(this.ids)!; }
+
   // protected _style: TileStyleDecls;
   // protected set style(value: TileStyleDecls) { this._style = value; }
   // public get style() : TileStyleDecls { return this._style; }
-  public get style() { return (Register.map(this.ids)! as any).style.grid.tile; }
+  public get style() { return (Register.map.abstract(this.ids)! as any).style.grid.tile; }
 
   // protected elements?: TileElements;
 

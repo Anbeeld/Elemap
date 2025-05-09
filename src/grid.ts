@@ -1,7 +1,6 @@
 import { AbstractTile } from "./tile.js";
 import { Size, Config, GridOrientation, GridOffset, OrthogonalCoords } from "./utils.js";
-import { GridIds, MapIds, Register } from "./register.js";
-import { AbstractGridMap } from "./map.js";
+import { GridIds, MapIds, Register, TileIds } from "./register.js";
 
 interface GridElements {
   frame: HTMLElement;
@@ -32,8 +31,18 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
   public tileByIndex(i: number, j: number) : Tile|undefined {
     return this.tiles[i]?.[j];
   }
+  public tileById(ids: TileIds) : Tile|undefined {
+    for (let i in this.tiles) {
+      for (let j in this.tiles[i]) {
+        if (this.tiles[i]![j as any]!.ids.tile === ids.tile) {
+          return this.tiles[i]![j as any]!;
+        }
+      }
+    }
+    return undefined;
+  }
 
-  public get style() { return (Register.map(this.ids)! as AbstractGridMap<AbstractGrid<AbstractTile>>).style.grid; }
+  public get style() { return Register.map.grid(this.ids)!.style.grid; }
 
   public get classes() {
     let base = `elemap-${this.ids.map}`;

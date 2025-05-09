@@ -10,7 +10,7 @@ export default abstract class Style {
 
   public constructor() {}
 
-  public get owner() : any { return Register.map(this.ids.owner)!; }
+  public get owner() : any { return Register.map.abstract(this.ids.owner)!; }
 
   public get selectors() {
     return {
