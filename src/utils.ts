@@ -24,13 +24,13 @@ export interface Coords {
 }
 
 export interface AxialCoords extends Coords {
-  $r: number;
-  $q: number;
+  r: number;
+  q: number;
 }
 
 export interface OrthogonalCoords extends Coords {
-  $x: number;
-  $y: number;
+  x: number;
+  y: number;
 }
 
 export type Config = {
@@ -283,48 +283,48 @@ export type hexagonSizeDecls = {
 }
 
 export function indexToOrthogonalCoords(index: Index) : OrthogonalCoords {
-  return {$x: index.i, $y: index.j};
+  return {x: index.i, y: index.j};
 }
 
 export function orthogonalCoordsToIndex(orthogonal: OrthogonalCoords) : Index {
-  return {i: orthogonal.$x, j: orthogonal.$y};
+  return {i: orthogonal.x, j: orthogonal.y};
 }
 
 export function orthogonalCoordsToAxial(orthogonal: OrthogonalCoords, orientation: GridOrientation, offset: GridOffset) : AxialCoords {
-  let axial: AxialCoords = {$r: 0, $q: 0};
+  let axial: AxialCoords = {r: 0, q: 0};
   if (orientation === GridOrientation.Pointy) {
-    axial.$r = orthogonal.$x;
+    axial.r = orthogonal.x;
     if (offset === GridOffset.Odd) {
-      axial.$q = orthogonal.$y - (orthogonal.$x - (orthogonal.$x & 1)) / 2;
+      axial.q = orthogonal.y - (orthogonal.x - (orthogonal.x & 1)) / 2;
     } else {
-      axial.$q = orthogonal.$y - (orthogonal.$x + (orthogonal.$x & 1)) / 2;
+      axial.q = orthogonal.y - (orthogonal.x + (orthogonal.x & 1)) / 2;
     }
   } else {
-    axial.$q = orthogonal.$y;
+    axial.q = orthogonal.y;
     if (offset === GridOffset.Odd) {
-      axial.$r = orthogonal.$x - (orthogonal.$y - (orthogonal.$y & 1)) / 2;
+      axial.r = orthogonal.x - (orthogonal.y - (orthogonal.y & 1)) / 2;
     } else {
-      axial.$r = orthogonal.$x - (orthogonal.$y + (orthogonal.$y & 1)) / 2;
+      axial.r = orthogonal.x - (orthogonal.y + (orthogonal.y & 1)) / 2;
     }
   }
   return axial;
 }
 
 export function axialCoordsToOrthogonal(axial: AxialCoords, orientation: GridOrientation, offset: GridOffset) : OrthogonalCoords {
-  let orthogonal: OrthogonalCoords = {$x: 0, $y: 0};
+  let orthogonal: OrthogonalCoords = {x: 0, y: 0};
   if (orientation === GridOrientation.Pointy) {
-    orthogonal.$x = axial.$r;
+    orthogonal.x = axial.r;
     if (offset === GridOffset.Odd) {
-      orthogonal.$y = axial.$q + (axial.$r - (axial.$r & 1)) / 2;
+      orthogonal.y = axial.q + (axial.r - (axial.r & 1)) / 2;
     } else {
-      orthogonal.$y = axial.$q + (axial.$r + (axial.$r & 1)) / 2;
+      orthogonal.y = axial.q + (axial.r + (axial.r & 1)) / 2;
     }
   } else {
-    orthogonal.$y = axial.$q;
+    orthogonal.y = axial.q;
     if (offset === GridOffset.Odd) {
-      orthogonal.$x = axial.$r + (axial.$q - (axial.$q & 1)) / 2;
+      orthogonal.x = axial.r + (axial.q - (axial.q & 1)) / 2;
     } else {
-      orthogonal.$x = axial.$r + (axial.$q + (axial.$q & 1)) / 2;
+      orthogonal.x = axial.r + (axial.q + (axial.q & 1)) / 2;
     }
   }
   return orthogonal;

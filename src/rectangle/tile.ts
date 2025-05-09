@@ -14,16 +14,16 @@ export default class RectangleTile extends AbstractTile {
 
   protected override setDataAttributes() {    
     if (this.elements!.outer) {
-      this.elements!.outer.dataset['elemapX'] = this.coords.$x.toString();
-      this.elements!.outer.dataset['elemapY'] = this.coords.$y.toString();
+      this.elements!.outer.dataset['elemapX'] = this.coords.x.toString();
+      this.elements!.outer.dataset['elemapY'] = this.coords.y.toString();
     }
-    this.elements!.inner.dataset['elemapX'] = this.coords.$x.toString();
-    this.elements!.inner.dataset['elemapY'] = this.coords.$y.toString();
+    this.elements!.inner.dataset['elemapX'] = this.coords.x.toString();
+    this.elements!.inner.dataset['elemapY'] = this.coords.y.toString();
   }
   
   public get selectors() {
     return {
-      data: `[data-elemap-x="${this.coords.$x}"][data-elemap-y="${this.coords.$y}"]`
+      data: `[data-elemap-x="${this.coords.x}"][data-elemap-y="${this.coords.y}"]`
     };
   }
 }

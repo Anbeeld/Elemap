@@ -19,7 +19,7 @@ export default class RectangleGrid extends AbstractGrid<RectangleTile> {
   }
 
   public override tileByCoords(firstCoord: number, secondCoord: number) : RectangleTile|undefined {
-    let index = orthogonalCoordsToIndex({$x: firstCoord, $y: secondCoord});
+    let index = orthogonalCoordsToIndex({x: firstCoord, y: secondCoord});
     return this.tileByIndex(index.i, index.j);
   }
   

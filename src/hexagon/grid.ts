@@ -18,7 +18,7 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
   }
   
   public override tileByCoords(firstCoord: number, secondCoord: number) : HexagonTile|undefined {
-    let index = orthogonalCoordsToIndex(axialCoordsToOrthogonal({$r: firstCoord, $q: secondCoord}, this.orientation, this.offset));
+    let index = orthogonalCoordsToIndex(axialCoordsToOrthogonal({r: firstCoord, q: secondCoord}, this.orientation, this.offset));
     return this.tileByIndex(index.i, index.j);
   }
 

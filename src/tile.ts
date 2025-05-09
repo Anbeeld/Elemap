@@ -118,22 +118,22 @@ export abstract class AbstractTile {
     let grid = Register.grid.abstract(this.ids);
     if (grid) {
       let element = this.elements!.inner;
-      let offset: OrthogonalCoords = {$x: 0, $y: 0};
+      let offset: OrthogonalCoords = {x: 0, y: 0};
       while (element) {
-        offset.$x += element.offsetLeft;
-        offset.$y += element.offsetTop;
+        offset.x += element.offsetLeft;
+        offset.y += element.offsetTop;
         element = element.parentElement as HTMLElement;
         if (element === grid.elements!.inner) {
           return {
-            $x: offset.$x - cssValueToNumber(grid.style.spacing),
-            $y: offset.$y - cssValueToNumber(grid.style.spacing)
+            x: offset.x - cssValueToNumber(grid.style.spacing),
+            y: offset.y - cssValueToNumber(grid.style.spacing)
           }
         }
       }
     }
     return {
-      $x: 0,
-      $y: 0
+      x: 0,
+      y: 0
     };
   }
 

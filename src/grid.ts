@@ -150,7 +150,7 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
       this.elements!.contourHover.removeAttribute('style');
     } else {
       this.elements!.contourHover.style.display = `block`;
-      this.elements!.contourHover.style.transform = `translate(${position.$x}px, ${position.$y}px)`;
+      this.elements!.contourHover.style.transform = `translate(${position.x}px, ${position.y}px)`;
     }
   }
 }

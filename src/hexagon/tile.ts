@@ -14,16 +14,16 @@ export default class HexagonTile extends AbstractTile {
 
   protected override setDataAttributes() {    
     if (this.elements!.outer) {
-      this.elements!.outer.dataset['elemapR'] = this.coords.$r.toString();
-      this.elements!.outer.dataset['elemapQ'] = this.coords.$q.toString();
+      this.elements!.outer.dataset['elemapR'] = this.coords.r.toString();
+      this.elements!.outer.dataset['elemapQ'] = this.coords.q.toString();
     }
-    this.elements!.inner.dataset['elemapR'] = this.coords.$r.toString();
-    this.elements!.inner.dataset['elemapQ'] = this.coords.$q.toString();
+    this.elements!.inner.dataset['elemapR'] = this.coords.r.toString();
+    this.elements!.inner.dataset['elemapQ'] = this.coords.q.toString();
   }
   
   public get selectors() {
     return {
-      data: `[data-elemap-r="${this.coords.$r}"][data-elemap-q="${this.coords.$q}"]`
+      data: `[data-elemap-r="${this.coords.r}"][data-elemap-q="${this.coords.q}"]`
     };
   }
 }
