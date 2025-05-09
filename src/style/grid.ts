@@ -1,52 +1,234 @@
-import { Style, StyleDecls, StyleProps, StyleTypes } from "./style.js";
-import { Width, Height, SizeValues, Spacing } from "./css/size.js";
-import { BorderRadius, BorderRadiusValues } from './css/border-radius.js';
+// import { Tile.size } from "../utils.js";
+import { AbstractGridMap } from "../map.js";
+import { GridStyleIds, MapStyleIds, Register } from "../register.js";
+import { GridStyleDecls, StyleDecls } from "./set.js";
+import TileStyle from "./tile.js";
+import Style from "./style.js";
+import { calc, printStyleDecl } from "./utils.js";
+import { AbstractGrid } from "../grid.js";
+import { AbstractTile } from "../tile.js";
 
-/* OUTER */
-
-export interface GridOuterStyleDecls extends StyleDecls {
-  spacing?: SizeValues|string;
-  borderRadius?: BorderRadiusValues|string;
+type GridComputed = {
+  outer: CSSStyleDeclaration,
+  inner: CSSStyleDeclaration,
+  contourHover: CSSStyleDeclaration,
 }
 
-export interface GridOuterStyleProps extends StyleProps {
-  spacing: Spacing;
-  borderRadius: BorderRadius;
-}
+export default abstract class GridStyle extends Style {
+  protected _ids: GridStyleIds;
+  protected set ids(value: GridStyleIds) { this._ids = value; }
+  public get ids() : GridStyleIds { return this._ids; }
 
-export class GridOuterStyle extends Style<GridOuterStyleDecls, GridOuterStyleProps> {
-  constructor(values: GridOuterStyleDecls) {
-    const types: StyleTypes = {
-      spacing: Spacing,
-      borderRadius: BorderRadius,
-    };
+  public override get owner() { return (Register.map(this.ids.owner)! as AbstractGridMap<AbstractGrid<AbstractTile>>).grid; }
+  public get map() { return Register.style.map.grid(this.ids.owner)!; }
 
-    super(types, values);
+  protected _decls: GridStyleDecls;
+  protected set decls(value: GridStyleDecls) { this._decls = value; }
+  public get decls() : GridStyleDecls { return this._decls; }
+
+  protected _computed: GridComputed;
+  protected set computed(value: GridComputed) { this._computed = value; }
+  public get computed() : GridComputed { return this._computed; }
+  
+  protected _tile: TileStyle;
+  protected set tile(value: TileStyle) { this._tile = value; }
+  public get tile() : TileStyle { return this._tile; }
+
+  public constructor(mapIds: MapStyleIds, decls: StyleDecls) {
+    super();
+    this.ids = new GridStyleIds(mapIds, Register.id());
+    this.tile = new TileStyle(this.ids, decls);
+    this.decls = decls.grid;
   }
-}
 
-/* INNER */
+  public override get selectors() {
+    let base = `.elemap-${this.ids.owner.map}`;
+    let grid = base + `-grid`;
+    return {
+      base: base,
+      frame: grid + `-frame`,
+      grid: grid,
+      row: grid + `>div`,
+      tile: grid + `>div>div`,
+      outerGrid: grid + `-outer`,
+      innerGrid: grid + `-inner`,
+      outerRow: grid + `-outer>div`,
+      innerRow: grid + `-inner>div`,
+      outerTile: grid + `-outer>div>div`,
+      innerTile: grid + `-inner>div>div`,
+      contour: grid + `-contour`
+    }
+  }
 
-export interface GridInnerStyleDecls extends StyleDecls {
-  width?: SizeValues|string;
-  height?: SizeValues|string;
-  borderRadius?: BorderRadiusValues|string;
-}
+  public get spacing() : string { return this.decls.spacing.custom || this.decls.spacing.default; }
 
-export interface GridInnerStyleProps extends StyleProps {
-  width: Width;
-  height: Height;
-  borderRadius: BorderRadius;
-}
+  public get static() : string {
+    return `` +
+    this.selectors.frame + `{` +
+      `display:block;` + 
+      `position:absolute;` + 
+      `z-index:50;` + 
+    `}` +
 
-export class GridInnerStyle extends Style<GridInnerStyleDecls, GridInnerStyleProps> {
-  constructor(values: GridInnerStyleDecls) {
-    const types: StyleTypes = {
-      width: Width,
-      height: Height,
-      borderRadius: BorderRadius,
+    this.selectors.grid + `{` +
+      `overflow:hidden;` + 
+    `}` +
+
+    this.selectors.row + `{` +
+      `display:flex;` +
+      `width:max-content;` +
+      `position:relative;` +
+      `pointer-events:none;` +
+    `}` +
+
+    this.selectors.tile + `{` +
+      `pointer-events:auto;` + 
+      `float:left;` + // To collapse margins
+    `}` +
+
+    this.selectors.outerGrid + `{` +
+      `position:absolute;` + 
+      `z-index:100;` + 
+    `}` +
+
+    this.selectors.outerRow + `{` +
+      `z-index:110;` + 
+    `}` +
+
+    this.selectors.outerTile + `{` +
+    `position:absolute;` + 
+      `z-index:120;` + 
+    `}` +
+
+    this.selectors.outerTile + `:before{` + 
+      `z-index:130;` + 
+    `}` +
+
+    this.selectors.outerTile + `:after{` + 
+      `z-index:140;` + 
+    `}` +
+
+    this.selectors.innerGrid + `{` +
+      `position:relative;` +
+      `width:max-content;` +
+      `z-index:150;` +
+    `}` + 
+    this.selectors.innerRow + `{` +
+      `z-index:160;` + 
+    `}` +
+
+    this.selectors.innerTile + `{` +
+      `position:relative;` + 
+      `z-index:170;` +
+    `}` +
+
+    this.selectors.innerTile + `:after{` +
+      `z-index:190;` +
+    `}` +
+
+    this.selectors.innerTile + `>*{` +
+      `position:relative;` +
+      `z-index:200;` +
+    `}` +
+
+    this.selectors.contour + `{` +
+      `display:block;` +
+      `position:absolute;` +
+      `z-index:210;` +
+      `pointer-events:none;` +
+    `}` +
+
+    this.selectors.contour + `>div{` +
+      `display:block;` +
+      `position:absolute;` +
+      `z-index:220;` +
+    `}`;
+  }
+
+  public get rules() : string {
+    return `` +
+
+    this.selectors.frame + `{` + 
+      printStyleDecl(this.decls.frame) +
+    `}` +
+    
+    this.selectors.grid + `{` +
+      `padding:${calc.div(this.spacing, 2)};` +
+    `}` +
+
+    this.selectors.outerTile + `{` +
+      printStyleDecl(this.tile.decls.outer) +
+    `}` +
+
+    this.selectors.innerTile + `{` +
+      printStyleDecl(this.tile.decls.inner) +
+
+      `margin:${calc.div(this.spacing, 2)};` +
+    `}`;
+  }
+
+  public get dynamic() : string {
+    let absolutePosition = `{` +
+      `top: ${this.map.computed.map.paddingTop};` +
+      `right: ${this.map.computed.map.paddingRight};` +
+      `bottom: ${this.map.computed.map.paddingBottom};` +
+      `left: ${this.map.computed.map.paddingLeft};` +
+    `}`;
+    
+    return `` +
+    this.selectors.frame + absolutePosition +
+
+    this.selectors.outerGrid + absolutePosition +
+    
+    this.selectors.contour + absolutePosition +
+
+    this.selectors.outerRow + `{` +
+      `width: ${calc.sub(calc.mult(this.tile.size.outer.width, this.owner.size.width), calc.mult(this.spacing, this.owner.size.width))};` +
+    `}` +
+
+
+
+
+
+    this.selectors.row + `{` +
+      `height:${this.tile.size.outer.height};` +
+    `}` +
+
+    this.selectors.outerTile + `{` + 
+      `width:${this.tile.size.outer.width};` + 
+      `height:${this.tile.size.outer.height};` + 
+    `}` +
+
+    this.selectors.contour + `>div{` +
+      `display:none;` +
+      `top:0;` +
+      `left:0;` +
+      `width:${this.tile.size.spaced.width};` +
+      `height:${this.tile.size.spaced.height};` +
+    `}` +
+
+
+
+    
+    this.selectors.frame + `{` +
+      `clip-path: path('${this.frameClipPath}');` +
+    `}` +
+
+
+    
+    this.dynamicSpecific;
+  }
+
+  public abstract get dynamicSpecific() : string;
+
+  protected abstract get frameClipPath() : string;
+
+  public compute() : void {
+    this.computed = {
+      outer: getComputedStyle(this.owner.elements!.outer),
+      inner: getComputedStyle(this.owner.elements!.inner),
+      contourHover: getComputedStyle(this.owner.elements!.contourHover)
     };
-
-    super(types, values);
+    this.tile.compute();
   }
 }

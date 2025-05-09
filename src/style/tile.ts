@@ -1,67 +1,94 @@
-import { Style, StyleDecls, StyleProps, StyleTypes } from "./style.js";
-import { Background, BackgroundValues } from './css/background.js';
-import { SizeValues, Width } from "./css/size.js";
+import { TileSizeSet } from "../utils.js";
+import { TileStyleIds, GridStyleIds, Register } from "../register.js";
+import { StyleDecls, TileStyleDecls } from "./set.js";
+import Style from "./style.js";
+import { AbstractGridMap } from "../map.js";
+import { AbstractGrid } from "../grid.js";
+import { AbstractTile } from "../tile.js";
+import { calc, printStyleDecl } from "./utils.js";
 
-/* OUTER */
-
-export interface TileOuterStyleDecls extends StyleDecls {
-  background?: BackgroundValues;
-
+type TileComputed = {
+  // outer: CSSStyleDeclaration,
+  inner: CSSStyleDeclaration,
 }
 
-export interface TileOuterStyleProps extends StyleProps {
-  background: Background,
-}
+export default class TileStyle extends Style {
+  protected _ids: TileStyleIds;
+  protected set ids(value: TileStyleIds) { this._ids = value; }
+  public get ids() : TileStyleIds { return this._ids; }
 
-export class TileOuterStyle extends Style<TileOuterStyleDecls, TileOuterStyleProps> {
-  constructor(values: TileOuterStyleDecls) {
-    const types: StyleTypes = {
-      background: Background,
-    }
+  public override get owner() { return Register.map(this.ids.owner)! as AbstractGridMap<AbstractGrid<AbstractTile>>; }
 
-    super(types, values);
+  public get grid() { return Register.style.grid(this.ids.owner)!; }
+
+  protected get spacing() : string { return this.grid.spacing; }
+
+  protected _computed: TileComputed;
+  protected set computed(value: TileComputed) { this._computed = value; }
+  public get computed() : TileComputed { return this._computed; }
+
+  public override get selectors() { return this.grid.selectors; }
+
+  protected _decls: TileStyleDecls;
+  protected set decls(value: TileStyleDecls) { this._decls = value; }
+  public get decls() : TileStyleDecls { return this._decls; }
+
+  public constructor(gridIds: GridStyleIds, decls: StyleDecls) {
+    super();
+    this.ids = new TileStyleIds(gridIds, Register.id());
+    this.decls = decls.tile;
   }
-}
 
-/* INNER */
+  public get size() : TileSizeSet {
+    let inner = {
+      width: this.computed.inner.width,
+      height: this.computed.inner.height
+    };
+    let spaced = {
+      width: calc.add(inner.width, calc.mult(this.spacing, 2)),
+      height: calc.add(inner.height, calc.mult(this.spacing, 2))
+    };
+    let outer = {
+      width: calc.add(inner.width, this.spacing),
+      height: calc.add(inner.height, this.spacing)
+    };
 
-export interface TileInnerStyleDecls extends StyleDecls {
-  background?: BackgroundValues;
-}
-
-export interface TileInnerStyleProps extends StyleProps {
-  background: Background;
-}
-
-export class TileInnerStyle extends Style<TileInnerStyleDecls, TileInnerStyleProps> {
-  constructor(values: TileInnerStyleDecls) {
-    const types: StyleTypes = {
-      background: Background,
-    }
-
-    super(types, values);
+    return { spaced, outer, inner };
   }
-}
 
-/* CONTOUR */
+  public get static() : string { return ''; }
+  public get rules() : string {
+    return `` + 
+    this.selectors.outerTile + `{` +
+      printStyleDecl(this.decls.outer) + 
+      /* `left:${calc.mult(this.size.outer.width, index!.j)};` + */
+    `}` +
 
-export interface TileContourStyleDecls extends StyleDecls {
-  width?: SizeValues|string;
-  background?: BackgroundValues;
-}
+    this.selectors.innerTile + `:hover{` + 
+      printStyleDecl(this.decls.hover.inner) +
+    `}` +
 
-export interface TileContourStyleProps extends StyleProps {
-  width: Width;
-  background: Background;
-}
+    this.selectors.contour + `>div{` + 
+      printStyleDecl(this.decls.contour) +
+    `}` +
 
-export class TileContourStyle extends Style<TileContourStyleDecls, TileContourStyleProps> {
-  constructor(values: TileContourStyleDecls) {
-    const types: StyleTypes = {
-      width: Width,
-      background: Background,
-    }
+    this.selectors.contour + `>div:hover{` + 
+      printStyleDecl(this.decls.hover.contour) +
+    `}`;
+  }
+  public get dynamic() : string {
+    return `` +
+    this.selectors.contour + `>div{` + 
+      `border:none;` +
+    `}`;
+  }
 
-    super(types, values);
+  
+
+  public compute() : void {
+    this.computed = {
+      // outer: getComputedStyle(this.owner.grid.tileByCoords(0, 0)!.elements.outer),
+      inner: getComputedStyle(this.owner.grid.tileByCoords(0, 0)!.elements.inner)
+    };
   }
 }

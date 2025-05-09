@@ -1,19 +1,27 @@
 import RectangleMap from "./rectangle/map.js";
 import HexagonMap from "./hexagon/map.js";
-import { Config } from "./utils.js";
-import { UserStyle, userStyleToSurfaceStyleGroup } from "./style/set.js";
+import { UserStyle, userStyleToStyle } from "./style/set.js";
 import { validateConfig } from "./config.js";
 import { MapType } from "./utils.js";
+import { AbstractMap } from "./map.js";
 
 export default class Elemap {
-  constructor(config: Config, userStyle: UserStyle) {
-    config = validateConfig(config);
-    let style = userStyleToSurfaceStyleGroup(userStyle);
+  private map: AbstractMap;
+
+  constructor(configCustom: any, userStyle: UserStyle) {
+    let config = validateConfig(configCustom);
+    let style = userStyleToStyle(userStyle);
 
     if (config.type === MapType.Rectangle) {
-      return new RectangleMap(config, style);
+      this.map = new RectangleMap(config, style);
     } else if (config.type === MapType.Hexagon) {
-      return new HexagonMap(config, style);
+      this.map = new HexagonMap(config, style);
     }
+
+    this["render"];
+  }
+
+  public render(container: HTMLElement) : void {
+    this.map.render(container);
   }
 }

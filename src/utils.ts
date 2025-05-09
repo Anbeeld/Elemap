@@ -1,4 +1,4 @@
-import { cssValueToNumber } from './style/css/utils.js';
+import { cssValueToNumber } from './style/utils.js';
 
 export type Size = {width: number, height: number};
 export type Index = {i: number, j: number};
@@ -24,13 +24,13 @@ export interface Coords {
 }
 
 export interface AxialCoords extends Coords {
-  r: number;
-  q: number;
+  $r: number;
+  $q: number;
 }
 
 export interface OrthogonalCoords extends Coords {
-  x: number;
-  y: number;
+  $x: number;
+  $y: number;
 }
 
 export type Config = {
@@ -197,7 +197,7 @@ export function generateHexagonPath(type: GridOrientation, hexagonSize: hexagonS
   }
 }
 
-export function generateRectanglePath(rectangleSize: tileSize, borderRadius: number = 0, margin = {top: 0, left: 0}) : string {
+export function generateRectanglePath(rectangleSize: TileSize, borderRadius: number = 0, margin = {top: 0, left: 0}) : string {
   // x0, y0 - xc0, y0 -------------- xc1, y0 - x1, y0
   // x0, yc0 -------------------------------- x1, yc0
   // ------------------------------------------------
@@ -259,15 +259,15 @@ export function generateRectanglePath(rectangleSize: tileSize, borderRadius: num
   `Z`;
 }
 
-export type tileSize = {
+export type TileSize = {
   width: string,
   height: string
 }
 
-export type tileSizeSet = {
-  spaced: tileSize,
-  outer: tileSize,
-  inner: tileSize
+export type TileSizeSet = {
+  spaced: TileSize,
+  outer: TileSize,
+  inner: TileSize
 }
 
 export type hexagonSize = {
@@ -276,55 +276,55 @@ export type hexagonSize = {
   short: string
 }
 
-export type hexagonSizeSet = {
+export type hexagonSizeDecls = {
   spaced: hexagonSize,
   outer: hexagonSize,
   inner: hexagonSize
 }
 
 export function indexToOrthogonalCoords(index: Index) : OrthogonalCoords {
-  return {x: index.i, y: index.j};
+  return {$x: index.i, $y: index.j};
 }
 
 export function orthogonalCoordsToIndex(orthogonal: OrthogonalCoords) : Index {
-  return {i: orthogonal.x, j: orthogonal.y};
+  return {i: orthogonal.$x, j: orthogonal.$y};
 }
 
 export function orthogonalCoordsToAxial(orthogonal: OrthogonalCoords, orientation: GridOrientation, offset: GridOffset) : AxialCoords {
-  let axial: AxialCoords = {r: 0, q: 0};
+  let axial: AxialCoords = {$r: 0, $q: 0};
   if (orientation === GridOrientation.Pointy) {
-    axial.r = orthogonal.x;
+    axial.$r = orthogonal.$x;
     if (offset === GridOffset.Odd) {
-      axial.q = orthogonal.y - (orthogonal.x - (orthogonal.x & 1)) / 2;
+      axial.$q = orthogonal.$y - (orthogonal.$x - (orthogonal.$x & 1)) / 2;
     } else {
-      axial.q = orthogonal.y - (orthogonal.x + (orthogonal.x & 1)) / 2;
+      axial.$q = orthogonal.$y - (orthogonal.$x + (orthogonal.$x & 1)) / 2;
     }
   } else {
-    axial.q = orthogonal.y;
+    axial.$q = orthogonal.$y;
     if (offset === GridOffset.Odd) {
-      axial.r = orthogonal.x - (orthogonal.y - (orthogonal.y & 1)) / 2;
+      axial.$r = orthogonal.$x - (orthogonal.$y - (orthogonal.$y & 1)) / 2;
     } else {
-      axial.r = orthogonal.x - (orthogonal.y + (orthogonal.y & 1)) / 2;
+      axial.$r = orthogonal.$x - (orthogonal.$y + (orthogonal.$y & 1)) / 2;
     }
   }
   return axial;
 }
 
 export function axialCoordsToOrthogonal(axial: AxialCoords, orientation: GridOrientation, offset: GridOffset) : OrthogonalCoords {
-  let orthogonal: OrthogonalCoords = {x: 0, y: 0};
+  let orthogonal: OrthogonalCoords = {$x: 0, $y: 0};
   if (orientation === GridOrientation.Pointy) {
-    orthogonal.x = axial.r;
+    orthogonal.$x = axial.$r;
     if (offset === GridOffset.Odd) {
-      orthogonal.y = axial.q + (axial.r - (axial.r & 1)) / 2;
+      orthogonal.$y = axial.$q + (axial.$r - (axial.$r & 1)) / 2;
     } else {
-      orthogonal.y = axial.q + (axial.r + (axial.r & 1)) / 2;
+      orthogonal.$y = axial.$q + (axial.$r + (axial.$r & 1)) / 2;
     }
   } else {
-    orthogonal.y = axial.q;
+    orthogonal.$y = axial.$q;
     if (offset === GridOffset.Odd) {
-      orthogonal.x = axial.r + (axial.q - (axial.q & 1)) / 2;
+      orthogonal.$x = axial.$r + (axial.$q - (axial.$q & 1)) / 2;
     } else {
-      orthogonal.x = axial.r + (axial.q + (axial.q & 1)) / 2;
+      orthogonal.$x = axial.$r + (axial.$q + (axial.$q & 1)) / 2;
     }
   }
   return orthogonal;
@@ -336,4 +336,64 @@ export function indexToAxialCoords(index: Index, orientation: GridOrientation, o
 
 export function capitalizeFirstLetter(val: string) : string {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+}
+
+function isObject(item: any) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+export function copyUnshieldedToShielded(shielded: any, unshielded: any, replace: boolean = true) : void {
+  for (const parameter in unshielded) {
+    if ((shielded as any).hasOwnProperty('$' + parameter)) {
+      let shieldedProperty = (shielded as any)['$' + parameter];
+      let unshieldedProperty = (unshielded as any)[parameter];
+
+      if (isObject(shieldedProperty) && isObject(unshieldedProperty)) {
+        copyUnshieldedToShielded(shieldedProperty, unshieldedProperty);
+      } else {
+        if (replace) {
+          (shielded as any)['$' + parameter] = unshieldedProperty;
+        } else {
+          (shielded as any)['$' + parameter] = shieldedProperty + unshieldedProperty;
+        }
+      }
+    }
+  }
+
+  // // Based on https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
+
+  // /**
+  //  * Deep merge two objects.
+  //  * @param target
+  //  * @param ...sources
+  //  */
+  // function mergeDeep(target: any, ...sources: any[]) {
+  //   if (!sources.length) {
+  //     return target;
+  //   }
+  //   const source = sources.shift();
+
+  //   if (isObject(target) && isObject(source)) {
+  //     for (const key in source) {
+  //       // Only if the key exists in the target object
+  //       if (!target.hasOwnProperty(key)) { 
+  //         continue;
+  //       }
+  //       if (isObject(target[key]) && isObject(source[key])) {
+  //         mergeDeep(target[key], source[key]);
+  //       } else {
+  //         Object.assign(target, { [key]: source[key] });
+  //       }
+  //     }
+  //   }
+
+  //   return mergeDeep(target, ...sources);
+  // }
+}
+
+export function unshield(string: string) : string {
+  if (string.startsWith('$')) {
+    return string.slice(1);
+  }
+  return string;
 }

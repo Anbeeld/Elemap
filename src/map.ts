@@ -2,14 +2,13 @@ import { AbstractTile } from './tile.js';
 import { AbstractGrid } from './grid.js';
 import { Config } from "./utils.js";
 
-import { SurfaceStyleGroup, SurfaceStyleSet, GridStyleGroup } from './style/set.js';
+import { StyleDecls } from './style/set.js';
+import { MapStyle, GridMapStyle } from './style/map.js';
 import { MapIds, Register } from './register.js';
 
 interface MapElements {
   container?: HTMLElement,
-  surface?: HTMLElement,
-  cssStatic: HTMLElement,
-  cssDynamic: HTMLElement
+  map: HTMLElement,
 }
 
 export abstract class AbstractMap {
@@ -21,32 +20,36 @@ export abstract class AbstractMap {
   protected set elements(value: MapElements) { this._elements = value; }
   public get elements() : MapElements { return this._elements; }
 
-  protected _style: SurfaceStyleSet;
-  protected set style(value: SurfaceStyleSet) { this._style = value; }
-  public get style() : SurfaceStyleSet { return this._style; }
+  protected _style: MapStyle;
+  protected set style(value: MapStyle) { this._style = value; }
+  public get style() : MapStyle { return this._style; }
 
-  constructor(config: Config, style: SurfaceStyleSet) {
+  public get classes() {
+    return {
+      base: `elemap-${this.ids.map}`,
+      container: `elemap-${this.ids.map}-container`,
+      map: `elemap-${this.ids.map}-map`
+    };
+  }
+
+  constructor(config: Config, style: StyleDecls) {
     this.ids = new MapIds(Register.id());
     Register.add(this);
     config; // TODO
-    this.style = style;
+    this.initStyle(style);
     this.elements = this.initElements();
-
-    this.elements.cssStatic.innerHTML = this.cssStatic;
   }
 
-  private initElements() : MapElements {
-    let elementStyleStatic = document.createElement('style');
-    elementStyleStatic.classList.add('elemap-' + this.ids.self + '-css-static');
-    document.head.appendChild(elementStyleStatic);
+  protected initStyle(style: StyleDecls) : void {
+    this.style = new MapStyle(this.ids, style);
+  }
 
-    let elementStyleDynamic = document.createElement('style');
-    elementStyleDynamic.classList.add('elemap-' + this.ids.self + '-css-dynamic');
-    document.head.appendChild(elementStyleDynamic);
+  private initElements() : MapElements {    
+    let elementMap = document.createElement('div');
+    elementMap.classList.add(`elemap-${this.ids.map}-map`);
 
     return {
-      cssStatic: elementStyleStatic,
-      cssDynamic: elementStyleDynamic
+      map: elementMap
     };
   }
 
@@ -61,37 +64,13 @@ export abstract class AbstractMap {
       this.elements.container = container;
       this.elements.container.classList.add('elemap-' + this.ids.self + '-container');
     }
-    
-    if (!this.elements.surface) {
-      this.elements.surface = document.createElement('div');
-      this.elements.surface.classList.add('elemap-' + this.ids.self + '-surface');
-    }
 
-    this.elements.container.appendChild(this.elements.surface);
+    this.elements.container.appendChild(this.elements.map);
   }
 
-  public get cssStatic() : string {
-    return `` +
-    `.elemap-${this.ids.self}-container{` +
-      `width:max-content;` +
-    `}` +
-
-    `.elemap-${this.ids.self}-surface{` +
-      `position:relative;` +
-      `width:max-content;` +
-      `z-index:10;` +
-    `}`;
-  }
-
-  public get cssDynamic() : string {
-    return `` +
-    `.elemap-${this.ids.self}-surface{` +
-      this.style.outer.regular.css +
-    `}` +
-
-    `.elemap-${this.ids.self}-surface>*{` +
-      this.style.inner.regular.css +
-    `}`;
+  public render(container: HTMLElement) {
+    this.initRender(container);
+    this.style.render();
   }
 }
 
@@ -100,16 +79,18 @@ export abstract class AbstractGridMap<Grid extends AbstractGrid<AbstractTile>> e
   protected set grid(value: Grid) { this._grid = value; }
   public get grid() : Grid { return this._grid; }
 
-  constructor(config: Config, style: SurfaceStyleGroup, gridClass: new (mapIds: MapIds, config: Config, style: GridStyleGroup) => Grid) {
-    super(config, style.self);
-    this.grid = new gridClass(this.ids, config, style.grid);
+  protected override _style: GridMapStyle;
+  protected override set style(value: GridMapStyle) { this._style = value; }
+  public override get style() : GridMapStyle { return this._style; }
 
-    this.elements.cssStatic.innerHTML = this.cssStatic + this.grid.cssStatic;
+  constructor(config: Config, style: StyleDecls, gridClass: new (mapIds: MapIds, config: Config, style: StyleDecls) => Grid) {
+    super(config, style);
+    this.grid = new gridClass(this.ids, config, style);
   }
 
-  public render(container: HTMLElement) {
+  public override render(container: HTMLElement) {
     this.initRender(container);
-    this.grid.render(this.elements.surface!);
-    this.elements.cssDynamic.innerHTML = this.cssDynamic + this.grid.cssDynamic;
+    this.grid.render(this.elements.map!);
+    this.style.render();
   }
 }
