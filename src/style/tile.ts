@@ -63,30 +63,54 @@ export default class TileStyle extends Style {
   }
 
   public get static() : string { return ''; }
+  
   public get rules() : string {
-    return `` +
-    this.selectors.outerTile + this.selectors.data + `{` +
-      this.decls.outer +
-    `}` +
+    let css = ``;
 
-    this.selectors.innerTile + this.selectors.data + `{` +
-      this.decls.inner +
-    `}` +
+    if (this.decls.outer.length) {
+      css +=
+      this.selectors.outerTile + this.selectors.data + `{` +
+        this.decls.outer +
+        /* `left:${calc.mult(this.size.outer.width, index!.j)};` + */
+      `}`;
+    }
 
-    this.selectors.outerTile + this.selectors.data + `{` +
-      this.decls.outer + 
-      /* `left:${calc.mult(this.size.outer.width, index!.j)};` + */
-    `}` +
+    if (this.decls.inner.length) {
+      css +=
+      this.selectors.innerTile + this.selectors.data + `{` +
+        this.decls.inner +
+      `}`;
+    }
 
-    this.selectors.innerTile + this.selectors.data + `:hover{` + 
-      this.decls.hover.inner +
-    `}`;
+    // TODO hover won't work
+    if (this.decls.hover.outer.length) {
+      css +=
+      this.selectors.outerTile + this.selectors.data + `:hover{` +
+        this.decls.hover.outer + 
+      `}`;
+    }
+
+    if (this.decls.hover.inner.length) {
+      css +=
+      this.selectors.innerTile + this.selectors.data + `:hover{` +
+        this.decls.hover.inner + 
+      `}`;
+    }
+
+    return css;
   }
+
   public get dynamic() : string {
-    return `` +
-    this.selectors.contour + `>div{` + 
-      `border:none;` +
-    `}`;
+    let css = ``;
+
+    if (this.initial) {
+      css +=
+      this.selectors.contour + `>div{` + 
+        `border:none;` +
+      `}`;
+    }
+
+    return css;
   }
 
   
