@@ -2,7 +2,6 @@ import { MapIds, Register, MapStyleIds, GridIds } from "../register.js";
 import { MapStyleDecls, StyleDecls } from "./set.js";
 import Style from "./style.js";
 import GridStyle from "./grid.js";
-import { printStyleDecl } from "./utils.js";
 
 type StyleElements = {
   static: HTMLElement,
@@ -93,11 +92,11 @@ export class MapStyle extends Style {
   protected get rules() : string {
     return `` +
     this.selectors.map + `{` +
-      printStyleDecl(this.decls.outer) +
+      this.decls.outer +
     `}` +
 
     this.selectors.map + `>*{` +
-      printStyleDecl(this.decls.inner) +
+      this.decls.inner +
     `}`;
   }
 

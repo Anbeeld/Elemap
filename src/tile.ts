@@ -45,7 +45,8 @@ export abstract class AbstractTile {
   }
 
   public deviateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
-    if (this.style === undefined || replace) {
+    console.log(addCustomTileStyleToDefault(decls));
+    if (this._style === undefined || replace) {
       this.style = new TileStyle(this.ids, this.grid.style.ids, addCustomTileStyleToDefault(decls));
     } else {
       this.style = new TileStyle(this.ids, this.grid.style.ids, addCustomTileStyleToDefault(decls, this.style.decls));

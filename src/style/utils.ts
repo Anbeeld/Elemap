@@ -1,5 +1,4 @@
 import { roundFloat } from '../utils.js';
-import { StyleDecl } from './set.js';
 
 export function cssValueToNumber(value: string) : number {
   if (value.endsWith('px')) {
@@ -134,15 +133,4 @@ export const calc = {
   round: (value: string, precision: number) => {
     return `${roundFloat(calcValueToNumber(value), precision)}px`;
   }
-}
-
-export function printStyleDecl(decl: StyleDecl) : string {
-  let rule = '';
-  if (typeof decl.default === 'string') {
-    rule += `${decl.default}`;
-  }
-  if (typeof decl.custom === 'string') {
-    rule += `${decl.custom}`;
-  }
-  return rule;
 }

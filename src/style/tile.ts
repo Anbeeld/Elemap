@@ -2,7 +2,7 @@ import { TileSizeSet } from "../utils.js";
 import { TileStyleIds, GridStyleIds, Register, TileIds } from "../register.js";
 import { StyleDecls, TileStyleDecls } from "./set.js";
 import Style from "./style.js";
-import { calc, printStyleDecl } from "./utils.js";
+import { calc } from "./utils.js";
 
 type TileComputed = {
   // outer: CSSStyleDeclaration,
@@ -42,6 +42,7 @@ export default class TileStyle extends Style {
     this.ids = new TileStyleIds(ownerIds, gridIds, Register.id());
     this.initial = initial;
     this.decls = decls.hasOwnProperty('tile') ? (decls as StyleDecls).tile : decls as TileStyleDecls;
+    console.log(this.decls);
   }
 
   public get size() : TileSizeSet {
@@ -65,22 +66,20 @@ export default class TileStyle extends Style {
   public get rules() : string {
     return `` +
     this.selectors.outerTile + this.selectors.data + `{` +
-      printStyleDecl(this.decls.outer) +
+      this.decls.outer +
     `}` +
 
     this.selectors.innerTile + this.selectors.data + `{` +
-      printStyleDecl(this.decls.inner) +
-
-      `margin:${calc.div(this.spacing, 2)};` +
+      this.decls.inner +
     `}` +
 
     this.selectors.outerTile + this.selectors.data + `{` +
-      printStyleDecl(this.decls.outer) + 
+      this.decls.outer + 
       /* `left:${calc.mult(this.size.outer.width, index!.j)};` + */
     `}` +
 
     this.selectors.innerTile + this.selectors.data + `:hover{` + 
-      printStyleDecl(this.decls.hover.inner) +
+      this.decls.hover.inner +
     `}`;
   }
   public get dynamic() : string {

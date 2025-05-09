@@ -2,10 +2,7 @@
 
 import { copyUnshieldedToShielded } from "../utils.js";
 
-export type StyleDecl = {
-  default: string,
-  custom: string
-}
+export type StyleDecl = string;
 
 export type StyleDecls = {
   map: MapStyleDecls,
@@ -25,7 +22,6 @@ export type MapStyleDecls = {
 
 export type GridStyleDecls = {
   frame: StyleDecl,
-  spacing: StyleDecl,
   contour: StyleDecl
 }
 
@@ -38,11 +34,11 @@ export type TileStyleDecls = {
   }
 }
 export type CustomTileStyleDecls = {
-  outer?: StyleDecl,
-  inner?: StyleDecl,
+  outer?: string,
+  inner?: string,
   hover?: {
-    outer?: StyleDecl,
-    inner?: StyleDecl,
+    outer?: string,
+    inner?: string,
   }
 }
 
@@ -54,12 +50,11 @@ export function userStyleToStyle(userStyle: UserStyle) : StyleDecls {
     },
     grid: {
       frame: 'background-color:#222222;',
-      spacing: '4px',
       contour: 'border: 2px solid transparent;background-color:#f5f5f5;',
     },
     tile: {
       outer: 'border-radius:6px;background-color:#222222;',
-      inner: 'width:100px;height:100px;border-radius:6px;background-color:#b2e090;',
+      inner: 'width:100px;height:100px;border-radius:6px;background-color:#b2e090;margin:2px;',
       hover: {
         outer: 'background-color:#f5f5f5;',
         inner: '',
@@ -74,7 +69,6 @@ export function userStyleToStyle(userStyle: UserStyle) : StyleDecls {
     },
     $grid: {
       $frame: '',
-      $spacing: '',
       $contour: '',
     },
     $tile: {
@@ -91,47 +85,19 @@ export function userStyleToStyle(userStyle: UserStyle) : StyleDecls {
 
   return {
     map: {
-      outer: {
-        default: defaultStyle.map.outer,
-        custom: customStyle.$map.$outer
-      },
-      inner: {
-        default: defaultStyle.map.inner,
-        custom: customStyle.$map.$inner
-      }
+      outer: defaultStyle.map.outer + customStyle.$map.$outer,
+      inner: defaultStyle.map.inner + customStyle.$map.$inner
     },
     grid: {
-      frame: {
-        default: defaultStyle.grid.frame,
-        custom: customStyle.$grid.$frame
-      },
-      spacing: {
-        default: defaultStyle.grid.spacing,
-        custom: customStyle.$grid.$spacing
-      },
-      contour: {
-        default: defaultStyle.grid.contour,
-        custom: customStyle.$grid.$contour
-      },
+      frame: defaultStyle.grid.frame + customStyle.$grid.$frame,
+      contour: defaultStyle.grid.contour + customStyle.$grid.$contour,
     },
     tile: {
-      outer: {
-        default: defaultStyle.tile.outer,
-        custom: customStyle.$tile.$outer,
-      },
-      inner: {
-        default: defaultStyle.tile.inner,
-        custom: customStyle.$tile.$inner,
-      },
+      outer: defaultStyle.tile.outer + customStyle.$tile.$outer,
+      inner: defaultStyle.tile.inner + customStyle.$tile.$inner,
       hover: {
-        outer: {
-          default: defaultStyle.tile.hover.outer,
-          custom: customStyle.$tile.$hover.$outer,
-        },
-        inner: {
-          default: defaultStyle.tile.hover.inner,
-          custom: customStyle.$tile.$hover.$inner,
-        },
+        outer: defaultStyle.tile.hover.outer + customStyle.$tile.$hover.$outer,
+        inner: defaultStyle.tile.hover.inner + customStyle.$tile.$hover.$inner,
       }
     }
   }
@@ -143,23 +109,11 @@ export function userStyleToStyle(userStyle: UserStyle) : StyleDecls {
 
 
 const initialTileStyle: TileStyleDecls = {
-  outer: {
-    default: 'border-radius:6px;background-color:#222222;',
-    custom: ''
-  },
-  inner: {
-    default: 'width:100px;height:100px;border-radius:6px;background-color:#b2e090;',
-    custom: ''
-  },
+  outer: '',//'border-radius:6px;background-color:#222222;',,
+  inner: '',//'width:100px;height:100px;border-radius:6px;background-color:#b2e090;',,
   hover: {
-    outer: {
-      default: 'background-color:#f5f5f5;',
-      custom: ''
-    },
-    inner: {
-      default: '',
-      custom: ''
-    },
+    outer: '',//'background-color:#f5f5f5;',,
+    inner: '',
   }
 }
 
@@ -176,23 +130,11 @@ export function addCustomTileStyleToDefault(unshielded: CustomTileStyleDecls, in
   copyUnshieldedToShielded(shielded, unshielded, false);
 
   return {
-    outer: {
-      default: initial.outer.default,
-      custom: initial.outer.custom + shielded.$outer,
-    },
-    inner: {
-      default: initial.inner.default,
-      custom: initial.inner.custom + shielded.$inner,
-    },
+    outer: initial.outer + shielded.$outer,
+    inner: initial.inner + shielded.$inner,
     hover: {
-      outer: {
-        default: initial.hover.outer.default,
-        custom: initial.hover.outer.custom + shielded.$hover.$outer,
-      },
-      inner: {
-        default: initial.hover.inner.default,
-        custom: initial.hover.inner.custom + shielded.$hover.$inner,
-      },
+      outer: initial.hover.outer + shielded.$hover.$outer,
+      inner: initial.hover.inner + shielded.$hover.$inner,
     }
   }
 }

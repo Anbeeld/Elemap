@@ -2,7 +2,7 @@ import { GridIds, GridStyleIds, MapStyleIds, Register } from "../register.js";
 import { GridStyleDecls, StyleDecls } from "./set.js";
 import TileStyle from "./tile.js";
 import Style from "./style.js";
-import { calc, printStyleDecl } from "./utils.js";
+import { calc } from "./utils.js";
 
 type GridComputed = {
   outer: CSSStyleDeclaration,
@@ -56,7 +56,7 @@ export default abstract class GridStyle extends Style {
     }
   }
 
-  public get spacing() : string { return this.decls.spacing.custom || this.decls.spacing.default; }
+  public get spacing() : string { return calc.mult(this.tile.computed.inner.marginRight, 2); }
 
   public get static() : string {
     return `` +
@@ -145,15 +145,11 @@ export default abstract class GridStyle extends Style {
     return `` +
 
     this.selectors.frame + `{` + 
-      printStyleDecl(this.decls.frame) +
-    `}` +
-    
-    this.selectors.grid + `{` +
-      `padding:${calc.div(this.spacing, 2)};` +
+      this.decls.frame +
     `}` +
 
     this.selectors.contour + `>div{` + 
-      printStyleDecl(this.decls.contour) +
+      this.decls.contour +
     `}`;
   }
 
@@ -166,6 +162,9 @@ export default abstract class GridStyle extends Style {
     `}`;
     
     return `` +
+    this.selectors.grid + `{` +
+      `padding:${calc.div(this.spacing, 2)};` +
+    `}` +
     this.selectors.frame + absolutePosition +
 
     this.selectors.outerGrid + absolutePosition +
