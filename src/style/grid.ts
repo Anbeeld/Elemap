@@ -60,7 +60,7 @@ export default abstract class GridStyle extends Style {
 
   public get spacing() : string { return calc.mult(this.tile.computed.inner.marginRight, 2); }
 
-  public get static() : string {
+  public get core() : string {
     return `` +
     this.selectors.frame + `{` +
       `display:block;` + 

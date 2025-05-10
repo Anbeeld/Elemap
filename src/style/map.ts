@@ -4,7 +4,7 @@ import Style from "./style.js";
 import GridStyle from "./grid.js";
 
 type StyleElements = {
-  static: HTMLElement,
+  core: HTMLElement,
   schema: HTMLElement,
   dynamic: HTMLElement
 }
@@ -38,9 +38,9 @@ export abstract class MapStyle extends Style {
   }
 
   protected initElements() : StyleElements {
-    let elementStyleStatic = document.createElement('style');
-    elementStyleStatic.classList.add(this.owner.classes.base + '-css-static');
-    document.head.appendChild(elementStyleStatic);
+    let elementStyleCore = document.createElement('style');
+    elementStyleCore.classList.add(this.owner.classes.base + '-css-core');
+    document.head.appendChild(elementStyleCore);
 
     let elementStyleSchema = document.createElement('style');
     elementStyleSchema.classList.add(this.owner.classes.base + '-css-schema');
@@ -51,14 +51,14 @@ export abstract class MapStyle extends Style {
     document.head.appendChild(elementStyleDynamic);
 
     return {
-      static: elementStyleStatic,
+      core: elementStyleCore,
       schema: elementStyleSchema,
       dynamic: elementStyleDynamic
     }
   }
 
   public render() {
-    this.elements.static.innerHTML = this.static;
+    this.elements.core.innerHTML = this.core;
     this.elements.schema.innerHTML = this.schema;
 
     void(this.owner.elements.map.offsetHeight);
@@ -76,7 +76,7 @@ export abstract class MapStyle extends Style {
     };
   }
 
-  protected get static() : string {
+  protected get core() : string {
     return `` +
     this.selectors.container + `{` +
       `width:max-content;` +
@@ -124,7 +124,7 @@ export abstract class GridMapStyle extends MapStyle {
   protected abstract initGrid(decls: StyleDecls) : void;
 
   public override render() {
-    this.elements.static.innerHTML = this.static + this.grid.static + this.grid.tile.static;
+    this.elements.core.innerHTML = this.core + this.grid.core + this.grid.tile.core;
     this.elements.schema.innerHTML = this.schema + this.grid.schema + this.grid.tile.schema;
 
     void(this.owner.elements.map.offsetHeight);

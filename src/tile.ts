@@ -98,7 +98,7 @@ export abstract class AbstractTile {
     this.setCoordsAttributes();
 
     if (this.elements!.style) {
-      this.elements.style.innerHTML = this.style.static + this.style.schema + this.style.dynamic;
+      this.elements.style.innerHTML = this.style.core + this.style.schema + this.style.dynamic;
       document.head.appendChild(this.elements.style);
     }
     if (this.elements!.outer) {

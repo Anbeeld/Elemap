@@ -61,7 +61,7 @@ export default abstract class TileStyle extends Style {
     return { spaced, outer, inner };
   }
 
-  public get static() : string { return ''; }
+  public get core() : string { return ''; }
 
   public get schema() : string {
     let css = ``;
