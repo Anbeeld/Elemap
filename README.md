@@ -4,7 +4,7 @@
 
 # Elemap
 
-Elemap is a no-dependency TS library for creating interactive game maps, rendered using HTML elements and CSS. This way you can easily populate them by adding your own HTML and manipulate everything hassle-free with JS/TS.
+Elemap is a zero-dependency TS library for creating interactive game maps, rendered using HTML elements and CSS. This way you can easily populate them by adding your own HTML and manipulate everything hassle-free with JS/TS.
 
 Live demo is available [on my website](https://anbeeld.com/elemap).
 
@@ -34,7 +34,7 @@ It goes well with my other library, [Tilted](https://github.com/anbeeld/Tilted),
 
 `config` is an object that sets up type of the map and grid parameters. Please refer to `examples` for more info.
 
-`style` is an object with arguments for map visuals, used by internal system based around CSS. Please refer to `examples` and `defaultSurfaceStyleDeclsGroup` in `src/style/set.ts` for more info. Note that its signature is `{surface:{}, grid:{}, tile:{}}`, which differs from the signature used on the inside.
+`style` is an object with arguments for map visuals, used by internal system based around CSS. Please refer to `examples` and `src/style/set.ts` for more info.
 
 `container` is an element that will store Elemap contents.
 

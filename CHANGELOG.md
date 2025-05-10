@@ -1,3 +1,14 @@
+## 0.1.3
+
+- Replaced an overly complex and detailed styling system with a much simpler solution, which uses CSS declarations instead of single properties. While the latter provided full control over styling, with the ability to access and edit every property in TS code and whitelist which properties can be used, it turned out to be overly difficult in terms of development and user configuration, as every single CSS property needs to be added to its correspoding style, verified, supported in the config and so on. The new system is much simpler, as it works on the declaration level instead, so many things like verification can be outsourced to the CSS engine, and user config becomes much easier to digest.
+- Fixed incorrect positioning of outer tiles for hexagon flat grids.
+- Exported index class now doesn't expose the Map class itself, allowing to specifically define methods available to the users without interfering with public ones that are meant to be used inside the library only.
+- Added setters where getters were already defined.
+- Removed underscore prefixes from private property and method names, except for properties behind setters and getters.
+- Renamed CSS element classes.
+- Webpack minimizing config now affects all property names, except the ones starting with $ or accessed with bracket, which can be used as a form of shielding.
+- Various small fixes and styling related adjustments.
+
 ## 0.1.2
 
 - Reduced default values for width and height (as in the amount of tiles) of a grid.
