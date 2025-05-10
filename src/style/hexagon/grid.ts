@@ -118,8 +118,8 @@ export default class HexagonGridStyle extends GridStyle {
           this.hexagonSize.spaced,
           cssValueToNumber(this.tile.computed.inner.borderRadius),
           {
-            top: i * topPerTile + (this.owner.hasIntendation(j) ? 1 : 0) * cssValueToNumber(this.tileIntendation.vertical),
-            left: j * leftPerTile + (this.owner.hasIntendation(i) ? 1 : 0) * cssValueToNumber(this.tileIntendation.horizontal)
+            top: i * topPerTile + (this.owner.hasIndentation(j) ? 1 : 0) * cssValueToNumber(this.tileIndentation.vertical),
+            left: j * leftPerTile + (this.owner.hasIndentation(i) ? 1 : 0) * cssValueToNumber(this.tileIndentation.horizontal)
           }
         );
       }
@@ -152,10 +152,10 @@ export default class HexagonGridStyle extends GridStyle {
       `clip-path:path(evenodd,'${outerPath} ${innerPath}');` +
     `}`
     + this.cssTileRecess()
-    + this.cssTileIntendation();
+    + this.cssTileIndentation();
   }
 
-  /* NOTE: for pointy grids recess and intendation are made on rows, for flat grids on tiles because there are no columns in html */
+  /* NOTE: for pointy grids recess and indentation are made on rows, for flat grids on tiles because there are no columns in html */
 
   // 1/4 of height; height is longer diagonal, side is 1/2 of diagonal, thus triangles are 1/2 of 1/2 high each
   private cssTileRecess() : string {
@@ -186,26 +186,45 @@ export default class HexagonGridStyle extends GridStyle {
     }
   }
 
-  private cssTileIntendation() : string {
-    let intendationRule: string = this.owner.offset === 'even' ? '2n - 1' : '2n';
+  private cssTileIndentation() : string {
+    let indentationRule: string = this.owner.offset === 'even' ? '2n - 1' : '2n';
     if (this.owner.orientation === GridOrientation.Pointy) {
       return `` +
-      this.selectors.row + `:nth-child(${intendationRule}){` +
-        `margin-left:${/*calc.add('0px', */this.tileIntendation.horizontal/*)*/};` +
+      this.selectors.row + `:nth-child(${indentationRule}){` +
+        `margin-left:${/*calc.add('0px', */this.tileIndentation.horizontal/*)*/};` +
       `}`;
     } else {
-      return `` +
-      this.selectors.row + `:last-child{` +
-        `height:${calc.add(this.tile.size.outer.height, this.tileIntendation.vertical)};` +
-      `}` +
-      this.selectors.tile + `:nth-child(${intendationRule}){` +
-        `margin-top:${calc.add(calc.div(this.spacing, 2), this.tileIntendation.vertical)};` +
-        `margin-bottom:${calc.add(calc.div(this.spacing, 2), calc.sub('0px', this.tileIntendation.vertical))};` +
+      let css = ``;
+
+      // For outer tiles rules based on index are required because not all of them are rendered 
+      for (let i = 0; i < this.owner.size.width; i++) {
+        if ((indentationRule === '2n - 1' && i % 2 === 0) || (indentationRule === '2n' && i % 2 !== 0)) {
+          css +=
+          this.selectors.outerTile + `[data-elemap-j="${i}"]{` +
+            `margin-top:${this.tileIndentation.vertical};` +
+            `margin-bottom:${calc.sub('0px', this.tileIndentation.vertical)};` +
+          `}`;
+        }
+      }
+
+      // Inner tiles are always rendered so we can work with them through nth-child
+      css +=
+      this.selectors.innerTile + `:nth-child(${indentationRule}){` +
+        `margin-top:${calc.add(calc.div(this.spacing, 2), this.tileIndentation.vertical)};` +
+        `margin-bottom:${calc.add(calc.div(this.spacing, 2), calc.sub('0px', this.tileIndentation.vertical))};` +
       `}`;
+
+      // Make last row higher to accommodate for indentation
+      css +=
+      this.selectors.row + `:last-child{` +
+        `height:${calc.add(this.tile.size.outer.height, this.tileIndentation.vertical)};` +
+      `}`;
+
+      return css;
     }
   }
 
-  private get tileIntendation() : {vertical: string, horizontal: string} {
+  private get tileIndentation() : {vertical: string, horizontal: string} {
     if (this.owner.orientation === GridOrientation.Pointy) {
       return {
         vertical: '0px',

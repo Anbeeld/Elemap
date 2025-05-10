@@ -32,7 +32,7 @@ export default class HexagonGrid extends AbstractGrid<HexagonTile> {
     return undefined;
   }
 
-  public hasIntendation(i: number) : boolean {
+  public hasIndentation(i: number) : boolean {
     if (this.offset === GridOffset.Odd) {
       return i % 2 === 1;
     } else {
