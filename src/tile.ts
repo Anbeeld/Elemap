@@ -77,14 +77,14 @@ export abstract class AbstractTile {
     }
   }
 
-  /* protected setIndexAttributes() {    
+  protected setIndexAttributes() {    
     if (this.elements!.outer) {
       this.elements!.outer.dataset['elemapI'] = this.index.i.toString();
       this.elements!.outer.dataset['elemapJ'] = this.index.j.toString();
     }
     this.elements!.inner.dataset['elemapI'] = this.index.i.toString();
     this.elements!.inner.dataset['elemapJ'] = this.index.j.toString();
-  } */
+  }
 
   protected abstract setCoordsAttributes() : void;
 
@@ -94,7 +94,7 @@ export abstract class AbstractTile {
 
     this.initElements();
 
-    // this.setIndexAttributes();
+    this.setIndexAttributes();
     this.setCoordsAttributes();
 
     if (this.elements!.style) {
