@@ -168,3 +168,9 @@ export function modifyGridMapStyleSchema(custom: CustomGridMapStyleSchema) : Gri
     tile: modifyTileStyleDecls(shielded.$tile as unknown as TileStyleDecls || {}, defaultTileStyleDecls),
   }
 }
+
+/* GRID STYLE SCHEMA TYPES */
+export type GridStyleSchema = {
+  grid: GridStyleDecls,
+  tile: TileStyleDecls
+}

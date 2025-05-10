@@ -1,9 +1,9 @@
 import { GridMapStyle } from "../map.js";
-import { GridMapStyleSchema } from "../schema.js";
+import { GridStyleSchema } from "../schema.js";
 import HexagonGridStyle from "./grid.js";
 
 export default class HexagonMapStyle extends GridMapStyle {
-  protected override initGrid(decls: GridMapStyleSchema) : void {
+  protected override initGrid(decls: GridStyleSchema) : void {
     this.grid = new HexagonGridStyle(this.owner.grid.ids, this.ids, decls);
   }
 }

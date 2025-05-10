@@ -1,5 +1,5 @@
 import { GridIds, GridStyleIds, MapStyleIds, Register } from "../register.js";
-import { GridStyleDecls, GridMapStyleSchema } from "./schema.js";
+import { GridStyleDecls, GridStyleSchema, TileStyleDecls } from "./schema.js";
 import TileStyle from "./tile.js";
 import Style from "./style.js";
 import { calc } from "./utils.js";
@@ -30,14 +30,14 @@ export default abstract class GridStyle extends Style {
   protected set tile(value: TileStyle) { this._tile = value; }
   public get tile() : TileStyle { return this._tile; }
 
-  public constructor(ownerIds: GridIds, mapIds: MapStyleIds, decls: GridMapStyleSchema) {
+  public constructor(ownerIds: GridIds, mapIds: MapStyleIds, decls: GridStyleSchema) {
     super();
     this.ids = new GridStyleIds(ownerIds, mapIds, Register.id());
-    this.initTile(decls);
+    this.initTile(decls.tile);
     this.decls = decls.grid;
   }
 
-  public abstract initTile(decls: GridMapStyleSchema) : void;
+  public abstract initTile(decls: TileStyleDecls) : void;
 
   public override get selectors() {
     let base = `.elemap-${this.ids.owner.map}`;

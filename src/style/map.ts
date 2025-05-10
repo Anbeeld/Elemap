@@ -1,5 +1,5 @@
 import { MapIds, Register, MapStyleIds } from "../register.js";
-import { MapStyleDecls, GridMapStyleSchema } from "./schema.js";
+import { MapStyleDecls, GridMapStyleSchema, GridStyleSchema } from "./schema.js";
 import Style from "./style.js";
 import GridStyle from "./grid.js";
 
@@ -118,10 +118,10 @@ export abstract class GridMapStyle extends MapStyle {
 
   public constructor(mapIds: MapIds, decls: GridMapStyleSchema) {
     super(mapIds, decls);
-    this.initGrid(decls);
+    this.initGrid(decls as GridStyleSchema);
   }
 
-  protected abstract initGrid(decls: GridMapStyleSchema) : void;
+  protected abstract initGrid(decls: GridStyleSchema) : void;
 
   public override render() {
     this.elements.core.innerHTML = this.core + this.grid.core + this.grid.tile.core;
