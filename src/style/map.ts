@@ -5,7 +5,7 @@ import GridStyle from "./grid.js";
 
 type StyleElements = {
   static: HTMLElement,
-  rules: HTMLElement,
+  schema: HTMLElement,
   dynamic: HTMLElement
 }
 
@@ -42,9 +42,9 @@ export abstract class MapStyle extends Style {
     elementStyleStatic.classList.add(this.owner.classes.base + '-css-static');
     document.head.appendChild(elementStyleStatic);
 
-    let elementStyleRules = document.createElement('style');
-    elementStyleRules.classList.add(this.owner.classes.base + '-css-rules');
-    document.head.appendChild(elementStyleRules);
+    let elementStyleSchema = document.createElement('style');
+    elementStyleSchema.classList.add(this.owner.classes.base + '-css-schema');
+    document.head.appendChild(elementStyleSchema);
 
     let elementStyleDynamic = document.createElement('style');
     elementStyleDynamic.classList.add(this.owner.classes.base + '-css-dynamic');
@@ -52,14 +52,14 @@ export abstract class MapStyle extends Style {
 
     return {
       static: elementStyleStatic,
-      rules: elementStyleRules,
+      schema: elementStyleSchema,
       dynamic: elementStyleDynamic
     }
   }
 
   public render() {
     this.elements.static.innerHTML = this.static;
-    this.elements.rules.innerHTML = this.rules;
+    this.elements.schema.innerHTML = this.schema;
 
     void(this.owner.elements.map.offsetHeight);
 
@@ -89,7 +89,7 @@ export abstract class MapStyle extends Style {
     `}`;
   }
 
-  protected get rules() : string {
+  protected get schema() : string {
     return `` +
     this.selectors.map + `{` +
       this.decls.outer +
@@ -125,7 +125,7 @@ export abstract class GridMapStyle extends MapStyle {
 
   public override render() {
     this.elements.static.innerHTML = this.static + this.grid.static + this.grid.tile.static;
-    this.elements.rules.innerHTML = this.rules + this.grid.rules + this.grid.tile.rules;
+    this.elements.schema.innerHTML = this.schema + this.grid.schema + this.grid.tile.schema;
 
     void(this.owner.elements.map.offsetHeight);
     void(this.owner.grid.elements!.inner.offsetHeight);

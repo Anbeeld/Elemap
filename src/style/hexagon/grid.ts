@@ -76,7 +76,7 @@ export default class HexagonGridStyle extends GridStyle {
       difference = calc.sub(this.tile.size.outer.height, this.tile.size.inner.height);
       longSize = calc.round(calc.mult(this.tile.size.inner.width, hexagonSizeRatio), 0);
 
-      this.map.elements.rules.innerHTML += `` +
+      this.map.elements.schema.innerHTML += `` +
 
       this.selectors.outerTile + `{` +
         `height:` + calc.add(longSize, difference) +
@@ -91,7 +91,7 @@ export default class HexagonGridStyle extends GridStyle {
 
       longSize = calc.round(calc.mult(this.tile.size.inner.height, hexagonSizeRatio), 0);
       
-      this.map.elements.rules.innerHTML += `` +
+      this.map.elements.schema.innerHTML += `` +
 
       this.selectors.outerTile + `{` +
         `width:` + calc.add(longSize, difference) +

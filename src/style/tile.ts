@@ -63,7 +63,7 @@ export default abstract class TileStyle extends Style {
 
   public get static() : string { return ''; }
 
-  public get rules() : string {
+  public get schema() : string {
     let css = ``;
 
     if (this.decls.outer.length) {

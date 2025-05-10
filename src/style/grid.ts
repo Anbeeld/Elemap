@@ -143,7 +143,7 @@ export default abstract class GridStyle extends Style {
     `}`;
   }
 
-  public get rules() : string {
+  public get schema() : string {
     return `` +
 
     this.selectors.frame + `{` + 

@@ -19,6 +19,6 @@ export default abstract class Style {
   }
 
   protected abstract get static() : string;
-  protected abstract get rules() : string;
+  protected abstract get schema() : string;
   protected abstract get dynamic() : string;
 }
