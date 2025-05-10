@@ -2,7 +2,7 @@ import { AbstractTile } from './tile.js';
 import { AbstractGrid } from './grid.js';
 import { Config } from "./utils.js";
 
-import { StyleDecls } from './style/set.js';
+import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { MapIds, Register } from './register.js';
 
@@ -39,7 +39,7 @@ export abstract class AbstractMap {
     this.elements = this.initElements();
   }
 
-  protected abstract initStyle(style: StyleDecls) : void;
+  protected abstract initStyle(style: GridMapStyleSchema) : void;
 
   private initElements() : MapElements {    
     let elementMap = document.createElement('div');
@@ -80,7 +80,7 @@ export abstract class AbstractGridMap<Grid extends AbstractGrid<AbstractTile>> e
   protected override set style(value: GridMapStyle) { this._style = value; }
   public override get style() : GridMapStyle { return this._style; }
 
-  constructor(config: Config, style: StyleDecls, gridClass: new (mapIds: MapIds, config: Config) => Grid) {
+  constructor(config: Config, style: GridMapStyleSchema, gridClass: new (mapIds: MapIds, config: Config) => Grid) {
     super(config);
     this.grid = new gridClass(this.ids, config);
     this.initStyle(style);

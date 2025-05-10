@@ -1,6 +1,6 @@
 import { TileSizeSet } from "../utils.js";
 import { TileStyleIds, GridStyleIds, Register, TileIds } from "../register.js";
-import { TileStyleDecls } from "./set.js";
+import { TileStyleDecls } from "./schema.js";
 import Style from "./style.js";
 import { calc } from "./utils.js";
 

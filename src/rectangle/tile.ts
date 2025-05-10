@@ -2,7 +2,7 @@ import { AbstractTile } from '../tile.js';
 import { OrthogonalCoords, Index } from '../utils.js';
 import { GridIds, Register } from '../register.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
-import { TileStyleDecls } from '../style/set.js';
+import { TileStyleDecls } from '../style/schema.js';
 
 export default class RectangleTile extends AbstractTile {
   protected override _coords: OrthogonalCoords;

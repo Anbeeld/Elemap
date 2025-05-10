@@ -1,12 +1,12 @@
 import { Register, StyleIds } from "../register.js";
-// import { StyleDecls } from "./set.js";
+// import { GridMapStyleSchema } from "./set.js";
 
 export default abstract class Style {
   protected abstract _ids: StyleIds;
   protected abstract set ids(value: StyleIds);
   public abstract get ids();
 
-  // public abstract get decls() : StyleDecls;
+  // public abstract get decls() : GridMapStyleSchema;
 
   public constructor() {}
 

@@ -2,7 +2,7 @@ import { Coords, Index, OrthogonalCoords } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIds, Register, TileIds } from './register.js';
 import TileStyle from './style/tile.js';
-import { addCustomTileStyleToDefault, CustomTileStyleDecls } from './style/set.js';
+import { modifyTileStyleDecls, CustomTileStyleDecls } from './style/schema.js';
 
 type TileElements = {
   outer?: HTMLElement,
@@ -50,9 +50,9 @@ export abstract class AbstractTile {
 
   public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
     if (this._style === undefined || replace) {
-      this.style = this.createStyle(addCustomTileStyleToDefault(decls));
+      this.style = this.createStyle(modifyTileStyleDecls(decls));
     } else {
-      this.style = this.createStyle(addCustomTileStyleToDefault(decls, this.style.decls));
+      this.style = this.createStyle(modifyTileStyleDecls(decls, this.style.decls));
     }    
 
     if (this.rendered) {

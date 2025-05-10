@@ -1,6 +1,6 @@
 import RectangleMap from "./rectangle/map.js";
 import HexagonMap from "./hexagon/map.js";
-import { CustomTileStyleDecls, UserStyle, userStyleToStyle } from "./style/set.js";
+import { CustomTileStyleDecls, CustomGridMapStyleSchema, modifyGridMapStyleSchema } from "./style/schema.js";
 import { validateConfig } from "./config.js";
 import { MapType } from "./utils.js";
 import { AbstractGridMap, AbstractMap } from "./map.js";
@@ -11,9 +11,9 @@ import { AbstractTile } from "./tile.js";
 export default class Elemap {
   private _: AbstractMap;
 
-  constructor(configCustom: any, userStyle: UserStyle) {
+  constructor(configCustom: any, CustomGridMapStyleSchema: CustomGridMapStyleSchema) {
     let config = validateConfig(configCustom);
-    let style = userStyleToStyle(userStyle);
+    let style = modifyGridMapStyleSchema(CustomGridMapStyleSchema);
 
     if (config.type === MapType.Rectangle) {
       this._ = new RectangleMap(config, style);

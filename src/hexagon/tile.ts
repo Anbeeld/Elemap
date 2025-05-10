@@ -1,7 +1,7 @@
 import { AbstractTile } from '../tile.js';
 import { AxialCoords, Index } from '../utils.js';
 import { GridIds, Register } from '../register.js';
-import { TileStyleDecls } from '../style/set.js';
+import { TileStyleDecls } from '../style/schema.js';
 import HexagonTileStyle from '../style/hexagon/tile.js';
 
 export default class HexagonTile extends AbstractTile {  

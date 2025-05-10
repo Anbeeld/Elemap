@@ -1,7 +1,7 @@
 import { AbstractGrid } from "../grid.js";
 import RectangleTile from "./tile.js";
 import { Config, /* generateRectanglePath, */ indexToOrthogonalCoords, orthogonalCoordsToIndex/*, TileSize */ } from "../utils.js";
-// import { StyleDecls } from "../style/set.js";
+// import { GridMapStyleSchema } from "../style/set.js";
 import { MapIds } from "../register.js";
 
 export default class RectangleGrid extends AbstractGrid<RectangleTile> {
