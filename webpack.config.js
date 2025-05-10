@@ -40,7 +40,8 @@ const webConfig = {
           },
           mangle: {
             properties: {
-              regex: /^[^\$].*$/
+              regex: /^[^\$].*$/,
+              keep_quoted: true
             }
           }
         }
