@@ -1,3 +1,8 @@
+## 0.1.4
+
+- Improved internal handling of CSS declarations.
+- Fixed some issues with build configuration.
+
 ## 0.1.3
 
 - Replaced an overly complex and detailed styling system with a much simpler solution, which uses CSS declarations instead of single properties. While the latter provided full control over styling, with the ability to access and edit every property in TS code and whitelist which properties can be used, it turned out to be overly difficult in terms of development and user configuration, as every single CSS property needs to be added to its correspoding style, verified, supported in the config and so on. The new system is much simpler, as it works on the declaration level instead, so many things like verification can be outsourced to the CSS engine, and user config becomes much easier to digest.
