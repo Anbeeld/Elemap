@@ -13,7 +13,7 @@ export default class RectangleGridStyle extends GridStyle {
   public override get tile() : RectangleTileStyle { return this._tile; }
 
   public override initTile(decls: StyleDecls) : void {
-    this.tile = new RectangleTileStyle(this.owner.tileByIndex(0, 0)!.ids, this.ids, decls, true);
+    this.tile = new RectangleTileStyle(this.owner.tileByIndex(0, 0)!.ids, this.ids, decls.tile, true);
   }
 
   public override get dynamicSpecific() : string {

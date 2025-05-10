@@ -1,6 +1,6 @@
 import { TileSizeSet } from "../utils.js";
 import { TileStyleIds, GridStyleIds, Register, TileIds } from "../register.js";
-import { StyleDecls, TileStyleDecls } from "./set.js";
+import { TileStyleDecls } from "./set.js";
 import Style from "./style.js";
 import { calc } from "./utils.js";
 
@@ -37,11 +37,11 @@ export default abstract class TileStyle extends Style {
   protected set decls(value: TileStyleDecls) { this._decls = value; }
   public get decls() : TileStyleDecls { return this._decls; }
 
-  public constructor(ownerIds: TileIds, gridIds: GridStyleIds, decls: StyleDecls|TileStyleDecls, initial: boolean = false) {
+  public constructor(ownerIds: TileIds, gridIds: GridStyleIds, decls: TileStyleDecls, initial: boolean = false) {
     super();
     this.ids = new TileStyleIds(ownerIds, gridIds, Register.id());
     this.initial = initial;
-    this.decls = decls.hasOwnProperty('tile') ? (decls as StyleDecls).tile : decls as TileStyleDecls;
+    this.decls = decls;
   }
 
   public get size() : TileSizeSet {
