@@ -84,7 +84,6 @@ export function generateHexagonPath(type: GridOrientation, hexagonSize: hexagonS
   const xCorrection = hexagonShort / expectedShortSize;
   const yCorrection = hexagonLong / expectedLongSize;
 
-
   const rounding = 2;
 
   let x0 = 0;
@@ -114,24 +113,24 @@ export function generateHexagonPath(type: GridOrientation, hexagonSize: hexagonS
 
   if (type === GridOrientation.Pointy) {
 
-    x0 += margin.left;
-    x1 += margin.left;
-    xc1 += margin.left;
-    xc2 += margin.left;
-    x2 += margin.left;
-    xc3 += margin.left;
-    xc0 += margin.left;
+    x0 = roundFloat(x0 + margin.left, rounding);
+    x1 = roundFloat(x1 + margin.left, rounding);
+    xc1 = roundFloat(xc1 + margin.left, rounding);
+    xc2 = roundFloat(xc2 + margin.left, rounding);
+    x2 = roundFloat(x2 + margin.left, rounding);
+    xc3 = roundFloat(xc3 + margin.left, rounding);
+    xc0 = roundFloat(xc0 + margin.left, rounding);
   
-    y0 += margin.top;
-    y1 += margin.top;
-    yc0 += margin.top;
-    yc1 += margin.top;
-    yc2 += margin.top;
-    y2 += margin.top;
-    yc3 += margin.top;
-    yc4 += margin.top;
-    y3 += margin.top;
-    yc5 += margin.top;
+    y0 = roundFloat(y0 + margin.top, rounding);
+    y1 = roundFloat(y1 + margin.top, rounding);
+    yc0 = roundFloat(yc0 + margin.top, rounding);
+    yc1 = roundFloat(yc1 + margin.top, rounding);
+    yc2 = roundFloat(yc2 + margin.top, rounding);
+    y2 = roundFloat(y2 + margin.top, rounding);
+    yc3 = roundFloat(yc3 + margin.top, rounding);
+    yc4 = roundFloat(yc4 + margin.top, rounding);
+    y3 = roundFloat(y3 + margin.top, rounding);
+    yc5 = roundFloat(yc5 + margin.top, rounding);
 
     return `` +
     `M ${xc1},${yc0}` +
@@ -153,25 +152,25 @@ export function generateHexagonPath(type: GridOrientation, hexagonSize: hexagonS
     `Q ${x0},${y1} ${xc0},${yc1} ` +
     `Z`;
   } else if (type === GridOrientation.Flat) {
-    
-    x0 += margin.top;
-    x1 += margin.top;
-    xc1 += margin.top;
-    xc2 += margin.top;
-    x2 += margin.top;
-    xc3 += margin.top;
-    xc0 += margin.top;
+
+    x0 = roundFloat(x0 + margin.top, rounding);
+    x1 = roundFloat(x1 + margin.top, rounding);
+    xc1 = roundFloat(xc1 + margin.top, rounding);
+    xc2 = roundFloat(xc2 + margin.top, rounding);
+    x2 = roundFloat(x2 + margin.top, rounding);
+    xc3 = roundFloat(xc3 + margin.top, rounding);
+    xc0 = roundFloat(xc0 + margin.top, rounding);
   
-    y0 += margin.left;
-    y1 += margin.left;
-    yc0 += margin.left;
-    yc1 += margin.left;
-    yc2 += margin.left;
-    y2 += margin.left;
-    yc3 += margin.left;
-    yc4 += margin.left;
-    y3 += margin.left;
-    yc5 += margin.left;
+    y0 = roundFloat(y0 + margin.left, rounding);
+    y1 = roundFloat(y1 + margin.left, rounding);
+    yc0 = roundFloat(yc0 + margin.left, rounding);
+    yc1 = roundFloat(yc1 + margin.left, rounding);
+    yc2 = roundFloat(yc2 + margin.left, rounding);
+    y2 = roundFloat(y2 + margin.left, rounding);
+    yc3 = roundFloat(yc3 + margin.left, rounding);
+    yc4 = roundFloat(yc4 + margin.left, rounding);
+    y3 = roundFloat(y3 + margin.left, rounding);
+    yc5 = roundFloat(yc5 + margin.left, rounding);
 
     return `` +
     `M ${yc0},${xc1}` +
@@ -220,7 +219,7 @@ export function generateRectanglePath(rectangleSize: TileSize, borderRadius: num
   const rectangleWidth: number = cssValueToNumber(rectangleSize.width);
   const rectangleHeight: number = cssValueToNumber(rectangleSize.height);
 
-  // const rounding = 2;
+  const rounding = 2;
 
   let x0 = 0;
   let y0 = 0;
@@ -233,16 +232,16 @@ export function generateRectanglePath(rectangleSize: TileSize, borderRadius: num
 
   let y1 = rectangleHeight;
   let yc1 = y1 - borderRadius;
+  
+  x0 = roundFloat(x0 + margin.left, rounding);
+  x1 = roundFloat(x1 + margin.left, rounding);
+  xc1 = roundFloat(xc1 + margin.left, rounding);
+  xc0 = roundFloat(xc0 + margin.left, rounding);
 
-  x0 += margin.left;
-  x1 += margin.left;
-  xc0 += margin.left;
-  xc1 += margin.left;
-
-  y0 += margin.top;
-  y1 += margin.top;
-  yc0 += margin.top;
-  yc1 += margin.top;
+  y0 = roundFloat(y0 + margin.top, rounding);
+  y1 = roundFloat(y1 + margin.top, rounding);
+  yc0 = roundFloat(yc0 + margin.top, rounding);
+  yc1 = roundFloat(yc1 + margin.top, rounding);
 
   return `` +
   `M ${x0},${yc0}` +
