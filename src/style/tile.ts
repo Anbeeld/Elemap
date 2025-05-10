@@ -98,7 +98,7 @@ export default abstract class TileStyle extends Style {
     return css;
   }
 
-  public get dynamic() : string {
+  public get generated() : string {
     let css = ``;
 
     if (this.initial) {

@@ -6,7 +6,7 @@ import GridStyle from "./grid.js";
 type StyleElements = {
   core: HTMLElement,
   schema: HTMLElement,
-  dynamic: HTMLElement
+  generated: HTMLElement
 }
 
 type MapComputed = {
@@ -46,14 +46,14 @@ export abstract class MapStyle extends Style {
     elementStyleSchema.classList.add(this.owner.classes.base + '-css-schema');
     document.head.appendChild(elementStyleSchema);
 
-    let elementStyleDynamic = document.createElement('style');
-    elementStyleDynamic.classList.add(this.owner.classes.base + '-css-dynamic');
-    document.head.appendChild(elementStyleDynamic);
+    let elementStyleGenerated = document.createElement('style');
+    elementStyleGenerated.classList.add(this.owner.classes.base + '-css-generated');
+    document.head.appendChild(elementStyleGenerated);
 
     return {
       core: elementStyleCore,
       schema: elementStyleSchema,
-      dynamic: elementStyleDynamic
+      generated: elementStyleGenerated
     }
   }
 
@@ -65,7 +65,7 @@ export abstract class MapStyle extends Style {
 
     this.compute();
 
-    this.elements.dynamic.innerHTML = this.dynamic;
+    this.elements.generated.innerHTML = this.generated;
   }
 
   public override get selectors() {
@@ -106,7 +106,7 @@ export abstract class MapStyle extends Style {
     };
   }
 
-  protected get dynamic() : string { return ``; };
+  protected get generated() : string { return ``; };
 }
 
 export abstract class GridMapStyle extends MapStyle {
@@ -132,7 +132,7 @@ export abstract class GridMapStyle extends MapStyle {
 
     this.compute();
 
-    this.elements.dynamic.innerHTML = this.dynamic + this.grid.dynamic + this.grid.tile.dynamic;
+    this.elements.generated.innerHTML = this.generated + this.grid.generated + this.grid.tile.generated;
   }
 
   protected override compute() : void {

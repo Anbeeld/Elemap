@@ -16,7 +16,7 @@ export default class RectangleGridStyle extends GridStyle {
     this.tile = new RectangleTileStyle(this.owner.tileByIndex(0, 0)!.ids, this.ids, decls.tile, true);
   }
 
-  public override get dynamicSpecific() : string {
+  public override get generatedSpecific() : string {
     let contourWidth = roundFloat(cssValueToNumber(this.computed.contourHover.borderWidth), 0) + 'px';
 
     let tileSizeContour: TileSize = {

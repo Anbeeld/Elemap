@@ -155,7 +155,7 @@ export default abstract class GridStyle extends Style {
     `}`;
   }
 
-  public get dynamic() : string {
+  public get generated() : string {
     let absolutePosition = `{` +
       `top: ${this.map.computed.map.paddingTop};` +
       `right: ${this.map.computed.map.paddingRight};` +
@@ -207,10 +207,10 @@ export default abstract class GridStyle extends Style {
 
 
     
-    this.dynamicSpecific;
+    this.generatedSpecific;
   }
 
-  public abstract get dynamicSpecific() : string;
+  public abstract get generatedSpecific() : string;
 
   protected abstract get frameClipPath() : string;
 

@@ -127,7 +127,7 @@ export default class HexagonGridStyle extends GridStyle {
     return path;
   }
 
-  public override get dynamicSpecific() : string {
+  public override get generatedSpecific() : string {
     let contourWidth = roundFloat(cssValueToNumber(this.computed.contourHover.borderWidth), 0) + 'px';
     let hexagonSizeContourLong = calc.sub(this.hexagonSize.spaced.long, calc.mult(contourWidth, 2));
     let hexagonSizeContour: hexagonSize = {
