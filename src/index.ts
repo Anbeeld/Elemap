@@ -21,8 +21,10 @@ export default class Elemap {
       this._ = new HexagonMap(config, style);
     }
 
+    // Shielding from mangling through "keep_quoted: true"
     this["_"];
     this["render"];
+    this["tileByIndex"];
   }
 
   public render(container: HTMLElement) : void {
@@ -44,6 +46,7 @@ class ElemapTile {
   constructor(map: AbstractTile) {
     this._ = map;
 
+    // Shielding from mangling through "keep_quoted: true"
     this["_"];
     this["updateStyle"];
   }
