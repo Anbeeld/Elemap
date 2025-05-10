@@ -6,7 +6,7 @@
 - Added setters where getters were already defined.
 - Removed underscore prefixes from private property and method names, except for properties behind setters and getters.
 - Renamed CSS element classes.
-- Webpack minimizing config now affects all property names, except the ones starting with $ or accessed with bracket, which can be used as a form of shielding.
+- Webpack minimizing config now affects all property names, except the ones starting with $ or accessed with brackets, which can be used as a form of shielding.
 - Various small fixes and styling related adjustments.
 
 ## 0.1.2
