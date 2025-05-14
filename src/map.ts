@@ -36,12 +36,11 @@ export abstract class AbstractMap {
     this.ids = new MapIds(Register.id());
     Register.add(this);
     config; // TODO
-    this.elements = this.initElements();
   }
 
   protected abstract initStyle(style: GridMapStyleSchema) : void;
 
-  private initElements() : MapElements {    
+  protected initElements() : MapElements {    
     let elementMap = document.createElement('div');
     elementMap.classList.add(`elemap-${this.ids.map}-map`);
 
@@ -66,6 +65,7 @@ export abstract class AbstractMap {
   }
 
   public render(container: HTMLElement) {
+    this.elements = this.initElements();
     this.initRender(container);
     this.style.render();
   }
@@ -87,6 +87,7 @@ export abstract class AbstractGridMap<Grid extends AbstractGrid<AbstractTile>> e
   }
 
   public override render(container: HTMLElement) {
+    this.elements = this.initElements();
     this.initRender(container);
     this.grid.render(this.elements.map!);
     this.style.render();
