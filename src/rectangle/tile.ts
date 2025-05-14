@@ -1,5 +1,5 @@
 import { AbstractTile } from '../tile.js';
-import { OrthogonalCoords, Index } from '../utils.js';
+import { OrthogonalCoords, Index, setProperty } from '../utils.js';
 import { GridIds, Register } from '../register.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';
@@ -30,11 +30,11 @@ export default class RectangleTile extends AbstractTile {
 
   protected override setCoordsAttributes() {    
     if (this.elements!.outer) {
-      this.elements!.outer.dataset['elemapX'] = this.coords.x.toString();
-      this.elements!.outer.dataset['elemapY'] = this.coords.y.toString();
+      setProperty(this.elements!.outer.dataset, 'elemapX', this.coords.x.toString());
+      setProperty(this.elements!.outer.dataset, 'elemapY', this.coords.y.toString());
     }
-    this.elements!.inner.dataset['elemapX'] = this.coords.x.toString();
-    this.elements!.inner.dataset['elemapY'] = this.coords.y.toString();
+    setProperty(this.elements!.inner.dataset, 'elemapX', this.coords.x.toString());
+    setProperty(this.elements!.inner.dataset, 'elemapY', this.coords.y.toString());
   }
   
   public get selectors() {

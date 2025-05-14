@@ -1,4 +1,4 @@
-import { Coords, Index, OrthogonalCoords } from './utils.js';
+import { Coords, Index, OrthogonalCoords, setProperty } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIds, Register, TileIds } from './register.js';
 import TileStyle from './style/tile.js';
@@ -79,11 +79,11 @@ export abstract class AbstractTile {
 
   protected setIndexAttributes() {    
     if (this.elements!.outer) {
-      this.elements!.outer.dataset['elemapI'] = this.index.i.toString();
-      this.elements!.outer.dataset['elemapJ'] = this.index.j.toString();
+      setProperty(this.elements!.outer.dataset, 'elemapI', this.index.i.toString());
+      setProperty(this.elements!.outer.dataset, 'elemapJ', this.index.j.toString());
     }
-    this.elements!.inner.dataset['elemapI'] = this.index.i.toString();
-    this.elements!.inner.dataset['elemapJ'] = this.index.j.toString();
+    setProperty(this.elements!.inner.dataset, 'elemapI', this.index.i.toString());
+    setProperty(this.elements!.inner.dataset, 'elemapJ', this.index.j.toString());
   }
 
   protected abstract setCoordsAttributes() : void;

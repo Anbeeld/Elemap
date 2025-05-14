@@ -1,3 +1,13 @@
+import { getProperty } from "../utils.js"
+
+function getDelcsProperty(decls: object, name: string) : string|undefined {
+  let value = getProperty(decls, name);
+  if (typeof value === 'string') {
+    return value;
+  }
+  return undefined;
+}
+
 /* MAP STYLE DECLARATION TYPES */
 export type MapStyleDecls = {
   outer: string,
@@ -19,10 +29,10 @@ function modifyMapStyleDecls(custom: CustomMapStyleDecls, initial?: MapStyleDecl
   return {
     outer: 
       (initial && initial.outer ? initial.outer : '') +
-      (custom['outer'] ? custom['outer'] : ''),
+      (getDelcsProperty(custom, 'outer') || ''),
     inner:
       (initial && initial.inner ? initial.inner : '') +
-      (custom['inner'] ? custom['inner'] : '')
+      (getDelcsProperty(custom, 'inner') || '')
   }
 }
 
@@ -47,10 +57,10 @@ function modifyGridStyleDecls(custom: CustomGridStyleDecls, initial?: GridStyleD
   return {
     frame:
       (initial && initial.frame ? initial.frame : '') +
-      (custom['frame'] ? custom['frame'] : ''),
+      (getDelcsProperty(custom, 'frame') || ''),
     contour:
       (initial && initial.contour ? initial.contour : '') +
-      (custom['contour'] ? custom['contour'] : '')
+      (getDelcsProperty(custom, 'contour') || '')
   }
 }
 
@@ -87,17 +97,17 @@ export function modifyTileStyleDecls(custom: CustomTileStyleDecls, initial?: Til
   return {
     outer:
       (initial && initial.outer ? initial.outer : '') +
-      (custom['outer'] ? custom['outer'] : ''),
+      (getDelcsProperty(custom, 'outer') || ''),
     inner:
       (initial && initial.inner ? initial.inner : '') +
-      (custom['inner'] ? custom['inner'] : ''),
+      (getDelcsProperty(custom, 'inner') || ''),
     hover: {
       outer:
         (initial && initial.hover && initial.hover.outer ? initial.hover.outer : '') +
-        (custom['hover'] && custom['hover']['outer'] ? custom['hover']['outer'] : ''),
+        (getDelcsProperty(getProperty(custom, 'hover'), 'outer') || ''),
       inner:
         (initial && initial.hover && initial.hover.inner ? initial.hover.inner : '') +
-        (custom['hover'] && custom['hover']['inner'] ? custom['hover']['inner'] : '')
+        (getDelcsProperty(getProperty(custom, 'hover'), 'inner') || ''),
     }
   }
 }
@@ -117,9 +127,9 @@ type CustomGridMapStyleSchema = {
 /* GRID MAP STYLE SCHEMA MODIFICATION */
 export function modifyGridMapStyleSchema(custom: CustomGridMapStyleSchema) : GridMapStyleSchema {
   return {
-    map: modifyMapStyleDecls(custom['map'] ? custom['map'] : {}, defaultMapStyleDecls),
-    grid: modifyGridStyleDecls(custom['grid'] ? custom['grid'] : {}, defaultGridStyleDecls),
-    tile: modifyTileStyleDecls(custom['tile'] ? custom['tile'] : {}, defaultTileStyleDecls),
+    map: modifyMapStyleDecls(getProperty(custom, 'map') || {}, defaultMapStyleDecls),
+    grid: modifyGridStyleDecls(getProperty(custom, 'grid') || {}, defaultGridStyleDecls),
+    tile: modifyTileStyleDecls(getProperty(custom, 'tile') || {}, defaultTileStyleDecls),
   }
 }
 

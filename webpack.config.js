@@ -39,9 +39,7 @@ const webConfig = {
             passes: 2,
           },
           mangle: {
-            properties: {
-              keep_quoted: true
-            }
+            properties: true
           }
         }
       }),

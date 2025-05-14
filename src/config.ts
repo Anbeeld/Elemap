@@ -1,4 +1,4 @@
-import { MapType, GridOrientation, GridOffset, Size } from "./utils.js";
+import { MapType, GridOrientation, GridOffset, Size, getProperty } from "./utils.js";
 
 export type CustomConfig = {
   type?: MapType,
@@ -23,14 +23,14 @@ export type Config = {
 
 export function validateConfig(custom: CustomConfig) : Config {
   return {
-    type: custom['type'] ? custom['type'] : MapType.Rectangle,
+    type: getProperty(custom, 'type') || MapType.Rectangle,
     size: {
-      width: custom['size'] && custom['size']['width'] ? custom['size']['width'] : 32,
-      height: custom['size'] && custom['size']['height'] ? custom['size']['height'] : 18
+      width: getProperty(getProperty(custom, 'size'), 'width') || 32,
+      height: getProperty(getProperty(custom, 'size'), 'height') || 18
     },
     grid: {
-      orientation: custom['grid'] && custom['grid']['orientation'] ? custom['grid']['orientation'] : GridOrientation.Pointy,
-      offset: custom['grid'] && custom['grid']['offset'] ? custom['grid']['offset'] : GridOffset.Odd
+      orientation: getProperty(getProperty(custom, 'grid'), 'orientation') || GridOrientation.Pointy,
+      offset: getProperty(getProperty(custom, 'grid'), 'offset') || GridOffset.Odd
     }
   };
 }

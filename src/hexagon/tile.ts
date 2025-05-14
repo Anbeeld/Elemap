@@ -1,5 +1,5 @@
 import { AbstractTile } from '../tile.js';
-import { AxialCoords, Index } from '../utils.js';
+import { AxialCoords, Index, setProperty } from '../utils.js';
 import { GridIds, Register } from '../register.js';
 import { TileStyleDecls } from '../style/schema.js';
 import HexagonTileStyle from '../style/hexagon/tile.js';
@@ -30,11 +30,11 @@ export default class HexagonTile extends AbstractTile {
 
   protected override setCoordsAttributes() {    
     if (this.elements!.outer) {
-      this.elements!.outer.dataset['elemapR'] = this.coords.r.toString();
-      this.elements!.outer.dataset['elemapQ'] = this.coords.q.toString();
+      setProperty(this.elements!.outer.dataset, 'elemapR', this.coords.r.toString());
+      setProperty(this.elements!.outer.dataset, 'elemapQ', this.coords.q.toString());
     }
-    this.elements!.inner.dataset['elemapR'] = this.coords.r.toString();
-    this.elements!.inner.dataset['elemapQ'] = this.coords.q.toString();
+    setProperty(this.elements!.inner.dataset, 'elemapR', this.coords.r.toString());
+    setProperty(this.elements!.inner.dataset, 'elemapQ', this.coords.q.toString());
   }
   
   public get selectors() {

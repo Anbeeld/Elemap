@@ -324,62 +324,50 @@ export function indexToAxialCoords(index: Index, orientation: GridOrientation, o
   return orthogonalCoordsToAxial(indexToOrthogonalCoords(index), orientation, offset);
 }
 
-function isObject(item: any) {
-  return (item && typeof item === 'object' && !Array.isArray(item));
+// function isObject(item: any) {
+//   return (item && typeof item === 'object' && !Array.isArray(item));
+// }
+
+// // Based on https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
+
+// /**
+//  * Deep merge two objects.
+//  * @param target
+//  * @param ...sources
+//  */
+// function mergeDeep(target: any, ...sources: any[]) {
+//   if (!sources.length) {
+//     return target;
+//   }
+//   const source = sources.shift();
+
+//   if (isObject(target) && isObject(source)) {
+//     for (const key in source) {
+//       // Only if the key exists in the target object
+//       if (!target.hasOwnProperty(key)) { 
+//         continue;
+//       }
+//       if (isObject(target[key]) && isObject(source[key])) {
+//         mergeDeep(target[key], source[key]);
+//       } else {
+//         Object.assign(target, { [key]: source[key] });
+//       }
+//     }
+//   }
+
+//   return mergeDeep(target, ...sources);
+// }
+
+export function getProperty(object: any, name: string) : any {
+  if (!object || !object.hasOwnProperty(name)) {
+    return undefined;
+  }
+  return object[name];
 }
 
-export function copyUnshieldedToShielded(shielded: any, unshielded: any, replace: boolean = true) : void {
-  for (const parameter in unshielded) {
-    if ((shielded as any).hasOwnProperty('$' + parameter)) {
-      let shieldedProperty = (shielded as any)['$' + parameter];
-      let unshieldedProperty = (unshielded as any)[parameter];
-
-      if (isObject(shieldedProperty) && isObject(unshieldedProperty)) {
-        copyUnshieldedToShielded(shieldedProperty, unshieldedProperty);
-      } else {
-        if (replace) {
-          (shielded as any)['$' + parameter] = unshieldedProperty;
-        } else {
-          (shielded as any)['$' + parameter] = shieldedProperty + unshieldedProperty;
-        }
-      }
-    }
+export function setProperty(object: any, name: string, value: any) : void {
+  if (!object) {
+    return;
   }
-
-  // // Based on https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
-
-  // /**
-  //  * Deep merge two objects.
-  //  * @param target
-  //  * @param ...sources
-  //  */
-  // function mergeDeep(target: any, ...sources: any[]) {
-  //   if (!sources.length) {
-  //     return target;
-  //   }
-  //   const source = sources.shift();
-
-  //   if (isObject(target) && isObject(source)) {
-  //     for (const key in source) {
-  //       // Only if the key exists in the target object
-  //       if (!target.hasOwnProperty(key)) { 
-  //         continue;
-  //       }
-  //       if (isObject(target[key]) && isObject(source[key])) {
-  //         mergeDeep(target[key], source[key]);
-  //       } else {
-  //         Object.assign(target, { [key]: source[key] });
-  //       }
-  //     }
-  //   }
-
-  //   return mergeDeep(target, ...sources);
-  // }
-}
-
-export function unshield(string: string) : string {
-  if (string.startsWith('$')) {
-    return string.slice(1);
-  }
-  return string;
+  object[name] = value;
 }
