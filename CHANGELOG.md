@@ -1,6 +1,10 @@
+## 0.1.6
+
+- Shielding from property mangling is now applied by using getProperty and setProperty utility functions.
+
 ## 0.1.5
 
-- Improved naming of user arguments and their types for better clarity.
+- Improved naming of user arguments and their types for clarity.
 - Moved everything related to HTML elements into rendering methods, allowing to create instances of Elemap in enviroments without DOM such as Node.
 - Removed shielding from property mangling by starting its name with $, instead only bracket access method is used now.
 
