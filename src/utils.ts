@@ -33,15 +33,6 @@ export interface OrthogonalCoords extends Coords {
   y: number;
 }
 
-export type Config = {
-  type?: MapType,
-  size?: Size,
-  grid?: {
-    orientation?: GridOrientation,
-    offset?: GridOffset
-  }
-}
-
 export function roundFloat(value: number, precision: number) : number {
   return parseFloat(value.toFixed(precision));
 }

@@ -1,6 +1,7 @@
 import { AbstractTile } from "./tile.js";
-import { Size, Config, GridOrientation, GridOffset, OrthogonalCoords } from "./utils.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords } from "./utils.js";
 import { GridIds, MapIds, Register, TileIds } from "./register.js";
+import { Config } from "./config.js";
 
 interface GridElements {
   frame: HTMLElement;

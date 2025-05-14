@@ -1,6 +1,27 @@
-import { MapType, GridOrientation, GridOffset, Config } from "./utils.js";
+import { MapType, GridOrientation, GridOffset, Size } from "./utils.js";
 
-export function validateConfig(custom: any) : Config {
+export type CustomConfig = {
+  type?: MapType,
+  size?: {
+    width?: number,
+    height?: number
+  },
+  grid?: {
+    orientation?: GridOrientation,
+    offset?: GridOffset
+  }
+};
+
+export type Config = {
+  type: MapType,
+  size: Size
+  grid: {
+    orientation: GridOrientation,
+    offset: GridOffset
+  }
+};
+
+export function validateConfig(custom: CustomConfig) : Config {
   return {
     type: custom['type'] ? custom['type'] : MapType.Rectangle,
     size: {

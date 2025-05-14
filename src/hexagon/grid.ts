@@ -1,7 +1,8 @@
 import { AbstractGrid } from "../grid.js";
 import HexagonTile from "./tile.js";
-import { Config, indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset } from "../utils.js";
+import { indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset } from "../utils.js";
 import { MapIds } from "../register.js";
+import { Config } from "../config.js";
 
 export default class HexagonGrid extends AbstractGrid<HexagonTile> {
   constructor(mapIds: MapIds, config: Config) {

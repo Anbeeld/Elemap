@@ -1,10 +1,10 @@
 import { AbstractGridMap } from "../map.js";
 import RectangleGrid from "./grid.js";
 // import RectangleTile from "./tile.js";
-import { Config } from "../utils.js";
 
 import { GridMapStyleSchema } from '../style/schema.js';
 import RectangleMapStyle from "../style/rectangle/map.js";
+import { Config } from "../config.js";
 
 export default class RectangleMap extends AbstractGridMap<RectangleGrid> {
   constructor(config: Config, style: GridMapStyleSchema) {

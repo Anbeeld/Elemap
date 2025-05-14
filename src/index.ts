@@ -1,7 +1,7 @@
 import RectangleMap from "./rectangle/map.js";
 import HexagonMap from "./hexagon/map.js";
-import { CustomTileStyleDecls, CustomGridMapStyleSchema, modifyGridMapStyleSchema } from "./style/schema.js";
-import { validateConfig } from "./config.js";
+import { CustomTileStyleDecls, CustomSchema, modifyGridMapStyleSchema } from "./style/schema.js";
+import { CustomConfig, validateConfig } from "./config.js";
 import { MapType } from "./utils.js";
 import { AbstractGridMap, AbstractMap } from "./map.js";
 import { AbstractGrid } from "./grid.js";
@@ -11,14 +11,14 @@ import { AbstractTile } from "./tile.js";
 export default class Elemap {
   private _: AbstractMap;
 
-  constructor(configCustom: any, CustomGridMapStyleSchema: CustomGridMapStyleSchema) {
-    let config = validateConfig(configCustom);
-    let style = modifyGridMapStyleSchema(CustomGridMapStyleSchema);
+  constructor(config?: CustomConfig, schema?: CustomSchema) {
+    let validatedConfig = validateConfig(config || {});
+    let validatedSchema = modifyGridMapStyleSchema(schema || {});
 
-    if (config.type === MapType.Rectangle) {
-      this._ = new RectangleMap(config, style);
-    } else if (config.type === MapType.Hexagon) {
-      this._ = new HexagonMap(config, style);
+    if (validatedConfig.type === MapType.Rectangle) {
+      this._ = new RectangleMap(validatedConfig, validatedSchema);
+    } else if (validatedConfig.type === MapType.Hexagon) {
+      this._ = new HexagonMap(validatedConfig, validatedSchema);
     }
 
     // Shielding from mangling through "keep_quoted: true"

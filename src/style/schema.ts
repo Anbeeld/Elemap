@@ -108,7 +108,7 @@ export type GridMapStyleSchema = {
   grid: GridStyleDecls,
   tile: TileStyleDecls
 }
-export type CustomGridMapStyleSchema = {
+type CustomGridMapStyleSchema = {
   map?: MapStyleDecls,
   grid?: GridStyleDecls,
   tile?: TileStyleDecls
@@ -128,3 +128,5 @@ export type GridStyleSchema = {
   grid: GridStyleDecls,
   tile: TileStyleDecls
 }
+
+export type CustomSchema = CustomGridMapStyleSchema;

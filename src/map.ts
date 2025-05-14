@@ -1,10 +1,10 @@
 import { AbstractTile } from './tile.js';
 import { AbstractGrid } from './grid.js';
-import { Config } from "./utils.js";
 
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { MapIds, Register } from './register.js';
+import { Config } from './config.js';
 
 interface MapElements {
   container?: HTMLElement,
