@@ -20,7 +20,7 @@
         offset: 'odd'
       }
     }
-    var style = {
+    var schema = {
       grid: {
         contour: 'border-width: 4px;'
       },
@@ -31,7 +31,7 @@
   </script>
   <script src="/js/elemap-init.js"></script>
   <script>
-    let tilted = new Tilted(document.getElementById('tilted-container'), document.getElementById('elemap-container'), {EDGE_MOVE_ENABLED: true});
+    let tilted = new Tilted(document.getElementById('tilted-container'), document.getElementById('elemap-container'), {edgeModeEnabled: true});
   </script>
 </body>
 </html>
