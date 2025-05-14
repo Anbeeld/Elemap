@@ -40,7 +40,6 @@ const webConfig = {
           },
           mangle: {
             properties: {
-              regex: /.*/,
               keep_quoted: true
             }
           }

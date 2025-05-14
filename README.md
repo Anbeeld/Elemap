@@ -28,15 +28,13 @@ It goes well with my other library, [Tilted](https://github.com/anbeeld/Tilted),
 
 `import Elemap from 'elemap'` if using npm
 
-`const elemap = new Elemap(config?, style?)`
-
-`elemap.render(container)`
+`const elemap = new Elemap(config?, schema?)`
 
 `config` is an object that sets up type of the map and grid parameters. Please refer to `examples` for more info.
 
-`style` is an object with arguments for map visuals, used by internal system based around CSS. Please refer to `examples` and `src/style/set.ts` for more info.
+`schema` is an object with arguments for map visuals, used by styling system based around CSS declarations. Please refer to `examples` and `src/style/schema.ts` for more info.
 
-`container` is an element that will store Elemap contents.
+`elemap.render(container)` to draw the map on the page, where `container` is an element that will store Elemap contents.
 
 More sophisticated documentation will be provided in the future.
 
