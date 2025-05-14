@@ -34,7 +34,6 @@ export abstract class MapStyle extends Style {
     super();
     this.ids = new MapStyleIds(mapIds, Register.id());
     this.decls = decls.map;
-    this.elements = this.initElements();
   }
 
   protected initElements() : StyleElements {
@@ -58,6 +57,8 @@ export abstract class MapStyle extends Style {
   }
 
   public render() {
+    this.elements = this.initElements();
+
     this.elements.core.innerHTML = this.core;
     this.elements.schema.innerHTML = this.schema;
 
@@ -124,6 +125,8 @@ export abstract class GridMapStyle extends MapStyle {
   protected abstract initGrid(decls: GridStyleSchema) : void;
 
   public override render() {
+    this.elements = this.initElements();
+    
     this.elements.core.innerHTML = this.core + this.grid.core + this.grid.tile.core;
     this.elements.schema.innerHTML = this.schema + this.grid.schema + this.grid.tile.schema;
 
