@@ -1,29 +1,15 @@
-import { MapType, GridOrientation, GridOffset, Config, copyUnshieldedToShielded } from "./utils.js";
+import { MapType, GridOrientation, GridOffset, Config } from "./utils.js";
 
-export function validateConfig(configCustom: any) : Config {
-  let configDefault = {
-    $type: MapType.Rectangle,
-    $size: {
-      $width: 32,
-      $height: 18
-    },
-    $grid: {
-      $orientation: GridOrientation.Pointy,
-      $offset: GridOffset.Odd
-    }
-  };
-
-  copyUnshieldedToShielded(configDefault, configCustom);
-
+export function validateConfig(custom: any) : Config {
   return {
-    type: configDefault.$type,
+    type: custom['type'] ? custom['type'] : MapType.Rectangle,
     size: {
-      width: configDefault.$size.$width,
-      height: configDefault.$size.$height
+      width: custom['size'] && custom['size']['width'] ? custom['size']['width'] : 32,
+      height: custom['size'] && custom['size']['height'] ? custom['size']['height'] : 18
     },
     grid: {
-      orientation: configDefault.$grid.$orientation,
-      offset: configDefault.$grid.$offset
+      orientation: custom['grid'] && custom['grid']['orientation'] ? custom['grid']['orientation'] : GridOrientation.Pointy,
+      offset: custom['grid'] && custom['grid']['offset'] ? custom['grid']['offset'] : GridOffset.Odd
     }
   };
 }
