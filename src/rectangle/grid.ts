@@ -4,11 +4,11 @@ import { indexToOrthogonalCoords, MapType, orthogonalCoordsToIndex/*, TileSize *
 import { MapIds } from "../register.js";
 import { Config } from "../config.js";
 
-type RectangleGridSnapshot = GridSnapshot & {
+export type RectangleGridSnapshot = GridSnapshot & {
   tiles: RectangleTileSnapshot[][]
 }
 
-export default class RectangleGrid extends AbstractGrid<RectangleTile> {
+export class RectangleGrid extends AbstractGrid<RectangleTile> {
   constructor(mapIds: MapIds, config: Config) {
     super(mapIds, config);
   }

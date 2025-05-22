@@ -1,14 +1,24 @@
 import { AbstractTile } from './tile.js';
-import { AbstractGrid } from './grid.js';
+import { AbstractGrid, GridSnapshot } from './grid.js';
 
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { MapIds, Register } from './register.js';
 import { Config } from './config.js';
+import { MapType } from './utils.js';
 
 interface MapElements {
   container?: HTMLElement,
   map: HTMLElement,
+}
+
+type MapSnapshot = {
+  ids: MapIds
+}
+
+export type GridMapSnapshot = MapSnapshot & {
+  type: MapType,
+  grid: GridSnapshot
 }
 
 export abstract class AbstractMap {
@@ -37,6 +47,10 @@ export abstract class AbstractMap {
     Register.add(this);
     config; // TODO
   }
+
+  // 'static' modifier cannot be used with 'abstract' modifier.
+  // public static abstract import(snapshot: MapSnapshot) : AbstractMap;
+  public abstract export() : MapSnapshot;
 
   protected abstract initStyle(style: GridMapStyleSchema) : void;
 

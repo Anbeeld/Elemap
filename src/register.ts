@@ -1,7 +1,7 @@
 import { AbstractGrid } from "./grid.js";
-import HexagonGrid from "./hexagon/grid.js";
+import { HexagonGrid } from "./hexagon/grid.js";
 import { AbstractGridMap, AbstractMap } from "./map.js";
-import RectangleGrid from "./rectangle/grid.js";
+import { RectangleGrid } from "./rectangle/grid.js";
 import GridStyle from "./style/grid.js";
 import { GridMapStyle } from "./style/map.js";
 import TileStyle from "./style/tile.js";

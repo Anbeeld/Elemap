@@ -4,11 +4,11 @@ import { indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, G
 import { MapIds } from "../register.js";
 import { Config } from "../config.js";
 
-type HexagonGridSnapshot = GridSnapshot & {
+export type HexagonGridSnapshot = GridSnapshot & {
   tiles: HexagonTileSnapshot[][]
 }
 
-export default class HexagonGrid extends AbstractGrid<HexagonTile> {
+export class HexagonGrid extends AbstractGrid<HexagonTile> {
   constructor(mapIds: MapIds, config: Config) {
     super(mapIds, config);
   }
