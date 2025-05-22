@@ -1,12 +1,37 @@
-import { AbstractGrid } from "../grid.js";
-import RectangleTile from "./tile.js";
-import { indexToOrthogonalCoords, orthogonalCoordsToIndex/*, TileSize */ } from "../utils.js";
+import { AbstractGrid, GridSnapshot } from "../grid.js";
+import { RectangleTile, RectangleTileSnapshot } from "./tile.js";
+import { indexToOrthogonalCoords, MapType, orthogonalCoordsToIndex/*, TileSize */ } from "../utils.js";
 import { MapIds } from "../register.js";
 import { Config } from "../config.js";
+
+type RectangleGridSnapshot = GridSnapshot & {
+  tiles: RectangleTileSnapshot[][]
+}
 
 export default class RectangleGrid extends AbstractGrid<RectangleTile> {
   constructor(mapIds: MapIds, config: Config) {
     super(mapIds, config);
+  }
+  
+  public static import(snapshot: RectangleGridSnapshot) : RectangleGrid {
+    return new RectangleGrid(snapshot.ids, {
+      type: MapType.Rectangle,
+      size: snapshot.size,
+      grid: {
+        orientation: snapshot.orientation,
+        offset: snapshot.offset
+      }
+    });
+  }
+
+  public override export() : RectangleGridSnapshot {
+    return {
+      ids: this.ids,
+      size: this.size,
+      orientation: this.orientation,
+      offset: this.offset,
+      tiles: this.tiles.map(row => row.map(tile => tile.export()))
+    };
   }
 
   protected override initTiles() : void {

@@ -4,11 +4,11 @@ import { GridIds, Register } from '../register.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';
 
-type RectangleTileSnapshot = TileSnapshot & {
+export type RectangleTileSnapshot = TileSnapshot & {
   coords: OrthogonalCoords
 };
 
-export default class RectangleTile extends AbstractTile {
+export class RectangleTile extends AbstractTile {
   protected override _coords: OrthogonalCoords;
   protected override set coords(value: OrthogonalCoords) { this._coords = value; }
   public override get coords() : OrthogonalCoords { return this._coords; }
@@ -19,7 +19,7 @@ export default class RectangleTile extends AbstractTile {
   }
 
   public static import(snapshot: RectangleTileSnapshot) : RectangleTile {
-    return new RectangleTile(snapshot.ids, snapshot.index, snapshot.coords)!;
+    return new RectangleTile(snapshot.ids, snapshot.index, snapshot.coords);
   }
 
   public override export() : RectangleTileSnapshot {

@@ -1,6 +1,5 @@
 import { AbstractGridMap } from "../map.js";
 import RectangleGrid from "./grid.js";
-// import RectangleTile from "./tile.js";
 
 import { GridMapStyleSchema } from '../style/schema.js';
 import RectangleMapStyle from "../style/rectangle/map.js";

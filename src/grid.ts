@@ -1,7 +1,15 @@
-import { AbstractTile } from "./tile.js";
+import { AbstractTile, TileSnapshot } from "./tile.js";
 import { Size, GridOrientation, GridOffset, OrthogonalCoords } from "./utils.js";
-import { GridIds, MapIds, Register, TileIds } from "./register.js";
+import { GridIds, GridIdsProperties, MapIds, Register, TileIds } from "./register.js";
 import { Config } from "./config.js";
+
+export type GridSnapshot = {
+  ids: GridIdsProperties,
+  size: Size,
+  orientation: GridOrientation,
+  offset: GridOffset,
+  tiles: TileSnapshot[][]
+}
 
 interface GridElements {
   frame: HTMLElement;
@@ -79,6 +87,10 @@ export abstract class AbstractGrid<Tile extends AbstractTile> {
 
     this.initTiles();
   }
+
+  // 'static' modifier cannot be used with 'abstract' modifier.
+  // public static abstract import(snapshot: GridSnapshot) : AbstractGrid;
+  public abstract export() : GridSnapshot;
 
   protected abstract initTiles(): void;
 

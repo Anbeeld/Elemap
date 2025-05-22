@@ -1,12 +1,37 @@
-import { AbstractGrid } from "../grid.js";
-import HexagonTile from "./tile.js";
-import { indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset } from "../utils.js";
+import { AbstractGrid, GridSnapshot } from "../grid.js";
+import { HexagonTile, HexagonTileSnapshot } from "./tile.js";
+import { indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset, MapType } from "../utils.js";
 import { MapIds } from "../register.js";
 import { Config } from "../config.js";
+
+type HexagonGridSnapshot = GridSnapshot & {
+  tiles: HexagonTileSnapshot[][]
+}
 
 export default class HexagonGrid extends AbstractGrid<HexagonTile> {
   constructor(mapIds: MapIds, config: Config) {
     super(mapIds, config);
+  }
+
+  public static import(snapshot: HexagonGridSnapshot) : HexagonGrid {
+    return new HexagonGrid(snapshot.ids, {
+      type: MapType.Hexagon,
+      size: snapshot.size,
+      grid: {
+        orientation: snapshot.orientation,
+        offset: snapshot.offset
+      }
+    });
+  }
+
+  public override export() : HexagonGridSnapshot {
+    return {
+      ids: this.ids,
+      size: this.size,
+      orientation: this.orientation,
+      offset: this.offset,
+      tiles: this.tiles.map(row => row.map(tile => tile.export()))
+    };
   }
 
   protected override initTiles() : void {
