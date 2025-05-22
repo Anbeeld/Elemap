@@ -1,8 +1,12 @@
-import { AbstractTile } from '../tile.js';
+import { AbstractTile, TileSnapshot } from '../tile.js';
 import { OrthogonalCoords, Index, setProperty } from '../utils.js';
 import { GridIds, Register } from '../register.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';
+
+type RectangleTileSnapshot = TileSnapshot & {
+  coords: OrthogonalCoords
+};
 
 export default class RectangleTile extends AbstractTile {
   protected override _coords: OrthogonalCoords;
@@ -12,6 +16,18 @@ export default class RectangleTile extends AbstractTile {
   constructor(gridIds: GridIds, index: Index, coords: OrthogonalCoords) {
     super(gridIds, index);
     this.coords = coords;
+  }
+
+  public static import(snapshot: RectangleTileSnapshot) : RectangleTile {
+    return new RectangleTile(snapshot.ids, snapshot.index, snapshot.coords)!;
+  }
+
+  public override export() : RectangleTileSnapshot {
+    return {
+      ids: this.ids,
+      index: this.index,
+      coords: this.coords
+    };
   }
   
   protected override _style: RectangleTileStyle|undefined;

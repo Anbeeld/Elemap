@@ -7,15 +7,25 @@ import { GridMapStyle } from "./style/map.js";
 import TileStyle from "./style/tile.js";
 import { AbstractTile } from "./tile.js";
 
+export type MapIdsProperties = {
+  map: number;
+}
+export type GridIdsProperties = MapIdsProperties & {
+  grid: number;
+}
+export type TileIdsProperties = GridIdsProperties & {
+  tile: number;
+}
+
 export abstract class Ids {
   public readonly map: number;
   constructor(mapId: number) {
     this.map = mapId;
   }
 }
-export class MapIds extends Ids {
+export class MapIds extends Ids implements MapIdsProperties {
 }
-export class GridIds extends MapIds {
+export class GridIds extends MapIds implements GridIdsProperties {
   public readonly grid: number;
   constructor(mapIds: MapIds, gridId: number) {
     super(mapIds.map);
@@ -23,7 +33,7 @@ export class GridIds extends MapIds {
   }
 }
 
-export class TileIds extends GridIds {
+export class TileIds extends GridIds implements TileIdsProperties {
   public readonly tile: number;
   constructor(gridIds: GridIds, tileId: number) {
     super(gridIds as MapIds, gridIds.grid);

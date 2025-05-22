@@ -1,8 +1,14 @@
 import { Coords, Index, OrthogonalCoords, setProperty } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
-import { GridIds, Register, TileIds } from './register.js';
+import { GridIds, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
 import { modifyTileStyleDecls, CustomTileStyleDecls } from './style/schema.js';
+
+export type TileSnapshot = {
+  ids: TileIdsProperties,
+  index: Index,
+  coords: Coords
+}
 
 type TileElements = {
   outer?: HTMLElement,
@@ -45,6 +51,10 @@ export abstract class AbstractTile {
     this.ids = new TileIds(gridIds, Register.id());
     this.index = index;
   }
+
+  // 'static' modifier cannot be used with 'abstract' modifier.
+  // public static abstract import(snapshot: TileSnapshot) : AbstractTile;
+  public abstract export() : TileSnapshot;
 
   protected abstract createStyle(decls: CustomTileStyleDecls) : TileStyle;
 
