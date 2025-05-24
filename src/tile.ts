@@ -4,11 +4,15 @@ import { GridIds, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
 import { modifyTileStyleDecls, CustomTileStyleDecls } from './style/schema.js';
 
-export type TileSnapshot = {
+// Snapshot and mutation types
+export type TileSnapshot = TileConstantProperties & TileMutableProperties;
+// type TileMutation = Partial<TypeMutableProperties>;
+type TileConstantProperties = {
   ids: TileIdsProperties,
   index: Index,
   coords: Coords
-}
+};
+type TileMutableProperties = {};
 
 type TileElements = {
   outer?: HTMLElement,
@@ -16,7 +20,7 @@ type TileElements = {
   style?: HTMLElement
 }
 
-export abstract class AbstractTile {
+export abstract class AbstractTile implements TileConstantProperties, TileMutableProperties {
   protected _ids: TileIds;
   protected set ids(value: TileIds) { this._ids = value; }
   public get ids() : TileIds { return this._ids; }
