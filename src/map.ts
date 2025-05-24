@@ -84,16 +84,16 @@ export abstract class AbstractMap {
   }
 }
 
-export abstract class AbstractGridMap<Grid extends AbstractGrid = AbstractGrid> extends AbstractMap {
-  protected _grid: Grid;
-  protected set grid(value: Grid) { this._grid = value; }
-  public get grid() : Grid { return this._grid; }
+export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> extends AbstractMap {
+  protected _grid: G;
+  protected set grid(value: G) { this._grid = value; }
+  public get grid() : G { return this._grid; }
 
   protected override _style: GridMapStyle;
   protected override set style(value: GridMapStyle) { this._style = value; }
   public override get style() : GridMapStyle { return this._style; }
 
-  constructor(config: Config, style: GridMapStyleSchema, gridClass: new (mapIds: MapIds, config: Config) => Grid) {
+  constructor(config: Config, style: GridMapStyleSchema, gridClass: new (mapIds: MapIds, config: Config) => G) {
     super(config);
     this.grid = new gridClass(this.ids, config);
     this.initStyle(style);

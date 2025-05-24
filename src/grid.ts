@@ -21,7 +21,7 @@ interface GridElements {
   contourHover: HTMLElement;
 }
 
-export abstract class AbstractGrid<Tile extends AbstractTile = AbstractTile> {
+export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> {
   protected _ids: GridIds;
   protected set ids(value: GridIds) { this._ids = value; }
   public get ids() : GridIds { return this._ids; }
@@ -30,17 +30,17 @@ export abstract class AbstractGrid<Tile extends AbstractTile = AbstractTile> {
   protected set size(value: Size) { this._size = value; }
   public get size() : Size { return this._size; }
 
-  public tiles: Tile[][] = [];
+  public tiles: T[][] = [];
 
   public tile(firstCoord: number, secondCoord: number) {
     return this.tileByCoords(firstCoord, secondCoord);
   }
-  public abstract tileByCoords(firstCoord: number, secondCoord: number) : Tile|undefined;
-  public abstract tileByElement(element: HTMLElement) : Tile|undefined;
-  public tileByIndex(i: number, j: number) : Tile|undefined {
+  public abstract tileByCoords(firstCoord: number, secondCoord: number) : T|undefined;
+  public abstract tileByElement(element: HTMLElement) : T|undefined;
+  public tileByIndex(i: number, j: number) : T|undefined {
     return this.tiles[i]?.[j];
   }
-  public tileById(ids: TileIds) : Tile|undefined {
+  public tileById(ids: TileIds) : T|undefined {
     for (let i in this.tiles) {
       for (let j in this.tiles[i]) {
         if (this.tiles[i]![j as any]!.ids.tile === ids.tile) {
