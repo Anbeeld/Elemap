@@ -81,7 +81,7 @@ export class Register {
     abstract: (ids: MapIds) : AbstractMap|undefined => {
       return Register.maps.get(ids.map);
     },
-    grid: (ids: MapIds) : AbstractGridMap<AbstractGrid<AbstractTile>>|undefined => {
+    grid: (ids: MapIds) : AbstractGridMap|undefined => {
       let map = Register.map.abstract(ids);
       if (map && map instanceof AbstractGridMap) {
         return map;
@@ -91,7 +91,7 @@ export class Register {
   }
 
   public static grid = {
-    abstract: (ids: MapIds) : AbstractGrid<AbstractTile>|undefined => {
+    abstract: (ids: MapIds) : AbstractGrid|undefined => {
       let map = Register.map.abstract(ids);
       if (map && map instanceof AbstractGridMap) {
         return map.grid;

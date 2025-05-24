@@ -21,7 +21,7 @@ interface GridElements {
   contourHover: HTMLElement;
 }
 
-export abstract class AbstractGrid<Tile extends AbstractTile> {
+export abstract class AbstractGrid<Tile extends AbstractTile = AbstractTile> {
   protected _ids: GridIds;
   protected set ids(value: GridIds) { this._ids = value; }
   public get ids() : GridIds { return this._ids; }

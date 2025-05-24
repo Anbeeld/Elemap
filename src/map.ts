@@ -1,4 +1,3 @@
-import { AbstractTile } from './tile.js';
 import { AbstractGrid, GridSnapshot } from './grid.js';
 
 import { GridMapStyleSchema } from './style/schema.js';
@@ -85,7 +84,7 @@ export abstract class AbstractMap {
   }
 }
 
-export abstract class AbstractGridMap<Grid extends AbstractGrid<AbstractTile>> extends AbstractMap {
+export abstract class AbstractGridMap<Grid extends AbstractGrid = AbstractGrid> extends AbstractMap {
   protected _grid: Grid;
   protected set grid(value: Grid) { this._grid = value; }
   public get grid() : Grid { return this._grid; }

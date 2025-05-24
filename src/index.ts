@@ -4,7 +4,6 @@ import { CustomTileStyleDecls, CustomSchema, modifyGridMapStyleSchema } from "./
 import { CustomConfig, validateConfig } from "./config.js";
 import { MapType, setProperty } from "./utils.js";
 import { AbstractGridMap, AbstractMap } from "./map.js";
-import { AbstractGrid } from "./grid.js";
 import { AbstractTile } from "./tile.js";
 // import { AbstractTile } from "./tile.js";
 
@@ -26,7 +25,7 @@ export default class Elemap {
     });
 
     setProperty(this, 'tileByIndex', (i: number, j: number) : ElemapTile|undefined => {
-      let tile = (this._ as AbstractGridMap<AbstractGrid<AbstractTile>>).grid.tileByIndex(i, j);
+      let tile = (this._ as AbstractGridMap).grid.tileByIndex(i, j);
       if (tile) {
         return new ElemapTile(tile);
       }
