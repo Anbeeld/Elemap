@@ -4,15 +4,9 @@ import { GridIds, Register } from '../register.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';
 
-export type RectangleTileSnapshot = TileSnapshot & {
-  coords: OrthogonalCoords
-};
+export type RectangleTileSnapshot = TileSnapshot<OrthogonalCoords>;
 
-export class RectangleTile extends AbstractTile {
-  protected override _coords: OrthogonalCoords;
-  protected override set coords(value: OrthogonalCoords) { this._coords = value; }
-  public override get coords() : OrthogonalCoords { return this._coords; }
-
+export class RectangleTile extends AbstractTile<OrthogonalCoords> {
   constructor(gridIds: GridIds, index: Index, coords: OrthogonalCoords) {
     super(gridIds, index);
     this.coords = coords;

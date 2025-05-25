@@ -5,12 +5,12 @@ import TileStyle from './style/tile.js';
 import { modifyTileStyleDecls, CustomTileStyleDecls } from './style/schema.js';
 
 // Snapshot and mutation types
-export type TileSnapshot = TileConstantProperties & TileMutableProperties;
+export type TileSnapshot<C extends Coords = Coords> = TileConstantProperties<C> & TileMutableProperties;
 // type TileMutation = Partial<TypeMutableProperties>;
-type TileConstantProperties = {
+type TileConstantProperties<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   index: Index,
-  coords: Coords
+  coords: C
 };
 type TileMutableProperties = {};
 
@@ -20,7 +20,7 @@ type TileElements = {
   style?: HTMLElement
 }
 
-export abstract class AbstractTile implements TileConstantProperties, TileMutableProperties {
+export abstract class AbstractTile<C extends Coords = Coords> implements TileConstantProperties<C>, TileMutableProperties {
   protected _ids: TileIds;
   protected set ids(value: TileIds) { this._ids = value; }
   public get ids() : TileIds { return this._ids; }
@@ -44,10 +44,10 @@ export abstract class AbstractTile implements TileConstantProperties, TileMutabl
   protected _index: Index;
   protected set index(value: Index) { this._index = value; }
   public get index() : Index { return this._index; }
-
-  protected abstract _coords: Coords;
-  protected abstract set coords(value: Coords);
-  public abstract get coords() : Coords;
+  
+  protected _coords: C;
+  protected set coords(value: C) { this._coords = value; }
+  public get coords() : C { return this._coords; }
 
   protected rendered: boolean = false;
 
