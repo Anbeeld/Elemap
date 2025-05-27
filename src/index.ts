@@ -3,7 +3,8 @@ import HexagonMap from "./hexagon/map.js";
 import { CustomTileStyleDecls, CustomSchema, modifyGridMapStyleSchema } from "./style/schema.js";
 import { CustomConfig, validateConfig } from "./config.js";
 import { MapType, setProperty } from "./utils.js";
-import { AbstractTile } from "./tile.js";
+import { RectangleTile } from "./rectangle/tile.js";
+import { HexagonTile } from "./hexagon/tile.js";
 
 type MapTypeStrings = `${MapType}`;
 
@@ -54,21 +55,26 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
   private shield__tileByIndex() {
     setProperty(this, 'tileByIndex', (i: number, j: number) => this.method__tileByIndex(i, j));
   }
-  private method__tileByIndex(i: number, j: number) : ElemapTile|undefined {
+  private method__tileByIndex(i: number, j: number) : ElemapTile<M>|undefined {
     // @ts-ignore
     let tile = this._.grid.tileByIndex(i, j);
     if (tile) {
-      return new ElemapTile(tile);
+      return new ElemapTile<M>(tile as ElemapTileType<M>);
     }
     return undefined;
   }
 }
 
-class ElemapTile {
-  private _: AbstractTile;
+type ElemapTileType<M> = 
+  M extends "rectangle" ? RectangleTile :
+  M extends "hexagon" ? HexagonTile :
+  never;
 
-  constructor(map: AbstractTile) {
-    this._ = map;
+class ElemapTile<M extends MapTypeStrings> {
+  private _: ElemapTileType<M>;
+
+  constructor(tile: ElemapTileType<M>) {
+    this._ = tile;
 
     // For JavaScript - shield method names from mangling
     this.shield__updateStyle();
