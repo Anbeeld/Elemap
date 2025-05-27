@@ -47,8 +47,8 @@ export abstract class AbstractMap {
     config; // TODO
   }
 
-  // 'static' modifier cannot be used with 'abstract' modifier.
-  // public static abstract import(snapshot: MapSnapshot) : AbstractMap;
+  // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
+  public static abstract import(snapshot: MapSnapshot) : AbstractMap;
   public abstract export() : MapSnapshot;
 
   protected abstract initStyle(style: GridMapStyleSchema) : void;

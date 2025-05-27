@@ -56,8 +56,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     this.index = index;
   }
 
-  // 'static' modifier cannot be used with 'abstract' modifier.
-  // public static abstract import(snapshot: TileSnapshot) : AbstractTile;
+  // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
+  public static abstract import(snapshot: TileSnapshot) : AbstractTile;
   public abstract export() : TileSnapshot<C>;
 
   protected exportSnapshotProperties() : TileSnapshot<C> {

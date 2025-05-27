@@ -88,8 +88,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> {
     this.initTiles();
   }
 
-  // 'static' modifier cannot be used with 'abstract' modifier.
-  // public static abstract import(snapshot: GridSnapshot) : AbstractGrid;
+  // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
+  public static abstract import(snapshot: GridSnapshot) : AbstractGrid;
   public abstract export() : GridSnapshot;
 
   protected abstract initTiles(): void;
