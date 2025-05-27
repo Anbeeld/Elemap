@@ -4,7 +4,6 @@ export type Size = {width: number, height: number};
 export type Index = {i: number, j: number};
 
 export enum MapType {
-  Plain = 'plain',
   Rectangle = 'rectangle',
   Hexagon = 'hexagon'
 }
