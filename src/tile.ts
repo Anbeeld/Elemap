@@ -6,7 +6,7 @@ import { modifyTileStyleDecls, CustomTileStyleDecls } from './style/schema.js';
 
 // Snapshot and mutation types
 export type TileSnapshot<C extends Coords = Coords> = TileConstantProperties<C> & TileMutableProperties;
-// type TileMutation = Partial<TypeMutableProperties>;
+// type TileMutation = Partial<TileMutableProperties>;
 type TileConstantProperties<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   index: Index,
