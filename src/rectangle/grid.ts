@@ -1,6 +1,6 @@
 import { AbstractGrid, GridSnapshot } from "../grid.js";
 import { RectangleTile, RectangleTileSnapshot } from "./tile.js";
-import { indexToOrthogonalCoords, MapType, orthogonalCoordsToIndex/*, TileSize */ } from "../utils.js";
+import { indexToOrthogonalCoords, orthogonalCoordsToIndex/*, TileSize */ } from "../utils.js";
 import { MapIds } from "../register.js";
 import { Config } from "../config.js";
 
@@ -15,7 +15,6 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
   
   public static import(snapshot: RectangleGridSnapshot) : RectangleGrid {
     return new RectangleGrid(snapshot.ids, {
-      type: MapType.Rectangle,
       size: snapshot.size,
       grid: {
         orientation: snapshot.orientation,

@@ -17,7 +17,6 @@ export default class HexagonMap extends AbstractGridMap<HexagonGrid> {
 
   public static import(snapshot: HexagonMapSnapshot) : HexagonMap {
     return new HexagonMap({
-      type: MapType.Hexagon,
       size: snapshot.grid.size,
       grid: {
         orientation: snapshot.grid.orientation,

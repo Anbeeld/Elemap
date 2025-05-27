@@ -1,6 +1,6 @@
 import { AbstractGrid, GridSnapshot } from "../grid.js";
 import { HexagonTile, HexagonTileSnapshot } from "./tile.js";
-import { indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset, MapType } from "../utils.js";
+import { indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset } from "../utils.js";
 import { MapIds } from "../register.js";
 import { Config } from "../config.js";
 
@@ -15,7 +15,6 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
 
   public static import(snapshot: HexagonGridSnapshot) : HexagonGrid {
     return new HexagonGrid(snapshot.ids, {
-      type: MapType.Hexagon,
       size: snapshot.size,
       grid: {
         orientation: snapshot.orientation,

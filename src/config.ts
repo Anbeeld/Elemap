@@ -1,7 +1,6 @@
-import { MapType, GridOrientation, GridOffset, Size, getProperty } from "./utils.js";
+import { GridOrientation, GridOffset, Size, getProperty } from "./utils.js";
 
 export type CustomConfig = {
-  type?: MapType,
   size?: {
     width?: number,
     height?: number
@@ -13,7 +12,6 @@ export type CustomConfig = {
 };
 
 export type Config = {
-  type: MapType,
   size: Size
   grid: {
     orientation: GridOrientation,
@@ -23,7 +21,6 @@ export type Config = {
 
 export function validateConfig(custom: CustomConfig) : Config {
   return {
-    type: getProperty(custom, 'type') || MapType.Rectangle,
     size: {
       width: getProperty(getProperty(custom, 'size'), 'width') || 32,
       height: getProperty(getProperty(custom, 'size'), 'height') || 18

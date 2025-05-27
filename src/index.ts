@@ -5,20 +5,24 @@ import { CustomConfig, validateConfig } from "./config.js";
 import { MapType, setProperty } from "./utils.js";
 import { AbstractGridMap, AbstractMap } from "./map.js";
 import { AbstractTile } from "./tile.js";
-// import { AbstractTile } from "./tile.js";
 
 export default class Elemap {
   private _: AbstractMap;
 
-  constructor(config?: CustomConfig, schema?: CustomSchema) {
+  constructor(type?: MapType, config?: CustomConfig, schema?: CustomSchema) {
+    let validatedType = type === MapType.Rectangle ? MapType.Rectangle : (type === MapType.Hexagon ? MapType.Hexagon : MapType.Rectangle);
     let validatedConfig = validateConfig(config || {});
     let validatedSchema = modifyGridMapStyleSchema(schema || {});
 
-    if (validatedConfig.type === MapType.Rectangle) {
+    if (validatedType === MapType.Rectangle) {
       this._ = new RectangleMap(validatedConfig, validatedSchema);
-    } else if (validatedConfig.type === MapType.Hexagon) {
+    } else if (validatedType === MapType.Hexagon) {
       this._ = new HexagonMap(validatedConfig, validatedSchema);
     }
+
+    setProperty(this, 'export', () : any => {
+      return this._.export();
+    });
 
     setProperty(this, 'render', (container: HTMLElement) : void => {
       this._.render(container);
