@@ -1,4 +1,5 @@
 const elemap = new Elemap(
+  typeof type !== 'undefined' ? type : 'rectangle',
   typeof config !== 'undefined' ? config : {},
   typeof schema !== 'undefined' ? schema : {}
 );

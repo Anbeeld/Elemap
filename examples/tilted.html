@@ -13,13 +13,13 @@
     <div id="elemap-container"></div>
   </div>
   <script>
+    var type = 'hexagon';
     var config = {
-      type: 'hexagon',
       grid: {
         orientation: 'pointy',
         offset: 'odd'
       }
-    }
+    };
     var schema = {
       grid: {
         contour: 'border-width: 4px;'
@@ -27,7 +27,7 @@
       tile: {
         inner: 'width: 200px; border-radius: 12px; margin: 4px;'
       }
-    }
+    };
   </script>
   <script src="/js/elemap-init.js"></script>
   <script>
