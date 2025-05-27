@@ -4,7 +4,7 @@ import { indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, G
 import { MapIds } from "../register.js";
 import { Config } from "../config.js";
 
-export type HexagonGridSnapshot = GridSnapshot & {
+export type HexagonGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
   tiles: HexagonTileSnapshot[][]
 }
 

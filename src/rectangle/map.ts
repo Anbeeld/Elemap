@@ -6,7 +6,7 @@ import RectangleMapStyle from "../style/rectangle/map.js";
 import { Config } from "../config.js";
 import { MapType } from "../utils.js";
 
-type RectangleMapSnapshot = GridMapSnapshot & {
+type RectangleMapSnapshot = Omit<GridMapSnapshot, 'grid'> & {
   grid: RectangleGridSnapshot
 };
 

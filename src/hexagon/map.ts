@@ -6,7 +6,7 @@ import HexagonMapStyle from "../style/hexagon/map.js";
 import { Config } from "../config.js";
 import { MapType } from "../utils.js";
 
-type HexagonMapSnapshot = GridMapSnapshot & {
+type HexagonMapSnapshot = Omit<GridMapSnapshot, 'grid'> & {
   grid: HexagonGridSnapshot
 };
 

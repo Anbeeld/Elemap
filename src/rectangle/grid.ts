@@ -4,7 +4,7 @@ import { indexToOrthogonalCoords, orthogonalCoordsToIndex/*, TileSize */ } from 
 import { MapIds } from "../register.js";
 import { Config } from "../config.js";
 
-export type RectangleGridSnapshot = GridSnapshot & {
+export type RectangleGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
   tiles: RectangleTileSnapshot[][]
 }
 
