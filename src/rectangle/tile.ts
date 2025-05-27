@@ -15,13 +15,8 @@ export class RectangleTile extends AbstractTile<OrthogonalCoords> {
   public static import(snapshot: RectangleTileSnapshot) : RectangleTile {
     return new RectangleTile(snapshot.ids, snapshot.index, snapshot.coords);
   }
-
   public override export() : RectangleTileSnapshot {
-    return {
-      ids: this.ids,
-      index: this.index,
-      coords: this.coords
-    };
+    return this.exportSnapshotProperties();
   }
   
   protected override _style: RectangleTileStyle|undefined;

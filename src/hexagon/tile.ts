@@ -15,13 +15,8 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
   public static import(snapshot: HexagonTileSnapshot) : HexagonTile {
     return new HexagonTile(snapshot.ids, snapshot.index, snapshot.coords);
   }
-
   public override export() : HexagonTileSnapshot {
-    return {
-      ids: this.ids,
-      index: this.index,
-      coords: this.coords
-    };
+    return this.exportSnapshotProperties();
   }
     
   protected override _style: HexagonTileStyle|undefined;

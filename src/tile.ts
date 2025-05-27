@@ -58,7 +58,20 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
 
   // 'static' modifier cannot be used with 'abstract' modifier.
   // public static abstract import(snapshot: TileSnapshot) : AbstractTile;
-  public abstract export() : TileSnapshot;
+  public abstract export() : TileSnapshot<C>;
+
+  protected exportSnapshotProperties() : TileSnapshot<C> {
+    return  this.exportMutableProperties(this.exportConstantProperties()) as TileSnapshot<C>;
+  }
+  protected exportConstantProperties(object: object = {}) : TileConstantProperties<C> {
+    setProperty(object, 'ids', this.ids);
+    setProperty(object, 'index', this.index);
+    setProperty(object, 'coords', this.coords);
+    return object as TileConstantProperties<C>;
+  }
+  protected exportMutableProperties(object: object = {}) : TileMutableProperties {
+    return object as TileMutableProperties;
+  }
 
   protected abstract createStyle(decls: CustomTileStyleDecls) : TileStyle;
 
