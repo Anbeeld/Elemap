@@ -400,6 +400,12 @@ export function shieldSize(size: Size) : Size {
   // @ts-ignore
   return object;
 }
+export function unshieldSize(object: any) : Size {
+  return {
+    width: unshieldProperty(object, 'width'),
+    height: unshieldProperty(object, 'height')
+  };
+}
 
 export function shieldIndex(index: Index) : Index {
   let object = {};
@@ -407,6 +413,12 @@ export function shieldIndex(index: Index) : Index {
   shieldProperty(object, 'j', index.j);
   // @ts-ignore
   return object;
+}
+export function unshieldIndex(object: any) : Index {
+  return {
+    i: unshieldProperty(object, 'i'),
+    j: unshieldProperty(object, 'j')
+  };
 }
 
 export function shieldAxialCoords(axial: AxialCoords) : AxialCoords {
@@ -416,6 +428,12 @@ export function shieldAxialCoords(axial: AxialCoords) : AxialCoords {
   // @ts-ignore
   return object;
 }
+export function unshieldAxialCoords(object: any) : AxialCoords {
+  return {
+    q: unshieldProperty(object, 'q'),
+    r: unshieldProperty(object, 'r')
+  };
+}
 
 export function shieldOrthogonalCoords(orthogonal: OrthogonalCoords) : OrthogonalCoords {
   let object = {};
@@ -423,4 +441,10 @@ export function shieldOrthogonalCoords(orthogonal: OrthogonalCoords) : Orthogona
   shieldProperty(object, 'y', orthogonal.y);
   // @ts-ignore
   return object;
+}
+export function unshieldOrthogonalCoords(object: any) : OrthogonalCoords {
+  return {
+    x: unshieldProperty(object, 'x'),
+    y: unshieldProperty(object, 'y')
+  };
 }

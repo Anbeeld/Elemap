@@ -1,4 +1,4 @@
-import { Coords, unshieldProperty, Index, OrthogonalCoords, shieldProperties, shieldProperty, shieldsIds, shieldIndex } from './utils.js';
+import { Coords, unshieldProperty, Index, OrthogonalCoords, shieldProperties, shieldProperty, shieldsIds, shieldIndex, unshieldIndex } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
@@ -70,8 +70,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected static importSnapshot<T extends AbstractTile, C extends Coords>(tile: new (args: TileArguments<C>) => T, snapshot: TileSnapshot) : T {
     let verifiedSnapshot: TileSnapshot<C> = {
       ids: unshieldProperty(snapshot, 'ids'),
-      index: unshieldProperty(snapshot, 'index'),
-      coords: unshieldProperty(snapshot, 'coords')
+      index: unshieldIndex(unshieldProperty(snapshot, 'index')),
+      coords: this.importCoords(unshieldProperty(snapshot, 'coords'))
     };
 
     let instance = new tile(verifiedSnapshot as TileArguments<C>);
@@ -81,6 +81,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected mutate(mutation: TileMutation) : void {
     mutation;
   }
+  // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
+  protected static abstract importCoords(object: any) : C;
 
   public abstract export() : TileSnapshot<C>;
   protected exportSnapshot() : TileSnapshot<C> {
