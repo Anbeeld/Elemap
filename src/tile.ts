@@ -5,14 +5,14 @@ import TileStyle from './style/tile.js';
 import { modifyTileStyleDecls, CustomTileStyleDecls } from './style/schema.js';
 
 // Snapshot and mutation types
-export type TileSnapshot<C extends Coords = Coords> = TileConstantProperties<C> & TileMutableProperties;
-// type TileMutation = Partial<TileMutableProperties>;
-type TileConstantProperties<C extends Coords = Coords> = {
+export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & TileMutables;
+// type TileMutation = Partial<TileMutables>;
+type TileConstants<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   index: Index,
   coords: C
 };
-type TileMutableProperties = {};
+type TileMutables = {};
 
 type TileElements = {
   outer?: HTMLElement,
@@ -20,7 +20,7 @@ type TileElements = {
   style?: HTMLElement
 }
 
-export abstract class AbstractTile<C extends Coords = Coords> implements TileConstantProperties<C>, TileMutableProperties {
+export abstract class AbstractTile<C extends Coords = Coords> implements TileConstants<C>, TileMutables {
   protected _ids: TileIds;
   protected set ids(value: TileIds) { this._ids = value; }
   public get ids() : TileIds { return this._ids; }
@@ -61,18 +61,18 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   public abstract export() : TileSnapshot<C>;
 
   protected exportSnapshotProperties() : TileSnapshot<C> {
-    return  this.exportMutableProperties(this.exportConstantProperties()) as TileSnapshot<C>;
+    return  this.exportMutables(this.exportConstants()) as TileSnapshot<C>;
   }
-  protected exportConstantProperties(object: object = {}) : TileConstantProperties<C> {
+  protected exportConstants(object: object = {}) : TileConstants<C> {
     setProperties(object, [
       ['ids', this.ids],
       ['index', this.index],
       ['coords', this.coords]
     ]);
-    return object as TileConstantProperties<C>;
+    return object as TileConstants<C>;
   }
-  protected exportMutableProperties(object: object = {}) : TileMutableProperties {
-    return object as TileMutableProperties;
+  protected exportMutables(object: object = {}) : TileMutables {
+    return object as TileMutables;
   }
 
   protected abstract createStyle(decls: CustomTileStyleDecls) : TileStyle;

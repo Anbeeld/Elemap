@@ -4,15 +4,15 @@ import { GridIds, GridIdsProperties, MapIds, Register, TileIds } from "./registe
 import { Config } from "./config.js";
 
 // Snapshot and mutation types
-export type GridSnapshot = GridConstantProperties & GridMutableProperties;
-// type GridMutation = Partial<GridMutableProperties>;
-type GridConstantProperties = {
+export type GridSnapshot = GridConstants & GridMutables;
+// type GridMutation = Partial<GridMutables>;
+type GridConstants = {
   ids: GridIdsProperties,
   size: Size,
   orientation: GridOrientation,
   offset: GridOffset,
 };
-type GridMutableProperties = {
+type GridMutables = {
   tiles: TileSnapshot[][]
 };
 
@@ -26,7 +26,7 @@ interface GridElements {
   contourHover: HTMLElement;
 }
 
-export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implements GridConstantProperties, GridMutableProperties {
+export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implements GridConstants, GridMutables {
   protected _ids: GridIds;
   protected set ids(value: GridIds) { this._ids = value; }
   public get ids() : GridIds { return this._ids; }
@@ -98,22 +98,22 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   public abstract export() : GridSnapshot;
 
   protected exportSnapshotProperties() : GridSnapshot {
-    return  this.exportMutableProperties(this.exportConstantProperties()) as GridSnapshot;
+    return  this.exportMutables(this.exportConstants()) as GridSnapshot;
   }
-  protected exportConstantProperties(object: object = {}) : GridConstantProperties {
+  protected exportConstants(object: object = {}) : GridConstants {
     setProperties(object, [
       ['ids', this.ids],
       ['size', this.size],
       ['orientation', this.orientation],
       ['offset', this.offset]
     ]);
-    return object as GridConstantProperties;
+    return object as GridConstants;
   }
-  protected exportMutableProperties(object: object = {}) : GridMutableProperties {
+  protected exportMutables(object: object = {}) : GridMutables {
     setProperties(object, [
       ['tiles', this.tiles.map(row => row.map(tile => tile.export()))]
     ]);
-    return object as GridMutableProperties;
+    return object as GridMutables;
   }
 
   protected abstract initTiles(): void;
