@@ -1,19 +1,18 @@
-import { AbstractTile, TileSnapshot } from '../tile.js';
-import { AxialCoords, Index, setProperty } from '../utils.js';
-import { GridIds, Register } from '../register.js';
+import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
+import { AxialCoords, setProperty } from '../utils.js';
+import { Register } from '../register.js';
 import { TileStyleDecls } from '../style/schema.js';
 import HexagonTileStyle from '../style/hexagon/tile.js';
 
 export type HexagonTileSnapshot = TileSnapshot<AxialCoords>;
 
 export class HexagonTile extends AbstractTile<AxialCoords> {
-  constructor(gridIds: GridIds, index: Index, coords: AxialCoords) {
-    super(gridIds, index);
-    this.coords = coords;
-  }
+  constructor(args: TileArguments<AxialCoords>) {
+      super(args);
+    }
 
   public static import(snapshot: HexagonTileSnapshot) : HexagonTile {
-    return new HexagonTile(snapshot.ids, snapshot.index, snapshot.coords);
+    return new HexagonTile(snapshot);
   }
   public override export() : HexagonTileSnapshot {
     return this.exportSnapshot();

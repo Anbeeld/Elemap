@@ -30,7 +30,11 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     for (let i = 0; i < this.size.height; i++) {
       this.tiles[i] = [];
       for (let j = 0; j < this.size.width; j++) {
-        this.tiles[i]![j] = new RectangleTile(this.ids, {i, j}, indexToOrthogonalCoords({i, j}));
+        this.tiles[i]![j] = new RectangleTile({
+          ids: this.ids,
+          index: {i, j},
+          coords: indexToOrthogonalCoords({i, j})
+        });
       }
     }
   }

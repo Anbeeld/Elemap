@@ -1,18 +1,22 @@
 import { Coords, Index, OrthogonalCoords, setProperties, setProperty } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
-import { GridIds, Register, TileIds, TileIdsProperties } from './register.js';
+import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
 import { modifyTileStyleDecls, CustomTileStyleDecls } from './style/schema.js';
 
 // Snapshot and mutation types
 export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & TileMutables;
 // type TileMutation = Partial<TileMutables>;
-type TileConstants<C extends Coords = Coords> = {
+export type TileConstants<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   index: Index,
   coords: C
 };
 type TileMutables = {};
+
+export type TileArguments<C extends Coords = Coords> = Omit<TileConstants<C>, 'ids'> & {
+  ids: GridIdsProperties | TileIdsProperties
+};
 
 type TileElements = {
   outer?: HTMLElement,
@@ -51,9 +55,14 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
 
   protected rendered: boolean = false;
 
-  constructor(gridIds: GridIds, index: Index) {
-    this.ids = new TileIds(gridIds, Register.id());
-    this.index = index;
+  constructor(args: TileArguments<C>) {
+    if (args.ids instanceof TileIds) {
+      this.ids = new TileIds(args.ids, args.ids.tile);
+    } else {
+      this.ids = new TileIds(args.ids, Register.id());
+    }
+    this.index = args.index;
+    this.coords = args.coords;
   }
 
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.

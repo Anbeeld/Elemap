@@ -30,7 +30,11 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     for (let i = 0; i < this.size.height; i++) {
       this.tiles[i] = [];
       for (let j = 0; j < this.size.width; j++) {
-        this.tiles[i]![j] = new HexagonTile(this.ids, {i, j}, indexToAxialCoords({i, j}, this.orientation, this.offset));
+        this.tiles[i]![j] = new HexagonTile({
+          ids: this.ids,
+          index: {i, j},
+          coords: indexToAxialCoords({i, j}, this.orientation, this.offset)
+        });
       }
     }
   }
