@@ -1,10 +1,11 @@
 import RectangleMap from "./rectangle/map.js";
 import HexagonMap from "./hexagon/map.js";
-import { CustomTileStyleDecls, CustomSchema, modifyGridMapStyleSchema } from "./style/schema.js";
+import { CustomTileStyleDecls, CustomSchema, modifyGridMapStyleSchema, GridMapStyleSchema } from "./style/schema.js";
 import { CustomConfig, validateConfig } from "./config.js";
 import { MapType, shieldProperty } from "./utils.js";
 import { RectangleTile } from "./rectangle/tile.js";
 import { HexagonTile } from "./hexagon/tile.js";
+import { GridMapSnapshot } from "./map.js";
 
 type MapTypeStrings = `${MapType}`;
 
@@ -49,6 +50,10 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     this.shield__tileByIndex();
   }
 
+  public static import(snapshot: GridMapSnapshot, style: GridMapStyleSchema) {
+    return method__import(snapshot, style);
+  }
+
   public export() {
     return this.method__export();
   }
@@ -80,6 +85,16 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     return undefined;
   }
 }
+
+function method__import(snapshot: GridMapSnapshot, style: GridMapStyleSchema) {
+  if (snapshot.type === MapType.Rectangle) {
+    return RectangleMap.import(snapshot as any, style);
+  } else if (snapshot.type === MapType.Hexagon) {
+    return HexagonMap.import(snapshot as any, style);
+  }
+  throw new Error(`Unknown map type: ${snapshot.type}`);
+}
+shieldProperty(Elemap, 'import', method__import);
 
 type ElemapTileType<M> = 
   M extends "rectangle" ? RectangleTile :
