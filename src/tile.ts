@@ -1,6 +1,6 @@
-import { Coords, getProperty, Index, OrthogonalCoords, setProperties, setProperty } from './utils.js';
+import { Coords, getProperty, Index, OrthogonalCoords, setProperties, setProperty, setIdsProperties } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
-import { GridIdsProperties, Register, setIdsProperties, TileIds, TileIdsProperties } from './register.js';
+import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
 import { modifyTileStyleDecls, CustomTileStyleDecls } from './style/schema.js';
 

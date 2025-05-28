@@ -1,6 +1,6 @@
 import { AbstractTile, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, setProperties, getProperty } from "./utils.js";
-import { GridIds, GridIdsProperties, MapIdsProperties, Register, setIdsProperties, TileIds } from "./register.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords, setProperties, getProperty, setIdsProperties } from "./utils.js";
+import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & GridMutables;

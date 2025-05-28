@@ -6,9 +6,8 @@ import GridStyle from "./style/grid.js";
 import { GridMapStyle } from "./style/map.js";
 import TileStyle from "./style/tile.js";
 import { AbstractTile } from "./tile.js";
-import { setProperty } from "./utils.js";
 
-type IdsProperties = {
+export type IdsProperties = {
   map: number;
 };
 export type MapIdsProperties = IdsProperties;
@@ -67,19 +66,6 @@ export class TileStyleIds extends GridStyleIds {
     super(ownerIds, gridIds, tileId);
     this.tile = tileId;
   }
-}
-
-export function setIdsProperties(ids: Ids) : IdsProperties {
-  let object = {};
-  setProperty(object, 'map', ids.map);
-  if (ids instanceof GridIds || ids instanceof TileIds) {
-    setProperty(object, 'grid', ids.grid);
-  }
-  if (ids instanceof TileIds) {
-    setProperty(object, 'tile', ids.tile);
-  }
-  // @ts-ignore
-  return object;
 }
 
 export class Register {

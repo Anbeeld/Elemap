@@ -2,8 +2,8 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
-import { GridIdsProperties, MapIds, MapIdsProperties, Register, setIdsProperties } from './register.js';
-import { getProperty, MapType, setProperties } from './utils.js';
+import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
+import { getProperty, MapType, setProperties, setIdsProperties } from './utils.js';
 
 interface MapElements {
   container?: HTMLElement,

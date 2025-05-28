@@ -1,3 +1,4 @@
+import { GridIds, Ids, IdsProperties, TileIds } from './register.js';
 import { cssValueToNumber } from './style/utils.js';
 
 export type Size = {width: number, height: number};
@@ -376,5 +377,18 @@ export function setProperties(object: any, properties: [string, any][]) : any {
   for (let property of properties) {
     setProperty(object, property[0], property[1]);
   }
+  return object;
+}
+
+export function setIdsProperties(ids: Ids) : IdsProperties {
+  let object = {};
+  setProperty(object, 'map', ids.map);
+  if (ids instanceof GridIds || ids instanceof TileIds) {
+    setProperty(object, 'grid', ids.grid);
+  }
+  if (ids instanceof TileIds) {
+    setProperty(object, 'tile', ids.tile);
+  }
+  // @ts-ignore
   return object;
 }
