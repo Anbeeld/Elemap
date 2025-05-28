@@ -124,7 +124,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     super(config);
     this.grid = new gridClass({
       ids: this.ids,
-      size: config.size,
+      size: config.grid.size,
       orientation: config.grid.orientation,
       offset: config.grid.offset
     });

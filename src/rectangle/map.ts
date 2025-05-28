@@ -17,8 +17,8 @@ export default class RectangleMap extends AbstractGridMap<RectangleGrid> {
   
   public static import(snapshot: RectangleMapSnapshot) : RectangleMap {
     return new RectangleMap({
-      size: snapshot.grid.size,
       grid: {
+        size: snapshot.grid.size,
         orientation: snapshot.grid.orientation,
         offset: snapshot.grid.offset
       }
