@@ -22,15 +22,8 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
       }
     });
   }
-
   public override export() : RectangleGridSnapshot {
-    return {
-      ids: this.ids,
-      size: this.size,
-      orientation: this.orientation,
-      offset: this.offset,
-      tiles: this.tiles.map(row => row.map(tile => tile.export()))
-    };
+    return this.exportSnapshotProperties() as RectangleGridSnapshot;
   }
 
   protected override initTiles() : void {

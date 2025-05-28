@@ -22,15 +22,8 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
       }
     });
   }
-
   public override export() : HexagonGridSnapshot {
-    return {
-      ids: this.ids,
-      size: this.size,
-      orientation: this.orientation,
-      offset: this.offset,
-      tiles: this.tiles.map(row => row.map(tile => tile.export()))
-    };
+    return this.exportSnapshotProperties() as HexagonGridSnapshot;
   }
 
   protected override initTiles() : void {
