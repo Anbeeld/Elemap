@@ -1,4 +1,4 @@
-import { Coords, Index, OrthogonalCoords, setProperty } from './utils.js';
+import { Coords, Index, OrthogonalCoords, setProperties, setProperty } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIds, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
@@ -64,9 +64,11 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     return  this.exportMutableProperties(this.exportConstantProperties()) as TileSnapshot<C>;
   }
   protected exportConstantProperties(object: object = {}) : TileConstantProperties<C> {
-    setProperty(object, 'ids', this.ids);
-    setProperty(object, 'index', this.index);
-    setProperty(object, 'coords', this.coords);
+    setProperties(object, [
+      ['ids', this.ids],
+      ['index', this.index],
+      ['coords', this.coords]
+    ]);
     return object as TileConstantProperties<C>;
   }
   protected exportMutableProperties(object: object = {}) : TileMutableProperties {

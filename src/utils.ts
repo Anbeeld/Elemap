@@ -370,3 +370,9 @@ export function setProperty(object: any, name: string, value: any) : void {
   }
   object[name] = value;
 }
+
+export function setProperties(object: any, properties: [string, any][]) : void {
+  for (let property of properties) {
+    setProperty(object, property[0], property[1]);
+  }
+}
