@@ -1,7 +1,7 @@
-import { getProperty } from "../utils.js"
+import { unshieldProperty } from "../utils.js"
 
 function getDelcsProperty(decls: object, name: string) : string|undefined {
-  let value = getProperty(decls, name);
+  let value = unshieldProperty(decls, name);
   if (typeof value === 'string') {
     return value;
   }
@@ -104,10 +104,10 @@ export function modifyTileStyleDecls(custom: CustomTileStyleDecls, initial?: Til
     hover: {
       outer:
         (initial && initial.hover && initial.hover.outer ? initial.hover.outer : '') +
-        (getDelcsProperty(getProperty(custom, 'hover'), 'outer') || ''),
+        (getDelcsProperty(unshieldProperty(custom, 'hover'), 'outer') || ''),
       inner:
         (initial && initial.hover && initial.hover.inner ? initial.hover.inner : '') +
-        (getDelcsProperty(getProperty(custom, 'hover'), 'inner') || ''),
+        (getDelcsProperty(unshieldProperty(custom, 'hover'), 'inner') || ''),
     }
   }
 }
@@ -127,9 +127,9 @@ type CustomGridMapStyleSchema = {
 /* GRID MAP STYLE SCHEMA MODIFICATION */
 export function modifyGridMapStyleSchema(custom: CustomGridMapStyleSchema) : GridMapStyleSchema {
   return {
-    map: modifyMapStyleDecls(getProperty(custom, 'map') || {}, defaultMapStyleDecls),
-    grid: modifyGridStyleDecls(getProperty(custom, 'grid') || {}, defaultGridStyleDecls),
-    tile: modifyTileStyleDecls(getProperty(custom, 'tile') || {}, defaultTileStyleDecls),
+    map: modifyMapStyleDecls(unshieldProperty(custom, 'map') || {}, defaultMapStyleDecls),
+    grid: modifyGridStyleDecls(unshieldProperty(custom, 'grid') || {}, defaultGridStyleDecls),
+    tile: modifyTileStyleDecls(unshieldProperty(custom, 'tile') || {}, defaultTileStyleDecls),
   }
 }
 

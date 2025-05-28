@@ -1,4 +1,4 @@
-import { GridOrientation, GridOffset, Size, getProperty } from "./utils.js";
+import { GridOrientation, GridOffset, Size, unshieldProperty } from "./utils.js";
 
 export type CustomConfig = {
   grid?: {
@@ -23,11 +23,11 @@ export function validateConfig(custom: CustomConfig) : Config {
   return {
     grid: {
       size: {
-        width: getProperty(getProperty(custom, 'size'), 'width') || 32,
-        height: getProperty(getProperty(custom, 'size'), 'height') || 18
+        width: unshieldProperty(unshieldProperty(custom, 'size'), 'width') || 32,
+        height: unshieldProperty(unshieldProperty(custom, 'size'), 'height') || 18
       },
-      orientation: getProperty(getProperty(custom, 'grid'), 'orientation') || GridOrientation.Pointy,
-      offset: getProperty(getProperty(custom, 'grid'), 'offset') || GridOffset.Odd
+      orientation: unshieldProperty(unshieldProperty(custom, 'grid'), 'orientation') || GridOrientation.Pointy,
+      offset: unshieldProperty(unshieldProperty(custom, 'grid'), 'offset') || GridOffset.Odd
     }
   };
 }

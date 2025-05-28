@@ -1,5 +1,5 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { OrthogonalCoords, setOrthogonalCoordsProperties, setProperty } from '../utils.js';
+import { OrthogonalCoords, shieldOrthogonalCoords, shieldProperty } from '../utils.js';
 import { Register } from '../register.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';
@@ -18,7 +18,7 @@ export class RectangleTile extends AbstractTile<OrthogonalCoords> {
     return this.exportSnapshot();
   }
   protected override exportCoords(): OrthogonalCoords {
-    return setOrthogonalCoordsProperties(this.coords);
+    return shieldOrthogonalCoords(this.coords);
   }
   
   protected override _style: RectangleTileStyle|undefined;
@@ -37,11 +37,11 @@ export class RectangleTile extends AbstractTile<OrthogonalCoords> {
 
   protected override setCoordsAttributes() {    
     if (this.elements!.outer) {
-      setProperty(this.elements!.outer.dataset, 'elemapX', this.coords.x.toString());
-      setProperty(this.elements!.outer.dataset, 'elemapY', this.coords.y.toString());
+      shieldProperty(this.elements!.outer.dataset, 'elemapX', this.coords.x.toString());
+      shieldProperty(this.elements!.outer.dataset, 'elemapY', this.coords.y.toString());
     }
-    setProperty(this.elements!.inner.dataset, 'elemapX', this.coords.x.toString());
-    setProperty(this.elements!.inner.dataset, 'elemapY', this.coords.y.toString());
+    shieldProperty(this.elements!.inner.dataset, 'elemapX', this.coords.x.toString());
+    shieldProperty(this.elements!.inner.dataset, 'elemapY', this.coords.y.toString());
   }
   
   public get selectors() {

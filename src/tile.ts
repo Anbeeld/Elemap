@@ -1,4 +1,4 @@
-import { Coords, getProperty, Index, OrthogonalCoords, setProperties, setProperty, setIdsProperties, setIndexProperties } from './utils.js';
+import { Coords, unshieldProperty, Index, OrthogonalCoords, shieldProperties, shieldProperty, shieldsIds, shieldIndex } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
@@ -69,9 +69,9 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   public static abstract import(snapshot: TileSnapshot) : AbstractTile;
   protected static importSnapshot<T extends AbstractTile, C extends Coords>(tile: new (args: TileArguments<C>) => T, snapshot: TileSnapshot) : T {
     let verifiedSnapshot: TileSnapshot<C> = {
-      ids: getProperty(snapshot, 'ids'),
-      index: getProperty(snapshot, 'index'),
-      coords: getProperty(snapshot, 'coords')
+      ids: unshieldProperty(snapshot, 'ids'),
+      index: unshieldProperty(snapshot, 'index'),
+      coords: unshieldProperty(snapshot, 'coords')
     };
 
     let instance = new tile(verifiedSnapshot as TileArguments<C>);
@@ -87,9 +87,9 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     return this.exportMutables(this.exportConstants()) as TileSnapshot<C>;
   }
   protected exportConstants(object: object = {}) : TileConstants<C> {
-    setProperties(object, [
-      ['ids', setIdsProperties(this.ids)],
-      ['index', setIndexProperties(this.index)],
+    shieldProperties(object, [
+      ['ids', shieldsIds(this.ids)],
+      ['index', shieldIndex(this.index)],
       ['coords', this.exportCoords()]
     ]);
     return object as TileConstants<C>;
@@ -132,11 +132,11 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
 
   protected setIndexAttributes() {    
     if (this.elements!.outer) {
-      setProperty(this.elements!.outer.dataset, 'elemapI', this.index.i.toString());
-      setProperty(this.elements!.outer.dataset, 'elemapJ', this.index.j.toString());
+      shieldProperty(this.elements!.outer.dataset, 'elemapI', this.index.i.toString());
+      shieldProperty(this.elements!.outer.dataset, 'elemapJ', this.index.j.toString());
     }
-    setProperty(this.elements!.inner.dataset, 'elemapI', this.index.i.toString());
-    setProperty(this.elements!.inner.dataset, 'elemapJ', this.index.j.toString());
+    shieldProperty(this.elements!.inner.dataset, 'elemapI', this.index.i.toString());
+    shieldProperty(this.elements!.inner.dataset, 'elemapJ', this.index.j.toString());
   }
 
   protected abstract setCoordsAttributes() : void;

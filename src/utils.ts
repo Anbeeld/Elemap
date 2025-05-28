@@ -358,14 +358,14 @@ export function indexToAxialCoords(index: Index, orientation: GridOrientation, o
 //   return mergeDeep(target, ...sources);
 // }
 
-export function getProperty(object: any, name: string) : any {
+export function unshieldProperty(object: any, name: string) : any {
   if (!object || !object.hasOwnProperty(name)) {
     return undefined;
   }
   return object[name];
 }
 
-export function setProperty(object: any, name: string, value: any) : any {
+export function shieldProperty(object: any, name: string, value: any) : any {
   if (!object) {
     return;
   }
@@ -373,54 +373,54 @@ export function setProperty(object: any, name: string, value: any) : any {
   return object;
 }
 
-export function setProperties(object: any, properties: [string, any][]) : any {
+export function shieldProperties(object: any, properties: [string, any][]) : any {
   for (let property of properties) {
-    setProperty(object, property[0], property[1]);
+    shieldProperty(object, property[0], property[1]);
   }
   return object;
 }
 
-export function setIdsProperties(ids: Ids) : IdsProperties {
+export function shieldsIds(ids: Ids) : IdsProperties {
   let object = {};
-  setProperty(object, 'map', ids.map);
+  shieldProperty(object, 'map', ids.map);
   if (ids instanceof GridIds || ids instanceof TileIds) {
-    setProperty(object, 'grid', ids.grid);
+    shieldProperty(object, 'grid', ids.grid);
   }
   if (ids instanceof TileIds) {
-    setProperty(object, 'tile', ids.tile);
+    shieldProperty(object, 'tile', ids.tile);
   }
   // @ts-ignore
   return object;
 }
 
-export function setSizeProperties(size: Size) : Size {
+export function shieldSize(size: Size) : Size {
   let object = {};
-  setProperty(object, 'width', size.width);
-  setProperty(object, 'height', size.height);
+  shieldProperty(object, 'width', size.width);
+  shieldProperty(object, 'height', size.height);
   // @ts-ignore
   return object;
 }
 
-export function setIndexProperties(index: Index) : Index {
+export function shieldIndex(index: Index) : Index {
   let object = {};
-  setProperty(object, 'i', index.i);
-  setProperty(object, 'j', index.j);
+  shieldProperty(object, 'i', index.i);
+  shieldProperty(object, 'j', index.j);
   // @ts-ignore
   return object;
 }
 
-export function setAxialCoordsProperties(axial: AxialCoords) : AxialCoords {
+export function shieldAxialCoords(axial: AxialCoords) : AxialCoords {
   let object = {};
-  setProperty(object, 'q', axial.q);
-  setProperty(object, 'r', axial.r);
+  shieldProperty(object, 'q', axial.q);
+  shieldProperty(object, 'r', axial.r);
   // @ts-ignore
   return object;
 }
 
-export function setOrthogonalCoordsProperties(orthogonal: OrthogonalCoords) : OrthogonalCoords {
+export function shieldOrthogonalCoords(orthogonal: OrthogonalCoords) : OrthogonalCoords {
   let object = {};
-  setProperty(object, 'x', orthogonal.x);
-  setProperty(object, 'y', orthogonal.y);
+  shieldProperty(object, 'x', orthogonal.x);
+  shieldProperty(object, 'y', orthogonal.y);
   // @ts-ignore
   return object;
 }

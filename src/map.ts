@@ -3,7 +3,7 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
-import { getProperty, MapType, setProperties, setIdsProperties } from './utils.js';
+import { unshieldProperty, MapType, shieldProperties, shieldsIds } from './utils.js';
 
 interface MapElements {
   container?: HTMLElement,
@@ -63,9 +63,9 @@ export abstract class AbstractMap implements MapConstants, MapMutables {
     return  this.exportMutables(this.exportConstants()) as MapSnapshot;
   }
   protected exportConstants(object: object = {}) : MapConstants {
-    setProperties(object, [
+    shieldProperties(object, [
       ['type', this.exportMapType()],
-      ['ids', setIdsProperties(this.ids)]
+      ['ids', shieldsIds(this.ids)]
     ]);
     return object as MapConstants;
   }
@@ -144,9 +144,9 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
 
   protected static importSnapshot<M extends AbstractGridMap>(map: new (args: GridMapArguments, style: GridMapStyleSchema) => M, snapshot: GridMapSnapshot, style: GridMapStyleSchema) : M {
     let verifiedSnapshot: GridMapSnapshot = {
-      type: getProperty(snapshot, 'type'),
-      ids: getProperty(snapshot, 'ids'),
-      grid: getProperty(snapshot, 'grid')
+      type: unshieldProperty(snapshot, 'type'),
+      ids: unshieldProperty(snapshot, 'ids'),
+      grid: unshieldProperty(snapshot, 'grid')
     };
 
     let instance = new map(verifiedSnapshot as GridMapArguments, style);
@@ -158,9 +158,9 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
   }
 
   protected override exportConstants(object: object = {}) : GridMapConstants {
-    setProperties(object, [
+    shieldProperties(object, [
       ['type', this.exportMapType()],
-      ['ids', setIdsProperties(this.ids)],
+      ['ids', shieldsIds(this.ids)],
       ['grid', this.grid.export()]
     ]);
     return object as GridMapConstants;

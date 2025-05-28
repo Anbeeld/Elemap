@@ -2,7 +2,7 @@ import RectangleMap from "./rectangle/map.js";
 import HexagonMap from "./hexagon/map.js";
 import { CustomTileStyleDecls, CustomSchema, modifyGridMapStyleSchema } from "./style/schema.js";
 import { CustomConfig, validateConfig } from "./config.js";
-import { MapType, setProperty } from "./utils.js";
+import { MapType, shieldProperty } from "./utils.js";
 import { RectangleTile } from "./rectangle/tile.js";
 import { HexagonTile } from "./hexagon/tile.js";
 
@@ -53,7 +53,7 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     return this.method__export();
   }
   private shield__export() {
-    setProperty(this, 'export', () => this.method__export());
+    shieldProperty(this, 'export', () => this.method__export());
   }
   private method__export() {
     return this._.export();
@@ -61,7 +61,7 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
   
   public render(container: HTMLElement) { this.method__render(container); }
   private shield__render() {
-    setProperty(this, 'render', (container: HTMLElement) => this.method__render(container));
+    shieldProperty(this, 'render', (container: HTMLElement) => this.method__render(container));
   }
   private method__render(container: HTMLElement) : void {
     this._.render(container);
@@ -69,7 +69,7 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
 
   public tileByIndex(i: number, j: number) { return this.method__tileByIndex(i, j); }
   private shield__tileByIndex() {
-    setProperty(this, 'tileByIndex', (i: number, j: number) => this.method__tileByIndex(i, j));
+    shieldProperty(this, 'tileByIndex', (i: number, j: number) => this.method__tileByIndex(i, j));
   }
   private method__tileByIndex(i: number, j: number) : ElemapTile<M>|undefined {
     // @ts-ignore
@@ -100,7 +100,7 @@ class ElemapTile<M extends MapTypeStrings> {
     this.method__updateStyle(decls, replace);
   }
   private shield__updateStyle() {
-    setProperty(this, 'updateStyle', (decls: CustomTileStyleDecls, replace: boolean = false) => this.method__updateStyle(decls, replace));
+    shieldProperty(this, 'updateStyle', (decls: CustomTileStyleDecls, replace: boolean = false) => this.method__updateStyle(decls, replace));
   }
   private method__updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
     this._.updateStyle(decls, replace);
