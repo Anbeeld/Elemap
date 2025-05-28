@@ -24,13 +24,11 @@ export default class HexagonMap extends AbstractGridMap<HexagonGrid> {
       }
     }, modifyGridMapStyleSchema({}));
   }
-
   public override export() : HexagonMapSnapshot {
-    return {
-      type: MapType.Hexagon,
-      ids: this.ids,
-      grid: this.grid.export()
-    };
+    return this.exportSnapshot() as HexagonMapSnapshot;
+  }
+  protected override exportMapType() : string {
+    return `${MapType.Hexagon}`;
   }
   
   protected override initStyle(style: GridMapStyleSchema) : void {

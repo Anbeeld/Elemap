@@ -2,25 +2,27 @@ import { AbstractGrid, GridSnapshot } from './grid.js';
 
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
-import { MapIds, Register } from './register.js';
+import { MapIds, MapIdsProperties, Register } from './register.js';
 import { Config } from './config.js';
-import { MapType } from './utils.js';
+import { MapType, setProperties } from './utils.js';
 
 interface MapElements {
   container?: HTMLElement,
   map: HTMLElement,
 }
 
-type MapSnapshot = {
-  ids: MapIds
-}
-
-export type GridMapSnapshot = MapSnapshot & {
+// Snapshot and mutation types
+export type MapSnapshot = {
   type: MapType,
-  grid: GridSnapshot
-}
+} & MapConstants & MapMutables;
+// type MapMutation = Partial<MapMutables>;
+type MapConstants = {
+  ids: MapIdsProperties
+};
+type MapMutables = {
+};
 
-export abstract class AbstractMap {
+export abstract class AbstractMap implements MapConstants, MapMutables {
   protected _ids: MapIds;
   protected set ids(value: MapIds) { this._ids = value; }
   public get ids() : MapIds { return this._ids; }
@@ -50,6 +52,21 @@ export abstract class AbstractMap {
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
   public static abstract import(snapshot: MapSnapshot) : AbstractMap;
   public abstract export() : MapSnapshot;
+  
+  protected exportSnapshot() : MapSnapshot {
+    return  this.exportMutables(this.exportConstants()) as MapSnapshot;
+  }
+  protected exportConstants(object: object = {}) : MapConstants {
+    setProperties(object, [
+      ['type', this.exportMapType()],
+      ['ids', this.ids]
+    ]);
+    return object as MapConstants;
+  }
+  protected exportMutables(object: object = {}) : MapMutables {
+    return object as MapMutables;
+  }
+  protected abstract exportMapType() : string;
 
   protected abstract initStyle(style: GridMapStyleSchema) : void;
 
@@ -84,7 +101,17 @@ export abstract class AbstractMap {
   }
 }
 
-export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> extends AbstractMap {
+// Snapshot and mutation types
+export type GridMapSnapshot = {
+  type: MapType,
+} & GridMapConstants & GridMapMutables;
+// type GridMapMutation = Partial<GridMapMutables>;
+type GridMapConstants = MapConstants & {
+  grid: GridSnapshot
+};
+type GridMapMutables = MapMutables;
+
+export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> extends AbstractMap implements GridMapConstants, GridMapMutables {
   protected _grid: G;
   protected set grid(value: G) { this._grid = value; }
   public get grid() : G { return this._grid; }
@@ -97,6 +124,15 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     super(config);
     this.grid = new gridClass(this.ids, config);
     this.initStyle(style);
+  }
+
+  protected override exportConstants(object: object = {}) : GridMapConstants {
+    setProperties(object, [
+      ['type', this.exportMapType()],
+      ['ids', this.ids],
+      ['grid', this.grid.export()]
+    ]);
+    return object as GridMapConstants;
   }
 
   public override render(container: HTMLElement) {

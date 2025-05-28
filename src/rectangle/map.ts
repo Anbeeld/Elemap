@@ -24,13 +24,11 @@ export default class RectangleMap extends AbstractGridMap<RectangleGrid> {
       }
     }, modifyGridMapStyleSchema({}));
   }
-
   public override export() : RectangleMapSnapshot {
-    return {
-      type: MapType.Rectangle,
-      ids: this.ids,
-      grid: this.grid.export()
-    };
+    return this.exportSnapshot() as RectangleMapSnapshot;
+  }
+  protected override exportMapType() : string {
+    return `${MapType.Rectangle}`;
   }
 
   protected override initStyle(style: GridMapStyleSchema) : void {
