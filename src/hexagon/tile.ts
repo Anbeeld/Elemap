@@ -1,5 +1,5 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { AxialCoords, setProperty } from '../utils.js';
+import { AxialCoords, setAxialCoordsProperties, setProperty } from '../utils.js';
 import { Register } from '../register.js';
 import { TileStyleDecls } from '../style/schema.js';
 import HexagonTileStyle from '../style/hexagon/tile.js';
@@ -16,6 +16,9 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
   }
   public override export() : HexagonTileSnapshot {
     return this.exportSnapshot();
+  }
+  protected override exportCoords(): AxialCoords {
+    return setAxialCoordsProperties(this.coords);
   }
     
   protected override _style: HexagonTileStyle|undefined;

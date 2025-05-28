@@ -1,5 +1,5 @@
 import { AbstractTile, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, setProperties, getProperty, setIdsProperties } from "./utils.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords, setProperties, getProperty, setIdsProperties, setSizeProperties } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 
 // Snapshot and mutation types
@@ -126,7 +126,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected exportConstants(object: object = {}) : GridConstants {
     setProperties(object, [
       ['ids', setIdsProperties(this.ids)],
-      ['size', this.size],
+      ['size', setSizeProperties(this.size)],
       ['orientation', this.orientation],
       ['offset', this.offset]
     ]);

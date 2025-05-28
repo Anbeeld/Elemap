@@ -1,5 +1,5 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { OrthogonalCoords, setProperty } from '../utils.js';
+import { OrthogonalCoords, setOrthogonalCoordsProperties, setProperty } from '../utils.js';
 import { Register } from '../register.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';
@@ -16,6 +16,9 @@ export class RectangleTile extends AbstractTile<OrthogonalCoords> {
   }
   public override export() : RectangleTileSnapshot {
     return this.exportSnapshot();
+  }
+  protected override exportCoords(): OrthogonalCoords {
+    return setOrthogonalCoordsProperties(this.coords);
   }
   
   protected override _style: RectangleTileStyle|undefined;

@@ -392,3 +392,35 @@ export function setIdsProperties(ids: Ids) : IdsProperties {
   // @ts-ignore
   return object;
 }
+
+export function setSizeProperties(size: Size) : Size {
+  let object = {};
+  setProperty(object, 'width', size.width);
+  setProperty(object, 'height', size.height);
+  // @ts-ignore
+  return object;
+}
+
+export function setIndexProperties(index: Index) : Index {
+  let object = {};
+  setProperty(object, 'i', index.i);
+  setProperty(object, 'j', index.j);
+  // @ts-ignore
+  return object;
+}
+
+export function setAxialCoordsProperties(axial: AxialCoords) : AxialCoords {
+  let object = {};
+  setProperty(object, 'q', axial.q);
+  setProperty(object, 'r', axial.r);
+  // @ts-ignore
+  return object;
+}
+
+export function setOrthogonalCoordsProperties(orthogonal: OrthogonalCoords) : OrthogonalCoords {
+  let object = {};
+  setProperty(object, 'x', orthogonal.x);
+  setProperty(object, 'y', orthogonal.y);
+  // @ts-ignore
+  return object;
+}
