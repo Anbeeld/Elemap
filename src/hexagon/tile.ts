@@ -8,11 +8,11 @@ export type HexagonTileSnapshot = TileSnapshot<AxialCoords>;
 
 export class HexagonTile extends AbstractTile<AxialCoords> {
   constructor(args: TileArguments<AxialCoords>) {
-      super(args);
-    }
+    super(args);
+  }
 
   public static import(snapshot: HexagonTileSnapshot) : HexagonTile {
-    return new HexagonTile(snapshot);
+    return this.importSnapshot(HexagonTile, snapshot);
   }
   public override export() : HexagonTileSnapshot {
     return this.exportSnapshot();

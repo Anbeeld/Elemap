@@ -12,7 +12,7 @@ export class RectangleTile extends AbstractTile<OrthogonalCoords> {
   }
 
   public static import(snapshot: RectangleTileSnapshot) : RectangleTile {
-    return new RectangleTile(snapshot);
+    return this.importSnapshot(RectangleTile, snapshot);
   }
   public override export() : RectangleTileSnapshot {
     return this.exportSnapshot();

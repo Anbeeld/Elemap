@@ -1,4 +1,4 @@
-import { Coords, Index, OrthogonalCoords, setProperties, setProperty } from './utils.js';
+import { Coords, getProperty, Index, OrthogonalCoords, setProperties, setProperty } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
@@ -6,7 +6,7 @@ import { modifyTileStyleDecls, CustomTileStyleDecls } from './style/schema.js';
 
 // Snapshot and mutation types
 export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & TileMutables;
-// type TileMutation = Partial<TileMutables>;
+type TileMutation = Partial<TileMutables>;
 export type TileConstants<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   index: Index,
@@ -67,10 +67,24 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
 
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
   public static abstract import(snapshot: TileSnapshot) : AbstractTile;
-  public abstract export() : TileSnapshot<C>;
+  protected static importSnapshot<T extends AbstractTile, C extends Coords>(tile: new (args: TileArguments<C>) => T, snapshot: TileSnapshot) : T {
+    let verifiedSnapshot: TileSnapshot<C> = {
+      ids: getProperty(snapshot, 'ids'),
+      index: getProperty(snapshot, 'index'),
+      coords: getProperty(snapshot, 'coords')
+    };
 
+    let instance = new tile(verifiedSnapshot as TileArguments<C>);
+    instance.mutate(snapshot);
+    return instance;
+  }
+  protected mutate(mutation: TileMutation) : void {
+    mutation;
+  }
+
+  public abstract export() : TileSnapshot<C>;
   protected exportSnapshot() : TileSnapshot<C> {
-    return  this.exportMutables(this.exportConstants()) as TileSnapshot<C>;
+    return this.exportMutables(this.exportConstants()) as TileSnapshot<C>;
   }
   protected exportConstants(object: object = {}) : TileConstants<C> {
     setProperties(object, [
