@@ -97,7 +97,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   public static abstract import(snapshot: GridSnapshot) : AbstractGrid;
   public abstract export() : GridSnapshot;
 
-  protected exportSnapshotProperties() : GridSnapshot {
+  protected exportSnapshot() : GridSnapshot {
     return  this.exportMutables(this.exportConstants()) as GridSnapshot;
   }
   protected exportConstants(object: object = {}) : GridConstants {

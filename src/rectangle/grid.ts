@@ -23,7 +23,7 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     });
   }
   public override export() : RectangleGridSnapshot {
-    return this.exportSnapshotProperties() as RectangleGridSnapshot;
+    return this.exportSnapshot() as RectangleGridSnapshot;
   }
 
   protected override initTiles() : void {

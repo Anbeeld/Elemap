@@ -23,7 +23,7 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     });
   }
   public override export() : HexagonGridSnapshot {
-    return this.exportSnapshotProperties() as HexagonGridSnapshot;
+    return this.exportSnapshot() as HexagonGridSnapshot;
   }
 
   protected override initTiles() : void {

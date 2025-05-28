@@ -60,7 +60,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   public static abstract import(snapshot: TileSnapshot) : AbstractTile;
   public abstract export() : TileSnapshot<C>;
 
-  protected exportSnapshotProperties() : TileSnapshot<C> {
+  protected exportSnapshot() : TileSnapshot<C> {
     return  this.exportMutables(this.exportConstants()) as TileSnapshot<C>;
   }
   protected exportConstants(object: object = {}) : TileConstants<C> {
