@@ -1,4 +1,4 @@
-import { AbstractGrid, GridSnapshot } from './grid.js';
+import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
@@ -120,9 +120,14 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
   protected override set style(value: GridMapStyle) { this._style = value; }
   public override get style() : GridMapStyle { return this._style; }
 
-  constructor(config: Config, style: GridMapStyleSchema, gridClass: new (mapIds: MapIds, config: Config) => G) {
+  constructor(config: Config, style: GridMapStyleSchema, gridClass: new (args: GridArguments) => G) {
     super(config);
-    this.grid = new gridClass(this.ids, config);
+    this.grid = new gridClass({
+      ids: this.ids,
+      size: config.size,
+      orientation: config.grid.orientation,
+      offset: config.grid.offset
+    });
     this.initStyle(style);
   }
 

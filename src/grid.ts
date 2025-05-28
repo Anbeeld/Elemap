@@ -1,11 +1,10 @@
 import { AbstractTile, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, setProperties } from "./utils.js";
-import { GridIds, GridIdsProperties, MapIds, Register, TileIds } from "./register.js";
-import { Config } from "./config.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords, setProperties, getProperty } from "./utils.js";
+import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & GridMutables;
-// type GridMutation = Partial<GridMutables>;
+type GridMutation = Partial<GridMutables>;
 type GridConstants = {
   ids: GridIdsProperties,
   size: Size,
@@ -14,6 +13,10 @@ type GridConstants = {
 };
 type GridMutables = {
   tiles: TileSnapshot[][]
+};
+
+export type GridArguments = Omit<GridConstants, 'ids'> & {
+  ids: MapIdsProperties | GridIdsProperties
 };
 
 interface GridElements {
@@ -83,20 +86,40 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected set elements(value: GridElements) { this._elements = value; }
   public get elements() : GridElements|undefined { return this._elements; }
 
-  constructor(mapIds: MapIds, config: Config) {
-    this.ids = new GridIds(mapIds, Register.id());
-    this.size = config.size!; // TODO
+  constructor(args: GridArguments) {
+    if (args.ids instanceof GridIds) {
+      this.ids = new GridIds(args.ids, args.ids.grid);
+    } else {
+      this.ids = new GridIds(args.ids, Register.id());
+    }
+    this.size = args.size;
 
-    this.orientation = config.grid!.orientation!;
-    this.offset = config.grid!.offset!;
+    this.orientation = args.orientation;
+    this.offset = args.offset;
 
     this.initTiles();
   }
 
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
   public static abstract import(snapshot: GridSnapshot) : AbstractGrid;
-  public abstract export() : GridSnapshot;
+  protected static importSnapshot<G extends AbstractGrid>(tile: new (args: GridArguments) => G, snapshot: GridSnapshot) : G {
+    let verifiedSnapshot: GridSnapshot = {
+      ids: getProperty(snapshot, 'ids'),
+      size: getProperty(snapshot, 'size'),
+      orientation: getProperty(snapshot, 'orientation'),
+      offset: getProperty(snapshot, 'offset'),
+      tiles: getProperty(snapshot, 'tiles')
+    };
 
+    let instance = new tile(verifiedSnapshot as GridArguments);
+    instance.mutate(snapshot);
+    return instance;
+  }
+  protected mutate(mutation: GridMutation) : void {
+    mutation;
+  }
+
+  public abstract export() : GridSnapshot;
   protected exportSnapshot() : GridSnapshot {
     return  this.exportMutables(this.exportConstants()) as GridSnapshot;
   }

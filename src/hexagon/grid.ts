@@ -1,26 +1,18 @@
-import { AbstractGrid, GridSnapshot } from "../grid.js";
+import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { HexagonTile, HexagonTileSnapshot } from "./tile.js";
 import { indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset } from "../utils.js";
-import { MapIds } from "../register.js";
-import { Config } from "../config.js";
 
 export type HexagonGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
   tiles: HexagonTileSnapshot[][]
 }
 
 export class HexagonGrid extends AbstractGrid<HexagonTile> {
-  constructor(mapIds: MapIds, config: Config) {
-    super(mapIds, config);
+  constructor(args: GridArguments) {
+    super(args);
   }
 
   public static import(snapshot: HexagonGridSnapshot) : HexagonGrid {
-    return new HexagonGrid(snapshot.ids, {
-      size: snapshot.size,
-      grid: {
-        orientation: snapshot.orientation,
-        offset: snapshot.offset
-      }
-    });
+    return this.importSnapshot(HexagonGrid, snapshot);
   }
   public override export() : HexagonGridSnapshot {
     return this.exportSnapshot() as HexagonGridSnapshot;
