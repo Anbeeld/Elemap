@@ -1,5 +1,5 @@
 import { AbstractTile, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, shieldProperties, unshieldProperty, shieldsIds, shieldSize, unshieldSize } from "./utils.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords, shieldProperties, unshieldProperty, shieldSize, unshieldSize, shieldGridIds, unshieldGridIds } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 
 // Snapshot and mutation types
@@ -104,7 +104,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   public static abstract import(snapshot: GridSnapshot) : AbstractGrid;
   protected static importSnapshot<G extends AbstractGrid>(tile: new (args: GridArguments) => G, snapshot: GridSnapshot) : G {
     let verifiedSnapshot: GridSnapshot = {
-      ids: unshieldProperty(snapshot, 'ids'),
+      ids: unshieldGridIds(unshieldProperty(snapshot, 'ids')),
       size: unshieldSize(unshieldProperty(snapshot, 'size')),
       orientation: unshieldProperty(snapshot, 'orientation'),
       offset: unshieldProperty(snapshot, 'offset'),
@@ -125,7 +125,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   }
   protected exportConstants(object: object = {}) : GridConstants {
     shieldProperties(object, [
-      ['ids', shieldsIds(this.ids)],
+      ['ids', shieldGridIds(this.ids)],
       ['size', shieldSize(this.size)],
       ['orientation', this.orientation],
       ['offset', this.offset]

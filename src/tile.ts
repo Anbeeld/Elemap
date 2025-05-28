@@ -1,4 +1,4 @@
-import { Coords, unshieldProperty, Index, OrthogonalCoords, shieldProperties, shieldProperty, shieldsIds, shieldIndex, unshieldIndex } from './utils.js';
+import { Coords, unshieldProperty, Index, OrthogonalCoords, shieldProperties, shieldProperty, shieldIndex, unshieldIndex, shieldTileIds, unshieldTileIds } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
@@ -69,7 +69,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   public static abstract import(snapshot: TileSnapshot) : AbstractTile;
   protected static importSnapshot<T extends AbstractTile, C extends Coords>(tile: new (args: TileArguments<C>) => T, snapshot: TileSnapshot) : T {
     let verifiedSnapshot: TileSnapshot<C> = {
-      ids: unshieldProperty(snapshot, 'ids'),
+      ids: unshieldTileIds(unshieldProperty(snapshot, 'ids')),
       index: unshieldIndex(unshieldProperty(snapshot, 'index')),
       coords: this.importCoords(unshieldProperty(snapshot, 'coords'))
     };
@@ -90,7 +90,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   }
   protected exportConstants(object: object = {}) : TileConstants<C> {
     shieldProperties(object, [
-      ['ids', shieldsIds(this.ids)],
+      ['ids', shieldTileIds(this.ids)],
       ['index', shieldIndex(this.index)],
       ['coords', this.exportCoords()]
     ]);

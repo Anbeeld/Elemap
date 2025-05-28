@@ -1,4 +1,4 @@
-import { GridIds, Ids, IdsProperties, TileIds } from './register.js';
+import { GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
 import { cssValueToNumber } from './style/utils.js';
 
 export type Size = {width: number, height: number};
@@ -380,17 +380,47 @@ export function shieldProperties(object: any, properties: [string, any][]) : any
   return object;
 }
 
-export function shieldsIds(ids: Ids) : IdsProperties {
+
+export function shieldMapIds(ids: MapIds) : MapIdsProperties {
   let object = {};
   shieldProperty(object, 'map', ids.map);
-  if (ids instanceof GridIds || ids instanceof TileIds) {
-    shieldProperty(object, 'grid', ids.grid);
-  }
-  if (ids instanceof TileIds) {
-    shieldProperty(object, 'tile', ids.tile);
-  }
   // @ts-ignore
   return object;
+}
+export function unshieldMapIds(object: any) : MapIds {
+  return {
+    map: unshieldProperty(object, 'map')
+  };
+}
+
+export function shieldGridIds(ids: GridIds) : GridIdsProperties {
+  let object = {};
+  shieldProperty(object, 'map', ids.map);
+  shieldProperty(object, 'grid', ids.grid);
+  // @ts-ignore
+  return object;
+}
+export function unshieldGridIds(object: any) : GridIds {
+  return {
+    map: unshieldProperty(object, 'map'),
+    grid: unshieldProperty(object, 'grid')
+  };
+}
+
+export function shieldTileIds(ids: TileIds) : TileIdsProperties {
+  let object = {};
+  shieldProperty(object, 'map', ids.map);
+  shieldProperty(object, 'grid', ids.grid);
+  shieldProperty(object, 'tile', ids.tile);
+  // @ts-ignore
+  return object;
+}
+export function unshieldTileIds(object: any) : TileIds {
+  return {
+    map: unshieldProperty(object, 'map'),
+    grid: unshieldProperty(object, 'grid'),
+    tile: unshieldProperty(object, 'tile')
+  };
 }
 
 export function shieldSize(size: Size) : Size {

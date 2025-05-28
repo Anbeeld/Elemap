@@ -3,7 +3,7 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
-import { unshieldProperty, MapType, shieldProperties, shieldsIds } from './utils.js';
+import { unshieldProperty, MapType, shieldProperties, shieldMapIds, unshieldMapIds } from './utils.js';
 
 interface MapElements {
   container?: HTMLElement,
@@ -65,7 +65,7 @@ export abstract class AbstractMap implements MapConstants, MapMutables {
   protected exportConstants(object: object = {}) : MapConstants {
     shieldProperties(object, [
       ['type', this.exportMapType()],
-      ['ids', shieldsIds(this.ids)]
+      ['ids', shieldMapIds(this.ids)]
     ]);
     return object as MapConstants;
   }
@@ -145,7 +145,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
   protected static importSnapshot<M extends AbstractGridMap>(map: new (args: GridMapArguments, style: GridMapStyleSchema) => M, snapshot: GridMapSnapshot, style: GridMapStyleSchema) : M {
     let verifiedSnapshot: GridMapSnapshot = {
       type: unshieldProperty(snapshot, 'type'),
-      ids: unshieldProperty(snapshot, 'ids'),
+      ids: unshieldMapIds(unshieldProperty(snapshot, 'ids')),
       grid: unshieldProperty(snapshot, 'grid')
     };
 
@@ -160,7 +160,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
   protected override exportConstants(object: object = {}) : GridMapConstants {
     shieldProperties(object, [
       ['type', this.exportMapType()],
-      ['ids', shieldsIds(this.ids)],
+      ['ids', shieldMapIds(this.ids)],
       ['grid', this.grid.export()]
     ]);
     return object as GridMapConstants;
