@@ -15,8 +15,8 @@ export default class HexagonMap extends AbstractGridMap<HexagonGrid> {
   }
 
   public static import(snapshot: HexagonMapSnapshot, style: GridMapStyleSchema) : HexagonMap {
-      return this.importSnapshot(HexagonMap, snapshot, style);
-    }
+    return this.importSnapshot(HexagonMap, snapshot, style);
+  }
   public override export() : HexagonMapSnapshot {
     return this.exportSnapshot() as HexagonMapSnapshot;
   }
