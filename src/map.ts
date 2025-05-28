@@ -2,7 +2,7 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
-import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
+import { GridIdsProperties, MapIds, MapIdsProperties, Register, setIdsProperties } from './register.js';
 import { getProperty, MapType, setProperties } from './utils.js';
 
 interface MapElements {
@@ -65,7 +65,7 @@ export abstract class AbstractMap implements MapConstants, MapMutables {
   protected exportConstants(object: object = {}) : MapConstants {
     setProperties(object, [
       ['type', this.exportMapType()],
-      ['ids', this.ids]
+      ['ids', setIdsProperties(this.ids)]
     ]);
     return object as MapConstants;
   }
@@ -160,7 +160,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
   protected override exportConstants(object: object = {}) : GridMapConstants {
     setProperties(object, [
       ['type', this.exportMapType()],
-      ['ids', this.ids],
+      ['ids', setIdsProperties(this.ids)],
       ['grid', this.grid.export()]
     ]);
     return object as GridMapConstants;

@@ -364,15 +364,17 @@ export function getProperty(object: any, name: string) : any {
   return object[name];
 }
 
-export function setProperty(object: any, name: string, value: any) : void {
+export function setProperty(object: any, name: string, value: any) : any {
   if (!object) {
     return;
   }
   object[name] = value;
+  return object;
 }
 
-export function setProperties(object: any, properties: [string, any][]) : void {
+export function setProperties(object: any, properties: [string, any][]) : any {
   for (let property of properties) {
     setProperty(object, property[0], property[1]);
   }
+  return object;
 }
