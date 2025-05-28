@@ -1,9 +1,8 @@
-import { AbstractGridMap, GridMapSnapshot } from "../map.js";
+import { AbstractGridMap, GridMapArguments, GridMapSnapshot } from "../map.js";
 import { RectangleGrid, RectangleGridSnapshot } from "./grid.js";
 
-import { GridMapStyleSchema, modifyGridMapStyleSchema } from '../style/schema.js';
+import { GridMapStyleSchema } from '../style/schema.js';
 import RectangleMapStyle from "../style/rectangle/map.js";
-import { Config } from "../config.js";
 import { MapType } from "../utils.js";
 
 type RectangleMapSnapshot = Omit<GridMapSnapshot, 'grid'> & {
@@ -11,18 +10,12 @@ type RectangleMapSnapshot = Omit<GridMapSnapshot, 'grid'> & {
 };
 
 export default class RectangleMap extends AbstractGridMap<RectangleGrid> {
-  constructor(config: Config, style: GridMapStyleSchema) {
-    super(config, style, RectangleGrid);
+  constructor(args: GridMapArguments, style: GridMapStyleSchema) {
+    super(args, style, RectangleGrid);
   }
   
-  public static import(snapshot: RectangleMapSnapshot) : RectangleMap {
-    return new RectangleMap({
-      grid: {
-        size: snapshot.grid.size,
-        orientation: snapshot.grid.orientation,
-        offset: snapshot.grid.offset
-      }
-    }, modifyGridMapStyleSchema({}));
+  public static import(snapshot: RectangleMapSnapshot, style: GridMapStyleSchema) : RectangleMap {
+    return this.importSnapshot(RectangleMap, snapshot, style);
   }
   public override export() : RectangleMapSnapshot {
     return this.exportSnapshot() as RectangleMapSnapshot;

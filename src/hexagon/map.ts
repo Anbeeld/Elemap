@@ -1,9 +1,8 @@
-import { AbstractGridMap, GridMapSnapshot } from "../map.js";
+import { AbstractGridMap, GridMapArguments, GridMapSnapshot } from "../map.js";
 import { HexagonGrid, HexagonGridSnapshot } from "./grid.js";
 
-import { GridMapStyleSchema, modifyGridMapStyleSchema } from '../style/schema.js';
+import { GridMapStyleSchema } from '../style/schema.js';
 import HexagonMapStyle from "../style/hexagon/map.js";
-import { Config } from "../config.js";
 import { MapType } from "../utils.js";
 
 type HexagonMapSnapshot = Omit<GridMapSnapshot, 'grid'> & {
@@ -11,19 +10,13 @@ type HexagonMapSnapshot = Omit<GridMapSnapshot, 'grid'> & {
 };
 
 export default class HexagonMap extends AbstractGridMap<HexagonGrid> {
-  constructor(config: Config, style: GridMapStyleSchema) {
-    super(config, style, HexagonGrid);
+  constructor(args: GridMapArguments, style: GridMapStyleSchema) {
+    super(args, style, HexagonGrid);
   }
 
-  public static import(snapshot: HexagonMapSnapshot) : HexagonMap {
-    return new HexagonMap({
-      grid: {
-        size: snapshot.grid.size,
-        orientation: snapshot.grid.orientation,
-        offset: snapshot.grid.offset
-      }
-    }, modifyGridMapStyleSchema({}));
-  }
+  public static import(snapshot: HexagonMapSnapshot, style: GridMapStyleSchema) : HexagonMap {
+      return this.importSnapshot(HexagonMap, snapshot, style);
+    }
   public override export() : HexagonMapSnapshot {
     return this.exportSnapshot() as HexagonMapSnapshot;
   }

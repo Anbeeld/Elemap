@@ -22,9 +22,25 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     let validatedSchema = modifyGridMapStyleSchema(schema || {});
 
     if (validatedType === MapType.Rectangle) {
-      this._ = new RectangleMap(validatedConfig, validatedSchema) as ElemapType<M>;
+      this._ = new RectangleMap({
+        ids: undefined,
+        grid: {
+          ids: undefined,
+          size: validatedConfig.grid.size,
+          orientation: validatedConfig.grid.orientation,
+          offset: validatedConfig.grid.offset
+        }
+      }, validatedSchema) as ElemapType<M>;
     } else if (validatedType === MapType.Hexagon) {
-      this._ = new HexagonMap(validatedConfig, validatedSchema) as ElemapType<M>;
+      this._ = new HexagonMap({
+        ids: undefined,
+        grid: {
+          ids: undefined,
+          size: validatedConfig.grid.size,
+          orientation: validatedConfig.grid.orientation,
+          offset: validatedConfig.grid.offset
+        }
+      }, validatedSchema) as ElemapType<M>;
     }
 
     // For JavaScript - shield method names from mangling
