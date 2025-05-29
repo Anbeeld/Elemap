@@ -112,12 +112,16 @@ export function modifyTileStyleDecls(custom: CustomTileStyleDecls, initial?: Til
   }
 }
 
-/* GRID MAP STYLE SCHEMA TYPES */
-export type GridMapStyleSchema = {
-  map: MapStyleDecls,
+/* GRID STYLE SCHEMA TYPES */
+export type GridStyleSchema = {
   grid: GridStyleDecls,
   tile: TileStyleDecls
 }
+
+/* GRID MAP STYLE SCHEMA TYPES */
+export type GridMapStyleSchema = {
+  map: MapStyleDecls
+} & GridStyleSchema;
 type CustomGridMapStyleSchema = {
   map?: MapStyleDecls,
   grid?: GridStyleDecls,
@@ -131,12 +135,6 @@ export function modifyGridMapStyleSchema(custom: CustomGridMapStyleSchema) : Gri
     grid: modifyGridStyleDecls(unshieldProperty(custom, 'grid') || {}, defaultGridStyleDecls),
     tile: modifyTileStyleDecls(unshieldProperty(custom, 'tile') || {}, defaultTileStyleDecls),
   }
-}
-
-/* GRID STYLE SCHEMA TYPES */
-export type GridStyleSchema = {
-  grid: GridStyleDecls,
-  tile: TileStyleDecls
 }
 
 export type CustomSchema = CustomGridMapStyleSchema;
