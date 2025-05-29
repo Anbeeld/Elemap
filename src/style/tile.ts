@@ -1,4 +1,4 @@
-import { TileSizeSet } from "../utils.js";
+import { shieldProperties, TileSizeSet } from "../utils.js";
 import { TileStyleIds, GridStyleIds, Register, TileIds } from "../register.js";
 import { TileStyleDecls } from "./schema.js";
 import Style from "./style.js";
@@ -42,6 +42,19 @@ export default abstract class TileStyle extends Style {
     this.ids = new TileStyleIds(ownerIds, gridIds, Register.id());
     this.initial = initial;
     this.decls = decls;
+  }
+
+  public export() : TileStyleDecls {
+    return shieldProperties(this.decls, [
+      ['outer', this.decls.outer],
+      ['inner', this.decls.inner],
+      ['hover', shieldProperties(
+        this.decls.hover, [
+          ['outer', this.decls.hover.outer],
+          ['inner', this.decls.hover.inner]
+        ]
+      )],
+    ]);
   }
 
   public get size() : TileSizeSet {

@@ -2,6 +2,7 @@ import { MapIds, Register, MapStyleIds } from "../register.js";
 import { MapStyleDecls, GridMapStyleSchema, GridStyleSchema } from "./schema.js";
 import Style from "./style.js";
 import GridStyle from "./grid.js";
+import { shieldProperties } from "src/utils.js";
 
 type StyleElements = {
   core: HTMLElement,
@@ -34,6 +35,13 @@ export abstract class MapStyle extends Style {
     super();
     this.ids = new MapStyleIds(mapIds, Register.id());
     this.decls = decls.map;
+  }
+
+  public export() : MapStyleDecls {
+    return shieldProperties(this.decls, [
+      ['outer', this.decls.outer],
+      ['inner', this.decls.inner],
+    ]);
   }
 
   protected initElements() : StyleElements {

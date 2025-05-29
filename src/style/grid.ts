@@ -3,6 +3,7 @@ import { GridStyleDecls, GridStyleSchema, TileStyleDecls } from "./schema.js";
 import TileStyle from "./tile.js";
 import Style from "./style.js";
 import { calc } from "./utils.js";
+import { shieldProperties } from "src/utils.js";
 
 type GridComputed = {
   outer: CSSStyleDeclaration,
@@ -35,6 +36,13 @@ export default abstract class GridStyle extends Style {
     this.ids = new GridStyleIds(ownerIds, mapIds, Register.id());
     this.initTile(decls.tile);
     this.decls = decls.grid;
+  }
+  
+  public export() : GridStyleDecls {
+    return shieldProperties(this.decls, [
+      ['frame', this.decls.frame],
+      ['contour', this.decls.contour]
+    ]);
   }
 
   public abstract initTile(decls: TileStyleDecls) : void;
