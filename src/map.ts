@@ -143,13 +143,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
 
   constructor(args: GridMapArguments, gridClass: new (args: GridArguments) => G) {
     super(args);
-    this.grid = new gridClass({
-      ids: args.grid.ids ? args.grid.ids : this.ids,
-      size: args.grid.size,
-      orientation: args.grid.orientation,
-      offset: args.grid.offset,
-      schema: args.grid.schema
-    });
+    this.grid = new gridClass(Object.assign(args.grid, {ids: args.grid.ids ? args.grid.ids : this.ids}));
     this.initStyle(args.schema);
   }
 
