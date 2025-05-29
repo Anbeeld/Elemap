@@ -1,7 +1,7 @@
 import { AbstractTile, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, shieldProperties, unshieldProperty, shieldSize, unshieldSize, shieldGridIds, unshieldGridIds, shieldGridStyleDecls, unshieldGridStyleDecls } from "./utils.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords, shieldProperties, unshieldProperty, shieldSize, unshieldSize, shieldGridIds, unshieldGridIds, shieldGridStyleSchema, unshieldGridStyleSchema } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
-import { GridStyleDecls } from "./style/schema.js";
+import { GridStyleSchema } from "./style/schema.js";
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & GridMutables;
@@ -11,7 +11,7 @@ type GridConstants = {
   size: Size,
   orientation: GridOrientation,
   offset: GridOffset,
-  decls: GridStyleDecls | false // false = use map default grid style
+  schema: GridStyleSchema | false // false = use map default grid and tile style
 };
 type GridMutables = {
   tiles: TileSnapshot[][]
@@ -62,7 +62,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   }
 
   public get style() { return Register.map.grid(this.ids)!.style.grid; }
-  public get decls() { return this.style.decls; }
+  public get schema() : GridStyleSchema { return {grid: this.style.decls, tile: this.style.tile.decls}; }
 
   public get classes() {
     let base = `elemap-${this.ids.map}`;
@@ -112,7 +112,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       orientation: unshieldProperty(snapshot, 'orientation'),
       offset: unshieldProperty(snapshot, 'offset'),
       tiles: unshieldProperty(snapshot, 'tiles'),
-      decls: unshieldGridStyleDecls(unshieldProperty(snapshot, 'decls'))
+      schema: unshieldGridStyleSchema(unshieldProperty(snapshot, 'schema'))
     };
 
     let instance = new tile(verifiedSnapshot as GridArguments);
@@ -133,7 +133,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       ['size', shieldSize(this.size)],
       ['orientation', this.orientation],
       ['offset', this.offset],
-      ['decls', shieldGridStyleDecls(this.decls)]
+      ['schema', shieldGridStyleSchema(this.schema)]
     ]);
     return object as GridConstants;
   }

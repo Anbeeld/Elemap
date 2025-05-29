@@ -30,7 +30,7 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
           size: validatedConfig.grid.size,
           orientation: validatedConfig.grid.orientation,
           offset: validatedConfig.grid.offset,
-          decls: false
+          schema: false
         }
       }, validatedSchema) as ElemapType<M>;
     } else if (validatedType === MapType.Hexagon) {
@@ -41,7 +41,7 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
           size: validatedConfig.grid.size,
           orientation: validatedConfig.grid.orientation,
           offset: validatedConfig.grid.offset,
-          decls: false
+          schema: false
         }
       }, validatedSchema) as ElemapType<M>;
     }
