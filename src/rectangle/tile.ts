@@ -1,5 +1,6 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { OrthogonalCoords, shieldOrthogonalCoords, shieldProperty, unshieldOrthogonalCoords } from '../utils.js';
+import { OrthogonalCoords } from '../utils.js';
+import { shieldOrthogonalCoords, shieldProperty, unshieldOrthogonalCoords } from '../shield.js';
 import { Register } from '../register.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';

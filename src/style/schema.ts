@@ -1,4 +1,4 @@
-import { unshieldProperty } from "../utils.js"
+import { unshieldProperty } from "../shield.js"
 
 function getDelcsProperty(decls: object, name: string) : string|undefined {
   let value = unshieldProperty(decls, name);

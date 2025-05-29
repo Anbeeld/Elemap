@@ -1,5 +1,6 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { AxialCoords, shieldAxialCoords, shieldProperty, unshieldAxialCoords } from '../utils.js';
+import { AxialCoords } from '../utils.js';
+import { shieldAxialCoords, shieldProperty, unshieldAxialCoords } from '../shield.js';
 import { Register } from '../register.js';
 import { TileStyleDecls } from '../style/schema.js';
 import HexagonTileStyle from '../style/hexagon/tile.js';

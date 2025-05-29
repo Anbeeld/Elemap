@@ -1,4 +1,5 @@
-import { GridOrientation, GridOffset, Size, unshieldProperty } from "./utils.js";
+import { unshieldProperty } from "./shield.js";
+import { GridOrientation, GridOffset, Size } from "./utils.js";
 
 export type CustomConfig = {
   grid?: {

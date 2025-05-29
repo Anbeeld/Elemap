@@ -1,7 +1,8 @@
 import { AbstractTile, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, shieldProperties, unshieldProperty, shieldSize, unshieldSize, shieldGridIds, unshieldGridIds, shieldGridStyleSchema, unshieldGridStyleSchema } from "./utils.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
+import { shieldProperties, unshieldProperty, shieldSize, unshieldSize, shieldGridIds, unshieldGridIds, shieldGridStyleSchema, unshieldGridStyleSchema } from "./shield.js";
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & GridMutables;

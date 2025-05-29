@@ -3,7 +3,8 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
-import { unshieldProperty, MapType, shieldProperties, shieldMapIds, unshieldMapIds, shieldGridMapStyleSchema, unshieldGridMapStyleSchema } from './utils.js';
+import { MapType, } from './utils.js';
+import { unshieldProperty, shieldProperties, shieldMapIds, unshieldMapIds, shieldGridMapStyleSchema, unshieldGridMapStyleSchema } from './shield.js';
 
 interface MapElements {
   container?: HTMLElement,
@@ -159,6 +160,8 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
       grid: unshieldProperty(snapshot, 'grid'),
       schema: unshieldGridMapStyleSchema(unshieldProperty(snapshot, 'schema'))
     };
+
+    console.log(verifiedSnapshot);
 
     let instance = new map(verifiedSnapshot as GridMapArguments);
     instance.mutate(snapshot);

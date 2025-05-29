@@ -2,7 +2,7 @@ import { MapIds, Register, MapStyleIds } from "../register.js";
 import { MapStyleDecls, GridMapStyleSchema, GridStyleSchema } from "./schema.js";
 import Style from "./style.js";
 import GridStyle from "./grid.js";
-import { shieldProperties } from "../utils.js";
+import { shieldProperties } from "../shield.js";
 
 type StyleElements = {
   core: HTMLElement,

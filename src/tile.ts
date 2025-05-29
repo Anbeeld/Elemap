@@ -1,4 +1,5 @@
-import { Coords, unshieldProperty, Index, OrthogonalCoords, shieldProperties, shieldProperty, shieldIndex, unshieldIndex, shieldTileIds, unshieldTileIds, unshieldTileStyleDecls, shieldTileStyleDecls } from './utils.js';
+import { Coords, Index, OrthogonalCoords } from './utils.js';
+import { unshieldProperty, shieldProperties, shieldProperty, shieldIndex, unshieldIndex, shieldTileIds, unshieldTileIds, unshieldTileStyleDecls, shieldTileStyleDecls } from './shield.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
