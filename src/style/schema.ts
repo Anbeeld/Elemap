@@ -12,11 +12,8 @@ function getDelcsProperty(decls: object, name: string) : string|undefined {
 export type MapStyleDecls = {
   outer: string,
   inner: string
-}
-type CustomMapStyleDecls = {
-  outer?: string,
-  inner?: string
-}
+};
+type CustomMapStyleDecls = Partial<MapStyleDecls>;
 
 /* MAP STYLE DECLARATION CONSTANTS */
 const defaultMapStyleDecls: MapStyleDecls = {
@@ -40,11 +37,8 @@ function modifyMapStyleDecls(custom: CustomMapStyleDecls, initial?: MapStyleDecl
 export type GridStyleDecls = {
   frame: string,
   contour: string
-}
-type CustomGridStyleDecls = {
-  frame?: string,
-  contour?: string
-}
+};
+type CustomGridStyleDecls = Partial<GridStyleDecls>;
 
 /* GRID STYLE DECLARATION CONSTANTS */
 const defaultGridStyleDecls: GridStyleDecls = {
@@ -65,22 +59,16 @@ function modifyGridStyleDecls(custom: CustomGridStyleDecls, initial?: GridStyleD
 }
 
 /* TILE STYLE DECLARATIONS TYPES */
-export type TileStyleDecls = {
+type TileStyleDeclsLayer = {
   outer: string,
-  inner: string,
-  hover: {
-    outer: string,
-    inner: string,
-  }
+  inner: string
+};
+export type TileStyleDecls = TileStyleDeclsLayer & {
+  hover: TileStyleDeclsLayer
 }
-export type CustomTileStyleDecls = {
-  outer?: string,
-  inner?: string,
-  hover?: {
-    outer?: string,
-    inner?: string,
-  }
-}
+export type CustomTileStyleDecls = Partial<TileStyleDeclsLayer> & {
+  hover?: Partial<TileStyleDeclsLayer>
+};
 
 /* TILE STYLE DECLARATIONS CONSTANTS */
 const defaultTileStyleDecls: TileStyleDecls = {
@@ -122,11 +110,7 @@ export type GridStyleSchema = {
 export type GridMapStyleSchema = {
   map: MapStyleDecls
 } & GridStyleSchema;
-type CustomGridMapStyleSchema = {
-  map?: MapStyleDecls,
-  grid?: GridStyleDecls,
-  tile?: TileStyleDecls
-}
+type CustomGridMapStyleSchema = Partial<GridMapStyleSchema>;
 
 /* GRID MAP STYLE SCHEMA MODIFICATION */
 export function modifyGridMapStyleSchema(custom: CustomGridMapStyleSchema) : GridMapStyleSchema {
