@@ -1,4 +1,5 @@
 import { GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
+import { TileStyleDecls } from './style/schema.js';
 import { cssValueToNumber } from './style/utils.js';
 
 export type Size = {width: number, height: number};
@@ -477,4 +478,15 @@ export function unshieldOrthogonalCoords(object: any) : OrthogonalCoords {
     x: unshieldProperty(object, 'x'),
     y: unshieldProperty(object, 'y')
   };
+}
+
+export function shieldTileStyleDecls(decls: TileStyleDecls) : TileStyleDecls {
+  return shieldProperties({}, [
+    ['outer', decls.outer],
+    ['inner', decls.inner],
+    ['hover', shieldProperties({}, [
+      ['outer', decls.hover.outer],
+      ['inner', decls.hover.inner]
+    ])],
+  ]);
 }

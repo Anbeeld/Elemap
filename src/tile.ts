@@ -1,8 +1,8 @@
-import { Coords, unshieldProperty, Index, OrthogonalCoords, shieldProperties, shieldProperty, shieldIndex, unshieldIndex, shieldTileIds, unshieldTileIds } from './utils.js';
+import { Coords, unshieldProperty, Index, OrthogonalCoords, shieldProperties, shieldProperty, shieldIndex, unshieldIndex, shieldTileIds, unshieldTileIds, unshieldTileStyleDecls, shieldTileStyleDecls } from './utils.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
-import { modifyTileStyleDecls, CustomTileStyleDecls } from './style/schema.js';
+import { modifyTileStyleDecls, CustomTileStyleDecls, TileStyleDecls } from './style/schema.js';
 
 // Snapshot and mutation types
 export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & TileMutables;
@@ -10,7 +10,8 @@ type TileMutation = Partial<TileMutables>;
 export type TileConstants<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   index: Index,
-  coords: C
+  coords: C,
+  decls: TileStyleDecls | false // false = use grid default tile style
 };
 type TileMutables = {};
 
@@ -40,6 +41,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
       return Register.style.tile(this.ids)!;
     }
   }
+  public get decls() : TileStyleDecls { return this.decls; }
 
   protected _elements: TileElements;
   protected set elements(value: TileElements) { this._elements = value; }
@@ -71,7 +73,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     let verifiedSnapshot: TileSnapshot<C> = {
       ids: unshieldTileIds(unshieldProperty(snapshot, 'ids')),
       index: unshieldIndex(unshieldProperty(snapshot, 'index')),
-      coords: this.importCoords(unshieldProperty(snapshot, 'coords'))
+      coords: this.importCoords(unshieldProperty(snapshot, 'coords')),
+      decls: unshieldTileStyleDecls(unshieldProperty(snapshot, 'decls'))
     };
 
     let instance = new tile(verifiedSnapshot as TileArguments<C>);
@@ -92,7 +95,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     shieldProperties(object, [
       ['ids', shieldTileIds(this.ids)],
       ['index', shieldIndex(this.index)],
-      ['coords', this.exportCoords()]
+      ['coords', this.exportCoords()],
+      ['decls', this._style !== undefined ? shieldTileStyleDecls(this.decls) : false]
     ]);
     return object as TileConstants<C>;
   }
@@ -107,7 +111,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     if (this._style === undefined || replace) {
       this.style = this.createStyle(modifyTileStyleDecls(decls));
     } else {
-      this.style = this.createStyle(modifyTileStyleDecls(decls, this.style.decls));
+      this.style = this.createStyle(modifyTileStyleDecls(decls, this.decls));
     }    
 
     if (this.rendered) {
@@ -126,7 +130,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
         this.elements.style = document.createElement('style');
         this.elements.style.classList.add('elemap-' + this.ids.map + '-css-tile-' + this.ids.tile);
       }
-      if (!this.elements.outer && (this.style.decls.outer.length || this.style.decls.hover.outer.length)) {
+      if (!this.elements.outer && (this.decls.outer.length || this.decls.hover.outer.length)) {
         this.elements.outer = document.createElement('div');
       }
     }

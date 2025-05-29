@@ -25,7 +25,8 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
         this.tiles[i]![j] = new HexagonTile({
           ids: this.ids,
           index: {i, j},
-          coords: indexToAxialCoords({i, j}, this.orientation, this.offset)
+          coords: indexToAxialCoords({i, j}, this.orientation, this.offset),
+          decls: false
         });
       }
     }
