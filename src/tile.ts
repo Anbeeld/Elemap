@@ -41,7 +41,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
       return Register.style.tile(this.ids)!;
     }
   }
-  public get decls() : TileStyleDecls { return this.decls; }
+  public get decls() : TileStyleDecls { return this.style.decls; }
 
   protected _elements: TileElements;
   protected set elements(value: TileElements) { this._elements = value; }
