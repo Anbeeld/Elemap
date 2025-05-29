@@ -1,5 +1,5 @@
 import { GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
-import { TileStyleDecls } from './style/schema.js';
+import { GridStyleDecls, MapStyleDecls, TileStyleDecls } from './style/schema.js';
 import { cssValueToNumber } from './style/utils.js';
 
 export type Size = {width: number, height: number};
@@ -359,6 +359,10 @@ export function indexToAxialCoords(index: Index, orientation: GridOrientation, o
 //   return mergeDeep(target, ...sources);
 // }
 
+/**
+ * SHIELDING AND UNSHIELDING
+ */
+
 export function unshieldProperty(object: any, name: string) : any {
   if (!object || !object.hasOwnProperty(name)) {
     return undefined;
@@ -480,6 +484,32 @@ export function unshieldOrthogonalCoords(object: any) : OrthogonalCoords {
   };
 }
 
+export function shieldMapStyleDecls(decls: MapStyleDecls) : MapStyleDecls {
+  return shieldProperties({}, [
+    ['outer', decls.outer],
+    ['inner', decls.inner],
+  ]);
+}
+export function unshieldMapStyleDecls(object: any) : MapStyleDecls {
+  return {
+    outer: unshieldProperty(object, 'outer'),
+    inner: unshieldProperty(object, 'inner'),
+  };
+}
+
+export function shieldGridStyleDecls(decls: GridStyleDecls) : GridStyleDecls {
+  return shieldProperties({}, [
+    ['frame', decls.frame],
+    ['contour', decls.contour],
+  ]);
+}
+export function unshieldGridStyleDecls(object: any) : GridStyleDecls {
+  return {
+    frame: unshieldProperty(object, 'frame'),
+    contour: unshieldProperty(object, 'contour'),
+  };
+}
+
 export function shieldTileStyleDecls(decls: TileStyleDecls) : TileStyleDecls {
   return shieldProperties({}, [
     ['outer', decls.outer],
@@ -489,4 +519,14 @@ export function shieldTileStyleDecls(decls: TileStyleDecls) : TileStyleDecls {
       ['inner', decls.hover.inner]
     ])],
   ]);
+}
+export function unshieldTileStyleDecls(object: any) : TileStyleDecls {
+  return {
+    outer: unshieldProperty(object, 'outer'),
+    inner: unshieldProperty(object, 'inner'),
+    hover: {
+      outer: unshieldProperty(unshieldProperty(object, 'hover'), 'outer'),
+      inner: unshieldProperty(unshieldProperty(object, 'hover'), 'inner'),
+    }
+  };
 }

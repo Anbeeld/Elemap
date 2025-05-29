@@ -137,7 +137,8 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
       ids: args.grid.ids ? args.grid.ids : this.ids,
       size: args.grid.size,
       orientation: args.grid.orientation,
-      offset: args.grid.offset
+      offset: args.grid.offset,
+      decls: args.grid.decls
     });
     this.initStyle(style);
   }

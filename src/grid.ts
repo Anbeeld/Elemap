@@ -1,6 +1,7 @@
 import { AbstractTile, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, shieldProperties, unshieldProperty, shieldSize, unshieldSize, shieldGridIds, unshieldGridIds } from "./utils.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords, shieldProperties, unshieldProperty, shieldSize, unshieldSize, shieldGridIds, unshieldGridIds, shieldGridStyleDecls, unshieldGridStyleDecls } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
+import { GridStyleDecls } from "./style/schema.js";
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & GridMutables;
@@ -10,6 +11,7 @@ type GridConstants = {
   size: Size,
   orientation: GridOrientation,
   offset: GridOffset,
+  decls: GridStyleDecls | false // false = use map default grid style
 };
 type GridMutables = {
   tiles: TileSnapshot[][]
@@ -60,6 +62,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   }
 
   public get style() { return Register.map.grid(this.ids)!.style.grid; }
+  public get decls() { return this.style.decls; }
 
   public get classes() {
     let base = `elemap-${this.ids.map}`;
@@ -108,7 +111,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       size: unshieldSize(unshieldProperty(snapshot, 'size')),
       orientation: unshieldProperty(snapshot, 'orientation'),
       offset: unshieldProperty(snapshot, 'offset'),
-      tiles: unshieldProperty(snapshot, 'tiles')
+      tiles: unshieldProperty(snapshot, 'tiles'),
+      decls: unshieldGridStyleDecls(unshieldProperty(snapshot, 'decls'))
     };
 
     let instance = new tile(verifiedSnapshot as GridArguments);
@@ -128,7 +132,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       ['ids', shieldGridIds(this.ids)],
       ['size', shieldSize(this.size)],
       ['orientation', this.orientation],
-      ['offset', this.offset]
+      ['offset', this.offset],
+      ['decls', shieldGridStyleDecls(this.decls)]
     ]);
     return object as GridConstants;
   }
