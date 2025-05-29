@@ -10,12 +10,12 @@ type HexagonMapSnapshot = Omit<GridMapSnapshot, 'grid'> & {
 };
 
 export default class HexagonMap extends AbstractGridMap<HexagonGrid> {
-  constructor(args: GridMapArguments, style: GridMapStyleSchema) {
-    super(args, style, HexagonGrid);
+  constructor(args: GridMapArguments) {
+    super(args, HexagonGrid);
   }
 
-  public static import(snapshot: HexagonMapSnapshot, style: GridMapStyleSchema) : HexagonMap {
-    return this.importSnapshot(HexagonMap, snapshot, style);
+  public static import(snapshot: HexagonMapSnapshot) : HexagonMap {
+    return this.importSnapshot(HexagonMap, snapshot);
   }
   public override export() : HexagonMapSnapshot {
     return this.exportSnapshot() as HexagonMapSnapshot;
@@ -24,7 +24,7 @@ export default class HexagonMap extends AbstractGridMap<HexagonGrid> {
     return `${MapType.Hexagon}`;
   }
   
-  protected override initStyle(style: GridMapStyleSchema) : void {
-    this.style = new HexagonMapStyle(this.ids, style);
+  protected override initStyle(schema: GridMapStyleSchema) : void {
+    this.style = new HexagonMapStyle(this.ids, schema);
   }
 }

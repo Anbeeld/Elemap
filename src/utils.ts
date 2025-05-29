@@ -1,5 +1,5 @@
 import { GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
-import { GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
+import { GridMapStyleSchema, GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
 import { cssValueToNumber } from './style/utils.js';
 
 export type Size = {width: number, height: number};
@@ -539,6 +539,21 @@ export function shieldGridStyleSchema(gridStyleSchema: GridStyleSchema) : GridSt
 }
 export function unshieldGridStyleSchema(object: any) : GridStyleSchema {
   return {
+    grid: unshieldGridStyleDecls(unshieldProperty(object, 'grid')),
+    tile: unshieldTileStyleDecls(unshieldProperty(object, 'tile')),
+  };
+}
+
+export function shieldGridMapStyleSchema(gridMapStyleSchema: GridMapStyleSchema) : GridMapStyleSchema {
+  return shieldProperties({}, [
+    ['map', shieldMapStyleDecls(gridMapStyleSchema.map)],
+    ['grid', shieldGridStyleDecls(gridMapStyleSchema.grid)],
+    ['tile', shieldTileStyleDecls(gridMapStyleSchema.tile)],
+  ]);
+}
+export function unshieldGridMapStyleSchema(object: any) : GridMapStyleSchema {
+  return {
+    map: unshieldMapStyleDecls(unshieldProperty(object, 'map')),
     grid: unshieldGridStyleDecls(unshieldProperty(object, 'grid')),
     tile: unshieldTileStyleDecls(unshieldProperty(object, 'tile')),
   };

@@ -10,12 +10,12 @@ type RectangleMapSnapshot = Omit<GridMapSnapshot, 'grid'> & {
 };
 
 export default class RectangleMap extends AbstractGridMap<RectangleGrid> {
-  constructor(args: GridMapArguments, style: GridMapStyleSchema) {
-    super(args, style, RectangleGrid);
+  constructor(args: GridMapArguments) {
+    super(args, RectangleGrid);
   }
   
-  public static import(snapshot: RectangleMapSnapshot, style: GridMapStyleSchema) : RectangleMap {
-    return this.importSnapshot(RectangleMap, snapshot, style);
+  public static import(snapshot: RectangleMapSnapshot) : RectangleMap {
+    return this.importSnapshot(RectangleMap, snapshot);
   }
   public override export() : RectangleMapSnapshot {
     return this.exportSnapshot() as RectangleMapSnapshot;
@@ -24,7 +24,7 @@ export default class RectangleMap extends AbstractGridMap<RectangleGrid> {
     return `${MapType.Rectangle}`;
   }
 
-  protected override initStyle(style: GridMapStyleSchema) : void {
-    this.style = new RectangleMapStyle(this.ids, style);
+  protected override initStyle(schema: GridMapStyleSchema) : void {
+    this.style = new RectangleMapStyle(this.ids, schema);
   }
 }

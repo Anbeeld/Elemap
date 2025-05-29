@@ -1,6 +1,6 @@
 import RectangleMap from "./rectangle/map.js";
 import HexagonMap from "./hexagon/map.js";
-import { CustomTileStyleDecls, CustomSchema, modifyGridMapStyleSchema, GridMapStyleSchema } from "./style/schema.js";
+import { CustomTileStyleDecls, CustomSchema, modifyGridMapStyleSchema } from "./style/schema.js";
 import { CustomConfig, validateConfig } from "./config.js";
 import { MapType, shieldProperty } from "./utils.js";
 import { RectangleTile } from "./rectangle/tile.js";
@@ -31,8 +31,9 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
           orientation: validatedConfig.grid.orientation,
           offset: validatedConfig.grid.offset,
           schema: false
-        }
-      }, validatedSchema) as ElemapType<M>;
+        },
+        schema: validatedSchema
+      }) as ElemapType<M>;
     } else if (validatedType === MapType.Hexagon) {
       this._ = new HexagonMap({
         ids: undefined,
@@ -42,8 +43,9 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
           orientation: validatedConfig.grid.orientation,
           offset: validatedConfig.grid.offset,
           schema: false
-        }
-      }, validatedSchema) as ElemapType<M>;
+        },
+        schema: validatedSchema
+      }) as ElemapType<M>;
     }
 
     // For JavaScript - shield method names from mangling
@@ -52,8 +54,8 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     this.shield__tileByIndex();
   }
 
-  public static import(snapshot: GridMapSnapshot, style: GridMapStyleSchema) {
-    return method__import(snapshot, style);
+  public static import(snapshot: GridMapSnapshot) {
+    return method__import(snapshot);
   }
 
   public export() {
@@ -88,11 +90,11 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
   }
 }
 
-function method__import(snapshot: GridMapSnapshot, style: GridMapStyleSchema) {
+function method__import(snapshot: GridMapSnapshot) {
   if (snapshot.type === MapType.Rectangle) {
-    return RectangleMap.import(snapshot as any, style);
+    return RectangleMap.import(snapshot as any);
   } else if (snapshot.type === MapType.Hexagon) {
-    return HexagonMap.import(snapshot as any, style);
+    return HexagonMap.import(snapshot as any);
   }
   throw new Error(`Unknown map type: ${snapshot.type}`);
 }
