@@ -1,3 +1,5 @@
+import { GridSnapshot } from './grid.js';
+import { GridMapSnapshot } from './map.js';
 import { GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
 import { GridMapStyleSchema, GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
 import { AxialCoords, Index, OrthogonalCoords, Size } from './utils.js';
@@ -195,5 +197,25 @@ export function unshieldGridMapStyleSchema(object: any) : GridMapStyleSchema {
     map: unshieldMapStyleDecls(unshieldProperty(object, 'map')),
     grid: unshieldGridStyleDecls(unshieldProperty(object, 'grid')),
     tile: unshieldTileStyleDecls(unshieldProperty(object, 'tile')),
+  };
+}
+
+export function unshieldGridMapSnapshot(object: any) : GridMapSnapshot {
+  return {
+    type: unshieldProperty(object, 'type'),
+    ids: unshieldMapIds(unshieldProperty(object, 'ids')),
+    grid: unshieldProperty(object, 'grid'),
+    schema: unshieldGridMapStyleSchema(unshieldProperty(object, 'schema')),
+  }
+}
+
+export function unshieldGridSnapshot(snapshot: any) : GridSnapshot {
+  return {
+    ids: unshieldGridIds(unshieldProperty(snapshot, 'ids')),
+    size: unshieldSize(unshieldProperty(snapshot, 'size')),
+    orientation: unshieldProperty(snapshot, 'orientation'),
+    offset: unshieldProperty(snapshot, 'offset'),
+    tiles: unshieldProperty(snapshot, 'tiles'),
+    schema: unshieldGridStyleSchema(unshieldProperty(snapshot, 'schema'))
   };
 }

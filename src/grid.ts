@@ -2,7 +2,7 @@ import { AbstractTile, TileSnapshot } from "./tile.js";
 import { Size, GridOrientation, GridOffset, OrthogonalCoords } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
-import { shieldProperties, unshieldProperty, shieldSize, unshieldSize, shieldGridIds, unshieldGridIds, shieldGridStyleSchema, unshieldGridStyleSchema } from "./shield.js";
+import { shieldProperties, shieldSize, shieldGridIds, shieldGridStyleSchema, unshieldGridSnapshot } from "./shield.js";
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & GridMutables;
@@ -106,17 +106,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
   public static abstract import(snapshot: GridSnapshot) : AbstractGrid;
-  protected static importSnapshot<G extends AbstractGrid>(tile: new (args: GridArguments) => G, snapshot: GridSnapshot) : G {
-    let verifiedSnapshot: GridSnapshot = {
-      ids: unshieldGridIds(unshieldProperty(snapshot, 'ids')),
-      size: unshieldSize(unshieldProperty(snapshot, 'size')),
-      orientation: unshieldProperty(snapshot, 'orientation'),
-      offset: unshieldProperty(snapshot, 'offset'),
-      tiles: unshieldProperty(snapshot, 'tiles'),
-      schema: unshieldGridStyleSchema(unshieldProperty(snapshot, 'schema'))
-    };
-
-    let instance = new tile(verifiedSnapshot as GridArguments);
+  protected static importSnapshot<G extends AbstractGrid>(gridClass: new (args: GridArguments) => G, snapshot: GridSnapshot) : G {
+    let instance = new gridClass(unshieldGridSnapshot(snapshot));
     instance.mutate(snapshot);
     return instance;
   }
