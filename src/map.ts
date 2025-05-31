@@ -4,7 +4,7 @@ import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
 import { MapType, } from './utils.js';
-import { unshieldProperty, shieldProperties, shieldMapIds, unshieldMapIds, shieldGridMapStyleSchema, unshieldGridMapStyleSchema } from './shield.js';
+import { unshieldProperty, shieldProperties, shieldMapIds, shieldGridMapStyleSchema, unshieldGridMapSnapshot } from './shield.js';
 
 interface MapElements {
   container?: HTMLElement,
@@ -143,21 +143,19 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
 
   constructor(args: GridMapArguments, gridClass: new (args: GridArguments) => G) {
     super(args);
-    this.grid = new gridClass(Object.assign(args.grid, {ids: args.grid.ids ? args.grid.ids : this.ids}));
+    // If grid has ids specified, then it's importing
+    if (unshieldProperty(args.grid, 'ids')) {
+      // @ts-ignore
+      this.grid = gridClass.import(args.grid);
+    } else {
+      this.grid = new gridClass(Object.assign(args.grid, {ids: this.ids}));
+    }
     this.initStyle(args.schema);
   }
 
-  protected static importSnapshot<M extends AbstractGridMap>(map: new (args: GridMapArguments) => M, snapshot: GridMapSnapshot) : M {
-    let verifiedSnapshot: GridMapSnapshot = {
-      type: unshieldProperty(snapshot, 'type'),
-      ids: unshieldMapIds(unshieldProperty(snapshot, 'ids')),
-      grid: unshieldProperty(snapshot, 'grid'),
-      schema: unshieldGridMapStyleSchema(unshieldProperty(snapshot, 'schema'))
-    };
-
-    console.log(verifiedSnapshot);
-
-    let instance = new map(verifiedSnapshot as GridMapArguments);
+  protected static importSnapshot<M extends AbstractGridMap>(mapClass: new (args: GridMapArguments) => M, snapshot: GridMapSnapshot) : M {
+    snapshot = unshieldGridMapSnapshot(snapshot);
+    let instance = new mapClass(snapshot);
     instance.mutate(snapshot);
     return instance;
   }
