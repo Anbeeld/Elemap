@@ -1,34 +1,24 @@
-import { unshieldProperty } from "./shield.js";
-import { GridOrientation, GridOffset, Size } from "./utils.js";
+import { GridMapArguments } from "./map.js";
+import { mangleGridIds, mangleGridMapStyleSchema, mangleGridStyleSchema, mangleMapIds, mangleProperty } from "./mangle.js";
+import { modifyGridMapStyleSchema } from "./style/schema.js";
+import { GridOrientation, GridOffset, DeepPartial } from "./utils.js";
 
-export type CustomConfig = {
-  grid?: {
-    size?: {
-      width?: number,
-      height?: number
-    },
-    orientation?: GridOrientation,
-    offset?: GridOffset
-  }
-};
+export type Config = DeepPartial<GridMapArguments>;
 
-export type Config = {
-  grid: {
-    size: Size
-    orientation: GridOrientation,
-    offset: GridOffset
-  }
-};
-
-export function validateConfig(custom: CustomConfig) : Config {
+export function configToGridMapArguments(config: Config) : GridMapArguments {
   return {
+    ids: mangleMapIds(mangleProperty(config, 'ids')),
     grid: {
+      ids: mangleGridIds(mangleProperty(mangleProperty(config, 'grid'), 'ids')),
       size: {
-        width: unshieldProperty(unshieldProperty(custom, 'size'), 'width') || 32,
-        height: unshieldProperty(unshieldProperty(custom, 'size'), 'height') || 18
+        width: mangleProperty(mangleProperty(config, 'size'), 'width') || 32,
+        height: mangleProperty(mangleProperty(config, 'size'), 'height') || 18
       },
-      orientation: unshieldProperty(unshieldProperty(custom, 'grid'), 'orientation') || GridOrientation.Pointy,
-      offset: unshieldProperty(unshieldProperty(custom, 'grid'), 'offset') || GridOffset.Odd
-    }
+      orientation: mangleProperty(mangleProperty(config, 'grid'), 'orientation') || GridOrientation.Pointy,
+      offset: mangleProperty(mangleProperty(config, 'grid'), 'offset') || GridOffset.Odd,
+      schema: mangleGridStyleSchema(mangleProperty(mangleProperty(config, 'grid'), 'schema')),
+      tiles: mangleProperty(mangleProperty(config, 'grid'), 'tiles')
+    },
+    schema: modifyGridMapStyleSchema(mangleGridMapStyleSchema(mangleProperty(config, 'schema')) || {})
   };
 }
