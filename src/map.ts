@@ -4,7 +4,7 @@ import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
 import { MapType, } from './utils.js';
-import { mangleProperty, demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleGridMapSnapshot } from './mangle.js';
+import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleGridMapSnapshot } from './mangle.js';
 
 interface MapElements {
   container?: HTMLElement,
@@ -144,7 +144,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
   constructor(args: GridMapArguments, gridClass: new (args: GridArguments) => G) {
     super(args);
     // If grid has ids specified, then it's importing
-    if (mangleProperty(args.grid, 'ids')) {
+    if (args.grid.ids && typeof args.grid.ids.grid === 'number') {
       // @ts-ignore
       this.grid = gridClass.import(args.grid);
     } else {
