@@ -215,7 +215,7 @@ export function unshieldGridSnapshot(snapshot: any) : GridSnapshot {
     size: unshieldSize(unshieldProperty(snapshot, 'size')),
     orientation: unshieldProperty(snapshot, 'orientation'),
     offset: unshieldProperty(snapshot, 'offset'),
-    tiles: unshieldProperty(snapshot, 'tiles'),
-    schema: unshieldGridStyleSchema(unshieldProperty(snapshot, 'schema'))
+    schema: unshieldGridStyleSchema(unshieldProperty(snapshot, 'schema')),
+    tiles: unshieldProperty(snapshot, 'tiles')
   };
 }

@@ -12,10 +12,10 @@ type GridConstants = {
   size: Size,
   orientation: GridOrientation,
   offset: GridOffset,
-  schema: GridStyleSchema | false // false = use map default grid and tile style
+  schema: GridStyleSchema | false, // false = use map default grid and tile style
+  tiles: TileSnapshot[][]
 };
 type GridMutables = {
-  tiles: TileSnapshot[][]
 };
 
 export type GridArguments = Omit<GridConstants, 'ids'> & {
@@ -101,7 +101,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     this.orientation = args.orientation;
     this.offset = args.offset;
 
-    this.initTiles();
+    this.initTiles(args.tiles);
   }
 
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
@@ -125,18 +125,16 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       ['size', shieldSize(this.size)],
       ['orientation', this.orientation],
       ['offset', this.offset],
-      ['schema', shieldGridStyleSchema(this.schema)]
+      ['schema', shieldGridStyleSchema(this.schema)],
+      ['tiles', this.tiles.map(row => row.map(tile => tile.export()))]
     ]);
     return object as GridConstants;
   }
   protected exportMutables(object: object = {}) : GridMutables {
-    shieldProperties(object, [
-      ['tiles', this.tiles.map(row => row.map(tile => tile.export()))]
-    ]);
     return object as GridMutables;
   }
 
-  protected abstract initTiles(): void;
+  protected abstract initTiles(snapshot?: TileSnapshot[][]): void;
 
   protected initElements() : void {
     if (!this.elements) {

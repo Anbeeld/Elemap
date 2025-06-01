@@ -18,16 +18,20 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return this.exportSnapshot() as HexagonGridSnapshot;
   }
 
-  protected override initTiles() : void {
+  protected override initTiles(snapshot?: HexagonTileSnapshot[][]) : void {
     for (let i = 0; i < this.size.height; i++) {
       this.tiles[i] = [];
       for (let j = 0; j < this.size.width; j++) {
-        this.tiles[i]![j] = new HexagonTile({
-          ids: this.ids,
-          index: {i, j},
-          coords: indexToAxialCoords({i, j}, this.orientation, this.offset),
-          decls: false
-        });
+        if (snapshot && snapshot[i] && snapshot[i]![j]) {
+          this.tiles[i]![j] = HexagonTile.import(snapshot[i]![j]!);
+        } else {
+          this.tiles[i]![j] = new HexagonTile({
+            ids: this.ids,
+            index: {i, j},
+            coords: indexToAxialCoords({i, j}, this.orientation, this.offset),
+            decls: false
+          });
+        }
       }
     }
   }

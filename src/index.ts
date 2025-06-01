@@ -31,7 +31,8 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
           size: validatedConfig.grid.size,
           orientation: validatedConfig.grid.orientation,
           offset: validatedConfig.grid.offset,
-          schema: false
+          schema: false,
+          tiles: []
         },
         schema: validatedSchema
       }) as ElemapType<M>;
@@ -43,7 +44,8 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
           size: validatedConfig.grid.size,
           orientation: validatedConfig.grid.orientation,
           offset: validatedConfig.grid.offset,
-          schema: false
+          schema: false,
+          tiles: []
         },
         schema: validatedSchema
       }) as ElemapType<M>;

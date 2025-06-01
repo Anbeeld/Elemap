@@ -18,16 +18,20 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     return this.exportSnapshot() as RectangleGridSnapshot;
   }
 
-  protected override initTiles() : void {
+  protected override initTiles(snapshot?: RectangleTileSnapshot[][]) : void {
     for (let i = 0; i < this.size.height; i++) {
       this.tiles[i] = [];
       for (let j = 0; j < this.size.width; j++) {
-        this.tiles[i]![j] = new RectangleTile({
-          ids: this.ids,
-          index: {i, j},
-          coords: indexToOrthogonalCoords({i, j}),
-          decls: false
-        });
+        if (snapshot && snapshot[i] && snapshot[i]![j]) {
+          this.tiles[i]![j] = RectangleTile.import(snapshot[i]![j]!);
+        } else {
+          this.tiles[i]![j] = new RectangleTile({
+            ids: this.ids,
+            index: {i, j},
+            coords: indexToOrthogonalCoords({i, j}),
+            decls: false
+          });
+        }
       }
     }
   }
