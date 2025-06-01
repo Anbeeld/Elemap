@@ -1,5 +1,5 @@
-import { GridSnapshot } from './grid.js';
-import { GridMapSnapshot } from './map.js';
+// import { GridSnapshot } from './grid.js';
+// import { GridMapSnapshot } from './map.js';
 import { GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
 import { GridMapStyleSchema, GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
 import { AxialCoords, Index, OrthogonalCoords, Size } from './utils.js';
@@ -200,22 +200,23 @@ export function mangleGridMapStyleSchema(object: any) : GridMapStyleSchema {
   };
 }
 
-export function mangleGridMapSnapshot(object: any) : GridMapSnapshot {
-  return {
-    type: mangleProperty(object, 'type'),
-    ids: mangleMapIds(mangleProperty(object, 'ids')),
-    grid: mangleProperty(object, 'grid'),
-    schema: mangleGridMapStyleSchema(mangleProperty(object, 'schema')),
-  }
-}
+// export function mangleGridMapSnapshot(object: any) : GridMapSnapshot {
+//   return {
+//     type: mangleProperty(object, 'type'),
+//     ids: mangleMapIds(mangleProperty(object, 'ids')),
+//     grid: mangleProperty(object, 'grid'),
+//     schema: mangleGridMapStyleSchema(mangleProperty(object, 'schema')),
+//   }
+// }
 
-export function mangleGridSnapshot(snapshot: any) : GridSnapshot {
-  return {
-    ids: mangleGridIds(mangleProperty(snapshot, 'ids')),
-    size: mangleSize(mangleProperty(snapshot, 'size')),
-    orientation: mangleProperty(snapshot, 'orientation'),
-    offset: mangleProperty(snapshot, 'offset'),
-    schema: mangleGridStyleSchema(mangleProperty(snapshot, 'schema')),
-    tiles: mangleProperty(snapshot, 'tiles')
-  };
-}
+// export function mangleGridSnapshot(snapshot: any) : GridSnapshot {
+//   console.log('mangleGridSnapshot', snapshot);
+//   return {
+//     ids: mangleGridIds(mangleProperty(snapshot, 'ids')),
+//     size: mangleSize(mangleProperty(snapshot, 'size')),
+//     orientation: mangleProperty(snapshot, 'orientation'),
+//     offset: mangleProperty(snapshot, 'offset'),
+//     schema: mangleGridStyleSchema(mangleProperty(snapshot, 'schema')),
+//     tiles: mangleProperty(snapshot, 'tiles')
+//   };
+// }

@@ -4,7 +4,7 @@ import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
 import { MapType, } from './utils.js';
-import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleGridMapSnapshot } from './mangle.js';
+import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema } from './mangle.js';
 
 interface MapElements {
   container?: HTMLElement,
@@ -154,7 +154,6 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
   }
 
   protected static importSnapshot<M extends AbstractGridMap>(mapClass: new (args: GridMapArguments) => M, snapshot: GridMapSnapshot) : M {
-    snapshot = mangleGridMapSnapshot(snapshot);
     let instance = new mapClass(snapshot);
     instance.mutate(snapshot);
     return instance;
