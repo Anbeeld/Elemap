@@ -1,3 +1,4 @@
+import { DeepPartial } from "src/utils.js";
 import { unshieldProperty } from "../shield.js"
 
 function getDelcsProperty(decls: object, name: string) : string|undefined {
@@ -66,9 +67,7 @@ type TileStyleDeclsLayer = {
 export type TileStyleDecls = TileStyleDeclsLayer & {
   hover: TileStyleDeclsLayer
 }
-export type CustomTileStyleDecls = Partial<TileStyleDeclsLayer> & {
-  hover?: Partial<TileStyleDeclsLayer>
-};
+export type CustomTileStyleDecls = DeepPartial<TileStyleDecls>;
 
 /* TILE STYLE DECLARATIONS CONSTANTS */
 const defaultTileStyleDecls: TileStyleDecls = {

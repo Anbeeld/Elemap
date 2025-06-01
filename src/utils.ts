@@ -356,3 +356,7 @@ export function indexToAxialCoords(index: Index, orientation: GridOrientation, o
 
 //   return mergeDeep(target, ...sources);
 // }
+
+export type DeepPartial<T> = T extends object ? {
+  [P in keyof T]?: DeepPartial<T[P]>;
+} : T;
