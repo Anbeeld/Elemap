@@ -1,13 +1,4 @@
 import { DeepPartial } from "src/utils.js";
-import { unshieldProperty } from "../shield.js"
-
-function getDelcsProperty(decls: object, name: string) : string|undefined {
-  let value = unshieldProperty(decls, name);
-  if (typeof value === 'string') {
-    return value;
-  }
-  return undefined;
-}
 
 /* MAP STYLE DECLARATION TYPES */
 export type MapStyleDecls = {
@@ -27,10 +18,10 @@ function modifyMapStyleDecls(custom: CustomMapStyleDecls, initial?: MapStyleDecl
   return {
     outer: 
       (initial && initial.outer ? initial.outer : '') +
-      (getDelcsProperty(custom, 'outer') || ''),
+      (custom.outer || ''),
     inner:
       (initial && initial.inner ? initial.inner : '') +
-      (getDelcsProperty(custom, 'inner') || '')
+      (custom.inner || '')
   }
 }
 
@@ -52,10 +43,10 @@ function modifyGridStyleDecls(custom: CustomGridStyleDecls, initial?: GridStyleD
   return {
     frame:
       (initial && initial.frame ? initial.frame : '') +
-      (getDelcsProperty(custom, 'frame') || ''),
+      (custom.frame || ''),
     contour:
       (initial && initial.contour ? initial.contour : '') +
-      (getDelcsProperty(custom, 'contour') || '')
+      (custom.contour || '')
   }
 }
 
@@ -84,17 +75,17 @@ export function modifyTileStyleDecls(custom: CustomTileStyleDecls, initial?: Til
   return {
     outer:
       (initial && initial.outer ? initial.outer : '') +
-      (getDelcsProperty(custom, 'outer') || ''),
+      (custom.outer || ''),
     inner:
       (initial && initial.inner ? initial.inner : '') +
-      (getDelcsProperty(custom, 'inner') || ''),
+      (custom.inner || ''),
     hover: {
       outer:
         (initial && initial.hover && initial.hover.outer ? initial.hover.outer : '') +
-        (getDelcsProperty(unshieldProperty(custom, 'hover'), 'outer') || ''),
+        (custom.hover && custom.hover.outer ? custom.hover.outer : ''),
       inner:
         (initial && initial.hover && initial.hover.inner ? initial.hover.inner : '') +
-        (getDelcsProperty(unshieldProperty(custom, 'hover'), 'inner') || ''),
+        (custom.hover && custom.hover.inner ? custom.hover.inner : ''),
     }
   }
 }
@@ -114,9 +105,9 @@ type CustomGridMapStyleSchema = Partial<GridMapStyleSchema>;
 /* GRID MAP STYLE SCHEMA MODIFICATION */
 export function modifyGridMapStyleSchema(custom: CustomGridMapStyleSchema) : GridMapStyleSchema {
   return {
-    map: modifyMapStyleDecls(unshieldProperty(custom, 'map') || {}, defaultMapStyleDecls),
-    grid: modifyGridStyleDecls(unshieldProperty(custom, 'grid') || {}, defaultGridStyleDecls),
-    tile: modifyTileStyleDecls(unshieldProperty(custom, 'tile') || {}, defaultTileStyleDecls),
+    map: modifyMapStyleDecls(custom.map || {}, defaultMapStyleDecls),
+    grid: modifyGridStyleDecls(custom.grid || {}, defaultGridStyleDecls),
+    tile: modifyTileStyleDecls(custom.tile || {}, defaultTileStyleDecls),
   }
 }
 
