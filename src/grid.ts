@@ -91,8 +91,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   public get elements() : GridElements|undefined { return this._elements; }
 
   constructor(args: GridArguments) {
-    if (args.ids instanceof GridIds) {
-      this.ids = new GridIds(args.ids, args.ids.grid);
+    if (typeof (args.ids as GridIdsProperties).grid === 'number') {
+      this.ids = new GridIds(args.ids, (args.ids as GridIdsProperties).grid);
     } else {
       this.ids = new GridIds(args.ids, Register.id());
     }

@@ -48,7 +48,7 @@ export abstract class AbstractMap implements MapConstants, MapMutables {
   }
 
   constructor(args: MapArguments) {
-    if (args.ids instanceof MapIds) {
+    if (args.ids && typeof args.ids.map === 'number') {
       this.ids = new MapIds(args.ids.map);
     } else {
       this.ids = new MapIds(Register.id());
