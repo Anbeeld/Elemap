@@ -1,6 +1,6 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
 import { OrthogonalCoords } from '../utils.js';
-import { shieldOrthogonalCoords, shieldProperty, unshieldOrthogonalCoords } from '../shield.js';
+import { demangleOrthogonalCoords, demangleProperty, mangleOrthogonalCoords } from '../mangle.js';
 import { Register } from '../register.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';
@@ -16,13 +16,13 @@ export class RectangleTile extends AbstractTile<OrthogonalCoords> {
     return this.importSnapshot(RectangleTile, snapshot);
   }
   public static override importCoords(object: any) : OrthogonalCoords {
-    return unshieldOrthogonalCoords(object);
+    return mangleOrthogonalCoords(object);
   }
   public override export() : RectangleTileSnapshot {
     return this.exportSnapshot();
   }
   protected override exportCoords(): OrthogonalCoords {
-    return shieldOrthogonalCoords(this.coords);
+    return demangleOrthogonalCoords(this.coords);
   }
   
   protected override _style: RectangleTileStyle|undefined;
@@ -41,11 +41,11 @@ export class RectangleTile extends AbstractTile<OrthogonalCoords> {
 
   protected override setCoordsAttributes() {    
     if (this.elements!.outer) {
-      shieldProperty(this.elements!.outer.dataset, 'elemapX', this.coords.x.toString());
-      shieldProperty(this.elements!.outer.dataset, 'elemapY', this.coords.y.toString());
+      demangleProperty(this.elements!.outer.dataset, 'elemapX', this.coords.x.toString());
+      demangleProperty(this.elements!.outer.dataset, 'elemapY', this.coords.y.toString());
     }
-    shieldProperty(this.elements!.inner.dataset, 'elemapX', this.coords.x.toString());
-    shieldProperty(this.elements!.inner.dataset, 'elemapY', this.coords.y.toString());
+    demangleProperty(this.elements!.inner.dataset, 'elemapX', this.coords.x.toString());
+    demangleProperty(this.elements!.inner.dataset, 'elemapY', this.coords.y.toString());
   }
   
   public get selectors() {

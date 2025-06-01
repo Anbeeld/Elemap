@@ -2,7 +2,7 @@ import { MapIds, Register, MapStyleIds } from "../register.js";
 import { MapStyleDecls, GridMapStyleSchema, GridStyleSchema } from "./schema.js";
 import Style from "./style.js";
 import GridStyle from "./grid.js";
-import { shieldProperties } from "../shield.js";
+import { demangleProperties } from "../mangle.js";
 
 type StyleElements = {
   core: HTMLElement,
@@ -38,7 +38,7 @@ export abstract class MapStyle extends Style {
   }
 
   public export() : MapStyleDecls {
-    return shieldProperties(this.decls, [
+    return demangleProperties(this.decls, [
       ['outer', this.decls.outer],
       ['inner', this.decls.inner],
     ]);

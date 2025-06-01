@@ -1,6 +1,6 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
 import { AxialCoords } from '../utils.js';
-import { shieldAxialCoords, shieldProperty, unshieldAxialCoords } from '../shield.js';
+import { demangleAxialCoords, demangleProperty, mangleAxialCoords } from '../mangle.js';
 import { Register } from '../register.js';
 import { TileStyleDecls } from '../style/schema.js';
 import HexagonTileStyle from '../style/hexagon/tile.js';
@@ -16,13 +16,13 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
     return this.importSnapshot(HexagonTile, snapshot);
   }
   public static override importCoords(object: any) : AxialCoords {
-    return unshieldAxialCoords(object);
+    return mangleAxialCoords(object);
   }
   public override export() : HexagonTileSnapshot {
     return this.exportSnapshot();
   }
   protected override exportCoords(): AxialCoords {
-    return shieldAxialCoords(this.coords);
+    return demangleAxialCoords(this.coords);
   }
     
   protected override _style: HexagonTileStyle|undefined;
@@ -41,11 +41,11 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
 
   protected override setCoordsAttributes() {    
     if (this.elements!.outer) {
-      shieldProperty(this.elements!.outer.dataset, 'elemapR', this.coords.r.toString());
-      shieldProperty(this.elements!.outer.dataset, 'elemapQ', this.coords.q.toString());
+      demangleProperty(this.elements!.outer.dataset, 'elemapR', this.coords.r.toString());
+      demangleProperty(this.elements!.outer.dataset, 'elemapQ', this.coords.q.toString());
     }
-    shieldProperty(this.elements!.inner.dataset, 'elemapR', this.coords.r.toString());
-    shieldProperty(this.elements!.inner.dataset, 'elemapQ', this.coords.q.toString());
+    demangleProperty(this.elements!.inner.dataset, 'elemapR', this.coords.r.toString());
+    demangleProperty(this.elements!.inner.dataset, 'elemapQ', this.coords.q.toString());
   }
   
   public get selectors() {

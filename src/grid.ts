@@ -2,7 +2,7 @@ import { AbstractTile, TileSnapshot } from "./tile.js";
 import { Size, GridOrientation, GridOffset, OrthogonalCoords } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
-import { shieldProperties, shieldSize, shieldGridIds, shieldGridStyleSchema, unshieldGridSnapshot } from "./shield.js";
+import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema, mangleGridSnapshot } from "./mangle.js";
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & GridMutables;
@@ -107,7 +107,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
   public static abstract import(snapshot: GridSnapshot) : AbstractGrid;
   protected static importSnapshot<G extends AbstractGrid>(gridClass: new (args: GridArguments) => G, snapshot: GridSnapshot) : G {
-    let instance = new gridClass(unshieldGridSnapshot(snapshot));
+    let instance = new gridClass(mangleGridSnapshot(snapshot));
     instance.mutate(snapshot);
     return instance;
   }
@@ -120,12 +120,12 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return  this.exportMutables(this.exportConstants()) as GridSnapshot;
   }
   protected exportConstants(object: object = {}) : GridConstants {
-    shieldProperties(object, [
-      ['ids', shieldGridIds(this.ids)],
-      ['size', shieldSize(this.size)],
+    demangleProperties(object, [
+      ['ids', demangleGridIds(this.ids)],
+      ['size', demangleSize(this.size)],
       ['orientation', this.orientation],
       ['offset', this.offset],
-      ['schema', shieldGridStyleSchema(this.schema)],
+      ['schema', demangleGridStyleSchema(this.schema)],
       ['tiles', this.tiles.map(row => row.map(tile => tile.export()))]
     ]);
     return object as GridConstants;

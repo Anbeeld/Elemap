@@ -1,5 +1,5 @@
 import { Coords, Index, OrthogonalCoords } from './utils.js';
-import { unshieldProperty, shieldProperties, shieldProperty, shieldIndex, unshieldIndex, shieldTileIds, unshieldTileIds, unshieldTileStyleDecls, shieldTileStyleDecls } from './shield.js';
+import { mangleProperty, demangleProperties, demangleProperty, demangleIndex, mangleIndex, demangleTileIds, mangleTileIds, mangleTileStyleDecls, demangleTileStyleDecls } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
@@ -72,10 +72,10 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   public static abstract import(snapshot: TileSnapshot) : AbstractTile;
   protected static importSnapshot<T extends AbstractTile, C extends Coords>(tile: new (args: TileArguments<C>) => T, snapshot: TileSnapshot) : T {
     let verifiedSnapshot: TileSnapshot<C> = {
-      ids: unshieldTileIds(unshieldProperty(snapshot, 'ids')),
-      index: unshieldIndex(unshieldProperty(snapshot, 'index')),
-      coords: this.importCoords(unshieldProperty(snapshot, 'coords')),
-      decls: unshieldTileStyleDecls(unshieldProperty(snapshot, 'decls'))
+      ids: mangleTileIds(mangleProperty(snapshot, 'ids')),
+      index: mangleIndex(mangleProperty(snapshot, 'index')),
+      coords: this.importCoords(mangleProperty(snapshot, 'coords')),
+      decls: mangleTileStyleDecls(mangleProperty(snapshot, 'decls'))
     };
 
     let instance = new tile(verifiedSnapshot as TileArguments<C>);
@@ -93,11 +93,11 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     return this.exportMutables(this.exportConstants()) as TileSnapshot<C>;
   }
   protected exportConstants(object: object = {}) : TileConstants<C> {
-    shieldProperties(object, [
-      ['ids', shieldTileIds(this.ids)],
-      ['index', shieldIndex(this.index)],
+    demangleProperties(object, [
+      ['ids', demangleTileIds(this.ids)],
+      ['index', demangleIndex(this.index)],
       ['coords', this.exportCoords()],
-      ['decls', this._style !== undefined ? shieldTileStyleDecls(this.decls) : false]
+      ['decls', this._style !== undefined ? demangleTileStyleDecls(this.decls) : false]
     ]);
     return object as TileConstants<C>;
   }
@@ -139,11 +139,11 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
 
   protected setIndexAttributes() {    
     if (this.elements!.outer) {
-      shieldProperty(this.elements!.outer.dataset, 'elemapI', this.index.i.toString());
-      shieldProperty(this.elements!.outer.dataset, 'elemapJ', this.index.j.toString());
+      demangleProperty(this.elements!.outer.dataset, 'elemapI', this.index.i.toString());
+      demangleProperty(this.elements!.outer.dataset, 'elemapJ', this.index.j.toString());
     }
-    shieldProperty(this.elements!.inner.dataset, 'elemapI', this.index.i.toString());
-    shieldProperty(this.elements!.inner.dataset, 'elemapJ', this.index.j.toString());
+    demangleProperty(this.elements!.inner.dataset, 'elemapI', this.index.i.toString());
+    demangleProperty(this.elements!.inner.dataset, 'elemapJ', this.index.j.toString());
   }
 
   protected abstract setCoordsAttributes() : void;

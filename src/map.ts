@@ -4,7 +4,7 @@ import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
 import { MapType, } from './utils.js';
-import { unshieldProperty, shieldProperties, shieldMapIds, shieldGridMapStyleSchema, unshieldGridMapSnapshot } from './shield.js';
+import { mangleProperty, demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleGridMapSnapshot } from './mangle.js';
 
 interface MapElements {
   container?: HTMLElement,
@@ -64,9 +64,9 @@ export abstract class AbstractMap implements MapConstants, MapMutables {
     return  this.exportMutables(this.exportConstants()) as MapSnapshot;
   }
   protected exportConstants(object: object = {}) : MapConstants {
-    shieldProperties(object, [
+    demangleProperties(object, [
       ['type', this.exportMapType()],
-      ['ids', shieldMapIds(this.ids)]
+      ['ids', demangleMapIds(this.ids)]
     ]);
     return object as MapConstants;
   }
@@ -144,7 +144,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
   constructor(args: GridMapArguments, gridClass: new (args: GridArguments) => G) {
     super(args);
     // If grid has ids specified, then it's importing
-    if (unshieldProperty(args.grid, 'ids')) {
+    if (mangleProperty(args.grid, 'ids')) {
       // @ts-ignore
       this.grid = gridClass.import(args.grid);
     } else {
@@ -154,7 +154,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
   }
 
   protected static importSnapshot<M extends AbstractGridMap>(mapClass: new (args: GridMapArguments) => M, snapshot: GridMapSnapshot) : M {
-    snapshot = unshieldGridMapSnapshot(snapshot);
+    snapshot = mangleGridMapSnapshot(snapshot);
     let instance = new mapClass(snapshot);
     instance.mutate(snapshot);
     return instance;
@@ -164,11 +164,11 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
   }
 
   protected override exportConstants(object: object = {}) : GridMapConstants {
-    shieldProperties(object, [
+    demangleProperties(object, [
       ['type', this.exportMapType()],
-      ['ids', shieldMapIds(this.ids)],
+      ['ids', demangleMapIds(this.ids)],
       ['grid', this.grid.export()],
-      ['schema', shieldGridMapStyleSchema(this.schema)]
+      ['schema', demangleGridMapStyleSchema(this.schema)]
     ]);
     return object as GridMapConstants;
   }
