@@ -238,3 +238,9 @@ function mangleCoords<C extends Coords>(coords: C) : C {
   }
   return mangleOrthogonalCoords(coords) as unknown as C;
 }
+export function demangleCoords<C extends Coords>(coords: C) : C {
+  if (mangleProperty(coords, 'q') !== undefined && mangleProperty(coords, 'r') !== undefined) {
+    return demangleAxialCoords(coords as unknown as AxialCoords) as unknown as C;
+  }
+  return demangleOrthogonalCoords(coords as unknown as OrthogonalCoords) as unknown as C;
+}
