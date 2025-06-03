@@ -1,6 +1,6 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
 import { AxialCoords } from '../utils.js';
-import { demangleAxialCoords, demangleProperty, mangleAxialCoords } from '../mangle.js';
+import { demangleAxialCoords, demangleProperty } from '../mangle.js';
 import { Register } from '../register.js';
 import { TileStyleDecls } from '../style/schema.js';
 import HexagonTileStyle from '../style/hexagon/tile.js';
@@ -14,9 +14,6 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
 
   public static import(snapshot: HexagonTileSnapshot) : HexagonTile {
     return this.importSnapshot(HexagonTile, snapshot);
-  }
-  public static override importCoords(object: any) : AxialCoords {
-    return mangleAxialCoords(object);
   }
   public override export() : HexagonTileSnapshot {
     return this.exportSnapshot();

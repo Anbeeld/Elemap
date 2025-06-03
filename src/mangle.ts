@@ -2,7 +2,8 @@
 // import { GridMapSnapshot } from './map.js';
 import { GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
 import { GridMapStyleSchema, GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
-import { AxialCoords, Index, OrthogonalCoords, Size } from './utils.js';
+import { TileSnapshot } from './tile.js';
+import { AxialCoords, Coords, Index, OrthogonalCoords, Size } from './utils.js';
 
 export function mangleProperty(object: any, name: string) : any {
   if (!object || !object.hasOwnProperty(name)) {
@@ -220,3 +221,20 @@ export function mangleGridMapStyleSchema(object: any) : GridMapStyleSchema {
 //     tiles: mangleProperty(snapshot, 'tiles')
 //   };
 // }
+
+export function mangleTileSnapshot<C extends Coords>(snapshot: any) : TileSnapshot<C> {
+  return {
+    ids: mangleTileIds(mangleProperty(snapshot, 'ids')),
+    index: mangleIndex(mangleProperty(snapshot, 'index')),
+    coords: mangleCoords<C>(mangleProperty(snapshot, 'coords')),
+    decls: mangleTileStyleDecls(mangleProperty(snapshot, 'decls')),
+    data: mangleProperty(snapshot, 'data')
+  };
+}
+
+function mangleCoords<C extends Coords>(coords: C) : C {
+  if (mangleProperty(coords, 'q') !== undefined && mangleProperty(coords, 'r') !== undefined) {
+    return mangleAxialCoords(coords) as unknown as C;
+  }
+  return mangleOrthogonalCoords(coords) as unknown as C;
+}

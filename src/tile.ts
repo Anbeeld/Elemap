@@ -1,5 +1,5 @@
 import { Coords, Index, mergeDeep, OrthogonalCoords } from './utils.js';
-import { mangleProperty, demangleProperties, demangleProperty, demangleIndex, mangleIndex, demangleTileIds, mangleTileIds, mangleTileStyleDecls, demangleTileStyleDecls } from './mangle.js';
+import { mangleProperty, demangleProperties, demangleProperty, demangleIndex, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
@@ -77,23 +77,13 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
   public static abstract import(snapshot: TileSnapshot) : AbstractTile;
   protected static importSnapshot<T extends AbstractTile, C extends Coords>(tile: new (args: TileArguments<C>) => T, snapshot: TileSnapshot) : T {
-    let verifiedSnapshot: TileSnapshot<C> = {
-      ids: mangleTileIds(mangleProperty(snapshot, 'ids')),
-      index: mangleIndex(mangleProperty(snapshot, 'index')),
-      coords: this.importCoords(mangleProperty(snapshot, 'coords')),
-      decls: mangleTileStyleDecls(mangleProperty(snapshot, 'decls')),
-      data: mangleProperty(snapshot, 'data')
-    };
-
-    let instance = new tile(verifiedSnapshot as TileArguments<C>);
+    let instance = new tile(mangleTileSnapshot(snapshot));
     instance.mutate(snapshot);
     return instance;
   }
   protected mutate(mutation: TileMutation) : void {
     mergeDeep(this.data, mangleProperty(mutation, 'data'));
   }
-  // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
-  protected static abstract importCoords(object: any) : C;
 
   public abstract export() : TileSnapshot<C>;
   protected exportSnapshot() : TileSnapshot<C> {

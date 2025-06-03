@@ -1,6 +1,6 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
 import { OrthogonalCoords } from '../utils.js';
-import { demangleOrthogonalCoords, demangleProperty, mangleOrthogonalCoords } from '../mangle.js';
+import { demangleOrthogonalCoords, demangleProperty } from '../mangle.js';
 import { Register } from '../register.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';
@@ -14,9 +14,6 @@ export class RectangleTile extends AbstractTile<OrthogonalCoords> {
 
   public static import(snapshot: RectangleTileSnapshot) : RectangleTile {
     return this.importSnapshot(RectangleTile, snapshot);
-  }
-  public static override importCoords(object: any) : OrthogonalCoords {
-    return mangleOrthogonalCoords(object);
   }
   public override export() : RectangleTileSnapshot {
     return this.exportSnapshot();
