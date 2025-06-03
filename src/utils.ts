@@ -323,39 +323,39 @@ export function indexToAxialCoords(index: Index, orientation: GridOrientation, o
   return orthogonalCoordsToAxial(indexToOrthogonalCoords(index), orientation, offset);
 }
 
-// function isObject(item: any) {
-//   return (item && typeof item === 'object' && !Array.isArray(item));
-// }
+function isObject(item: any) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
 
-// // Based on https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
+// Based on https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
 
-// /**
-//  * Deep merge two objects.
-//  * @param target
-//  * @param ...sources
-//  */
-// function mergeDeep(target: any, ...sources: any[]) {
-//   if (!sources.length) {
-//     return target;
-//   }
-//   const source = sources.shift();
+/**
+ * Deep merge two objects.
+ * @param target
+ * @param ...sources
+ */
+export function mergeDeep(target: any, ...sources: any[]) {
+  if (!sources.length) {
+    return target;
+  }
+  const source = sources.shift();
 
-//   if (isObject(target) && isObject(source)) {
-//     for (const key in source) {
-//       // Only if the key exists in the target object
-//       if (!target.hasOwnProperty(key)) { 
-//         continue;
-//       }
-//       if (isObject(target[key]) && isObject(source[key])) {
-//         mergeDeep(target[key], source[key]);
-//       } else {
-//         Object.assign(target, { [key]: source[key] });
-//       }
-//     }
-//   }
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      // Only if the key exists in the target object
+      if (!target.hasOwnProperty(key)) { 
+        continue;
+      }
+      if (isObject(target[key]) && isObject(source[key])) {
+        mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(target, { [key]: source[key] });
+      }
+    }
+  }
 
-//   return mergeDeep(target, ...sources);
-// }
+  return mergeDeep(target, ...sources);
+}
 
 export type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>;

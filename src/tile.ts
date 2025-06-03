@@ -1,4 +1,4 @@
-import { Coords, Index, OrthogonalCoords } from './utils.js';
+import { Coords, Index, mergeDeep, OrthogonalCoords } from './utils.js';
 import { mangleProperty, demangleProperties, demangleProperty, demangleIndex, mangleIndex, demangleTileIds, mangleTileIds, mangleTileStyleDecls, demangleTileStyleDecls } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
@@ -14,7 +14,9 @@ export type TileConstants<C extends Coords = Coords> = {
   coords: C,
   decls: TileStyleDecls | false // false = use grid default tile style
 };
-type TileMutables = {};
+type TileMutables = {
+  data: Record<string, any>
+};
 
 export type TileArguments<C extends Coords = Coords> = Omit<TileConstants<C>, 'ids'> & {
   ids: GridIdsProperties | TileIdsProperties
@@ -58,6 +60,10 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
 
   protected rendered: boolean = false;
 
+  protected _data: Record<string, any>;
+  protected set data(value: Record<string, any>) { this._data = value; }
+  public get data() : Record<string, any> { return this._data; }
+
   constructor(args: TileArguments<C>) {
     if (typeof (args.ids as TileIdsProperties).tile === 'number') {
       this.ids = new TileIds(args.ids, (args.ids as TileIdsProperties).tile);
@@ -75,7 +81,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
       ids: mangleTileIds(mangleProperty(snapshot, 'ids')),
       index: mangleIndex(mangleProperty(snapshot, 'index')),
       coords: this.importCoords(mangleProperty(snapshot, 'coords')),
-      decls: mangleTileStyleDecls(mangleProperty(snapshot, 'decls'))
+      decls: mangleTileStyleDecls(mangleProperty(snapshot, 'decls')),
+      data: mangleProperty(snapshot, 'data')
     };
 
     let instance = new tile(verifiedSnapshot as TileArguments<C>);
@@ -83,7 +90,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     return instance;
   }
   protected mutate(mutation: TileMutation) : void {
-    mutation;
+    mergeDeep(this.data, mangleProperty(mutation, 'data'));
   }
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
   protected static abstract importCoords(object: any) : C;
@@ -97,7 +104,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
       ['ids', demangleTileIds(this.ids)],
       ['index', demangleIndex(this.index)],
       ['coords', this.exportCoords()],
-      ['decls', this._style !== undefined ? demangleTileStyleDecls(this.decls) : false]
+      ['decls', this._style !== undefined ? demangleTileStyleDecls(this.decls) : false],
+      ['data', this.data]
     ]);
     return object as TileConstants<C>;
   }
