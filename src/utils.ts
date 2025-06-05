@@ -360,3 +360,6 @@ export function mergeDeep(target: any, ...sources: any[]) {
 export type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>;
 } : T;
+
+export type Mutation = Record<string, any>;
+export type Mutables = { mutables: Mutation };

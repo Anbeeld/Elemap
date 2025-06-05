@@ -2,15 +2,13 @@ import RectangleMap from "./rectangle/map.js";
 import HexagonMap from "./hexagon/map.js";
 import { CustomTileStyleDecls } from "./style/schema.js";
 import { Config, configToGridMapArguments } from "./config.js";
-import { MapType } from "./utils.js";
+import { MapType, Mutation } from "./utils.js";
 import { demangleProperty } from "./mangle.js";
 import { RectangleTile } from "./rectangle/tile.js";
 import { HexagonTile } from "./hexagon/tile.js";
 import { GridMapMutation, GridMapSnapshot } from "./map.js";
 import { RectangleGrid } from "./rectangle/grid.js";
 import { HexagonGrid } from "./hexagon/grid.js";
-import { GridMutation } from "./grid.js";
-import { TileMutation } from "./tile.js";
 
 type MapTypeStrings = `${MapType}`;
 
@@ -108,13 +106,13 @@ class ElemapGrid<M extends MapTypeStrings> {
     this.demangle__tileByIndex();
   }
 
-  public mutate(mutation: GridMutation) : void {
+  public mutate(mutation: Mutation) : void {
     return this.method__mutate(mutation);
   }
   private demangle__mutate() {
-    demangleProperty(this, 'mutate', (mutation: GridMutation) => this.method__mutate(mutation));
+    demangleProperty(this, 'mutate', (mutation: Mutation) => this.method__mutate(mutation));
   }
-  private method__mutate(mutation: GridMutation) {
+  private method__mutate(mutation: Mutation) {
     return this._.mutate(mutation);
   }
 
@@ -147,13 +145,13 @@ class ElemapTile<M extends MapTypeStrings> {
     this.demangle__updateStyle();
   }
 
-  public mutate(mutation: TileMutation) : void {
+  public mutate(mutation: Mutation) : void {
     return this.method__mutate(mutation);
   }
   private demangle__mutate() {
-    demangleProperty(this, 'mutate', (mutation: TileMutation) => this.method__mutate(mutation));
+    demangleProperty(this, 'mutate', (mutation: Mutation) => this.method__mutate(mutation));
   }
-  private method__mutate(mutation: TileMutation) {
+  private method__mutate(mutation: Mutation) {
     return this._.mutate(mutation);
   }
 

@@ -1,12 +1,11 @@
 import { AbstractTile, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep } from "./utils.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep, Mutables, Mutation } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
 import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema } from "./mangle.js";
 
 // Snapshot and mutation types
-export type GridSnapshot = GridConstants & GridMutables;
-export type GridMutation = Record<string, any>;
+export type GridSnapshot = GridConstants & Mutables;
 type GridConstants = {
   ids: GridIdsProperties,
   size: Size,
@@ -14,9 +13,6 @@ type GridConstants = {
   offset: GridOffset,
   schema: GridStyleSchema | false, // false = use map default grid and tile style
   tiles: TileSnapshot[][]
-};
-type GridMutables = {
-  data: GridMutation
 };
 
 export type GridArguments = Omit<GridConstants, 'ids'> & {
@@ -33,7 +29,7 @@ interface GridElements {
   contourHover: HTMLElement;
 }
 
-export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implements GridConstants, GridMutables {
+export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implements GridConstants, Mutables {
   protected _ids: GridIds;
   protected set ids(value: GridIds) { this._ids = value; }
   public get ids() : GridIds { return this._ids; }
@@ -92,8 +88,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   public get elements() : GridElements|undefined { return this._elements; }
 
   protected _data: Record<string, any> = {};
-  protected set data(value: Record<string, any>) { this._data = value; }
-  public get data() : Record<string, any> { return this._data; }
+  protected set mutables(value: Record<string, any>) { this._data = value; }
+  public get mutables() : Record<string, any> { return this._data; }
 
   constructor(args: GridArguments) {
     if (typeof (args.ids as GridIdsProperties).grid === 'number') {
@@ -116,8 +112,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     instance.mutate(snapshot);
     return instance;
   }
-  public mutate(mutation: GridMutation) : void {
-    mergeDeep(this.data, mutation);
+  public mutate(mutation: Mutation) : void {
+    mergeDeep(this.mutables, mutation);
   }
 
   public abstract export() : GridSnapshot;
@@ -135,11 +131,11 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     ]);
     return object as GridConstants;
   }
-  protected exportMutables(object: object = {}) : GridMutables {
+  protected exportMutables(object: object = {}) : Mutables {
     demangleProperties(object, [
-      ['data', this.data]
+      ['mutables', this.mutables]
     ]);
-    return object as GridMutables;
+    return object as Mutables;
   }
 
   protected abstract initTiles(snapshot?: TileSnapshot[][]): void;

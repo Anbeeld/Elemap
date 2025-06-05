@@ -228,7 +228,7 @@ export function mangleTileSnapshot<C extends Coords>(snapshot: any) : TileSnapsh
     index: mangleIndex(mangleProperty(snapshot, 'index')),
     coords: mangleCoords<C>(mangleProperty(snapshot, 'coords')),
     decls: mangleTileStyleDecls(mangleProperty(snapshot, 'decls')),
-    data: mangleProperty(snapshot, 'data')
+    mutables: mangleProperty(snapshot, 'mutables')
   };
 }
 
