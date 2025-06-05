@@ -166,7 +166,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     instance.mutate(snapshot);
     return instance;
   }
-  protected mutate(mutation: GridMapMutation) : void {
+  public mutate(mutation: GridMapMutation) : void {
     mergeDeep(this.data, mangleProperty(mutation, 'data'));
   }
 

@@ -81,7 +81,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     instance.mutate(snapshot);
     return instance;
   }
-  protected mutate(mutation: TileMutation) : void {
+  public mutate(mutation: TileMutation) : void {
     mergeDeep(this.data, mangleProperty(mutation, 'data'));
   }
 

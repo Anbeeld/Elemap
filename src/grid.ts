@@ -116,7 +116,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     instance.mutate(snapshot);
     return instance;
   }
-  protected mutate(mutation: GridMutation) : void {
+  public mutate(mutation: GridMutation) : void {
     mergeDeep(this.data, mangleProperty(mutation, 'data'));
   }
 
