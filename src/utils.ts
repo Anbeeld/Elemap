@@ -343,9 +343,9 @@ export function mergeDeep(target: any, ...sources: any[]) {
   if (isObject(target) && isObject(source)) {
     for (const key in source) {
       // Only if the key exists in the target object
-      if (!target.hasOwnProperty(key)) { 
-        continue;
-      }
+      // if (!target.hasOwnProperty(key)) { 
+      //   continue;
+      // }
       if (isObject(target[key]) && isObject(source[key])) {
         mergeDeep(target[key], source[key]);
       } else {
