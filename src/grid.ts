@@ -1,8 +1,8 @@
 import { AbstractTile, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords } from "./utils.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
-import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema } from "./mangle.js";
+import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema, mangleProperty } from "./mangle.js";
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & GridMutables;
@@ -16,6 +16,7 @@ type GridConstants = {
   tiles: TileSnapshot[][]
 };
 type GridMutables = {
+  data: Record<string, any>
 };
 
 export type GridArguments = Omit<GridConstants, 'ids'> & {
@@ -90,6 +91,10 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected set elements(value: GridElements) { this._elements = value; }
   public get elements() : GridElements|undefined { return this._elements; }
 
+  protected _data: Record<string, any>;
+  protected set data(value: Record<string, any>) { this._data = value; }
+  public get data() : Record<string, any> { return this._data; }
+
   constructor(args: GridArguments) {
     if (typeof (args.ids as GridIdsProperties).grid === 'number') {
       this.ids = new GridIds(args.ids, (args.ids as GridIdsProperties).grid);
@@ -112,12 +117,12 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return instance;
   }
   protected mutate(mutation: GridMutation) : void {
-    mutation;
+    mergeDeep(this.data, mangleProperty(mutation, 'data'));
   }
 
   public abstract export() : GridSnapshot;
   protected exportSnapshot() : GridSnapshot {
-    return  this.exportMutables(this.exportConstants()) as GridSnapshot;
+    return this.exportMutables(this.exportConstants()) as GridSnapshot;
   }
   protected exportConstants(object: object = {}) : GridConstants {
     demangleProperties(object, [
@@ -131,6 +136,9 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return object as GridConstants;
   }
   protected exportMutables(object: object = {}) : GridMutables {
+    demangleProperties(object, [
+      ['data', this.data]
+    ]);
     return object as GridMutables;
   }
 
