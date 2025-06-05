@@ -3,8 +3,8 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
-import { MapType, } from './utils.js';
-import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema } from './mangle.js';
+import { MapType, mergeDeep, } from './utils.js';
+import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleProperty } from './mangle.js';
 
 interface MapElements {
   container?: HTMLElement,
@@ -20,6 +20,7 @@ type MapConstants = {
   ids: MapIdsProperties
 };
 type MapMutables = {
+  data: Record<string, any>
 };
 
 export type MapArguments = Omit<MapConstants, 'ids'> & {
@@ -47,6 +48,10 @@ export abstract class AbstractMap implements MapConstants, MapMutables {
     };
   }
 
+  protected _data: Record<string, any>;
+  protected set data(value: Record<string, any>) { this._data = value; }
+  public get data() : Record<string, any> { return this._data; }
+
   constructor(args: MapArguments) {
     if (args.ids && typeof args.ids.map === 'number') {
       this.ids = new MapIds(args.ids.map);
@@ -71,6 +76,9 @@ export abstract class AbstractMap implements MapConstants, MapMutables {
     return object as MapConstants;
   }
   protected exportMutables(object: object = {}) : MapMutables {
+    demangleProperties(object, [
+      ['data', this.data]
+    ]);
     return object as MapMutables;
   }
   protected abstract exportMapType() : string;
@@ -159,7 +167,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     return instance;
   }
   protected mutate(mutation: GridMapMutation) : void {
-    mutation;
+    mergeDeep(this.data, mangleProperty(mutation, 'data'));
   }
 
   protected override exportConstants(object: object = {}) : GridMapConstants {
@@ -170,6 +178,12 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
       ['schema', demangleGridMapStyleSchema(this.schema)]
     ]);
     return object as GridMapConstants;
+  }
+  protected override exportMutables(object: object = {}) : GridMapMutables {
+    demangleProperties(object, [
+      ['data', this.data]
+    ]);
+    return object as GridMapMutables;
   }
 
   public override render(container: HTMLElement) {
