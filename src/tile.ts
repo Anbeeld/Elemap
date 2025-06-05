@@ -100,6 +100,9 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     return object as TileConstants<C>;
   }
   protected exportMutables(object: object = {}) : TileMutables {
+    demangleProperties(object, [
+      ['data', this.data]
+    ]);
     return object as TileMutables;
   }
 
