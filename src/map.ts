@@ -48,7 +48,7 @@ export abstract class AbstractMap implements MapConstants, MapMutables {
     };
   }
 
-  protected _data: Record<string, any>;
+  protected _data: Record<string, any> = {};
   protected set data(value: Record<string, any>) { this._data = value; }
   public get data() : Record<string, any> { return this._data; }
 

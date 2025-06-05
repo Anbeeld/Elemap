@@ -91,7 +91,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected set elements(value: GridElements) { this._elements = value; }
   public get elements() : GridElements|undefined { return this._elements; }
 
-  protected _data: Record<string, any>;
+  protected _data: Record<string, any> = {};
   protected set data(value: Record<string, any>) { this._data = value; }
   public get data() : Record<string, any> { return this._data; }
 

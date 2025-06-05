@@ -60,7 +60,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
 
   protected rendered: boolean = false;
 
-  protected _data: Record<string, any>;
+  protected _data: Record<string, any> = {};
   protected set data(value: Record<string, any>) { this._data = value; }
   public get data() : Record<string, any> { return this._data; }
 
