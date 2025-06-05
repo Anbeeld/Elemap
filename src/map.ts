@@ -120,7 +120,7 @@ export abstract class AbstractMap implements MapConstants, MapMutables {
 export type GridMapSnapshot = {
   type: MapType,
 } & GridMapConstants & GridMapMutables;
-type GridMapMutation = Partial<GridMapMutables>;
+export type GridMapMutation = Partial<GridMapMutables>;
 type GridMapConstants = MapConstants & {
   grid: GridSnapshot,
   schema: GridMapStyleSchema

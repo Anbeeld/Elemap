@@ -6,7 +6,7 @@ import { MapType } from "./utils.js";
 import { demangleProperty } from "./mangle.js";
 import { RectangleTile } from "./rectangle/tile.js";
 import { HexagonTile } from "./hexagon/tile.js";
-import { GridMapSnapshot } from "./map.js";
+import { GridMapMutation, GridMapSnapshot } from "./map.js";
 
 type MapTypeStrings = `${MapType}`;
 
@@ -30,6 +30,7 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     // For JavaScript - ensure methods are available by their original names
     this.demangle__export();
     this.demangle__render();
+    this.demangle__mutate();
     this.demangle__tileByIndex();
   }
 
@@ -45,6 +46,16 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
   }
   private method__export() {
     return this._.export();
+  }
+
+  public mutate(mutation: GridMapMutation) : void {
+    return this.method__mutate(mutation);
+  }
+  private demangle__mutate() {
+    demangleProperty(this, 'mutate', (mutation: GridMapMutation) => this.method__mutate(mutation));
+  }
+  private method__mutate(mutation: GridMapMutation) {
+    return this._.mutate(mutation);
   }
   
   public render(container: HTMLElement) { this.method__render(container); }
