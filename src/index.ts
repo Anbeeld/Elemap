@@ -69,9 +69,13 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     this._.render(container);
   }
 
-  public grid() { return this.method__grid(); }
+  public set grid(value: any) { value; }
+  public get grid() { return this.method__grid(); }
   private demangle__grid() {
-    demangleProperty(this, 'grid', () => this.method__grid());
+    demangleProperty(this, 'grid', {
+      set: (value: any) => { value; },
+      get: () => this.method__grid()
+    });
   }
   private method__grid() : ElemapGrid<M>|undefined {
     let grid = this._.grid;
