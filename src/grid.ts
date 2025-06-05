@@ -6,7 +6,7 @@ import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSch
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & GridMutables;
-type GridMutation = Partial<GridMutables>;
+export type GridMutation = Partial<GridMutables>;
 type GridConstants = {
   ids: GridIdsProperties,
   size: Size,

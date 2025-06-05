@@ -7,6 +7,9 @@ import { demangleProperty } from "./mangle.js";
 import { RectangleTile } from "./rectangle/tile.js";
 import { HexagonTile } from "./hexagon/tile.js";
 import { GridMapMutation, GridMapSnapshot } from "./map.js";
+import { RectangleGrid } from "./rectangle/grid.js";
+import { HexagonGrid } from "./hexagon/grid.js";
+import { GridMutation } from "./grid.js";
 
 type MapTypeStrings = `${MapType}`;
 
@@ -31,6 +34,7 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     this.demangle__export();
     this.demangle__render();
     this.demangle__mutate();
+    this.demangle__grid();
     this.demangle__tileByIndex();
   }
 
@@ -66,6 +70,18 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     this._.render(container);
   }
 
+  public grid() { return this.method__grid(); }
+  private demangle__grid() {
+    demangleProperty(this, 'grid', () => this.method__grid());
+  }
+  private method__grid() : ElemapGrid<M>|undefined {
+    let grid = this._.grid;
+    if (grid) {
+      return new ElemapGrid<M>(grid as ElemapGridType<M>);
+    }
+    return undefined;
+  }
+
   public tileByIndex(i: number, j: number) { return this.method__tileByIndex(i, j); }
   private demangle__tileByIndex() {
     demangleProperty(this, 'tileByIndex', (i: number, j: number) => this.method__tileByIndex(i, j));
@@ -84,6 +100,32 @@ function method__import(snapshot: GridMapSnapshot) {
   return new Elemap(snapshot.type, snapshot);
 }
 demangleProperty(Elemap, 'import', method__import);
+
+type ElemapGridType<M> = 
+  M extends "rectangle" ? RectangleGrid :
+  M extends "hexagon" ? HexagonGrid :
+  never;
+
+class ElemapGrid<M extends MapTypeStrings> {
+  private _: ElemapGridType<M>;
+
+  constructor(grid: ElemapGridType<M>) {
+    this._ = grid;
+
+    // For JavaScript - ensure methods are available by their original names
+    this.demangle__mutate();
+  }
+
+  public mutate(mutation: GridMutation) : void {
+    return this.method__mutate(mutation);
+  }
+  private demangle__mutate() {
+    demangleProperty(this, 'mutate', (mutation: GridMutation) => this.method__mutate(mutation));
+  }
+  private method__mutate(mutation: GridMutation) {
+    return this._.mutate(mutation);
+  }
+}
 
 type ElemapTileType<M> = 
   M extends "rectangle" ? RectangleTile :

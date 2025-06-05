@@ -133,9 +133,7 @@ export type GridMapArguments = Omit<GridMapConstants, 'ids' | 'grid'> & {
 };
 
 export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> extends AbstractMap implements GridMapConstants, GridMapMutables {
-  protected _grid: G;
-  protected set grid(value: G) { this._grid = value; }
-  public get grid() : G { return this._grid; }
+  public readonly grid: G;
 
   protected override _style: GridMapStyle;
   protected override set style(value: GridMapStyle) { this._style = value; }
