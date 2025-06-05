@@ -35,7 +35,6 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     this.demangle__render();
     this.demangle__mutate();
     this.demangle__grid();
-    this.demangle__tileByIndex();
   }
 
   public static import(snapshot: GridMapSnapshot) {
@@ -81,19 +80,6 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     }
     return undefined;
   }
-
-  public tileByIndex(i: number, j: number) { return this.method__tileByIndex(i, j); }
-  private demangle__tileByIndex() {
-    demangleProperty(this, 'tileByIndex', (i: number, j: number) => this.method__tileByIndex(i, j));
-  }
-  private method__tileByIndex(i: number, j: number) : ElemapTile<M>|undefined {
-    // @ts-ignore
-    let tile = this._.grid.tileByIndex(i, j);
-    if (tile) {
-      return new ElemapTile<M>(tile as ElemapTileType<M>);
-    }
-    return undefined;
-  }
 }
 
 function method__import(snapshot: GridMapSnapshot) {
@@ -114,6 +100,7 @@ class ElemapGrid<M extends MapTypeStrings> {
 
     // For JavaScript - ensure methods are available by their original names
     this.demangle__mutate();
+    this.demangle__tileByIndex();
   }
 
   public mutate(mutation: GridMutation) : void {
@@ -124,6 +111,18 @@ class ElemapGrid<M extends MapTypeStrings> {
   }
   private method__mutate(mutation: GridMutation) {
     return this._.mutate(mutation);
+  }
+
+  public tileByIndex(i: number, j: number) { return this.method__tileByIndex(i, j); }
+  private demangle__tileByIndex() {
+    demangleProperty(this, 'tileByIndex', (i: number, j: number) => this.method__tileByIndex(i, j));
+  }
+  private method__tileByIndex(i: number, j: number) : ElemapTile<M>|undefined {
+    let tile = this._.tileByIndex(i, j);
+    if (tile) {
+      return new ElemapTile<M>(tile as ElemapTileType<M>);
+    }
+    return undefined;
   }
 }
 
