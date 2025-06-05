@@ -10,6 +10,7 @@ import { GridMapMutation, GridMapSnapshot } from "./map.js";
 import { RectangleGrid } from "./rectangle/grid.js";
 import { HexagonGrid } from "./hexagon/grid.js";
 import { GridMutation } from "./grid.js";
+import { TileMutation } from "./tile.js";
 
 type MapTypeStrings = `${MapType}`;
 
@@ -142,7 +143,18 @@ class ElemapTile<M extends MapTypeStrings> {
     this._ = tile;
 
     // For JavaScript - ensure methods are available by their original names
+    this.demangle__mutate();
     this.demangle__updateStyle();
+  }
+
+  public mutate(mutation: TileMutation) : void {
+    return this.method__mutate(mutation);
+  }
+  private demangle__mutate() {
+    demangleProperty(this, 'mutate', (mutation: TileMutation) => this.method__mutate(mutation));
+  }
+  private method__mutate(mutation: TileMutation) {
+    return this._.mutate(mutation);
   }
 
   public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {

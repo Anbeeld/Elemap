@@ -7,7 +7,7 @@ import { modifyTileStyleDecls, CustomTileStyleDecls, TileStyleDecls } from './st
 
 // Snapshot and mutation types
 export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & TileMutables;
-type TileMutation = Partial<TileMutables>;
+export type TileMutation = Partial<TileMutables>;
 export type TileConstants<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   index: Index,
