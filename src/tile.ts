@@ -1,5 +1,5 @@
 import { Coords, Index, mergeDeep, OrthogonalCoords } from './utils.js';
-import { mangleProperty, demangleProperties, demangleProperty, demangleIndex, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords } from './mangle.js';
+import { demangleProperties, demangleProperty, demangleIndex, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
@@ -7,7 +7,7 @@ import { modifyTileStyleDecls, CustomTileStyleDecls, TileStyleDecls } from './st
 
 // Snapshot and mutation types
 export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & TileMutables;
-export type TileMutation = Partial<TileMutables>;
+export type TileMutation = Record<string, any>;
 export type TileConstants<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   index: Index,
@@ -15,7 +15,7 @@ export type TileConstants<C extends Coords = Coords> = {
   decls: TileStyleDecls | false // false = use grid default tile style
 };
 type TileMutables = {
-  data: Record<string, any>
+  data: TileMutation
 };
 
 export type TileArguments<C extends Coords = Coords> = Omit<TileConstants<C>, 'ids'> & {
@@ -82,7 +82,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     return instance;
   }
   public mutate(mutation: TileMutation) : void {
-    mergeDeep(this.data, mangleProperty(mutation, 'data'));
+    mergeDeep(this.data, mutation);
   }
 
   public abstract export() : TileSnapshot<C>;

@@ -2,11 +2,11 @@ import { AbstractTile, TileSnapshot } from "./tile.js";
 import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
-import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema, mangleProperty } from "./mangle.js";
+import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema } from "./mangle.js";
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & GridMutables;
-export type GridMutation = Partial<GridMutables>;
+export type GridMutation = Record<string, any>;
 type GridConstants = {
   ids: GridIdsProperties,
   size: Size,
@@ -16,7 +16,7 @@ type GridConstants = {
   tiles: TileSnapshot[][]
 };
 type GridMutables = {
-  data: Record<string, any>
+  data: GridMutation
 };
 
 export type GridArguments = Omit<GridConstants, 'ids'> & {
@@ -117,7 +117,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return instance;
   }
   public mutate(mutation: GridMutation) : void {
-    mergeDeep(this.data, mangleProperty(mutation, 'data'));
+    mergeDeep(this.data, mutation);
   }
 
   public abstract export() : GridSnapshot;

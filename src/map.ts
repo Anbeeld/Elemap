@@ -4,7 +4,7 @@ import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
 import { MapType, mergeDeep, } from './utils.js';
-import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleProperty } from './mangle.js';
+import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema } from './mangle.js';
 
 interface MapElements {
   container?: HTMLElement,
@@ -15,12 +15,12 @@ interface MapElements {
 export type MapSnapshot = {
   type: MapType,
 } & MapConstants & MapMutables;
-// type MapMutation = Partial<MapMutables>;
+type MapMutation = Record<string, any>;
 type MapConstants = {
   ids: MapIdsProperties
 };
 type MapMutables = {
-  data: Record<string, any>
+  data: MapMutation
 };
 
 export type MapArguments = Omit<MapConstants, 'ids'> & {
@@ -120,7 +120,7 @@ export abstract class AbstractMap implements MapConstants, MapMutables {
 export type GridMapSnapshot = {
   type: MapType,
 } & GridMapConstants & GridMapMutables;
-export type GridMapMutation = Partial<GridMapMutables>;
+export type GridMapMutation = MapMutation;
 type GridMapConstants = MapConstants & {
   grid: GridSnapshot,
   schema: GridMapStyleSchema
@@ -165,7 +165,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     return instance;
   }
   public mutate(mutation: GridMapMutation) : void {
-    mergeDeep(this.data, mangleProperty(mutation, 'data'));
+    mergeDeep(this.data, mutation);
   }
 
   protected override exportConstants(object: object = {}) : GridMapConstants {
