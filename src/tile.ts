@@ -101,6 +101,9 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     ]);
     return object as Mutables;
   }
+  public report() : Mutation {
+    return this.mutables;
+  }
 
   protected abstract createStyle(decls: CustomTileStyleDecls) : TileStyle;
 

@@ -78,6 +78,9 @@ export abstract class AbstractMap implements MapConstants, Mutables {
     return object as Mutables;
   }
   protected abstract exportMapType() : string;
+  public report() : Mutation {
+    return this.mutables;
+  }
 
   protected abstract initStyle(schema: GridMapStyleSchema) : void;
 

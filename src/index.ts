@@ -31,6 +31,7 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
 
     // For JavaScript - ensure methods are available by their original names
     this.demangle__export();
+    this.demangle__report();
     this.demangle__render();
     this.demangle__mutate();
     this.demangle__grid();
@@ -48,6 +49,16 @@ export default class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
   }
   private method__export() {
     return this._.export();
+  }
+
+  public report() {
+    return this.method__report();
+  }
+  private demangle__report() {
+    demangleProperty(this, 'report', () => this.method__report());
+  }
+  private method__report() {
+    return this._.report();
   }
 
   public mutate(mutation: GridMapMutation) : void {
@@ -103,6 +114,7 @@ class ElemapGrid<M extends MapTypeStrings> {
 
     // For JavaScript - ensure methods are available by their original names
     this.demangle__export();
+    this.demangle__report();
     this.demangle__mutate();
     this.demangle__tileByIndex();
   }
@@ -115,6 +127,16 @@ class ElemapGrid<M extends MapTypeStrings> {
   }
   private method__export() {
     return this._.export();
+  }
+
+  public report() {
+    return this.method__report();
+  }
+  private demangle__report() {
+    demangleProperty(this, 'report', () => this.method__report());
+  }
+  private method__report() {
+    return this._.report();
   }
 
   public mutate(mutation: Mutation) : void {
@@ -153,6 +175,7 @@ class ElemapTile<M extends MapTypeStrings> {
 
     // For JavaScript - ensure methods are available by their original names
     this.demangle__export();
+    this.demangle__report();
     this.demangle__mutate();
     this.demangle__updateStyle();
   }
@@ -165,6 +188,16 @@ class ElemapTile<M extends MapTypeStrings> {
   }
   private method__export() {
     return this._.export();
+  }
+
+  public report() {
+    return this.method__report();
+  }
+  private demangle__report() {
+    demangleProperty(this, 'report', () => this.method__report());
+  }
+  private method__report() {
+    return this._.report();
   }
 
   public mutate(mutation: Mutation) : void {

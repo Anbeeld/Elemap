@@ -137,6 +137,9 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     ]);
     return object as Mutables;
   }
+  public report() : Mutation {
+    return this.mutables;
+  }
 
   protected abstract initTiles(snapshot?: TileSnapshot[][]): void;
 
