@@ -19,6 +19,7 @@ It goes well with my other library, [Tilted](https://github.com/anbeeld/Tilted),
 - Tile shapes are set using clip-path to ensure correct mouse behaviour.
 - Spacing between tiles, outline on hover, rounded corners, and more included by default.
 - Styling system based around CSS with the ability to set custom visuals for each tile.
+- Import and export, as well as the mutation system to store arbitrary data in Elemap objects.
 
 ## Installation
 
@@ -28,11 +29,11 @@ It goes well with my other library, [Tilted](https://github.com/anbeeld/Tilted),
 
 `import Elemap from 'elemap'` if using npm
 
-`const elemap = new Elemap(config?, schema?)`
+`const elemap = new Elemap(type?, config?)`
 
 `config` is an object that sets up type of the map and grid parameters. Please refer to `examples` for more info.
 
-`schema` is an object with arguments for map visuals, used by styling system based around CSS declarations. Please refer to `examples` and `src/style/schema.ts` for more info.
+`config` includes `schema`, which is an object with arguments for map visuals, used by styling system based around CSS declarations. Please refer to `examples` and `src/style/schema.ts` for more info.
 
 `elemap.render(container)` to draw the map on the page, where `container` is an element that will store Elemap contents.
 
