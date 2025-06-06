@@ -1,5 +1,5 @@
 import { Coords, Index, mergeDeep, Mutables, Mutation, OrthogonalCoords } from './utils.js';
-import { demangleProperties, demangleProperty, demangleIndex, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords } from './mangle.js';
+import { demangleProperties, demangleProperty, demangleIndex, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords, mangleTileStyleDecls } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
@@ -105,6 +105,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected abstract createStyle(decls: CustomTileStyleDecls) : TileStyle;
 
   public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
+    decls = mangleTileStyleDecls(decls);
     if (this._style === undefined || replace) {
       this.style = this.createStyle(modifyTileStyleDecls(decls));
     } else {
