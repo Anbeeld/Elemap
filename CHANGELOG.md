@@ -1,3 +1,14 @@
+## 0.2.0
+
+- Implemented import and export methods for map, grid and tile classes. You can use the export method of a map object to return its snapshot containing all the data of the map itself, as well as its grid and tiles associated with it. You can then import it via a static method of the main index class, which will create an identical map. Import and export preserve the ids and thus are not meant for cloning, but rather for saving the state between sessions and alike. You can also use export on the grid object, which will result in a snapshot with the grid and tiles data, and also on the individual tiles. Importing is limited to the map at the moment, creating all the objects at once.
+- Implemented mutate and report methods for map, grid and tile classes. The mutate method allows you to pass an object with arbitrary properties, which will be then saved as mutables in the Elemap entity you are passing it into. You can then use report method to get an object with all properties added in previous mutations. Alternatively, export snapshots include mutables as well. Mutation allows you to store any data and easily transfer it using Elemap objects instead of having multiple duplicate systems.
+- User config now follows the structure of the map snapshot. Map type is no longer included in it, and is now a separate argument in the main index class. On the other hand, schema is now included in the config, while previously it was provided separately. Size, as in rows and columns of tiles, is now part of the grid properties instead of the main config object.
+- Map, grid and tile classes are now constructed using their own sets of arguments, with defined properties mostly following their respective snapshots, instead of passing the initial user config.
+- Added the grid index class, and made all the index classes generic based on map type, improving TypeScript compatibility.
+- Improved generic types of abstract map, grid and tile classes.
+- One more naming change for property mangling workarounds. Now it's just mangleX to convert input data into mangled names, and demangleX to convert mangled names into output data, all in a separate file. Hopefully that's the last one.
+- Various small fixes and changes.
+
 ## 0.1.6
 
 - Shielding from property mangling is now applied by using getProperty and setProperty utility functions.
