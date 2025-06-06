@@ -102,8 +102,19 @@ class ElemapGrid<M extends MapTypeStrings> {
     this._ = grid;
 
     // For JavaScript - ensure methods are available by their original names
+    this.demangle__export();
     this.demangle__mutate();
     this.demangle__tileByIndex();
+  }
+
+  public export() {
+    return this.method__export();
+  }
+  private demangle__export() {
+    demangleProperty(this, 'export', () => this.method__export());
+  }
+  private method__export() {
+    return this._.export();
   }
 
   public mutate(mutation: Mutation) : void {
@@ -141,8 +152,19 @@ class ElemapTile<M extends MapTypeStrings> {
     this._ = tile;
 
     // For JavaScript - ensure methods are available by their original names
+    this.demangle__export();
     this.demangle__mutate();
     this.demangle__updateStyle();
+  }
+
+  public export() {
+    return this.method__export();
+  }
+  private demangle__export() {
+    demangleProperty(this, 'export', () => this.method__export());
+  }
+  private method__export() {
+    return this._.export();
   }
 
   public mutate(mutation: Mutation) : void {
