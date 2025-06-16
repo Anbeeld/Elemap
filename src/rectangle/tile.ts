@@ -8,9 +8,6 @@ import { TileStyleDecls } from '../style/schema.js';
 export type RectangleTileSnapshot = TileSnapshot<OrthogonalCoords>;
 
 export class RectangleTile extends AbstractTile<OrthogonalCoords> {
-  public get row() : number { return this.coords.x; }
-  public get col() : number { return this.coords.y; }
-
   constructor(args: TileArguments<OrthogonalCoords>) {
     super(args);
   }

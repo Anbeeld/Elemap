@@ -8,9 +8,6 @@ import HexagonTileStyle from '../style/hexagon/tile.js';
 export type HexagonTileSnapshot = TileSnapshot<AxialCoords>;
 
 export class HexagonTile extends AbstractTile<AxialCoords> {
-  public get row() : number { return this.coords.q; }
-  public get col() : number { return this.coords.r; }
-  
   constructor(args: TileArguments<AxialCoords>) {
     super(args);
   }

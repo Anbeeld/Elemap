@@ -1,4 +1,4 @@
-import { Coords, mergeDeep, Mutables, Mutation, OrthogonalCoords } from './utils.js';
+import { Coords, getCoordsRow, mergeDeep, Mutables, Mutation, OrthogonalCoords } from './utils.js';
 import { demangleProperties, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords, mangleTileStyleDecls } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
@@ -48,8 +48,6 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected _coords: C;
   protected set coords(value: C) { this._coords = value; }
   public get coords() : C { return this._coords; }
-  public abstract get row() : number;
-  public abstract get col() : number;
 
   protected rendered: boolean = false;
 
@@ -134,8 +132,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected abstract setCoordsAttributes() : void;
 
   public render() : void {
-    let outer = this.grid.elements!.outerRows[this.row]!;
-    let inner = this.grid.elements!.innerRows[this.row]!;
+    let outer = this.grid.elements!.outerRows[getCoordsRow(this.coords)]!;
+    let inner = this.grid.elements!.innerRows[getCoordsRow(this.coords)]!;
 
     this.initElements();
 

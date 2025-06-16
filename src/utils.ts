@@ -34,13 +34,13 @@ export interface OrthogonalCoords extends Coords {
 
 export function getCoordsRow<C extends Coords>(coords: C) : number {
   if (coords.q !== undefined && coords.r !== undefined) {
-    return coords.q;
+    return coords.r;
   }
   return coords.x!;
 }
 export function getCoordsCol<C extends Coords>(coords: C) : number {
   if (coords.q !== undefined && coords.r !== undefined) {
-    return coords.r;
+    return coords.q;
   }
   return coords.y!;
 }
