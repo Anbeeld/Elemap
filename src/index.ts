@@ -116,7 +116,7 @@ class ElemapGrid<M extends MapTypeStrings> {
     this.demangle__export();
     this.demangle__report();
     this.demangle__mutate();
-    this.demangle__tileByIndex();
+    this.demangle__tileByCoords();
   }
 
   public export() {
@@ -149,12 +149,12 @@ class ElemapGrid<M extends MapTypeStrings> {
     return this._.mutate(mutation);
   }
 
-  public tileByIndex(i: number, j: number) { return this.method__tileByIndex(i, j); }
-  private demangle__tileByIndex() {
-    demangleProperty(this, 'tileByIndex', (i: number, j: number) => this.method__tileByIndex(i, j));
+  public tileByCoords(firstCoord: number, secondCoord: number) { return this.method__tileByCoords(firstCoord, secondCoord); }
+  private demangle__tileByCoords() {
+    demangleProperty(this, 'tileByCoords', (firstCoord: number, secondCoord: number) => this.method__tileByCoords(firstCoord, secondCoord));
   }
-  private method__tileByIndex(i: number, j: number) : ElemapTile<M>|undefined {
-    let tile = this._.tileByIndex(i, j);
+  private method__tileByCoords(firstCoord: number, secondCoord: number) : ElemapTile<M>|undefined {
+    let tile = this._.tileByCoords(firstCoord, secondCoord);
     if (tile) {
       return new ElemapTile<M>(tile as ElemapTileType<M>);
     }

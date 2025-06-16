@@ -1,6 +1,6 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { HexagonTile, HexagonTileSnapshot } from "./tile.js";
-import { axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset, SignedTable, AxialCoords, Index, indexToAxialCoords } from "../utils.js";
+import { GridOffset, SignedTable, AxialCoords, Index, indexToAxialCoords } from "../utils.js";
 import { TileArguments } from "src/tile.js";
 
 export type HexagonGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
@@ -25,11 +25,6 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
   protected override tileImport(snapshot: HexagonTileSnapshot) { return HexagonTile.import(snapshot); }
   protected override indexToCoords(index: Index): AxialCoords {
     return indexToAxialCoords(index, this.orientation, this.offset);
-  }
-  
-  public override tileByCoords(firstCoord: number, secondCoord: number) : HexagonTile|undefined {
-    let index = orthogonalCoordsToIndex(axialCoordsToOrthogonal({r: firstCoord, q: secondCoord}, this.orientation, this.offset));
-    return this.tileByIndex(index.i, index.j);
   }
 
   public override tileByElement(element: HTMLElement) : HexagonTile|undefined {

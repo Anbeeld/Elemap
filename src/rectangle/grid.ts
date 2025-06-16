@@ -1,7 +1,6 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { RectangleTile, RectangleTileSnapshot } from "./tile.js";
-import { Index, indexToOrthogonalCoords, OrthogonalCoords, orthogonalCoordsToIndex,/*, TileSize */ 
-SignedTable} from "../utils.js";
+import { Index, indexToOrthogonalCoords, OrthogonalCoords, SignedTable} from "../utils.js";
 import { TileArguments } from "src/tile.js";
 
 export type RectangleGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
@@ -26,11 +25,6 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
   protected override tileImport(snapshot: RectangleTileSnapshot) { return RectangleTile.import(snapshot); }
   protected override indexToCoords(index: Index): OrthogonalCoords {
     return indexToOrthogonalCoords(index);
-  }
-
-  public override tileByCoords(firstCoord: number, secondCoord: number) : RectangleTile|undefined {
-    let index = orthogonalCoordsToIndex({x: firstCoord, y: secondCoord});
-    return this.tileByIndex(index.i, index.j);
   }
   
   public override tileByElement(element: HTMLElement) : RectangleTile|undefined {

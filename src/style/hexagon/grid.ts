@@ -13,7 +13,7 @@ export default class HexagonGridStyle extends GridStyle {
   public override get tile() : HexagonTileStyle { return this._tile; }
 
   public override initTile(decls: TileStyleDecls) : void {
-    this.tile = new HexagonTileStyle(this.owner.tileByIndex(0, 0)!.ids, this.ids, decls, true);
+    this.tile = new HexagonTileStyle(this.owner.tileByCoords(0, 0)!.ids, this.ids, decls, true);
   }
 
   public get hexagonSize() : hexagonSizeDecls {
