@@ -32,6 +32,19 @@ export interface OrthogonalCoords extends Coords {
   y: number;
 }
 
+export function getCoordsRow<C extends Coords>(coords: C) : number {
+  if (coords.q !== undefined && coords.r !== undefined) {
+    return coords.q;
+  }
+  return coords.x!;
+}
+export function getCoordsCol<C extends Coords>(coords: C) : number {
+  if (coords.q !== undefined && coords.r !== undefined) {
+    return coords.r;
+  }
+  return coords.y!;
+}
+
 export function roundFloat(value: number, precision: number) : number {
   return parseFloat(value.toFixed(precision));
 }

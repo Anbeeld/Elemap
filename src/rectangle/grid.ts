@@ -1,7 +1,8 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { RectangleTile, RectangleTileSnapshot } from "./tile.js";
-import { indexToOrthogonalCoords, orthogonalCoordsToIndex,/*, TileSize */ 
+import { Index, indexToOrthogonalCoords, OrthogonalCoords, orthogonalCoordsToIndex,/*, TileSize */ 
 SignedTable} from "../utils.js";
+import { TileArguments } from "src/tile.js";
 
 export type RectangleGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
   tiles: SignedTable<RectangleTileSnapshot>
@@ -19,21 +20,12 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     return this.exportSnapshot() as RectangleGridSnapshot;
   }
 
-  protected override initTiles(snapshot?: SignedTable<RectangleTileSnapshot>) : void {
-    for (let i = 0; i < this.size.height; i++) {
-      this.tiles[i] = [];
-      for (let j = 0; j < this.size.width; j++) {
-        if (snapshot && snapshot[i] && snapshot[i]![j]) {
-          this.tiles[i]![j] = RectangleTile.import(snapshot[i]![j]!);
-        } else {
-          this.tiles[i]![j] = new RectangleTile({
-            ids: this.ids,
-            coords: indexToOrthogonalCoords({i, j}),
-            decls: false
-          });
-        }
-      }
-    }
+  protected override tileFactory(args: TileArguments<OrthogonalCoords>): RectangleTile {
+    return new RectangleTile(args);
+  }
+  protected override tileImport(snapshot: RectangleTileSnapshot) { return RectangleTile.import(snapshot); }
+  protected override indexToCoords(index: Index): OrthogonalCoords {
+    return indexToOrthogonalCoords(index);
   }
 
   public override tileByCoords(firstCoord: number, secondCoord: number) : RectangleTile|undefined {

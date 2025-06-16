@@ -1,6 +1,7 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { HexagonTile, HexagonTileSnapshot } from "./tile.js";
-import { indexToAxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset, SignedTable } from "../utils.js";
+import { axialCoordsToOrthogonal, orthogonalCoordsToIndex, GridOffset, SignedTable, AxialCoords, Index, indexToAxialCoords } from "../utils.js";
+import { TileArguments } from "src/tile.js";
 
 export type HexagonGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
   tiles: SignedTable<HexagonTileSnapshot>
@@ -17,22 +18,13 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
   public override export() : HexagonGridSnapshot {
     return this.exportSnapshot() as HexagonGridSnapshot;
   }
-
-  protected override initTiles(snapshot?: SignedTable<HexagonTileSnapshot>) : void {
-    for (let i = 0; i < this.size.height; i++) {
-      this.tiles[i] = [];
-      for (let j = 0; j < this.size.width; j++) {
-        if (snapshot && snapshot[i] && snapshot[i]![j]) {
-          this.tiles[i]![j] = HexagonTile.import(snapshot[i]![j]!);
-        } else {
-          this.tiles[i]![j] = new HexagonTile({
-            ids: this.ids,
-            coords: indexToAxialCoords({i, j}, this.orientation, this.offset),
-            decls: false
-          });
-        }
-      }
-    }
+  
+  protected override tileFactory(args: TileArguments<AxialCoords>): HexagonTile {
+    return new HexagonTile(args);
+  }
+  protected override tileImport(snapshot: HexagonTileSnapshot) { return HexagonTile.import(snapshot); }
+  protected override indexToCoords(index: Index): AxialCoords {
+    return indexToAxialCoords(index, this.orientation, this.offset);
   }
   
   public override tileByCoords(firstCoord: number, secondCoord: number) : HexagonTile|undefined {

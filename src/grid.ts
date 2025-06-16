@@ -1,5 +1,5 @@
-import { AbstractTile, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep, Mutables, Mutation, SignedArray, SignedTable } from "./utils.js";
+import { AbstractTile, TileArguments, TileSnapshot } from "./tile.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep, Mutables, Mutation, SignedArray, SignedTable, Coords, Index, getCoordsRow, getCoordsCol } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
 import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema } from "./mangle.js";
@@ -150,7 +150,36 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return this.mutables;
   }
 
-  protected abstract initTiles(snapshot?: SignedTable<TileSnapshot>): void;
+  protected initTiles(snapshot?: SignedTable<TileSnapshot>) : void {
+    if (snapshot) {
+      for (let [i, row] of snapshot) {
+        for (let [j, tile] of row) {
+          if (!this.tiles[i]) {
+            this.tiles[i] = new SignedArray<T>();
+          }
+          this.tiles[i][j] = this.tileImport(tile);
+        }
+      }
+    } else {
+      for (let i = 0; i < this.size.height; i++) {
+        for (let j = 0; j < this.size.width; j++) {
+          let coords = this.indexToCoords({i, j});
+          if (!this.tiles[getCoordsRow(coords)]) {
+            this.tiles[getCoordsRow(coords)] = new SignedArray<T>();
+          }
+          this.tiles[getCoordsRow(coords)]![getCoordsCol(coords)] = this.tileFactory({
+            ids: this.ids,
+            coords: coords,
+            decls: false
+          });
+        }
+      }
+    }
+  }
+
+  protected abstract tileFactory(args: TileArguments) : T;
+  protected abstract tileImport(snapshot: TileSnapshot) : T;
+  protected abstract indexToCoords(index: Index) : Coords;
 
   protected initElements() : void {
     if (!this.elements) {
