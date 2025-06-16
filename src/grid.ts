@@ -181,6 +181,26 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected abstract tileImport(snapshot: TileSnapshot) : T;
   protected abstract indexToCoords(index: Index) : Coords;
 
+  public get tilesLimits() : {rows: {min: number, max: number}, cols: {min: number, max: number}} {
+    let minCol, maxCol;
+    for (let [i, row] of this.tiles) {
+      i; // TODO
+      for (let [j, tile] of row) {
+        tile; // TODO
+        if (minCol === undefined || j < minCol) {
+          minCol = j;
+        }
+        if (maxCol === undefined || j > maxCol) {
+          maxCol = j;
+        }
+      }
+    }
+    return {
+      rows: {min: 0, max: 0},
+      cols: {min: minCol || 0, max: maxCol || 0}
+    };
+  }
+
   protected initElements() : void {
     if (!this.elements) {
       this.elements = {
