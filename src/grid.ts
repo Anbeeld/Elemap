@@ -1,5 +1,5 @@
 import { AbstractTile, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep, Mutables, Mutation } from "./utils.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep, Mutables, Mutation, SignedArray, SignedTable } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
 import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema } from "./mangle.js";
@@ -12,7 +12,7 @@ type GridConstants = {
   orientation: GridOrientation,
   offset: GridOffset,
   schema: GridStyleSchema | false, // false = use map default grid and tile style
-  tiles: TileSnapshot[][]
+  tiles: SignedTable<TileSnapshot>
 };
 
 export type GridArguments = Omit<GridConstants, 'ids'> & {
@@ -23,8 +23,8 @@ interface GridElements {
   frame: HTMLElement;
   outer: HTMLElement;
   inner: HTMLElement;
-  outerRows: HTMLElement[];
-  innerRows: HTMLElement[];
+  outerRows: SignedArray<HTMLElement>;
+  innerRows: SignedArray<HTMLElement>;
   contour: HTMLElement;
   contourHover: HTMLElement;
 }
@@ -38,7 +38,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected set size(value: Size) { this._size = value; }
   public get size() : Size { return this._size; }
 
-  public tiles: T[][] = [];
+  public tiles: SignedTable<T> = new SignedTable<T>();
 
   public tile(firstCoord: number, secondCoord: number) {
     return this.tileByCoords(firstCoord, secondCoord);
@@ -121,13 +121,22 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return this.exportMutables(this.exportConstants()) as GridSnapshot;
   }
   protected exportConstants(object: object = {}) : GridConstants {
+    let tiles: SignedTable<TileSnapshot> = new SignedArray<SignedArray<TileSnapshot>>();
+    for (let [i, row] of this.tiles) {
+      tiles[i] = new SignedArray<TileSnapshot>();
+
+      for (let [j, tile] of row) {
+        tiles[i][j] = tile.export();
+      }
+    }
+
     demangleProperties(object, [
       ['ids', demangleGridIds(this.ids)],
       ['size', demangleSize(this.size)],
       ['orientation', this.orientation],
       ['offset', this.offset],
       ['schema', demangleGridStyleSchema(this.schema)],
-      ['tiles', this.tiles.map(row => row.map(tile => tile.export()))]
+      ['tiles', tiles]
     ]);
     return object as GridConstants;
   }
@@ -141,7 +150,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return this.mutables;
   }
 
-  protected abstract initTiles(snapshot?: TileSnapshot[][]): void;
+  protected abstract initTiles(snapshot?: SignedTable<TileSnapshot>): void;
 
   protected initElements() : void {
     if (!this.elements) {
@@ -149,8 +158,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
         frame: document.createElement('div'),
         outer: document.createElement('div'),
         inner: document.createElement('div'),
-        outerRows: [],
-        innerRows: [],
+        outerRows: new SignedArray<HTMLElement>(),
+        innerRows: new SignedArray<HTMLElement>(),
         contour: document.createElement('div'),
         contourHover: document.createElement('div')
       }
@@ -173,7 +182,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
     container.innerHTML = '';
 
-    for (let i in this.tiles) {
+    for (let i in Object.keys(this.tiles)) {
       if (typeof this.elements!.outerRows[i] === 'undefined') {
         this.elements!.outerRows[i] = document.createElement('div');
         this.elements!.outer.appendChild(this.elements!.outerRows[i]);

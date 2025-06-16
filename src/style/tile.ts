@@ -116,8 +116,10 @@ export default abstract class TileStyle extends Style {
   // Outer elements use absolute positioning
   public get outerPosition() : string {
     let css = ``;
-    for (let rows of this.owner.grid.tiles) {
-      for (let tile of rows) {
+    for (let [i, row] of this.owner.grid.tiles) {
+      i; // TODO
+      for (let [j, tile] of row) {
+        j; // TODO
         css +=
         this.selectors.outerTile + tile.selectors.data + `{` +
           `left:${calc.mult(this.size.outer.width, tile.index!.j)};` +

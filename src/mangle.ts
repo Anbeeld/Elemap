@@ -3,7 +3,7 @@
 import { GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
 import { GridMapStyleSchema, GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
 import { TileSnapshot } from './tile.js';
-import { AxialCoords, Coords, Index, OrthogonalCoords, Size } from './utils.js';
+import { AxialCoords, Coords, OrthogonalCoords, Size } from './utils.js';
 
 export function mangleProperty(object: any, name: string) : any {
   if (!object || !object.hasOwnProperty(name)) {
@@ -81,20 +81,6 @@ export function mangleSize(object: any) : Size {
   return {
     width: mangleProperty(object, 'width'),
     height: mangleProperty(object, 'height')
-  };
-}
-
-export function demangleIndex(index: Index) : Index {
-  let object = {};
-  demangleProperty(object, 'i', index.i);
-  demangleProperty(object, 'j', index.j);
-  // @ts-ignore
-  return object;
-}
-export function mangleIndex(object: any) : Index {
-  return {
-    i: mangleProperty(object, 'i'),
-    j: mangleProperty(object, 'j')
   };
 }
 
@@ -225,7 +211,6 @@ export function mangleGridMapStyleSchema(object: any) : GridMapStyleSchema {
 export function mangleTileSnapshot<C extends Coords>(snapshot: any) : TileSnapshot<C> {
   return {
     ids: mangleTileIds(mangleProperty(snapshot, 'ids')),
-    index: mangleIndex(mangleProperty(snapshot, 'index')),
     coords: mangleCoords<C>(mangleProperty(snapshot, 'coords')),
     decls: mangleTileStyleDecls(mangleProperty(snapshot, 'decls')),
     mutables: mangleProperty(snapshot, 'mutables')

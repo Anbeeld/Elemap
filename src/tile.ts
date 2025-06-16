@@ -1,5 +1,5 @@
-import { Coords, Index, mergeDeep, Mutables, Mutation, OrthogonalCoords } from './utils.js';
-import { demangleProperties, demangleProperty, demangleIndex, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords, mangleTileStyleDecls } from './mangle.js';
+import { Coords, mergeDeep, Mutables, Mutation, OrthogonalCoords } from './utils.js';
+import { demangleProperties, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords, mangleTileStyleDecls } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
 import TileStyle from './style/tile.js';
@@ -9,7 +9,6 @@ import { modifyTileStyleDecls, CustomTileStyleDecls, TileStyleDecls } from './st
 export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & Mutables;
 export type TileConstants<C extends Coords = Coords> = {
   ids: TileIdsProperties,
-  index: Index,
   coords: C,
   decls: TileStyleDecls | false // false = use grid default tile style
 };
@@ -45,14 +44,12 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected _elements: TileElements;
   protected set elements(value: TileElements) { this._elements = value; }
   public get elements() : TileElements { return this._elements; }
-
-  protected _index: Index;
-  protected set index(value: Index) { this._index = value; }
-  public get index() : Index { return this._index; }
   
   protected _coords: C;
   protected set coords(value: C) { this._coords = value; }
   public get coords() : C { return this._coords; }
+  public abstract get row() : number;
+  public abstract get col() : number;
 
   protected rendered: boolean = false;
 
@@ -66,7 +63,6 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     } else {
       this.ids = new TileIds(args.ids, Register.id());
     }
-    this.index = args.index;
     this.coords = args.coords;
   }
 
@@ -88,7 +84,6 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected exportConstants(object: object = {}) : TileConstants<C> {
     demangleProperties(object, [
       ['ids', demangleTileIds(this.ids)],
-      ['index', demangleIndex(this.index)],
       ['coords', demangleCoords<C>(this.coords)],
       ['decls', this._style !== undefined ? demangleTileStyleDecls(this.decls) : false],
       ['mutables', this.mutables]
@@ -136,25 +131,14 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
       }
     }
   }
-
-  protected setIndexAttributes() {    
-    if (this.elements!.outer) {
-      demangleProperty(this.elements!.outer.dataset, 'elemapI', this.index.i.toString());
-      demangleProperty(this.elements!.outer.dataset, 'elemapJ', this.index.j.toString());
-    }
-    demangleProperty(this.elements!.inner.dataset, 'elemapI', this.index.i.toString());
-    demangleProperty(this.elements!.inner.dataset, 'elemapJ', this.index.j.toString());
-  }
-
   protected abstract setCoordsAttributes() : void;
 
   public render() : void {
-    let outer = this.grid.elements!.outerRows[this.index.i]!;
-    let inner = this.grid.elements!.innerRows[this.index.i]!;
+    let outer = this.grid.elements!.outerRows[this.row]!;
+    let inner = this.grid.elements!.innerRows[this.row]!;
 
     this.initElements();
 
-    this.setIndexAttributes();
     this.setCoordsAttributes();
 
     if (this.elements!.style) {

@@ -363,3 +363,43 @@ export type DeepPartial<T> = T extends object ? {
 
 export type Mutation = Record<string, any>;
 export type Mutables = { mutables: Mutation };
+
+export class SignedArray<V> {
+  [key: number]: V
+
+  *[Symbol.iterator]() {
+    let records: [number, V][] = [];
+    for (const [key, value] of Object.entries(this)) {
+      let index: number;
+
+      if (typeof key === 'string') {
+        if (isNumeric(key)) {
+          index = Number(key);
+        } else {
+          continue;
+        }
+      } else if (typeof key === 'number') {
+        index = key;
+      } else {
+        continue;
+      }
+
+      records.push([index, value as V]);
+    }
+
+    records.sort((a, b) => a[0] - b[0]);
+
+    for (const [key, value] of records) {
+      yield [key, value] as [number, V];
+    }
+  }
+}
+
+export class SignedTable<V> extends SignedArray<SignedArray<V>> {}
+
+export function isNumeric(str: string) {
+  if (typeof str !== "string") {
+    return false;
+  }
+  return !isNaN(Number(str));
+}

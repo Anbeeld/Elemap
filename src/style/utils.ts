@@ -1,20 +1,10 @@
-import { roundFloat } from '../utils.js';
+import { roundFloat, isNumeric } from '../utils.js';
 
 export function cssValueToNumber(value: string) : number {
   if (value.endsWith('px')) {
     return Number(value.slice(0, -2));
   }
   return Number(value);
-}
-
-
-
-
-function isNumeric(str: string) {
-  if (typeof str !== "string") {
-    return false;
-  }
-  return !isNaN(Number(str));
 }
 
 function calcValueToNumber(value: string|number) : number {
