@@ -1,4 +1,4 @@
-import { getCoordsCol, TileSizeSet } from "../utils.js";
+import { TileSizeSet } from "../utils.js";
 import { TileStyleIds, GridStyleIds, Register, TileIds } from "../register.js";
 import { TileStyleDecls } from "./schema.js";
 import Style from "./style.js";
@@ -122,7 +122,7 @@ export default abstract class TileStyle extends Style {
         j; // TODO
         css +=
         this.selectors.outerTile + tile.selectors.data + `{` +
-          `left:${calc.mult(this.size.outer.width, getCoordsCol(tile.coords) - this.owner.grid.tilesLimits.cols.min)};` +
+          `left:${calc.mult(this.size.outer.width, tile.indexInRow)};` +
         `}`; 
       }
     }
