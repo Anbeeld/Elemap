@@ -236,8 +236,9 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
         this.elements!.innerRows[i] = document.createElement('div');
         this.elements!.inner.appendChild(this.elements!.innerRows[i]);
       }
-      for (let j in this.tiles[i]) {
-        this.tiles[Number(i)]![Number(j)]!.render();
+      for (let [j, tile] of this.tiles[i]!) {
+        j; // TODO
+        tile.render();
       }
     }
 
