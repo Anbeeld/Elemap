@@ -200,7 +200,7 @@ export default class HexagonGridStyle extends GridStyle {
       for (let i = 0; i < this.owner.size.width; i++) {
         if ((indentationRule === '2n - 1' && i % 2 === 0) || (indentationRule === '2n' && i % 2 !== 0)) {
           css +=
-          this.selectors.outerTile + `[data-elemap-j="${i}"]{` +
+          this.selectors.outerTile + `[data-elemap-y="${i}"]{` +
             `margin-top:${this.tileIndentation.vertical};` +
             `margin-bottom:${calc.sub('0px', this.tileIndentation.vertical)};` +
           `}`;
