@@ -1,5 +1,5 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { AxialCoords } from '../utils.js';
+import { AxialCoords, axialCoordsToOrthogonal, OrthogonalCoords } from '../utils.js';
 import { demangleProperty } from '../mangle.js';
 import { Register } from '../register.js';
 import { TileStyleDecls } from '../style/schema.js';
@@ -10,6 +10,13 @@ export type HexagonTileSnapshot = TileSnapshot<AxialCoords>;
 export class HexagonTile extends AbstractTile<AxialCoords> {
   constructor(args: TileArguments<AxialCoords>) {
     super(args);
+  }
+
+  protected get orthogonalCoords() : OrthogonalCoords {
+    return {
+      x: axialCoordsToOrthogonal(this.coords, this.grid.orientation, this.grid.offset).x,
+      y: axialCoordsToOrthogonal(this.coords, this.grid.orientation, this.grid.offset).y
+    };
   }
 
   public static import(snapshot: HexagonTileSnapshot) : HexagonTile {
@@ -40,6 +47,13 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
     }
     demangleProperty(this.elements!.inner.dataset, 'elemapR', this.coords.r.toString());
     demangleProperty(this.elements!.inner.dataset, 'elemapQ', this.coords.q.toString());
+
+    if (this.elements!.outer) {
+      demangleProperty(this.elements!.outer.dataset, 'elemapX', this.orthogonalCoords.x.toString());
+      demangleProperty(this.elements!.outer.dataset, 'elemapY', this.orthogonalCoords.y.toString());
+    }
+    demangleProperty(this.elements!.inner.dataset, 'elemapX', this.orthogonalCoords.x.toString());
+    demangleProperty(this.elements!.inner.dataset, 'elemapY', this.orthogonalCoords.y.toString());
   }
   
   public get selectors() {

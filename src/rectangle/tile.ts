@@ -33,7 +33,7 @@ export class RectangleTile extends AbstractTile<OrthogonalCoords> {
     return new RectangleTileStyle(this.ids, this.grid.style.ids, decls);
   }
 
-  protected override setCoordsAttributes() {    
+  protected override setCoordsAttributes() {
     if (this.elements!.outer) {
       demangleProperty(this.elements!.outer.dataset, 'elemapX', this.coords.x.toString());
       demangleProperty(this.elements!.outer.dataset, 'elemapY', this.coords.y.toString());
