@@ -234,4 +234,8 @@ export default class HexagonGridStyle extends GridStyle {
       };
     }
   }
+
+  protected override get rowWidth() : string {
+    return calc.sub(calc.mult(this.tile.size.outer.width, this.owner.size.width), calc.mult(this.tileRecess.horizontal, this.owner.size.width - 1));
+  }
 }

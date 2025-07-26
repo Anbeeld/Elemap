@@ -74,7 +74,6 @@ export default abstract class GridStyle extends Style {
 
     this.selectors.row + `{` +
       `display:flex;` +
-      `width:max-content;` +
       `position:relative;` +
       `pointer-events:none;` +
     `}` +
@@ -174,7 +173,7 @@ export default abstract class GridStyle extends Style {
     this.selectors.contour + absolutePosition +
 
     this.selectors.row + `{` +
-      `width: ${calc.mult(this.tile.size.outer.width, this.owner.size.width)};` +
+      `width: ${this.rowWidth};` +
     `}` +
 
 
@@ -221,5 +220,9 @@ export default abstract class GridStyle extends Style {
       contourHover: getComputedStyle(this.owner.elements!.contourHover)
     };
     this.tile.compute();
+  }
+
+  protected get rowWidth() : string {
+    return calc.mult(this.tile.size.outer.width, this.owner.size.width);
   }
 }
