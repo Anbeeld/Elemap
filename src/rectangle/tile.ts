@@ -11,6 +11,10 @@ export class RectangleTile extends AbstractTile<OrthogonalCoords> {
   constructor(args: TileArguments<OrthogonalCoords>) {
     super(args);
   }
+  
+  protected override get orthogonalCoords() : OrthogonalCoords {
+    return this.coords;
+  }
 
   public static import(snapshot: RectangleTileSnapshot) : RectangleTile {
     return this.importSnapshot(RectangleTile, snapshot);

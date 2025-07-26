@@ -12,7 +12,7 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
     super(args);
   }
 
-  protected get orthogonalCoords() : OrthogonalCoords {
+  protected override get orthogonalCoords() : OrthogonalCoords {
     return {
       x: axialCoordsToOrthogonal(this.coords, this.grid.orientation, this.grid.offset).x,
       y: axialCoordsToOrthogonal(this.coords, this.grid.orientation, this.grid.offset).y

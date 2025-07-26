@@ -48,6 +48,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected _coords: C;
   protected set coords(value: C) { this._coords = value; }
   public get coords() : C { return this._coords; }
+  
+  protected abstract get orthogonalCoords() : OrthogonalCoords;
 
   protected rendered: boolean = false;
 
