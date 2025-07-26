@@ -1,6 +1,7 @@
 import TileStyle from '../tile.js';
 import HexagonGridStyle from './grid.js';
 import { calc } from '../utils.js';
+import { getCoordsCol } from '../../utils.js';
 
 export default class HexagonTileStyle extends TileStyle {
   public override get outerPosition() : string {
@@ -12,7 +13,7 @@ export default class HexagonTileStyle extends TileStyle {
         j; // TODO
         css +=
         this.selectors.outerTile + tile.selectors.data + `{` +
-          `left:${calc.sub(calc.mult(this.size.outer.width, tile.indexInRow), calc.mult((this.grid as HexagonGridStyle).tileRecess.horizontal, tile.indexInRow))};` +
+          `left:${calc.sub(calc.mult(this.size.outer.width, getCoordsCol(tile.orthogonalCoords) - this.owner.grid.tilesLimits.cols.min), calc.mult((this.grid as HexagonGridStyle).tileRecess.horizontal, getCoordsCol(tile.orthogonalCoords) - this.owner.grid.tilesLimits.cols.min))};` +
         `}`; 
       }
     }

@@ -12,7 +12,7 @@ export class RectangleTile extends AbstractTile<OrthogonalCoords> {
     super(args);
   }
   
-  protected override get orthogonalCoords() : OrthogonalCoords {
+  public override get orthogonalCoords() : OrthogonalCoords {
     return this.coords;
   }
 

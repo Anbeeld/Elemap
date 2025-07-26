@@ -40,9 +40,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
   public tiles: SignedTable<T> = new SignedTable<T>();
 
-  public tileByCoords(firstCoord: number, secondCoord: number) : T|undefined {
-    return this.tiles[firstCoord]![secondCoord];
-  }
+  public abstract tileByCoords(firstCoord: number, secondCoord: number) : T|undefined;
   public abstract tileByElement(element: HTMLElement) : T|undefined;
   public tileById(ids: TileIds) : T|undefined {
     for (let x in this.tiles) {
