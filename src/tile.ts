@@ -134,8 +134,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected abstract setCoordsAttributes() : void;
 
   public render() : void {
-    let outer = this.grid.elements!.outerRows[getCoordsRow(this.coords)]!;
-    let inner = this.grid.elements!.innerRows[getCoordsRow(this.coords)]!;
+    let outer = this.grid.elements!.outerRows[getCoordsRow(this.orthogonalCoords)]!;
+    let inner = this.grid.elements!.innerRows[getCoordsRow(this.orthogonalCoords)]!;
 
     this.initElements();
 
