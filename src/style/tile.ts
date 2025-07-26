@@ -121,7 +121,7 @@ export default abstract class TileStyle extends Style {
       for (let [j, tile] of row) {
         j; // TODO
         css +=
-        this.selectors.outerTile + tile.selectors.data + `{` +
+        this.selectors.tile + tile.selectors.data + `{` +
           `left:${calc.mult(this.size.outer.width, getCoordsCol(tile.orthogonalCoords) - this.owner.grid.tilesLimits.cols.min)};` +
         `}`; 
       }

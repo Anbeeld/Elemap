@@ -116,7 +116,7 @@ export default abstract class GridStyle extends Style {
     `}` +
 
     this.selectors.innerTile + `{` +
-      `position:relative;` + 
+      `position:absolute;` + 
       `z-index:170;` +
     `}` +
 
@@ -173,8 +173,8 @@ export default abstract class GridStyle extends Style {
     
     this.selectors.contour + absolutePosition +
 
-    this.selectors.outerRow + `{` +
-      `width: ${calc.sub(calc.mult(this.tile.size.outer.width, this.owner.size.width), calc.mult(this.spacing, this.owner.size.width))};` +
+    this.selectors.row + `{` +
+      `width: ${calc.mult(this.tile.size.outer.width, this.owner.size.width)};` +
     `}` +
 
 

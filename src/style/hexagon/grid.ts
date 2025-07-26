@@ -165,10 +165,7 @@ export default class HexagonGridStyle extends GridStyle {
         `margin-top:${calc.sub('0px', this.tileRecess.vertical)};` +
       `}`;
     } else {
-      return `` +
-      this.selectors.innerTile + `:not(:first-child){` +
-        `margin-left:${calc.sub(calc.div(this.spacing, 2), this.tileRecess.horizontal)};` +
-      `}`;
+      return ``;
     }
   }
 
