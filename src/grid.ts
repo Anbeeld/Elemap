@@ -235,7 +235,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
     container.innerHTML = '';
 
-    for (let x in Object.keys(this.tiles)) {
+    for (let [x, row] of this.tiles) {
       if (typeof this.elements!.outerRows[x] === 'undefined') {
         this.elements!.outerRows[x] = document.createElement('div');
         this.elements!.outer.appendChild(this.elements!.outerRows[x]);
@@ -244,7 +244,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
         this.elements!.innerRows[x] = document.createElement('div');
         this.elements!.inner.appendChild(this.elements!.innerRows[x]);
       }
-      for (let [y, tile] of this.tiles[x]!) {
+      for (let [y, tile] of row) {
         y; // TODO
         tile.render();
       }

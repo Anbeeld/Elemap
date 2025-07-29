@@ -84,31 +84,40 @@ export abstract class AbstractMap implements MapConstants, Mutables {
 
   protected abstract initStyle(schema: GridMapStyleSchema) : void;
 
-  protected initElements() : MapElements {    
-    let elementMap = document.createElement('div');
-    elementMap.classList.add(`elemap-${this.ids.map}-map`);
+  protected initElements() : MapElements {
+    if (this.elements && this.elements.map) {
+      return this.elements;
+    } else {
+      let elementMap = document.createElement('div');
+      elementMap.classList.add(`elemap-${this.ids.map}-map`);
 
-    return {
-      map: elementMap
-    };
+      return {
+        map: elementMap
+      };
+    }
   }
 
-  public initRender(container: HTMLElement) {
+  public initRender(container?: HTMLElement) {
+    if (container && this.elements.container !== container) {
+      this.elements.container = container;
+      this.elements.container.classList.add('elemap-' + this.ids.map + '-container');
+    }
+
+    if (!this.elements.container) {
+      throw new Error('No container found.');
+    }
+
     for (let element of document.getElementsByClassName('elemap-' + this.ids.map + '-container')) {
-      if (element === container) {
+      if (element === this.elements.container) {
         continue;
       }
       element.classList.remove('elemap-' + this.ids.map + '-container');
-    }
-    if (this.elements.container !== container) {
-      this.elements.container = container;
-      this.elements.container.classList.add('elemap-' + this.ids.map + '-container');
     }
 
     this.elements.container.appendChild(this.elements.map);
   }
 
-  public render(container: HTMLElement) {
+  public render(container?: HTMLElement) {
     this.elements = this.initElements();
     this.initRender(container);
     this.style.render();
