@@ -24,6 +24,12 @@ interface GridElements {
   inner: HTMLElement;
   outerRows: SignedArray<HTMLElement>;
   innerRows: SignedArray<HTMLElement>;
+  mannequin: {
+    outerRow: HTMLElement;
+    outerTile: HTMLElement;
+    innerRow: HTMLElement;
+    innerTile: HTMLElement
+  }
   contour: HTMLElement;
   contourHover: HTMLElement;
 }
@@ -44,10 +50,14 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   }
 
   public tiles: SignedTable<T> = new SignedTable<T>();
+  public mannequin: T;
 
   public abstract tileByCoords(firstCoord: number, secondCoord: number) : T|undefined;
   public abstract tileByElement(element: HTMLElement) : T|undefined;
   public tileById(ids: TileIds) : T|undefined {
+    if (this.mannequin.ids.tile === ids.tile) {
+      return this.mannequin;
+    }
     for (let y in this.tiles) {
       for (let x in this.tiles[y]) {
         if (this.tiles[y]![x as any]!.ids.tile === ids.tile) {
@@ -100,7 +110,9 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     this.orientation = args.orientation;
     this.offset = args.offset;
 
-    this.initTiles(args.tiles);
+    if (args.tiles) {
+      this.importTiles(args.tiles);
+    }
   }
 
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
@@ -147,31 +159,15 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return this.mutables;
   }
 
-  protected initTiles(snapshot?: SignedTable<TileSnapshot>) : void {
-    if (snapshot) {
-      for (let [y, row] of snapshot) {
-        for (let [x, tile] of row) {
-          if (!this.tiles[y]) {
-            this.tiles[y] = new SignedArray<T>();
-          }
-          this.tiles[y][x] = this.tileImport(tile);
+  protected importTiles(snapshot: SignedTable<TileSnapshot>) : void {
+    for (let [y, row] of snapshot) {
+      for (let [x, tile] of row) {
+        if (!this.tiles[y]) {
+          this.tiles[y] = new SignedArray<T>();
         }
+        this.tiles[y][x] = this.tileImport(tile);
       }
     }
-    // else {
-    //   for (let y = 0; y < size.height; y++) {
-    //     for (let x = 0; x < size.width; x++) {
-    //       if (!this.tiles[y]) {
-    //         this.tiles[y] = new SignedArray<T>();
-    //       }
-    //       this.tiles[y]![x] = this.tileFactory({
-    //         ids: this.ids,
-    //         coords: this.tileCoordsFromOrthogonal({x, y}),
-    //         decls: false
-    //       });
-    //     }
-    //   }
-    // }
   }
 
   public createTile(coords: OrthogonalCoords) : void {
@@ -183,6 +179,14 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       coords: this.tileCoordsFromOrthogonal(coords),
       decls: false
     });
+  }
+
+  public createTiles(size: Size, coords: OrthogonalCoords) : void {
+    for (let x = coords.x; x < coords.x + size.width; x++) {
+      for (let y = coords.y; y < coords.y + size.height; y++) {
+        this.createTile({x, y});
+      }
+    }
   }
 
   protected abstract tileFactory(args: TileArguments) : T;
@@ -224,7 +228,13 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
         outerRows: new SignedArray<HTMLElement>(),
         innerRows: new SignedArray<HTMLElement>(),
         contour: document.createElement('div'),
-        contourHover: document.createElement('div')
+        contourHover: document.createElement('div'),
+        mannequin: {
+          outerRow: document.createElement('div'),
+          outerTile: document.createElement('div'),
+          innerRow: document.createElement('div'),
+          innerTile: document.createElement('div')
+        }
       }
 
       this.elements.frame.classList.add('elemap-' + this.ids.map + '-grid-frame');
@@ -237,6 +247,14 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
       this.elements.contour.classList.add('elemap-' + this.ids.map + '-grid-contour');
       this.elements.contour.appendChild(this.elements.contourHover);
+
+      this.elements.mannequin.outerRow.classList.add('elemap-' + this.ids.map + '-mannequin');
+      this.elements.outer.appendChild(this.elements.mannequin.outerRow);
+
+      this.elements.mannequin.innerRow.classList.add('elemap-' + this.ids.map + '-mannequin');
+      this.elements.inner.appendChild(this.elements.mannequin.innerRow);
+
+      this.style.tile.owner.render();
     }
   }
 

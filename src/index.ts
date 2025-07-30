@@ -2,7 +2,7 @@ import RectangleMap from "./rectangle/map.js";
 import HexagonMap from "./hexagon/map.js";
 import { CustomTileStyleDecls } from "./style/schema.js";
 import { Config, configToGridMapArguments } from "./config.js";
-import { MapType, Mutation, OrthogonalCoords } from "./utils.js";
+import { MapType, Mutation, OrthogonalCoords, Size } from "./utils.js";
 import { demangleProperty } from "./mangle.js";
 import { RectangleTile } from "./rectangle/tile.js";
 import { HexagonTile } from "./hexagon/tile.js";
@@ -118,6 +118,7 @@ class ElemapGrid<M extends MapTypeStrings> {
     this.demangle__mutate();
     this.demangle__tileByCoords();
     this.demangle__createTile();
+    this.demangle__createTiles();
   }
 
   public export() {
@@ -170,6 +171,16 @@ class ElemapGrid<M extends MapTypeStrings> {
   }
   private method__createTile(coords: OrthogonalCoords) {
     return this._.createTile(coords);
+  }
+
+  public createTiles(size: Size, coords: OrthogonalCoords = {x: 0, y: 0}) : void {
+    return this.method__createTiles(size, coords);
+  }
+  private demangle__createTiles() {
+    demangleProperty(this, 'createTiles', (size: Size, coords: OrthogonalCoords = {x: 0, y: 0}) => this.method__createTiles(size, coords));
+  }
+  private method__createTiles(size: Size, coords: OrthogonalCoords) {
+    return this._.createTiles(size, coords);
   }
 }
 
