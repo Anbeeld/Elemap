@@ -114,8 +114,15 @@ export default class HexagonGridStyle extends GridStyle {
     let topPerTile: number = cssValueToNumber(this.tile.size.spaced.height) - cssValueToNumber(this.tileRecess.vertical) - cssValueToNumber(this.spacing);
     let leftPerTile: number = cssValueToNumber(this.tile.size.spaced.width) - cssValueToNumber(this.tileRecess.horizontal) - cssValueToNumber(this.spacing);
 
-    for (let y = 0; y < this.owner.size.height; y++) {
-      for (let x = 0; x < this.owner.size.width; x++) {
+    let extremes = this.owner.extremes;
+    let j = 0;
+    for (let y = extremes.y.min; y <= extremes.y.max; y++) {
+      let i = 0;
+      for (let x = extremes.x.min; x <= extremes.x.max; x++) {
+        if (!this.owner.tiles[y] || !this.owner.tiles[y]![x]) {
+          i++;
+          continue;
+        }
         if (path !== '') {
           path += ' ';
         }
@@ -124,11 +131,13 @@ export default class HexagonGridStyle extends GridStyle {
           this.hexagonSize.spaced,
           cssValueToNumber(this.tile.computed.inner.borderRadius),
           {
-            top: y * topPerTile + (this.owner.hasIndentation(x) ? 1 : 0) * cssValueToNumber(this.tileIndentation.vertical),
-            left: x * leftPerTile + (this.owner.hasIndentation(y) ? 1 : 0) * cssValueToNumber(this.tileIndentation.horizontal)
+            top: j * topPerTile + (this.owner.hasIndentation(x) ? 1 : 0) * cssValueToNumber(this.tileIndentation.vertical),
+            left: i * leftPerTile + (this.owner.hasIndentation(y) ? 1 : 0) * cssValueToNumber(this.tileIndentation.horizontal)
           }
         );
+        i++;
       }
+      j++;
     }
     return path;
   }
@@ -179,8 +188,9 @@ export default class HexagonGridStyle extends GridStyle {
 
   private cssTileIndentation() : string {
     let css = ``;
+    let extremes = this.owner.extremes;
     if (this.owner.orientation === GridOrientation.Pointy) {
-      for (let y = 0; y < this.owner.size.height; y++) {
+      for (let y = extremes.y.min; y <= extremes.y.max; y++) {
         if ((this.owner.offset === 'even' && y % 2 === 0) || (this.owner.offset === 'odd' && y % 2 !== 0)) {
           css +=
           this.selectors.row + `[data-elemap-y="${y}"]{` +
@@ -189,7 +199,7 @@ export default class HexagonGridStyle extends GridStyle {
         }
       }
     } else {
-      for (let x = 0; x < this.owner.size.width; x++) {
+      for (let x = extremes.x.min; x <= extremes.x.max; x++) {
         if ((this.owner.offset === 'even' && x % 2 === 0) || (this.owner.offset === 'odd' && x % 2 !== 0)) {
           css +=
           this.selectors.tile + `[data-elemap-x="${x}"]{` +

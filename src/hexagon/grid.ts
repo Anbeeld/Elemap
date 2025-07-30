@@ -48,7 +48,7 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
 
   public hasIndentation(i: number) : boolean {
     if (this.offset === GridOffset.Odd) {
-      return i % 2 === 1;
+      return i % 2 !== 0;
     } else {
       return i % 2 === 0;
     }
