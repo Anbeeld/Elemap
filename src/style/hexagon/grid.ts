@@ -197,11 +197,6 @@ export default class HexagonGridStyle extends GridStyle {
           `}`;
         }
       }
-      // Make last row higher to accommodate for indentation
-      css +=
-      this.selectors.row + `:last-child{` +
-        `height:${calc.add(this.tile.size.outer.height, this.tileIndentation.vertical)};` +
-      `}`;
     }
     return css;
   }
