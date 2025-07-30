@@ -121,7 +121,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
         inner: document.createElement('div')
       }
     }
-    if (this._style !== undefined && !this.style.initial) {
+    if (this._style !== undefined && !this.style.mannequin) {
       if (!this.elements.style) {
         this.elements.style = document.createElement('style');
         this.elements.style.classList.add('elemap-' + this.ids.map + '-css-tile-' + this.ids.tile);
