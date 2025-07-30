@@ -40,13 +40,36 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   public get ids() : GridIds { return this._ids; }
 
   public get size() : Size {
-    let width = 0;
-    for (let row of this.tiles.values) {
-      if (row.length > width) {
-        width = row.length;
+    return {
+      width: this.extremes.x.max - this.extremes.x.min + 1,
+      height: this.extremes.y.max - this.extremes.y.min + 1
+    };
+  }
+
+  public get extremes() : {x: {min: number, max: number}, y: {min: number, max: number}} {
+    let minY, maxY, minX, maxX;
+    for (let y of this.tiles.keys) {
+
+      if (minY === undefined || y < minY) {
+        minY = y;
+      }
+      if (maxY === undefined || y > maxY) {
+        maxY = y;
+      }
+
+      for (let x of this.tiles[y]!.keys) {
+        if (minX === undefined || x < minX) {
+          minX = x;
+        }
+        if (maxX === undefined || x > maxX) {
+          maxX = x;
+        }
       }
     }
-    return {width, height: this.tiles.length};
+    return {
+      x: {min: minX || 0, max: maxX || 0},
+      y: {min: minY || 0, max: maxY || 0}
+    };
   }
 
   public tiles: SignedTable<T> = new SignedTable<T>();
@@ -192,32 +215,6 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected abstract tileFactory(args: TileArguments) : T;
   protected abstract tileImport(snapshot: TileSnapshot) : T;
   protected abstract tileCoordsFromOrthogonal(coords: OrthogonalCoords) : Coords;
-
-  public get extremes() : {x: {min: number, max: number}, y: {min: number, max: number}} {
-    let minY, maxY, minX, maxX;
-    for (let y of this.tiles.keys) {
-
-      if (minY === undefined || y < minY) {
-        minY = y;
-      }
-      if (maxY === undefined || y > maxY) {
-        maxY = y;
-      }
-
-      for (let x of this.tiles[y]!.keys) {
-        if (minX === undefined || x < minX) {
-          minX = x;
-        }
-        if (maxX === undefined || x > maxX) {
-          maxX = x;
-        }
-      }
-    }
-    return {
-      x: {min: minX || 0, max: maxX || 0},
-      y: {min: minY || 0, max: maxY || 0}
-    };
-  }
 
   protected initElements() : void {
     if (!this.elements) {
