@@ -28,6 +28,11 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
   }
 
   public override tileByCoords(firstCoord: number, secondCoord: number) : RectangleTile|undefined {
+    if (!this.tiles[secondCoord]) {
+      return undefined;
+    } else if (!this.tiles[secondCoord]![firstCoord]) {
+      return undefined;
+    }
     return this.tiles[secondCoord]![firstCoord];
   }
   public override tileByElement(element: HTMLElement) : RectangleTile|undefined {
