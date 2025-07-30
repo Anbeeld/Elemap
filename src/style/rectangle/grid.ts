@@ -1,3 +1,4 @@
+import { RectangleTile } from "../../rectangle/tile.js";
 import { Register } from "../../register.js";
 import { generateRectanglePath, roundFloat, TileSize } from "../../utils.js";
 import GridStyle from "../grid.js";
@@ -13,7 +14,12 @@ export default class RectangleGridStyle extends GridStyle {
   public override get tile() : RectangleTileStyle { return this._tile; }
 
   public override initTile(decls: TileStyleDecls) : void {
-    this.tile = new RectangleTileStyle(this.owner.tileByCoords(0, 0)!.ids, this.ids, decls, true);
+    this.owner.mannequin = new RectangleTile({
+      ids: this.owner.ids,
+      coords: { x: 0, y: 0 },
+      decls: "mannequin"
+    });
+    this.tile = new RectangleTileStyle(this.owner.mannequin.ids, this.ids, decls, true);
   }
 
   public override get generatedSpecific() : string {

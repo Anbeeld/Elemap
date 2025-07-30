@@ -10,7 +10,7 @@ export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & Mutable
 export type TileConstants<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   coords: C,
-  decls: TileStyleDecls | false // false = use grid default tile style
+  decls: TileStyleDecls | "mannequin" | false // false = use grid default tile style
 };
 
 export type TileArguments<C extends Coords = Coords> = Omit<TileConstants<C>, 'ids'> & {
@@ -134,27 +134,53 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected abstract setCoordsAttributes() : void;
 
   public render() : void {
-    let outer = this.grid.elements!.outerRows[getCoordsRow(this.orthogonalCoords)]!;
-    let inner = this.grid.elements!.innerRows[getCoordsRow(this.orthogonalCoords)]!;
+    if (this.style.mannequin && this.style.owner === this) {
+      this.renderMannequin();
+    } else {
+      let outer = this.grid.elements!.outerRows[getCoordsRow(this.orthogonalCoords)]!;
+      let inner = this.grid.elements!.innerRows[getCoordsRow(this.orthogonalCoords)]!;
 
-    this.initElements();
+      this.initElements();
 
-    this.setCoordsAttributes();
+      this.setCoordsAttributes();
 
-    if (this.elements!.style) {
-      this.elements.style.innerHTML = this.style.core + this.style.schema + this.style.generated;
-      document.head.appendChild(this.elements.style);
-    }
-    if (this.elements!.outer) {
-      if (!outer.contains(this.elements!.outer)) {
-        outer.appendChild(this.elements!.outer);
+      if (this.elements!.style) {
+        this.elements.style.innerHTML = this.style.core + this.style.schema + this.style.generated;
+        document.head.appendChild(this.elements.style);
       }
+      if (this.elements!.outer) {
+        if (!outer.contains(this.elements!.outer)) {
+          outer.appendChild(this.elements!.outer);
+        }
+      }
+      if (!inner.contains(this.elements!.inner)) {
+        inner.appendChild(this.elements!.inner);
+      }
+    }
+
+    this.rendered = true;
+  }
+
+  protected renderMannequin() : void {
+    let outer = this.grid.elements!.mannequin.outerRow;
+    let inner = this.grid.elements!.mannequin.innerRow;
+
+    if (!this.elements) {
+      this.elements = {
+        inner: document.createElement('div'),
+        outer: document.createElement('div')
+      }
+    }
+
+    this.elements!.outer!.classList.add('elemap-' + this.ids.map + '-mannequin');
+    this.elements!.inner.classList.add('elemap-' + this.ids.map + '-mannequin');
+
+    if (!outer.contains(this.elements!.outer!)) {
+      outer.appendChild(this.elements!.outer!);
     }
     if (!inner.contains(this.elements!.inner)) {
       inner.appendChild(this.elements!.inner);
     }
-
-    this.rendered = true;
   }
 
   public hover() : void {

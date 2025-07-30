@@ -54,7 +54,8 @@ export default abstract class GridStyle extends Style {
       innerRow: grid + `-inner>div`,
       outerTile: grid + `-outer>div>div`,
       innerTile: grid + `-inner>div>div`,
-      contour: grid + `-contour`
+      contour: grid + `-contour`,
+      mannequin: base + `-mannequin`
     }
   }
 
@@ -66,6 +67,10 @@ export default abstract class GridStyle extends Style {
       `display:block;` + 
       `position:absolute;` + 
       `z-index:50;` + 
+    `}` +
+
+    this.selectors.mannequin + `{` +
+      `display:none;` +
     `}` +
 
     this.selectors.grid + `{` +
