@@ -13,7 +13,7 @@ export default class HexagonTileStyle extends TileStyle {
         j; // TODO
         css +=
         this.selectors.tile + tile.selectors.data + `{` +
-          `left:${calc.sub(calc.mult(this.size.outer.width, getCoordsCol(tile.orthogonalCoords) - this.owner.grid.tilesLimits.cols.min), calc.mult((this.grid as HexagonGridStyle).tileRecess.horizontal, getCoordsCol(tile.orthogonalCoords) - this.owner.grid.tilesLimits.cols.min))};` +
+          `left:${calc.sub(calc.mult(this.size.outer.width, getCoordsCol(tile.orthogonalCoords) - this.owner.grid.extremes.x.min), calc.mult((this.grid as HexagonGridStyle).tileRecess.horizontal, getCoordsCol(tile.orthogonalCoords) - this.owner.grid.extremes.x.min))};` +
         `}`; 
       }
     }

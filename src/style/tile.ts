@@ -122,7 +122,7 @@ export default abstract class TileStyle extends Style {
         j; // TODO
         css +=
         this.selectors.tile + tile.selectors.data + `{` +
-          `left:${calc.mult(this.size.outer.width, getCoordsCol(tile.orthogonalCoords) - this.owner.grid.tilesLimits.cols.min)};` +
+          `left:${calc.mult(this.size.outer.width, getCoordsCol(tile.orthogonalCoords) - this.owner.grid.extremes.x.min)};` +
         `}`; 
       }
     }

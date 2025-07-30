@@ -69,12 +69,14 @@ export default abstract class GridStyle extends Style {
     `}` +
 
     this.selectors.grid + `{` +
-      `overflow:hidden;` + 
+      `overflow:hidden;` +
     `}` +
 
     this.selectors.row + `{` +
-      `display:flex;` +
-      `position:relative;` +
+      `position:absolute;` +
+      `left:0;` +
+      `right:auto;` +
+      `bottom:auto;` +
       `pointer-events:none;` +
     `}` +
 
@@ -93,7 +95,7 @@ export default abstract class GridStyle extends Style {
     `}` +
 
     this.selectors.outerTile + `{` +
-    `position:absolute;` + 
+      `position:absolute;` + 
       `z-index:120;` + 
     `}` +
 
@@ -164,25 +166,30 @@ export default abstract class GridStyle extends Style {
     
     return `` +
     this.selectors.grid + `{` +
-      `padding:${calc.div(this.spacing, 2)};` +
+      `margin:${calc.div(this.spacing, 2)};` +
+      `width: ${this.gridSize.width};` +
+      `height:${this.gridSize.height};` +
     `}` +
+
     this.selectors.frame + absolutePosition +
 
     this.selectors.outerGrid + absolutePosition +
     
     this.selectors.contour + absolutePosition +
-
-    this.selectors.row + `{` +
-      `width: ${this.rowWidth};` +
+    
+    this.selectors.contour + `{` +
+      `margin:${calc.div(this.spacing, 2)};` +
     `}` +
-
-
-
-
 
     this.selectors.row + `{` +
       `height:${this.tile.size.outer.height};` +
+      `width: ${this.rowSize.width};` +
     `}` +
+
+
+
+
+
 
     this.selectors.outerTile + `{` + 
       `width:${this.tile.size.outer.width};` + 
@@ -205,8 +212,20 @@ export default abstract class GridStyle extends Style {
     `}` +
 
 
+    this.generateRowPositions +
     
     this.generatedSpecific;
+  }
+
+  protected get generateRowPositions() : string {
+    let css = ``;
+    for (let [y, row] of this.owner.tiles) {
+      row; // TODO
+      css += this.selectors.row + `[data-elemap-y="${y}"]{` +
+        `top:${calc.mult(y, this.tile.size.outer.height)};` +
+      `}`;
+    }
+    return css;
   }
 
   public abstract get generatedSpecific() : string;
@@ -222,7 +241,17 @@ export default abstract class GridStyle extends Style {
     this.tile.compute();
   }
 
-  protected get rowWidth() : string {
-    return calc.mult(this.tile.size.outer.width, this.owner.size.width);
+  protected get rowSize() : {width: string, height: string} {
+    return {
+      width: calc.mult(this.tile.size.outer.width, this.owner.size.width),
+      height: this.tile.size.outer.height
+    };
+  }
+
+  protected get gridSize() : {width: string, height: string} {
+    return {
+      width: this.rowSize.width,
+      height: calc.mult(this.tile.size.outer.height, this.owner.size.height)
+    };
   }
 }

@@ -151,24 +151,12 @@ export default class HexagonGridStyle extends GridStyle {
     this.selectors.contour + `>div{` +
       `clip-path:path(evenodd,'${outerPath} ${innerPath}');` +
     `}`
-    + this.cssTileRecess()
     + this.cssTileIndentation();
   }
 
   /* NOTE: for pointy grids recess and indentation are made on rows, for flat grids on tiles because there are no columns in html */
 
   // 1/4 of height; height is longer diagonal, side is 1/2 of diagonal, thus triangles are 1/2 of 1/2 high each
-  private cssTileRecess() : string {
-    if (this.owner.orientation === GridOrientation.Pointy) {
-      return `` +
-      this.selectors.row + `:not(:first-child){` +
-        `margin-top:${calc.sub('0px', this.tileRecess.vertical)};` +
-      `}`;
-    } else {
-      return ``;
-    }
-  }
-
   public get tileRecess() : {vertical: string, horizontal: string} {
     if (this.owner.orientation === GridOrientation.Pointy) {
       return {
@@ -188,7 +176,7 @@ export default class HexagonGridStyle extends GridStyle {
     if (this.owner.orientation === GridOrientation.Pointy) {
       return `` +
       this.selectors.row + `:nth-child(${indentationRule}){` +
-        `margin-left:${/*calc.add('0px', */this.tileIndentation.horizontal/*)*/};` +
+        `left:${/*calc.add('0px', */this.tileIndentation.horizontal/*)*/};` +
       `}`;
     } else {
       let css = ``;
@@ -197,19 +185,11 @@ export default class HexagonGridStyle extends GridStyle {
       for (let i = 0; i < this.owner.size.width; i++) {
         if ((indentationRule === '2n - 1' && i % 2 === 0) || (indentationRule === '2n' && i % 2 !== 0)) {
           css +=
-          this.selectors.outerTile + `[data-elemap-x="${i}"]{` +
-            `margin-top:${this.tileIndentation.vertical};` +
-            `margin-bottom:${calc.sub('0px', this.tileIndentation.vertical)};` +
+          this.selectors.tile + `[data-elemap-x="${i}"]{` +
+            `top:${this.tileIndentation.vertical};` +
           `}`;
         }
       }
-
-      // Inner tiles are always rendered so we can work with them through nth-child
-      css +=
-      this.selectors.innerTile + `:nth-child(${indentationRule}){` +
-        `margin-top:${calc.add(calc.div(this.spacing, 2), this.tileIndentation.vertical)};` +
-        `margin-bottom:${calc.add(calc.div(this.spacing, 2), calc.sub('0px', this.tileIndentation.vertical))};` +
-      `}`;
 
       // Make last row higher to accommodate for indentation
       css +=
@@ -235,7 +215,30 @@ export default class HexagonGridStyle extends GridStyle {
     }
   }
 
-  protected override get rowWidth() : string {
-    return calc.sub(calc.mult(this.tile.size.outer.width, this.owner.size.width), calc.mult(this.tileRecess.horizontal, this.owner.size.width - 1));
+  protected override get generateRowPositions() : string {
+    let css = ``;
+    let i = 0;
+    for (let [y, row] of this.owner.tiles) {
+      row; // TODO
+      css += this.selectors.row + `[data-elemap-y="${y}"]{` +
+        `top:${calc.sub(calc.mult(i, this.tile.size.outer.height), calc.mult(this.tileRecess.vertical, i))};` +
+      `}`;
+      i++;
+    }
+    return css;
+  }
+
+  protected override get rowSize() : {width: string, height: string} {
+    return {
+      width: calc.sub(calc.mult(this.tile.size.outer.width, this.owner.size.width), calc.mult(this.tileRecess.horizontal, this.owner.size.width - 1)),
+      height: this.tile.size.outer.height
+    };
+  }
+
+  protected override get gridSize() : {width: string, height: string} {
+    return {
+      width: calc.add(this.rowSize.width, this.tileIndentation.horizontal),
+      height: calc.add(calc.sub(calc.mult(this.tile.size.outer.height, this.owner.size.height), calc.mult(this.tileRecess.vertical, this.owner.size.height - 1)), this.tileIndentation.vertical)
+    };
   }
 }

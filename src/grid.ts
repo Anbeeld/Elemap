@@ -2,7 +2,7 @@ import { AbstractTile, TileArguments, TileSnapshot } from "./tile.js";
 import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep, Mutables, Mutation, SignedArray, SignedTable, Coords, Index } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
-import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema } from "./mangle.js";
+import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema, demangleProperty } from "./mangle.js";
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & Mutables;
@@ -185,23 +185,30 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected abstract tileImport(snapshot: TileSnapshot) : T;
   protected abstract indexToCoords(index: Index) : Coords;
 
-  public get tilesLimits() : {rows: {min: number, max: number}, cols: {min: number, max: number}} {
-    let minCol, maxCol;
-    for (let [i, row] of this.tiles) {
-      i; // TODO
-      for (let [j, tile] of row) {
+  public get extremes() : {x: {min: number, max: number}, y: {min: number, max: number}} {
+    let minY, maxY, minX, maxX;
+    for (let [y, row] of this.tiles) {
+
+      if (minY === undefined || y < minY) {
+        minY = y;
+      }
+      if (maxY === undefined || y > maxY) {
+        maxY = y;
+      }
+
+      for (let [x, tile] of row) {
         tile; // TODO
-        if (minCol === undefined || j < minCol) {
-          minCol = j;
+        if (minX === undefined || x < minX) {
+          minX = x;
         }
-        if (maxCol === undefined || j > maxCol) {
-          maxCol = j;
+        if (maxX === undefined || x > maxX) {
+          maxX = x;
         }
       }
     }
     return {
-      rows: {min: 0, max: 0},
-      cols: {min: minCol || 0, max: maxCol || 0}
+      x: {min: minX || 0, max: maxX || 0},
+      y: {min: minY || 0, max: maxY || 0}
     };
   }
 
@@ -238,10 +245,12 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     for (let [y, row] of this.tiles) {
       if (typeof this.elements!.outerRows[y] === 'undefined') {
         this.elements!.outerRows[y] = document.createElement('div');
+        demangleProperty(this.elements!.outerRows[y].dataset, 'elemapY', y.toString());
         this.elements!.outer.appendChild(this.elements!.outerRows[y]);
       }
       if (typeof this.elements!.innerRows[y] === 'undefined') {
         this.elements!.innerRows[y] = document.createElement('div');
+        demangleProperty(this.elements!.innerRows[y].dataset, 'elemapY', y.toString());
         this.elements!.inner.appendChild(this.elements!.innerRows[y]);
       }
       for (let [y, tile] of row) {
