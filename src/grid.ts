@@ -2,13 +2,12 @@ import { AbstractTile, TileArguments, TileSnapshot } from "./tile.js";
 import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep, Mutables, Mutation, SignedArray, SignedTable, Coords } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
-import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema, demangleProperty } from "./mangle.js";
+import { demangleProperties, demangleGridIds, demangleGridStyleSchema, demangleProperty } from "./mangle.js";
 
 // Snapshot and mutation types
 export type GridSnapshot = GridConstants & Mutables;
 type GridConstants = {
   ids: GridIdsProperties,
-  size: Size,
   orientation: GridOrientation,
   offset: GridOffset,
   schema: GridStyleSchema | false, // false = use map default grid and tile style
@@ -34,9 +33,15 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected set ids(value: GridIds) { this._ids = value; }
   public get ids() : GridIds { return this._ids; }
 
-  protected _size: Size;
-  protected set size(value: Size) { this._size = value; }
-  public get size() : Size { return this._size; }
+  public get size() : Size {
+    let width = 0;
+    for (let row of this.tiles.values) {
+      if (row.length > width) {
+        width = row.length;
+      }
+    }
+    return {width, height: this.tiles.length};
+  }
 
   public tiles: SignedTable<T> = new SignedTable<T>();
 
@@ -91,7 +96,6 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     } else {
       this.ids = new GridIds(args.ids, Register.id());
     }
-    this.size = args.size;
 
     this.orientation = args.orientation;
     this.offset = args.offset;
@@ -126,7 +130,6 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
     demangleProperties(object, [
       ['ids', demangleGridIds(this.ids)],
-      ['size', demangleSize(this.size)],
       ['orientation', this.orientation],
       ['offset', this.offset],
       ['schema', demangleGridStyleSchema(this.schema)],
@@ -154,20 +157,21 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
           this.tiles[y][x] = this.tileImport(tile);
         }
       }
-    } else {
-      for (let y = 0; y < this.size.height; y++) {
-        for (let x = 0; x < this.size.width; x++) {
-          if (!this.tiles[y]) {
-            this.tiles[y] = new SignedArray<T>();
-          }
-          this.tiles[y]![x] = this.tileFactory({
-            ids: this.ids,
-            coords: this.tileCoordsFromOrthogonal({x, y}),
-            decls: false
-          });
-        }
-      }
     }
+    // else {
+    //   for (let y = 0; y < size.height; y++) {
+    //     for (let x = 0; x < size.width; x++) {
+    //       if (!this.tiles[y]) {
+    //         this.tiles[y] = new SignedArray<T>();
+    //       }
+    //       this.tiles[y]![x] = this.tileFactory({
+    //         ids: this.ids,
+    //         coords: this.tileCoordsFromOrthogonal({x, y}),
+    //         decls: false
+    //       });
+    //     }
+    //   }
+    // }
   }
 
   public createTile(coords: OrthogonalCoords) : void {

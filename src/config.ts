@@ -6,16 +6,11 @@ import { GridOrientation, GridOffset, DeepPartial } from "./utils.js";
 export type Config = DeepPartial<GridMapArguments>;
 
 export function configToGridMapArguments(config: Config) : GridMapArguments {
-  let configSize = mangleProperty(config, 'size'),
-      configGrid = mangleProperty(config, 'grid');
+  let configGrid = mangleProperty(config, 'grid');
   return {
     ids: mangleMapIds(mangleProperty(config, 'ids')),
     grid: {
       ids: mangleGridIds(mangleProperty(configGrid, 'ids')),
-      size: {
-        width: mangleProperty(configSize, 'width') || 32,
-        height: mangleProperty(configSize, 'height') || 18
-      },
       orientation: mangleProperty(configGrid, 'orientation') || GridOrientation.Pointy,
       offset: mangleProperty(configGrid, 'offset') || GridOffset.Odd,
       schema: mangleGridStyleSchema(mangleProperty(configGrid, 'schema')),

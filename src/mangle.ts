@@ -3,7 +3,7 @@
 import { GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
 import { GridMapStyleSchema, GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
 import { TileSnapshot } from './tile.js';
-import { AxialCoords, Coords, OrthogonalCoords, Size } from './utils.js';
+import { AxialCoords, Coords, OrthogonalCoords } from './utils.js';
 
 export function mangleProperty(object: any, name: string) : any {
   if (!object || !object.hasOwnProperty(name)) {
@@ -67,20 +67,6 @@ export function mangleTileIds(object: any) : TileIds {
     map: mangleProperty(object, 'map'),
     grid: mangleProperty(object, 'grid'),
     tile: mangleProperty(object, 'tile')
-  };
-}
-
-export function demangleSize(size: Size) : Size {
-  let object = {};
-  demangleProperty(object, 'width', size.width);
-  demangleProperty(object, 'height', size.height);
-  // @ts-ignore
-  return object;
-}
-export function mangleSize(object: any) : Size {
-  return {
-    width: mangleProperty(object, 'width'),
-    height: mangleProperty(object, 'height')
   };
 }
 
@@ -186,27 +172,6 @@ export function mangleGridMapStyleSchema(object: any) : GridMapStyleSchema {
     tile: mangleTileStyleDecls(mangleProperty(object, 'tile')),
   };
 }
-
-// export function mangleGridMapSnapshot(object: any) : GridMapSnapshot {
-//   return {
-//     type: mangleProperty(object, 'type'),
-//     ids: mangleMapIds(mangleProperty(object, 'ids')),
-//     grid: mangleProperty(object, 'grid'),
-//     schema: mangleGridMapStyleSchema(mangleProperty(object, 'schema')),
-//   }
-// }
-
-// export function mangleGridSnapshot(snapshot: any) : GridSnapshot {
-//   console.log('mangleGridSnapshot', snapshot);
-//   return {
-//     ids: mangleGridIds(mangleProperty(snapshot, 'ids')),
-//     size: mangleSize(mangleProperty(snapshot, 'size')),
-//     orientation: mangleProperty(snapshot, 'orientation'),
-//     offset: mangleProperty(snapshot, 'offset'),
-//     schema: mangleGridStyleSchema(mangleProperty(snapshot, 'schema')),
-//     tiles: mangleProperty(snapshot, 'tiles')
-//   };
-// }
 
 export function mangleTileSnapshot<C extends Coords>(snapshot: any) : TileSnapshot<C> {
   return {
