@@ -187,7 +187,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
   public get extremes() : {x: {min: number, max: number}, y: {min: number, max: number}} {
     let minY, maxY, minX, maxX;
-    for (let [y, row] of this.tiles) {
+    for (let y of this.tiles.keys) {
 
       if (minY === undefined || y < minY) {
         minY = y;
@@ -196,8 +196,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
         maxY = y;
       }
 
-      for (let [x, tile] of row) {
-        tile; // TODO
+      for (let x of this.tiles[y]!.keys) {
         if (minX === undefined || x < minX) {
           minX = x;
         }
@@ -253,8 +252,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
         demangleProperty(this.elements!.innerRows[y].dataset, 'elemapY', y.toString());
         this.elements!.inner.appendChild(this.elements!.innerRows[y]);
       }
-      for (let [y, tile] of row) {
-        y; // TODO
+      for (let tile of row.values) {
         tile.render();
       }
     }

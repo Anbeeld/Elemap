@@ -368,8 +368,14 @@ export class SignedArray<V> {
   [key: number]: V
 
   *[Symbol.iterator]() {
-    let records: [number, V][] = [];
-    for (const [key, value] of Object.entries(this)) {
+    for (const key of this.keys) {
+      yield [key, this[key]] as [number, V];
+    }
+  }
+
+  public get keys(): number[] {
+    let keys: number[] = [];
+    for (const key of Object.keys(this)) {
       let index: number;
 
       if (typeof key === 'string') {
@@ -384,14 +390,20 @@ export class SignedArray<V> {
         continue;
       }
 
-      records.push([index, value as V]);
+      keys.push(index);
     }
+    
+    keys.sort((a, b) => a - b);
 
-    records.sort((a, b) => a[0] - b[0]);
+    return keys;
+  }
 
-    for (const [key, value] of records) {
-      yield [key, value] as [number, V];
+  public get values() : V[] {
+    let values: V[] = [];
+    for (const key of this.keys) {
+      values.push(this[key]!);
     }
+    return values;
   }
 }
 
