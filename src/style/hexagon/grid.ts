@@ -178,33 +178,32 @@ export default class HexagonGridStyle extends GridStyle {
   }
 
   private cssTileIndentation() : string {
-    let indentationRule: string = this.owner.offset === 'even' ? '2n - 1' : '2n';
+    let css = ``;
     if (this.owner.orientation === GridOrientation.Pointy) {
-      return `` +
-      this.selectors.row + `:nth-child(${indentationRule}){` +
-        `left:${/*calc.add('0px', */this.tileIndentation.horizontal/*)*/};` +
-      `}`;
+      for (let y = 0; y < this.owner.size.height; y++) {
+        if ((this.owner.offset === 'even' && y % 2 === 0) || (this.owner.offset === 'odd' && y % 2 !== 0)) {
+          css +=
+          this.selectors.row + `[data-elemap-y="${y}"]{` +
+            `left:${this.tileIndentation.horizontal};` +
+          `}`;
+        }
+      }
     } else {
-      let css = ``;
-
-      // For outer tiles rules based on index are required because not all of them are rendered 
       for (let x = 0; x < this.owner.size.width; x++) {
-        if ((indentationRule === '2n - 1' && x % 2 === 0) || (indentationRule === '2n' && x % 2 !== 0)) {
+        if ((this.owner.offset === 'even' && x % 2 === 0) || (this.owner.offset === 'odd' && x % 2 !== 0)) {
           css +=
           this.selectors.tile + `[data-elemap-x="${x}"]{` +
             `top:${this.tileIndentation.vertical};` +
           `}`;
         }
       }
-
       // Make last row higher to accommodate for indentation
       css +=
       this.selectors.row + `:last-child{` +
         `height:${calc.add(this.tile.size.outer.height, this.tileIndentation.vertical)};` +
       `}`;
-
-      return css;
     }
+    return css;
   }
 
   private get tileIndentation() : {vertical: string, horizontal: string} {
