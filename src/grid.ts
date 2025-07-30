@@ -43,10 +43,10 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   public abstract tileByCoords(firstCoord: number, secondCoord: number) : T|undefined;
   public abstract tileByElement(element: HTMLElement) : T|undefined;
   public tileById(ids: TileIds) : T|undefined {
-    for (let x in this.tiles) {
-      for (let y in this.tiles[x]) {
-        if (this.tiles[x]![y as any]!.ids.tile === ids.tile) {
-          return this.tiles[x]![y as any]!;
+    for (let y in this.tiles) {
+      for (let x in this.tiles[y]) {
+        if (this.tiles[y]![x as any]!.ids.tile === ids.tile) {
+          return this.tiles[y]![x as any]!;
         }
       }
     }
@@ -146,21 +146,21 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
   protected initTiles(snapshot?: SignedTable<TileSnapshot>) : void {
     if (snapshot) {
-      for (let [x, row] of snapshot) {
-        for (let [y, tile] of row) {
-          if (!this.tiles[x]) {
-            this.tiles[x] = new SignedArray<T>();
+      for (let [y, row] of snapshot) {
+        for (let [x, tile] of row) {
+          if (!this.tiles[y]) {
+            this.tiles[y] = new SignedArray<T>();
           }
-          this.tiles[x][y] = this.tileImport(tile);
+          this.tiles[y][x] = this.tileImport(tile);
         }
       }
     } else {
-      for (let x = 0; x < this.size.height; x++) {
-        for (let y = 0; y < this.size.width; y++) {
-          if (!this.tiles[x]) {
-            this.tiles[x] = new SignedArray<T>();
+      for (let y = 0; y < this.size.height; y++) {
+        for (let x = 0; x < this.size.width; x++) {
+          if (!this.tiles[y]) {
+            this.tiles[y] = new SignedArray<T>();
           }
-          this.tiles[x]![y] = this.tileFactory({
+          this.tiles[y]![x] = this.tileFactory({
             ids: this.ids,
             coords: this.indexToCoords({i: x, j: y}),
             decls: false
@@ -171,10 +171,10 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   }
 
   public createTile(coords: OrthogonalCoords) : void {
-    if (!this.tiles[coords.x]) {
-      this.tiles[coords.x] = new SignedArray<T>();
+    if (!this.tiles[coords.y]) {
+      this.tiles[coords.y] = new SignedArray<T>();
     }
-    this.tiles[coords.x]![coords.y] = this.tileFactory({
+    this.tiles[coords.y]![coords.x] = this.tileFactory({
       ids: this.ids,
       coords: this.indexToCoords({i: coords.x, j: coords.y}),
       decls: false
@@ -235,14 +235,14 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
     container.innerHTML = '';
 
-    for (let [x, row] of this.tiles) {
-      if (typeof this.elements!.outerRows[x] === 'undefined') {
-        this.elements!.outerRows[x] = document.createElement('div');
-        this.elements!.outer.appendChild(this.elements!.outerRows[x]);
+    for (let [y, row] of this.tiles) {
+      if (typeof this.elements!.outerRows[y] === 'undefined') {
+        this.elements!.outerRows[y] = document.createElement('div');
+        this.elements!.outer.appendChild(this.elements!.outerRows[y]);
       }
-      if (typeof this.elements!.innerRows[x] === 'undefined') {
-        this.elements!.innerRows[x] = document.createElement('div');
-        this.elements!.inner.appendChild(this.elements!.innerRows[x]);
+      if (typeof this.elements!.innerRows[y] === 'undefined') {
+        this.elements!.innerRows[y] = document.createElement('div');
+        this.elements!.inner.appendChild(this.elements!.innerRows[y]);
       }
       for (let [y, tile] of row) {
         y; // TODO

@@ -28,7 +28,7 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
   }
 
   public override tileByCoords(firstCoord: number, secondCoord: number) : RectangleTile|undefined {
-    return this.tiles[firstCoord]![secondCoord];
+    return this.tiles[secondCoord]![firstCoord];
   }
   public override tileByElement(element: HTMLElement) : RectangleTile|undefined {
     if (element.hasAttribute('data-elemap-x') && element.hasAttribute('data-elemap-y')) {

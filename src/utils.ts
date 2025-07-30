@@ -34,15 +34,15 @@ export interface OrthogonalCoords extends Coords {
 
 export function getCoordsRow<C extends Coords>(coords: C) : number {
   if (coords.q !== undefined && coords.r !== undefined) {
-    return coords.r;
-  }
-  return coords.x!;
-}
-export function getCoordsCol<C extends Coords>(coords: C) : number {
-  if (coords.q !== undefined && coords.r !== undefined) {
     return coords.q;
   }
   return coords.y!;
+}
+export function getCoordsCol<C extends Coords>(coords: C) : number {
+  if (coords.q !== undefined && coords.r !== undefined) {
+    return coords.r;
+  }
+  return coords.x!;
 }
 
 export function roundFloat(value: number, precision: number) : number {
@@ -295,18 +295,18 @@ export function orthogonalCoordsToIndex(orthogonal: OrthogonalCoords) : Index {
 export function orthogonalCoordsToAxial(orthogonal: OrthogonalCoords, orientation: GridOrientation, offset: GridOffset) : AxialCoords {
   let axial: AxialCoords = {r: 0, q: 0};
   if (orientation === GridOrientation.Pointy) {
-    axial.r = orthogonal.x;
+    axial.r = orthogonal.y;
     if (offset === GridOffset.Odd) {
-      axial.q = orthogonal.y - (orthogonal.x - (orthogonal.x & 1)) / 2;
+      axial.q = orthogonal.x - (orthogonal.y - (orthogonal.y & 1)) / 2;
     } else {
-      axial.q = orthogonal.y - (orthogonal.x + (orthogonal.x & 1)) / 2;
+      axial.q = orthogonal.x - (orthogonal.y + (orthogonal.y & 1)) / 2;
     }
   } else {
-    axial.q = orthogonal.y;
+    axial.q = orthogonal.x;
     if (offset === GridOffset.Odd) {
-      axial.r = orthogonal.x - (orthogonal.y - (orthogonal.y & 1)) / 2;
+      axial.r = orthogonal.y - (orthogonal.x - (orthogonal.x & 1)) / 2;
     } else {
-      axial.r = orthogonal.x - (orthogonal.y + (orthogonal.y & 1)) / 2;
+      axial.r = orthogonal.y - (orthogonal.x + (orthogonal.x & 1)) / 2;
     }
   }
   return axial;
@@ -315,18 +315,18 @@ export function orthogonalCoordsToAxial(orthogonal: OrthogonalCoords, orientatio
 export function axialCoordsToOrthogonal(axial: AxialCoords, orientation: GridOrientation, offset: GridOffset) : OrthogonalCoords {
   let orthogonal: OrthogonalCoords = {x: 0, y: 0};
   if (orientation === GridOrientation.Pointy) {
-    orthogonal.x = axial.r;
+    orthogonal.y = axial.r;
     if (offset === GridOffset.Odd) {
-      orthogonal.y = axial.q + (axial.r - (axial.r & 1)) / 2;
+      orthogonal.x = axial.q + (axial.r - (axial.r & 1)) / 2;
     } else {
-      orthogonal.y = axial.q + (axial.r + (axial.r & 1)) / 2;
+      orthogonal.x = axial.q + (axial.r + (axial.r & 1)) / 2;
     }
   } else {
-    orthogonal.y = axial.q;
+    orthogonal.x = axial.q;
     if (offset === GridOffset.Odd) {
-      orthogonal.x = axial.r + (axial.q - (axial.q & 1)) / 2;
+      orthogonal.y = axial.r + (axial.q - (axial.q & 1)) / 2;
     } else {
-      orthogonal.x = axial.r + (axial.q + (axial.q & 1)) / 2;
+      orthogonal.y = axial.r + (axial.q + (axial.q & 1)) / 2;
     }
   }
   return orthogonal;

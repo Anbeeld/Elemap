@@ -29,7 +29,7 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
 
   public override tileByCoords(firstCoord: number, secondCoord: number) : HexagonTile|undefined {
     let orthogonalCoords = axialCoordsToOrthogonal({r: firstCoord, q: secondCoord}, this.orientation, this.offset);
-    return this.tiles[orthogonalCoords.x]![orthogonalCoords.y];
+    return this.tiles[orthogonalCoords.y]![orthogonalCoords.x];
   }
   public override tileByElement(element: HTMLElement) : HexagonTile|undefined {
     if (element.hasAttribute('data-elemap-r') && element.hasAttribute('data-elemap-q')) {
