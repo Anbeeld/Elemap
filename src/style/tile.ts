@@ -129,8 +129,8 @@ export default abstract class TileStyle extends Style {
 
   public compute() : void {
     this.computed = {
-      // outer: getComputedStyle(this.owner.grid.tileByCoords(0, 0)!.elements.outer),
-      inner: getComputedStyle(this.owner.grid.tileByCoords(0, 0)!.elements.inner)
+      // outer: getComputedStyle(this.owner.elements.outer),
+      inner: getComputedStyle(this.owner.elements.inner)
     };
   }
 }
