@@ -1,4 +1,4 @@
-import { Coords, getCoordsCol, getCoordsRow, mergeDeep, Mutables, Mutation, OrthogonalCoords } from './utils.js';
+import { Coords, getCoordsRow, mergeDeep, Mutables, Mutation, OrthogonalCoords } from './utils.js';
 import { demangleProperties, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords, mangleTileStyleDecls } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
@@ -194,20 +194,4 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   }
 
   public abstract get selectors() : {[key: string]: string};
-
-  public get indexInRow() : number {
-    if (this.grid.tiles[getCoordsRow(this.coords)]) {
-      let minIndex;
-      for (let [i, tile] of this.grid.tiles[getCoordsRow(this.coords)]!) {
-        tile; // TODO
-        if (minIndex === undefined || i < minIndex) {
-          minIndex = i;
-        }
-      }
-      if (minIndex !== undefined) {
-        return minIndex + getCoordsCol(this.coords);
-      }
-    }
-    return 0;
-  }
 }

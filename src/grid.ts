@@ -1,5 +1,5 @@
 import { AbstractTile, TileArguments, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep, Mutables, Mutation, SignedArray, SignedTable, Coords, Index } from "./utils.js";
+import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep, Mutables, Mutation, SignedArray, SignedTable, Coords } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
 import { demangleProperties, demangleSize, demangleGridIds, demangleGridStyleSchema, demangleProperty } from "./mangle.js";
@@ -116,11 +116,11 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   }
   protected exportConstants(object: object = {}) : GridConstants {
     let tiles: SignedTable<TileSnapshot> = new SignedArray<SignedArray<TileSnapshot>>();
-    for (let [i, row] of this.tiles) {
-      tiles[i] = new SignedArray<TileSnapshot>();
+    for (let [y, row] of this.tiles) {
+      tiles[y] = new SignedArray<TileSnapshot>();
 
-      for (let [j, tile] of row) {
-        tiles[i][j] = tile.export();
+      for (let [x, tile] of row) {
+        tiles[y][x] = tile.export();
       }
     }
 
@@ -162,7 +162,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
           }
           this.tiles[y]![x] = this.tileFactory({
             ids: this.ids,
-            coords: this.indexToCoords({i: x, j: y}),
+            coords: this.tileCoordsFromOrthogonal({x, y}),
             decls: false
           });
         }
@@ -176,14 +176,14 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     }
     this.tiles[coords.y]![coords.x] = this.tileFactory({
       ids: this.ids,
-      coords: this.indexToCoords({i: coords.x, j: coords.y}),
+      coords: this.tileCoordsFromOrthogonal(coords),
       decls: false
     });
   }
 
   protected abstract tileFactory(args: TileArguments) : T;
   protected abstract tileImport(snapshot: TileSnapshot) : T;
-  protected abstract indexToCoords(index: Index) : Coords;
+  protected abstract tileCoordsFromOrthogonal(coords: OrthogonalCoords) : Coords;
 
   public get extremes() : {x: {min: number, max: number}, y: {min: number, max: number}} {
     let minY, maxY, minX, maxX;

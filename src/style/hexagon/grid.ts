@@ -108,8 +108,8 @@ export default class HexagonGridStyle extends GridStyle {
     let topPerTile: number = cssValueToNumber(this.tile.size.spaced.height) - cssValueToNumber(this.tileRecess.vertical) - cssValueToNumber(this.spacing);
     let leftPerTile: number = cssValueToNumber(this.tile.size.spaced.width) - cssValueToNumber(this.tileRecess.horizontal) - cssValueToNumber(this.spacing);
 
-    for (let i = 0; i < this.owner.size.height; i++) {
-      for (let j = 0; j < this.owner.size.width; j++) {
+    for (let y = 0; y < this.owner.size.height; y++) {
+      for (let x = 0; x < this.owner.size.width; x++) {
         if (path !== '') {
           path += ' ';
         }
@@ -118,8 +118,8 @@ export default class HexagonGridStyle extends GridStyle {
           this.hexagonSize.spaced,
           cssValueToNumber(this.tile.computed.inner.borderRadius),
           {
-            top: i * topPerTile + (this.owner.hasIndentation(j) ? 1 : 0) * cssValueToNumber(this.tileIndentation.vertical),
-            left: j * leftPerTile + (this.owner.hasIndentation(i) ? 1 : 0) * cssValueToNumber(this.tileIndentation.horizontal)
+            top: y * topPerTile + (this.owner.hasIndentation(x) ? 1 : 0) * cssValueToNumber(this.tileIndentation.vertical),
+            left: x * leftPerTile + (this.owner.hasIndentation(y) ? 1 : 0) * cssValueToNumber(this.tileIndentation.horizontal)
           }
         );
       }
@@ -182,10 +182,10 @@ export default class HexagonGridStyle extends GridStyle {
       let css = ``;
 
       // For outer tiles rules based on index are required because not all of them are rendered 
-      for (let i = 0; i < this.owner.size.width; i++) {
-        if ((indentationRule === '2n - 1' && i % 2 === 0) || (indentationRule === '2n' && i % 2 !== 0)) {
+      for (let x = 0; x < this.owner.size.width; x++) {
+        if ((indentationRule === '2n - 1' && x % 2 === 0) || (indentationRule === '2n' && x % 2 !== 0)) {
           css +=
-          this.selectors.tile + `[data-elemap-x="${i}"]{` +
+          this.selectors.tile + `[data-elemap-x="${x}"]{` +
             `top:${this.tileIndentation.vertical};` +
           `}`;
         }

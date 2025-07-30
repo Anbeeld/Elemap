@@ -1,7 +1,6 @@
 import { cssValueToNumber } from './style/utils.js';
 
 export type Size = {width: number, height: number};
-export type Index = {i: number, j: number};
 
 export enum MapType {
   Rectangle = 'rectangle',
@@ -284,14 +283,6 @@ export type hexagonSizeDecls = {
   inner: hexagonSize
 }
 
-export function indexToOrthogonalCoords(index: Index) : OrthogonalCoords {
-  return {x: index.i, y: index.j};
-}
-
-export function orthogonalCoordsToIndex(orthogonal: OrthogonalCoords) : Index {
-  return {i: orthogonal.x, j: orthogonal.y};
-}
-
 export function orthogonalCoordsToAxial(orthogonal: OrthogonalCoords, orientation: GridOrientation, offset: GridOffset) : AxialCoords {
   let axial: AxialCoords = {r: 0, q: 0};
   if (orientation === GridOrientation.Pointy) {
@@ -330,10 +321,6 @@ export function axialCoordsToOrthogonal(axial: AxialCoords, orientation: GridOri
     }
   }
   return orthogonal;
-}
-
-export function indexToAxialCoords(index: Index, orientation: GridOrientation, offset: GridOffset) : AxialCoords {
-  return orthogonalCoordsToAxial(indexToOrthogonalCoords(index), orientation, offset);
 }
 
 function isObject(item: any) {

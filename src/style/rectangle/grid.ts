@@ -35,15 +35,15 @@ export default class RectangleGridStyle extends GridStyle {
 
   protected override get frameClipPath() {
     let path = '';
-    for (let i = 0; i < this.owner.size.height; i++) {
-      for (let j = 0; j < this.owner.size.width; j++) {
+    for (let y = 0; y < this.owner.size.height; y++) {
+      for (let x = 0; x < this.owner.size.width; x++) {
         if (path !== '') path += ' ';
         path += generateRectanglePath(
           this.tile.size.spaced,
           cssValueToNumber(this.tile.computed.inner.borderRadius),
           {
-            top: i * (cssValueToNumber(this.tile.size.spaced.height) - cssValueToNumber(this.spacing)),
-            left: j * (cssValueToNumber(this.tile.size.spaced.width) - cssValueToNumber(this.spacing)) 
+            top: y * (cssValueToNumber(this.tile.size.spaced.height) - cssValueToNumber(this.spacing)),
+            left: x * (cssValueToNumber(this.tile.size.spaced.width) - cssValueToNumber(this.spacing)) 
           }
         );
       }
