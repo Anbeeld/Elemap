@@ -405,6 +405,10 @@ export class SignedArray<V> {
     }
     return values;
   }
+
+  public get length() : number {
+    return this.keys.length;
+  }
 }
 
 export class SignedTable<V> extends SignedArray<SignedArray<V>> {}
