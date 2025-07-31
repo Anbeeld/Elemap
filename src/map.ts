@@ -44,9 +44,9 @@ export abstract class AbstractMap implements MapConstants, Mutables {
     };
   }
 
-  protected _data: Record<string, any> = {};
-  protected set mutables(value: Record<string, any>) { this._data = value; }
-  public get mutables() : Record<string, any> { return this._data; }
+  protected _mutables: Record<string, any> = {};
+  protected set mutables(value: Record<string, any>) { this._mutables = value; }
+  public get mutables() : Record<string, any> { return this._mutables; }
 
   constructor(args: MapArguments) {
     if (args.ids && typeof args.ids.map === 'number') {

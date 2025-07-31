@@ -53,9 +53,9 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
 
   protected rendered: boolean = false;
 
-  protected _data: Record<string, any> = {};
-  protected set mutables(value: Record<string, any>) { this._data = value; }
-  public get mutables() : Record<string, any> { return this._data; }
+  protected _mutables: Record<string, any> = {};
+  protected set mutables(value: Record<string, any>) { this._mutables = value; }
+  public get mutables() : Record<string, any> { return this._mutables; }
 
   constructor(args: TileArguments<C>) {
     if (typeof (args.ids as TileIdsProperties).tile === 'number') {
