@@ -114,7 +114,6 @@ export default abstract class GridStyle extends Style {
 
     this.selectors.innerGrid + `{` +
       `position:relative;` +
-      `width:max-content;` +
       `z-index:150;` +
     `}` + 
     this.selectors.innerRow + `{` +

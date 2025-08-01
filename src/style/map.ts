@@ -81,7 +81,8 @@ export abstract class MapStyle extends Style {
     return {
       base: `.elemap-${this.ids.owner.map}`,
       container: `.elemap-${this.ids.owner.map}-container`,
-      map: `.elemap-${this.ids.owner.map}-map`
+      map: `.elemap-${this.ids.owner.map}-map`,
+      content: `.elemap-${this.ids.owner.map}-content`
     };
   }
 
@@ -89,12 +90,30 @@ export abstract class MapStyle extends Style {
     return `` +
     this.selectors.container + `{` +
       `width:max-content;` +
+      `position:relative;` +
     `}` +
 
     this.selectors.map + `{` +
       `position:relative;` +
       `width:max-content;` +
       `z-index:10;` +
+    `}` +
+
+    this.selectors.content + `{` +
+      `position:absolute;` +
+      `z-index:500;` +
+      `top:50px;` +
+      `left:50px;` +
+      `bottom:50px;` +
+      `right:50px;` +
+      `pointer-events:none;` +
+    `}` +
+
+    this.selectors.content + `>div{` +
+      `width: 0px;height: 0px;position: absolute;overflow:visible` +
+    `}` +
+    this.selectors.content + `>div>*{` +
+      `position: absolute;transform: translate(-50%, -100%);` +
     `}`;
   }
 

@@ -1,3 +1,4 @@
+import { Content } from "./content.js";
 import { AbstractGrid } from "./grid.js";
 import { HexagonGrid } from "./hexagon/grid.js";
 import { AbstractGridMap, AbstractMap } from "./map.js";
@@ -16,6 +17,9 @@ export type GridIdsProperties = MapIdsProperties & {
 };
 export type TileIdsProperties = GridIdsProperties & {
   tile: number;
+};
+export type ContentIdsProperties = MapIdsProperties & {
+  content: number;
 };
 
 export abstract class Ids {
@@ -38,6 +42,13 @@ export class TileIds extends GridIds implements TileIdsProperties {
   constructor(gridIds: GridIds, tileId: number) {
     super(gridIds as MapIds, gridIds.grid);
     this.tile = tileId;
+  }
+}
+export class ContentIds extends MapIds implements ContentIdsProperties {
+  public readonly content: number;
+  constructor(mapIds: MapIds, contentId: number) {
+    super(mapIds.map);
+    this.content = contentId;
   }
 }
 
@@ -122,6 +133,14 @@ export class Register {
       }
       return undefined;
     },
+  }
+
+  public static content(ids: ContentIds) : Content|undefined {
+    let map = Register.map.abstract(ids);
+    if (map) {
+      return map.contentById(ids);
+    }
+    return undefined;
   }
 
   public static style = {

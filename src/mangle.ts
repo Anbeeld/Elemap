@@ -1,6 +1,8 @@
 // import { GridSnapshot } from './grid.js';
 // import { GridMapSnapshot } from './map.js';
-import { GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
+import { ContentSnapshot } from './content.js';
+import { ContentParameters } from './index/index.js';
+import { ContentIds, ContentIdsProperties, GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
 import { GridMapStyleSchema, GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
 import { TileSnapshot } from './tile.js';
 import { AxialCoords, Coords, OrthogonalCoords } from './utils.js';
@@ -67,6 +69,20 @@ export function mangleTileIds(object: any) : TileIds {
     map: mangleProperty(object, 'map'),
     grid: mangleProperty(object, 'grid'),
     tile: mangleProperty(object, 'tile')
+  };
+}
+
+export function demangleContentIds(ids: ContentIds) : ContentIdsProperties {
+  let object = {};
+  demangleProperty(object, 'map', ids.map);
+  demangleProperty(object, 'content', ids.content);
+  // @ts-ignore
+  return object;
+}
+export function mangleContentIds(object: any) : ContentIds {
+  return {
+    map: mangleProperty(object, 'map'),
+    content: mangleProperty(object, 'content')
   };
 }
 
@@ -179,6 +195,20 @@ export function mangleTileSnapshot<C extends Coords>(snapshot: any) : TileSnapsh
     coords: mangleCoords<C>(mangleProperty(snapshot, 'coords')),
     decls: mangleTileStyleDecls(mangleProperty(snapshot, 'decls')),
     mutables: mangleProperty(snapshot, 'mutables')
+  };
+}
+
+export function mangleContentSnapshot(snapshot: any) : ContentSnapshot {
+  return {
+    ids: mangleContentIds(mangleProperty(snapshot, 'ids')),
+    figure: mangleProperty(snapshot, 'figure'),
+    mutables: mangleProperty(snapshot, 'mutables')
+  };
+}
+
+export function mangleContentParams(params: any) : ContentParameters {
+  return {
+    figure: mangleProperty(params, 'figure'),
   };
 }
 

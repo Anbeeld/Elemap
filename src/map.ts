@@ -2,13 +2,17 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
-import { GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
+import { ContentIds, GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
 import { MapType, mergeDeep, Mutables, Mutation, } from './utils.js';
-import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema } from './mangle.js';
+import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleContentParams } from './mangle.js';
+import { Content } from './content.js';
+import { ElemapContent } from './index/content.js'
+import { ContentParameters } from './index/index.js';
 
 interface MapElements {
   container?: HTMLElement,
   map: HTMLElement,
+  content: HTMLElement
 }
 
 // Snapshot and mutation types
@@ -47,6 +51,10 @@ export abstract class AbstractMap implements MapConstants, Mutables {
   protected _mutables: Record<string, any> = {};
   protected set mutables(value: Record<string, any>) { this._mutables = value; }
   public get mutables() : Record<string, any> { return this._mutables; }
+
+  protected _contents: Content[] = [];
+  protected set contents(value: Content[]) { this._contents = value; }
+  public get contents() : Content[] { return this._contents; }
 
   constructor(args: MapArguments) {
     if (args.ids && typeof args.ids.map === 'number') {
@@ -91,8 +99,12 @@ export abstract class AbstractMap implements MapConstants, Mutables {
       let elementMap = document.createElement('div');
       elementMap.classList.add(`elemap-${this.ids.map}-map`);
 
+      let elementContent = document.createElement('div');
+      elementContent.classList.add(`elemap-${this.ids.map}-content`);
+
       return {
-        map: elementMap
+        map: elementMap,
+        content: elementContent
       };
     }
   }
@@ -115,12 +127,41 @@ export abstract class AbstractMap implements MapConstants, Mutables {
     }
 
     this.elements.container.appendChild(this.elements.map);
+
+    this.elements.container.appendChild(this.elements.content);
   }
 
   public render(container?: HTMLElement) {
     this.elements = this.initElements();
     this.initRender(container);
+    for (let content of this.contents) {
+      content.render();
+    }
     this.style.render();
+  }
+
+  public contentById(ids: ContentIds) : Content|undefined {
+    for (let content of this.contents) {
+      if (content.ids.content === ids.content) {
+        return content;
+      }
+    }
+    return undefined;
+  }
+
+  public contentByElement(element: HTMLElement) : Content|undefined {
+    for (let content of this.contents) {
+      if (content.elements.figure === element) {
+        return content;
+      }
+    }
+    return undefined;
+  }
+
+  public addContent(params: ContentParameters) : ElemapContent {
+    let content = new Content(Object.assign(mangleContentParams(params), {ids: this.ids}));
+    this.contents.push(content);
+    return new ElemapContent(content);
   }
 }
 
@@ -196,6 +237,9 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     this.elements = this.initElements();
     this.initRender(container);
     this.grid.render(this.elements.map!);
+    for (let content of this.contents) {
+      content.render();
+    }
     this.style.render();
   }
 }

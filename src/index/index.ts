@@ -5,7 +5,8 @@ import { MapType } from "../utils.js";
 import { demangleProperty } from "../mangle.js";
 import { GridMapMutation, GridMapSnapshot } from "../map.js";
 import { ElemapGrid, ElemapGridType } from "./grid.js";
-
+import { ElemapContent } from "./content.js";
+import { ContentArguments } from "src/content.js";
 
 export type MapTypeStrings = `${MapType}`;
 
@@ -13,6 +14,8 @@ type ElemapType<M> =
   M extends "rectangle" ? RectangleMap :
   M extends "hexagon" ? HexagonMap :
   never;
+
+export type ContentParameters = Omit<ContentArguments, 'ids'>;
 
 export class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
   private _: ElemapType<M>;
@@ -32,6 +35,7 @@ export class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     this.demangle__render();
     this.demangle__mutate();
     this.demangle__grid();
+    this.demangle__addContent();
   }
 
   public static import(snapshot: GridMapSnapshot) {
@@ -90,6 +94,16 @@ export class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
       return new ElemapGrid<M>(grid as ElemapGridType<M>);
     }
     return undefined;
+  }
+
+  public addContent(params: ContentParameters) : ElemapContent {
+    return this.method__addContent(params);
+  }
+  private demangle__addContent() {
+    demangleProperty(this, 'addContent', (params: ContentParameters) => this.method__addContent(params));
+  }
+  private method__addContent(params: ContentParameters) {
+    return this._.addContent(params);
   }
 }
 
