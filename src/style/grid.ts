@@ -3,6 +3,7 @@ import { GridStyleDecls, GridStyleSchema, TileStyleDecls } from "./schema.js";
 import TileStyle from "./tile.js";
 import Style from "./style.js";
 import { calc } from "./utils.js";
+import { OrthogonalCoords } from "src/utils.js";
 
 type GridComputed = {
   outer: CSSStyleDeclaration,
@@ -257,6 +258,21 @@ export default abstract class GridStyle extends Style {
     return {
       width: this.rowSize.width,
       height: calc.mult(this.tile.size.outer.height, this.owner.size.height)
+    };
+  }
+
+  protected tileOuterPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+    return {
+      top: calc.mult(coords.y - this.owner.extremes.y.min, this.tile.size.outer.height),
+      left: calc.mult(coords.x - this.owner.extremes.x.min, this.tile.size.outer.width)
+    };
+  }
+
+  protected tileInnerPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+    let tileOuterPosition = this.tileOuterPosition(coords);
+    return {
+      top: calc.add(tileOuterPosition.top, calc.div(this.spacing, 2)),
+      left: calc.add(tileOuterPosition.left, calc.div(this.spacing, 2))
     };
   }
 }

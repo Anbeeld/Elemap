@@ -1,6 +1,6 @@
 import { HexagonTile } from "../../hexagon/tile.js";
 import { Register } from "../../register.js";
-import { generateHexagonPath, GridOrientation, hexagonSize, hexagonSizeDecls, hexagonSizeRatio, roundFloat } from "../../utils.js";
+import { generateHexagonPath, GridOrientation, hexagonSize, hexagonSizeDecls, hexagonSizeRatio, OrthogonalCoords, roundFloat } from "../../utils.js";
 import GridStyle from "../grid.js";
 import { TileStyleDecls } from "../schema.js";
 import { calc, cssValueToNumber } from "../utils.js";
@@ -111,33 +111,28 @@ export default class HexagonGridStyle extends GridStyle {
 
   protected override get frameClipPath() : string {
     let path = '';
-    let topPerTile: number = cssValueToNumber(this.tile.size.spaced.height) - cssValueToNumber(this.tileRecess.vertical) - cssValueToNumber(this.spacing);
-    let leftPerTile: number = cssValueToNumber(this.tile.size.spaced.width) - cssValueToNumber(this.tileRecess.horizontal) - cssValueToNumber(this.spacing);
 
     let extremes = this.owner.extremes;
-    let j = 0;
     for (let y = extremes.y.min; y <= extremes.y.max; y++) {
-      let i = 0;
       for (let x = extremes.x.min; x <= extremes.x.max; x++) {
         if (!this.owner.tiles[y] || !this.owner.tiles[y]![x]) {
-          i++;
           continue;
         }
         if (path !== '') {
           path += ' ';
         }
+
+        let position = this.tileOuterPosition({x, y});
         path += generateHexagonPath(
           this.owner.orientation,
           this.hexagonSize.spaced,
           cssValueToNumber(this.tile.computed.inner.borderRadius),
           {
-            top: j * topPerTile + (this.owner.hasIndentation(x) ? 1 : 0) * cssValueToNumber(this.tileIndentation.vertical),
-            left: i * leftPerTile + (this.owner.hasIndentation(y) ? 1 : 0) * cssValueToNumber(this.tileIndentation.horizontal)
+            top: cssValueToNumber(position.top),
+            left: cssValueToNumber(position.left)
           }
         );
-        i++;
       }
-      j++;
     }
     return path;
   }
@@ -248,6 +243,27 @@ export default class HexagonGridStyle extends GridStyle {
     return {
       width: calc.add(this.rowSize.width, this.tileIndentation.horizontal),
       height: calc.add(calc.sub(calc.mult(this.tile.size.outer.height, this.owner.size.height), calc.mult(this.tileRecess.vertical, this.owner.size.height - 1)), this.tileIndentation.vertical)
+    };
+  }
+  
+  protected override tileOuterPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+    let i = coords.x - this.owner.extremes.x.min,
+        j = coords.y - this.owner.extremes.y.min;
+
+    let topPerTile = calc.sub(this.tile.size.outer.height, this.tileRecess.vertical);
+    let leftPerTile = calc.sub(this.tile.size.outer.width, this.tileRecess.horizontal);
+
+    return {
+      top: calc.add(calc.mult(j, topPerTile), calc.mult((this.owner.hasIndentation(coords.x) ? 1 : 0), this.tileIndentation.vertical)),
+      left: calc.add(calc.mult(i, leftPerTile), calc.mult((this.owner.hasIndentation(coords.y) ? 1 : 0), this.tileIndentation.horizontal))
+    }
+  }
+
+  protected override tileInnerPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+    let tileOuterPosition = this.tileOuterPosition(coords);
+    return {
+      top: calc.add(tileOuterPosition.top, calc.div(this.spacing, 2)),
+      left: calc.add(tileOuterPosition.left, calc.div(this.spacing, 2))
     };
   }
 }
