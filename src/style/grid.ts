@@ -185,6 +185,10 @@ export default abstract class GridStyle extends Style {
     this.selectors.contour + `{` +
       `margin:${calc.div(this.spacing, 2)};` +
     `}` +
+    
+    this.selectors.contour + `>div{` + 
+      `border:none;` +
+    `}` +
 
     this.selectors.row + `{` +
       `height:${this.tile.size.outer.height};` +
@@ -218,6 +222,8 @@ export default abstract class GridStyle extends Style {
 
 
     this.generateRowPositions +
+
+    this.generateTilePositions +
     
     this.generatedSpecific;
   }
@@ -261,18 +267,31 @@ export default abstract class GridStyle extends Style {
     };
   }
 
-  protected tileOuterPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+  public tileOuterPosition(coords: OrthogonalCoords) : {top: string, left: string} {
     return {
       top: calc.mult(coords.y - this.owner.extremes.y.min, this.tile.size.outer.height),
       left: calc.mult(coords.x - this.owner.extremes.x.min, this.tile.size.outer.width)
     };
   }
 
-  protected tileInnerPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+  public tileInnerPosition(coords: OrthogonalCoords) : {top: string, left: string} {
     let tileOuterPosition = this.tileOuterPosition(coords);
     return {
       top: calc.add(tileOuterPosition.top, calc.div(this.spacing, 2)),
       left: calc.add(tileOuterPosition.left, calc.div(this.spacing, 2))
     };
+  }
+
+  public get generateTilePositions() : string {
+    let css = ``;
+    for (let row of this.owner.tiles.values) {
+      for (let tile of row.values) {
+        css +=
+        this.selectors.tile + tile.selectors.data + `{` +
+          `left:${this.tileOuterPosition(tile.orthogonalCoords).left};` +
+        `}`; 
+      }
+    }
+    return css;
   }
 }

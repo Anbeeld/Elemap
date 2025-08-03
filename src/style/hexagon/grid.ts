@@ -246,7 +246,7 @@ export default class HexagonGridStyle extends GridStyle {
     };
   }
   
-  protected override tileOuterPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+  public override tileOuterPosition(coords: OrthogonalCoords) : {top: string, left: string} {
     let i = coords.x - this.owner.extremes.x.min,
         j = coords.y - this.owner.extremes.y.min;
 
@@ -259,11 +259,25 @@ export default class HexagonGridStyle extends GridStyle {
     }
   }
 
-  protected override tileInnerPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+  public override tileInnerPosition(coords: OrthogonalCoords) : {top: string, left: string} {
     let tileOuterPosition = this.tileOuterPosition(coords);
     return {
       top: calc.add(tileOuterPosition.top, calc.div(this.spacing, 2)),
       left: calc.add(tileOuterPosition.left, calc.div(this.spacing, 2))
     };
+  }
+
+  public override get generateTilePositions() : string {
+    let css = ``;
+    for (let row of this.owner.tiles.values) {
+      for (let tile of row.values) {
+        css +=
+        this.selectors.tile + tile.selectors.data + `{` +
+          // Tile indentation is already applied to the row positions
+          `left:${calc.sub(this.tileOuterPosition(tile.orthogonalCoords).left, this.owner.hasIndentation(tile.orthogonalCoords.y) ? this.tileIndentation.horizontal : 0)};` +
+        `}`; 
+      }
+    }
+    return css;
   }
 }

@@ -13,9 +13,10 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
   }
 
   public override get orthogonalCoords() : OrthogonalCoords {
+    let orthogonalCoords = axialCoordsToOrthogonal(this.coords, this.grid.orientation, this.grid.offset);
     return {
-      x: axialCoordsToOrthogonal(this.coords, this.grid.orientation, this.grid.offset).x,
-      y: axialCoordsToOrthogonal(this.coords, this.grid.orientation, this.grid.offset).y
+      x: orthogonalCoords.x,
+      y: orthogonalCoords.y
     };
   }
 

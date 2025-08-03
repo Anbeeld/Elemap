@@ -1,4 +1,4 @@
-import { getCoordsCol, TileSizeSet } from "../utils.js";
+import { TileSizeSet } from "../utils.js";
 import { TileStyleIds, GridStyleIds, Register, TileIds } from "../register.js";
 import { TileStyleDecls } from "./schema.js";
 import Style from "./style.js";
@@ -101,31 +101,8 @@ export default abstract class TileStyle extends Style {
   public get generated() : string {
     let css = ``;
 
-    if (this.mannequin) {
-      css +=
-      this.selectors.contour + `>div{` + 
-        `border:none;` +
-      `}`;
-
-      css += this.outerPosition;
-    }
-
     return css;
-  }
-
-  // Outer elements use absolute positioning
-  public get outerPosition() : string {
-    let css = ``;
-    for (let row of this.owner.grid.tiles.values) {
-      for (let tile of row.values) {
-        css +=
-        this.selectors.tile + tile.selectors.data + `{` +
-          `left:${calc.mult(this.size.outer.width, getCoordsCol(tile.orthogonalCoords) - this.owner.grid.extremes.x.min)};` +
-        `}`; 
-      }
-    }
-    return css;
-  }
+  }  
 
   public compute() : void {
     this.computed = {
