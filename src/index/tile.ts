@@ -1,13 +1,18 @@
 import { CustomTileStyleDecls } from "../style/schema.js";
-import { demangleProperty } from "../mangle.js";
+import { demangleProperty, demangleCoords } from "../mangle.js";
 import { RectangleTile } from "../rectangle/tile.js";
 import { HexagonTile } from "../hexagon/tile.js";
 import { MapTypeStrings } from "./index.js";
-import { Mutation } from "../utils.js";
+import { AxialCoords, Mutation, OrthogonalCoords } from "../utils.js";
 
 export type ElemapTileType<M> = 
   M extends "rectangle" ? RectangleTile :
   M extends "hexagon" ? HexagonTile :
+  never;
+
+export type ElemapCoordsType<M> = 
+  M extends "rectangle" ? OrthogonalCoords :
+  M extends "hexagon" ? AxialCoords :
   never;
 
 export class ElemapTile<M extends MapTypeStrings> {
@@ -17,10 +22,24 @@ export class ElemapTile<M extends MapTypeStrings> {
     this._ = tile;
 
     // For JavaScript - ensure methods are available by their original names
+    this.demangle__coords();
     this.demangle__export();
     this.demangle__report();
     this.demangle__mutate();
     this.demangle__updateStyle();
+  }
+
+  public set coords(value: any) { value; }
+  public get coords() { return this.method__coords(); }
+  private demangle__coords() {
+    demangleProperty(this, 'coords', {
+      set: (value: any) => { value; },
+      get: () => this.method__coords()
+    });
+  }
+  private method__coords() : ElemapCoordsType<M> {
+    // @ts-ignore
+    return demangleCoords(this._.coords);
   }
 
   public export() {
