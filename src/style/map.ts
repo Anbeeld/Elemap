@@ -45,6 +45,10 @@ export abstract class MapStyle extends Style {
   }
 
   protected initElements() : StyleElements {
+    if (this.elements) {
+      return this.elements;
+    }
+    
     let elementStyleCore = document.createElement('style');
     elementStyleCore.classList.add(this.owner.classes.base + '-css-core');
     document.head.appendChild(elementStyleCore);
