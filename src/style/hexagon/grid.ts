@@ -1,6 +1,6 @@
 import { HexagonTile } from "../../hexagon/tile.js";
 import { Register } from "../../register.js";
-import { generateHexagonPath, GridOrientation, hexagonSize, hexagonSizeDecls, hexagonSizeRatio, OrthogonalCoords, roundFloat } from "../../utils.js";
+import { generateHexagonPath, GridOrientation, hexagonSize, hexagonSizeDecls, hexagonSizeRatio, OrthogonalCoords, Position, roundFloat } from "../../utils.js";
 import GridStyle from "../grid.js";
 import { TileStyleDecls } from "../schema.js";
 import { calc, cssValueToNumber } from "../utils.js";
@@ -246,7 +246,7 @@ export default class HexagonGridStyle extends GridStyle {
     };
   }
   
-  public override tileOuterPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+  public override tileOuterPosition(coords: OrthogonalCoords) : Position {
     let i = coords.x - this.owner.extremes.x.min,
         j = coords.y - this.owner.extremes.y.min;
 
@@ -259,7 +259,7 @@ export default class HexagonGridStyle extends GridStyle {
     }
   }
 
-  public override tileInnerPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+  public override tileInnerPosition(coords: OrthogonalCoords) : Position {
     let tileOuterPosition = this.tileOuterPosition(coords);
     return {
       top: calc.add(tileOuterPosition.top, calc.div(this.spacing, 2)),

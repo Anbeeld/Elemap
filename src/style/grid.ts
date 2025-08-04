@@ -3,7 +3,7 @@ import { GridStyleDecls, GridStyleSchema, TileStyleDecls } from "./schema.js";
 import TileStyle from "./tile.js";
 import Style from "./style.js";
 import { calc } from "./utils.js";
-import { OrthogonalCoords } from "src/utils.js";
+import { OrthogonalCoords, Position } from "src/utils.js";
 
 type GridComputed = {
   outer: CSSStyleDeclaration,
@@ -267,14 +267,14 @@ export default abstract class GridStyle extends Style {
     };
   }
 
-  public tileOuterPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+  public tileOuterPosition(coords: OrthogonalCoords) : Position {
     return {
       top: calc.mult(coords.y - this.owner.extremes.y.min, this.tile.size.outer.height),
       left: calc.mult(coords.x - this.owner.extremes.x.min, this.tile.size.outer.width)
     };
   }
 
-  public tileInnerPosition(coords: OrthogonalCoords) : {top: string, left: string} {
+  public tileInnerPosition(coords: OrthogonalCoords) : Position {
     let tileOuterPosition = this.tileOuterPosition(coords);
     return {
       top: calc.add(tileOuterPosition.top, calc.div(this.spacing, 2)),
@@ -295,7 +295,7 @@ export default abstract class GridStyle extends Style {
     return css;
   }
 
-  public get tileZeroPosition() : {top: string, left: string} {
+  public get tileZeroPosition() : Position {
     return {
       top: calc.add(this.map.computed.map.paddingTop, calc.div(this.spacing, 2)),
       left: calc.add(this.map.computed.map.paddingLeft, calc.div(this.spacing, 2))

@@ -1,6 +1,16 @@
 import { cssValueToNumber } from './style/utils.js';
 
-export type Size = {width: number, height: number};
+export type Size = {
+  width: number,
+  height: number
+};
+
+export type Position = {
+  top: string,
+  right?: string,
+  bottom?: string,
+  left: string
+}
 
 export enum MapType {
   Rectangle = 'rectangle',

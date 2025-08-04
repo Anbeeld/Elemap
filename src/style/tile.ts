@@ -1,4 +1,4 @@
-import { TileSizeSet } from "../utils.js";
+import { Position, TileSizeSet } from "../utils.js";
 import { TileStyleIds, GridStyleIds, Register, TileIds } from "../register.js";
 import { TileStyleDecls } from "./schema.js";
 import Style from "./style.js";
@@ -116,10 +116,10 @@ export default abstract class TileStyle extends Style {
     };
   }
 
-  public get outerPosition() : {top: string, left: string} {
+  public get outerPosition() : Position {
     return this.grid.tileOuterPosition(this.owner.orthogonalCoords);
   }
-  public get innerPosition() : {top: string, left: string} {
+  public get innerPosition() : Position {
     return this.grid.tileInnerPosition(this.owner.orthogonalCoords);
   }
 }
