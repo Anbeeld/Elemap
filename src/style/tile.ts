@@ -24,7 +24,12 @@ export default abstract class TileStyle extends Style {
 
   protected _computed: TileComputed;
   protected set computed(value: TileComputed) { this._computed = value; }
-  public get computed() : TileComputed { return this._computed; }
+  public get computed() : TileComputed {
+    if (!this._computed) {
+      this.compute();
+    }
+    return this._computed;
+  }
 
   public override get selectors() {
     return {
@@ -109,5 +114,12 @@ export default abstract class TileStyle extends Style {
       // outer: getComputedStyle(this.owner.elements.outer),
       inner: getComputedStyle(this.owner.elements.inner)
     };
+  }
+
+  public get outerPosition() : {top: string, left: string} {
+    return this.grid.tileOuterPosition(this.owner.orthogonalCoords);
+  }
+  public get innerPosition() : {top: string, left: string} {
+    return this.grid.tileInnerPosition(this.owner.orthogonalCoords);
   }
 }

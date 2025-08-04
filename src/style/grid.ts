@@ -294,4 +294,11 @@ export default abstract class GridStyle extends Style {
     }
     return css;
   }
+
+  public get tileZeroPosition() : {top: string, left: string} {
+    return {
+      top: calc.add(this.map.computed.map.paddingTop, calc.div(this.spacing, 2)),
+      left: calc.add(this.map.computed.map.paddingLeft, calc.div(this.spacing, 2))
+    }
+  }
 }

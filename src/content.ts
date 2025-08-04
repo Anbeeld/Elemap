@@ -1,13 +1,17 @@
 import { mergeDeep, Mutables, Mutation } from './utils.js';
 import { demangleProperties, demangleContentIds, mangleContentSnapshot } from './mangle.js';
-import { Register, ContentIds, ContentIdsProperties, MapIdsProperties } from './register.js';
+import { Register, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties, TileIds } from './register.js';
 import { AbstractTile } from './tile.js';
+import { ElemapTile } from './index/tile.js';
+import { AbstractGridMap } from './map.js';
+import { calc } from './style/utils.js';
 
 // Snapshot and mutation types
 export type ContentSnapshot = ContentConstants & Mutables;
 export type ContentConstants = {
   ids: ContentIdsProperties,
-  figure: string
+  figure: string,
+  location: TileIdsProperties|ContentIdsProperties|undefined
 };
 
 export type ContentArguments = Omit<ContentConstants, 'figure'|'ids'> & {
@@ -15,6 +19,7 @@ export type ContentArguments = Omit<ContentConstants, 'figure'|'ids'> & {
   figure: HTMLElement|string
 };
 
+type ContentLocationIds = TileIds|ContentIds|undefined;
 type ContentLocation = AbstractTile|Content|undefined;
 
 type ContentElements = {
@@ -22,16 +27,23 @@ type ContentElements = {
   container?: HTMLElement
 }
 
-export class Content implements Omit<ContentConstants, 'figure'>, Mutables {
+export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mutables {
   protected _ids: ContentIds;
   protected set ids(value: ContentIds) { this._ids = value; }
   public get ids() : ContentIds { return this._ids; }
 
   public get map() { return Register.map.abstract(this.ids)!; }
 
-  protected _location: ContentLocation = undefined;
-  protected set location(value: ContentLocation) { this._location = value; }
-  public get location() : ContentLocation { return this._location; }
+  protected _location: ContentLocationIds = undefined;
+  protected set location(value: ContentLocationIds) { this._location = value; }
+  public get location() : ContentLocation {
+    if (this._location instanceof ContentIds) {
+      return Register.content(this._location)!;
+    } else if (this._location instanceof TileIds) {
+      return Register.tile.abstract(this._location)!;
+    }
+    return undefined;
+  }
 
   protected _elements: ContentElements;
   protected set elements(value: ContentElements) { this._elements = value; }
@@ -47,6 +59,7 @@ export class Content implements Omit<ContentConstants, 'figure'>, Mutables {
     } else {
       this.ids = new ContentIds(args.ids, Register.id());
     }
+
     if (typeof args.figure === 'string') {
       let figureWrapper = document.createElement('div');
       figureWrapper.innerHTML = args.figure;
@@ -54,6 +67,11 @@ export class Content implements Omit<ContentConstants, 'figure'>, Mutables {
     } else {
       this.elements = {figure: args.figure};
     }
+
+    if (args.location instanceof ElemapTile) {
+      this.location = (this.map as AbstractGridMap).grid.tileByCoords(args.location.coords.x, args.location.coords.y)!.ids;
+    }
+    
   }
 
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
@@ -74,6 +92,7 @@ export class Content implements Omit<ContentConstants, 'figure'>, Mutables {
     demangleProperties(object, [
       ['ids', demangleContentIds(this.ids)],
       ['figure', this.elements.figure.outerHTML],
+      ['location', this.location ? this.location : undefined],
       ['mutables', this.mutables]
     ]);
     return object as ContentConstants;
@@ -108,7 +127,13 @@ export class Content implements Omit<ContentConstants, 'figure'>, Mutables {
   public render() : void {
     this.initElements();
 
-    console.log(this.elements.figure);
+    if (this.location && this.location instanceof AbstractTile) {
+      let tileZeroPosition = this.location.style.grid.tileZeroPosition;
+      let locationPosition = this.location.style.innerPosition;
+      let size = this.location.style.size.inner;
+      this.elements.container!.style.top = calc.add(tileZeroPosition.top, locationPosition.top, calc.div(size.height, 2));
+      this.elements.container!.style.left = calc.add(tileZeroPosition.left, locationPosition.left, calc.div(size.width, 2));
+    }
 
     if (!this.elements.container!.contains(this.elements.figure)) {
       this.elements.container!.appendChild(this.elements.figure);

@@ -102,10 +102,10 @@ export abstract class MapStyle extends Style {
     this.selectors.content + `{` +
       `position:absolute;` +
       `z-index:500;` +
-      `top:50px;` +
-      `left:50px;` +
-      `bottom:50px;` +
-      `right:50px;` +
+      `top:0;` +
+      `left:0;` +
+      `bottom:0;` +
+      `right:0;` +
       `pointer-events:none;` +
     `}` +
 
