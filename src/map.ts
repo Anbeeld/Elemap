@@ -159,7 +159,13 @@ export abstract class AbstractMap implements MapConstants, Mutables {
   }
 
   public addContent(params: ContentParameters) : ElemapContent {
-    let content = new Content(Object.assign(mangleContentParams(params), {ids: this.ids}));
+    let content = new Content(Object.assign(
+      mangleContentParams(params),
+      {
+        ids: this.ids,
+        offset: params.offset || {top:'0', right:'0'},
+      }
+    ));
     this.contents.push(content);
     return new ElemapContent(content);
   }

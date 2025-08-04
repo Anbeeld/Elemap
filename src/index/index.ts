@@ -1,7 +1,7 @@
 import RectangleMap from "../rectangle/map.js";
 import HexagonMap from "../hexagon/map.js";
 import { Config, configToGridMapArguments } from "../config.js";
-import { MapType } from "../utils.js";
+import { MapType, Position } from "../utils.js";
 import { demangleProperty } from "../mangle.js";
 import { GridMapMutation, GridMapSnapshot } from "../map.js";
 import { ElemapGrid, ElemapGridType } from "./grid.js";
@@ -15,7 +15,9 @@ type ElemapType<M> =
   M extends "hexagon" ? HexagonMap :
   never;
 
-export type ContentParameters = Omit<ContentArguments, 'ids'>;
+export type ContentParameters = Omit<ContentArguments, 'ids'|'offset'> & {
+  offset?: Position
+};
 
 export class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
   private _: ElemapType<M>;

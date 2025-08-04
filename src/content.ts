@@ -1,4 +1,4 @@
-import { mergeDeep, Mutables, Mutation } from './utils.js';
+import { mergeDeep, Mutables, Mutation, Position } from './utils.js';
 import { demangleProperties, demangleContentIds, mangleContentSnapshot } from './mangle.js';
 import { Register, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties, TileIds } from './register.js';
 import { AbstractTile } from './tile.js';
@@ -11,7 +11,8 @@ export type ContentSnapshot = ContentConstants & Mutables;
 export type ContentConstants = {
   ids: ContentIdsProperties,
   figure: string,
-  location: TileIdsProperties|ContentIdsProperties|undefined
+  location: ContentLocationIds,
+  offset: Position
 };
 
 export type ContentArguments = Omit<ContentConstants, 'figure'|'ids'> & {
@@ -19,7 +20,7 @@ export type ContentArguments = Omit<ContentConstants, 'figure'|'ids'> & {
   figure: HTMLElement|string
 };
 
-type ContentLocationIds = TileIds|ContentIds|undefined;
+type ContentLocationIds = TileIdsProperties|ContentIdsProperties|undefined;
 type ContentLocation = AbstractTile|Content|undefined;
 
 type ContentElements = {
@@ -44,6 +45,10 @@ export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mut
     }
     return undefined;
   }
+
+  protected _offset: Position;
+  protected set offset(value: Position) { this._offset = value; }
+  public get offset() : Position { return this._offset; }
 
   protected _elements: ContentElements;
   protected set elements(value: ContentElements) { this._elements = value; }
@@ -72,6 +77,7 @@ export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mut
       this.location = (this.map as AbstractGridMap).grid.tileByCoords(args.location.coords.x, args.location.coords.y)!.ids;
     }
     
+    this.offset = args.offset;
   }
 
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
@@ -131,8 +137,8 @@ export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mut
       let tileZeroPosition = this.location.style.grid.tileZeroPosition;
       let locationPosition = this.location.style.innerPosition;
       let size = this.location.style.size.inner;
-      this.elements.container!.style.top = calc.add(tileZeroPosition.top, locationPosition.top, calc.div(size.height, 2));
-      this.elements.container!.style.left = calc.add(tileZeroPosition.left, locationPosition.left, calc.div(size.width, 2));
+      this.elements.container!.style.top = calc.add(tileZeroPosition.top, locationPosition.top, this.offset.top, calc.div(size.height, 2));
+      this.elements.container!.style.left = calc.add(tileZeroPosition.left, locationPosition.left, this.offset.top, calc.div(size.width, 2));
     }
 
     if (!this.elements.container!.contains(this.elements.figure)) {

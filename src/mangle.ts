@@ -203,6 +203,7 @@ export function mangleContentSnapshot(snapshot: any) : ContentSnapshot {
     ids: mangleContentIds(mangleProperty(snapshot, 'ids')),
     figure: mangleProperty(snapshot, 'figure'),
     location: mangleProperty(snapshot, 'location'),
+    offset: mangleProperty(snapshot, 'offset'),
     mutables: mangleProperty(snapshot, 'mutables')
   };
 }
@@ -211,6 +212,7 @@ export function mangleContentParams(params: any) : ContentParameters {
   return {
     figure: mangleProperty(params, 'figure'),
     location: mangleProperty(params, 'location'),
+    offset: mangleProperty(params, 'offset'),
   };
 }
 
