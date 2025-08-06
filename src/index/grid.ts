@@ -73,23 +73,25 @@ export class ElemapGrid<M extends MapTypeStrings> {
     return undefined;
   }
 
-  public createTile(coords: OrthogonalCoords) : void {
+  public createTile(coords: ElemapCoords<M>|[number, number]) : void {
     return this.method__createTile(coords);
   }
   private demangle__createTile() {
-    demangleProperty(this, 'createTile', (coords: OrthogonalCoords) => this.method__createTile(coords));
+    demangleProperty(this, 'createTile', (coords: ElemapCoords<M>|[number, number]) => this.method__createTile(coords));
   }
-  private method__createTile(coords: OrthogonalCoords) {
+  private method__createTile(coords: ElemapCoords<M>|[number, number]) {
+    // @ts-ignore coords &
     return this._.createTile(coords);
   }
 
-  public createTiles(size: Size, coords: OrthogonalCoords = {x: 0, y: 0}) : void {
+  public createTiles(size: Size, coords: ElemapCoords<M>|[number, number] = [0, 0]) : void {
     return this.method__createTiles(size, coords);
   }
   private demangle__createTiles() {
-    demangleProperty(this, 'createTiles', (size: Size, coords: OrthogonalCoords = {x: 0, y: 0}) => this.method__createTiles(size, coords));
+    demangleProperty(this, 'createTiles', (size: Size, coords: ElemapCoords<M>|[number, number] = [0, 0]) => this.method__createTiles(size, coords));
   }
-  private method__createTiles(size: Size, coords: OrthogonalCoords) {
+  private method__createTiles(size: Size, coords: ElemapCoords<M>|[number, number]) {
+    // @ts-ignore coords &
     return this._.createTiles(size, coords);
   }
 }

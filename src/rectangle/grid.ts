@@ -1,6 +1,6 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { RectangleTile, RectangleTileSnapshot } from "./tile.js";
-import { OrthogonalCoords, SignedTable} from "../utils.js";
+import { OrthogonalCoords, SignedArray, SignedTable, Size} from "../utils.js";
 import { TileArguments } from "src/tile.js";
 
 export type RectangleGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
@@ -25,6 +25,37 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
   protected override tileImport(snapshot: RectangleTileSnapshot) { return RectangleTile.import(snapshot); }
   protected override tileCoordsFromOrthogonal(coords: OrthogonalCoords): OrthogonalCoords {
     return coords;
+  }
+
+  public createTile(coords: OrthogonalCoords|[number, number]) : void {
+    if (Array.isArray(coords)) {
+      coords = {
+        x: coords[0],
+        y: coords[1]
+      };
+    }
+    if (!this.tiles[coords.y]) {
+      this.tiles[coords.y] = new SignedArray<RectangleTile>();
+    }
+    this.tiles[coords.y]![coords.x] = this.tileFactory({
+      ids: this.ids,
+      coords: this.tileCoordsFromOrthogonal(coords),
+      decls: false
+    });
+  }
+
+  public createTiles(size: Size, coords: OrthogonalCoords|[number, number]) : void {
+    if (Array.isArray(coords)) {
+      coords = {
+        x: coords[0],
+        y: coords[1]
+      };
+    }
+    for (let x = coords.x; x < coords.x + size.width; x++) {
+      for (let y = coords.y; y < coords.y + size.height; y++) {
+        this.createTile({x, y});
+      }
+    }
   }
 
   public override tileByCoords(coords: OrthogonalCoords|[number, number]) : RectangleTile|undefined {

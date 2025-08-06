@@ -193,24 +193,9 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     }
   }
 
-  public createTile(coords: OrthogonalCoords) : void {
-    if (!this.tiles[coords.y]) {
-      this.tiles[coords.y] = new SignedArray<T>();
-    }
-    this.tiles[coords.y]![coords.x] = this.tileFactory({
-      ids: this.ids,
-      coords: this.tileCoordsFromOrthogonal(coords),
-      decls: false
-    });
-  }
+  public abstract createTile(coords: Coords|[number, number]) : void;
 
-  public createTiles(size: Size, coords: OrthogonalCoords) : void {
-    for (let x = coords.x; x < coords.x + size.width; x++) {
-      for (let y = coords.y; y < coords.y + size.height; y++) {
-        this.createTile({x, y});
-      }
-    }
-  }
+  public abstract createTiles(size: Size, coords: Coords|[number, number]) : void;
 
   protected abstract tileFactory(args: TileArguments) : T;
   protected abstract tileImport(snapshot: TileSnapshot) : T;

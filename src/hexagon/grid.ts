@@ -1,6 +1,6 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { HexagonTile, HexagonTileSnapshot } from "./tile.js";
-import { GridOffset, SignedTable, AxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToAxial, OrthogonalCoords } from "../utils.js";
+import { GridOffset, SignedTable, AxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToAxial, OrthogonalCoords, SignedArray, Size } from "../utils.js";
 import { TileArguments } from "src/tile.js";
 
 export type HexagonGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
@@ -50,6 +50,38 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
       });
     }
     return undefined;
+  }
+  
+  public createTile(coords: AxialCoords|[number, number]) : void {
+    if (Array.isArray(coords)) {
+      coords = {
+        q: coords[0],
+        r: coords[1]
+      };
+    }
+    let orthogonalCoords = axialCoordsToOrthogonal(coords, this.orientation, this.offset);
+    if (!this.tiles[orthogonalCoords.y]) {
+      this.tiles[orthogonalCoords.y] = new SignedArray<HexagonTile>();
+    }
+    this.tiles[orthogonalCoords.y]![orthogonalCoords.x] = this.tileFactory({
+      ids: this.ids,
+      coords: this.tileCoordsFromOrthogonal(orthogonalCoords),
+      decls: false
+    });
+  }
+
+  public createTiles(size: Size, coords: AxialCoords|[number, number]) : void {
+    if (Array.isArray(coords)) {
+      coords = {
+        q: coords[0],
+        r: coords[1]
+      };
+    }
+    for (let q = coords.q; q < coords.q + size.width; q++) {
+      for (let r = coords.r; r < coords.r + size.height; r++) {
+        this.createTile({q, r});
+      }
+    }
   }
 
   public hasIndentation(i: number) : boolean {
