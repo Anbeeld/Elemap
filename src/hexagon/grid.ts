@@ -27,8 +27,14 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return orthogonalCoordsToAxial(coords, this.orientation, this.offset);
   }
 
-  public override tileByCoords(firstCoord: number, secondCoord: number) : HexagonTile|undefined {
-    let orthogonalCoords = axialCoordsToOrthogonal({r: firstCoord, q: secondCoord}, this.orientation, this.offset);
+  public override tileByCoords(coords: AxialCoords|[number, number]) : HexagonTile|undefined {
+    if (Array.isArray(coords)) {
+      coords = {
+        q: coords[0],
+        r: coords[1]
+      };
+    }
+    let orthogonalCoords = axialCoordsToOrthogonal(coords, this.orientation, this.offset);
     if (!this.tiles[orthogonalCoords.y]) {
       return undefined;
     } else if (!this.tiles[orthogonalCoords.y]![orthogonalCoords.x]) {
@@ -38,10 +44,10 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
   }
   public override tileByElement(element: HTMLElement) : HexagonTile|undefined {
     if (element.hasAttribute('data-elemap-r') && element.hasAttribute('data-elemap-q')) {
-      return this.tileByCoords(
-        Number(element.getAttribute('data-elemap-r')!),
-        Number(element.getAttribute('data-elemap-q')!)
-      );
+      return this.tileByCoords({
+        q: Number(element.getAttribute('data-elemap-q')!),
+        r: Number(element.getAttribute('data-elemap-r')!)
+      });
     }
     return undefined;
   }

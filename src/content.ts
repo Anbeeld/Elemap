@@ -74,7 +74,7 @@ export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mut
     }
 
     if (args.location instanceof ElemapTile) {
-      this.location = (this.map as AbstractGridMap).grid.tileByCoords(args.location.coords.x, args.location.coords.y)!.ids;
+      this.location = (this.map as AbstractGridMap).grid.tileByCoords(args.location.coords)!.ids;
     }
     
     this.offset = args.offset;

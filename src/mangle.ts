@@ -216,7 +216,7 @@ export function mangleContentParams(params: any) : ContentParameters {
   };
 }
 
-function mangleCoords<C extends Coords>(coords: C) : C {
+export function mangleCoords<C extends Coords>(coords: C) : C {
   if (mangleProperty(coords, 'q') !== undefined && mangleProperty(coords, 'r') !== undefined) {
     return mangleAxialCoords(coords) as unknown as C;
   }

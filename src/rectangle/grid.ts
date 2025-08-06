@@ -27,20 +27,26 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     return coords;
   }
 
-  public override tileByCoords(firstCoord: number, secondCoord: number) : RectangleTile|undefined {
-    if (!this.tiles[secondCoord]) {
+  public override tileByCoords(coords: OrthogonalCoords|[number, number]) : RectangleTile|undefined {
+    if (Array.isArray(coords)) {
+      coords = {
+        x: coords[0],
+        y: coords[1]
+      };
+    }
+    if (!this.tiles[coords.y]) {
       return undefined;
-    } else if (!this.tiles[secondCoord]![firstCoord]) {
+    } else if (!this.tiles[coords.y]![coords.x]) {
       return undefined;
     }
-    return this.tiles[secondCoord]![firstCoord];
+    return this.tiles[coords.y]![coords.x];
   }
   public override tileByElement(element: HTMLElement) : RectangleTile|undefined {
     if (element.hasAttribute('data-elemap-x') && element.hasAttribute('data-elemap-y')) {
-      return this.tileByCoords(
-        Number(element.getAttribute('data-elemap-x')!),
-        Number(element.getAttribute('data-elemap-y')!)
-      );
+      return this.tileByCoords({
+        x: Number(element.getAttribute('data-elemap-x')!),
+        y: Number(element.getAttribute('data-elemap-y')!)
+      });
     }
     return undefined;
   }

@@ -1,5 +1,5 @@
-import { Mutation, OrthogonalCoords, Size } from "../utils.js";
-import { demangleProperty } from "../mangle.js";
+import { AxialCoords, Mutation, OrthogonalCoords, Size } from "../utils.js";
+import { mangleCoords, demangleProperty } from "../mangle.js";
 import { RectangleGrid } from "../rectangle/grid.js";
 import { HexagonGrid } from "../hexagon/grid.js";
 import { MapTypeStrings } from "./index.js";
@@ -8,6 +8,11 @@ import { ElemapTile, ElemapTileType } from "./tile.js";
 export type ElemapGridType<M> = 
   M extends "rectangle" ? RectangleGrid :
   M extends "hexagon" ? HexagonGrid :
+  never;
+
+export type ElemapCoords<M> = 
+  M extends "rectangle" ? OrthogonalCoords :
+  M extends "hexagon" ? AxialCoords :
   never;
 
 export class ElemapGrid<M extends MapTypeStrings> {
@@ -55,12 +60,13 @@ export class ElemapGrid<M extends MapTypeStrings> {
     return this._.mutate(mutation);
   }
 
-  public tileByCoords(firstCoord: number, secondCoord: number) { return this.method__tileByCoords(firstCoord, secondCoord); }
+  public tileByCoords(coords: ElemapCoords<M>|[number, number]) { return this.method__tileByCoords(coords); }
   private demangle__tileByCoords() {
-    demangleProperty(this, 'tileByCoords', (firstCoord: number, secondCoord: number) => this.method__tileByCoords(firstCoord, secondCoord));
+    demangleProperty(this, 'tileByCoords', (coords: ElemapCoords<M>|[number, number]) => this.method__tileByCoords(coords));
   }
-  private method__tileByCoords(firstCoord: number, secondCoord: number) : ElemapTile<M>|undefined {
-    let tile = this._.tileByCoords(firstCoord, secondCoord);
+  private method__tileByCoords(coords: ElemapCoords<M>|[number, number]) : ElemapTile<M>|undefined {
+    // @ts-ignore coords &
+    let tile = this._.tileByCoords(Array.isArray(coords) ? coords : mangleCoords(coords));
     if (tile) {
       return new ElemapTile<M>(tile as ElemapTileType<M>);
     }
