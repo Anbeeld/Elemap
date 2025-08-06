@@ -380,7 +380,7 @@ export type DeepPartial<T> = T extends object ? {
 } : T;
 
 export type Mutation = Record<string, any>;
-export type Mutables = { mutables: Mutation };
+export type Mutations = { mutations: Mutation };
 
 export class SignedArray<V> {
   [key: number]: V

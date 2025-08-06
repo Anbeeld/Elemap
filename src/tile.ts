@@ -1,4 +1,4 @@
-import { Coords, getCoordsRow, mergeDeep, Mutables, Mutation, CartesianCoords } from './utils.js';
+import { Coords, getCoordsRow, mergeDeep, Mutations, Mutation, CartesianCoords } from './utils.js';
 import { demangleProperties, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords, mangleTileStyleDecls } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
@@ -6,7 +6,7 @@ import TileStyle from './style/tile.js';
 import { modifyTileStyleDecls, CustomTileStyleDecls, TileStyleDecls } from './style/schema.js';
 
 // Snapshot and mutation types
-export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & Mutables;
+export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & Mutations;
 export type TileConstants<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   coords: C,
@@ -23,7 +23,7 @@ type TileElements = {
   style?: HTMLElement
 }
 
-export abstract class AbstractTile<C extends Coords = Coords> implements TileConstants<C>, Mutables {
+export abstract class AbstractTile<C extends Coords = Coords> implements TileConstants<C>, Mutations {
   protected _ids: TileIds;
   protected set ids(value: TileIds) { this._ids = value; }
   public get ids() : TileIds { return this._ids; }
@@ -53,9 +53,9 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
 
   protected rendered: boolean = false;
 
-  protected _mutables: Record<string, any> = {};
-  protected set mutables(value: Record<string, any>) { this._mutables = value; }
-  public get mutables() : Record<string, any> { return this._mutables; }
+  protected _mutations: Record<string, any> = {};
+  protected set mutations(value: Record<string, any>) { this._mutations = value; }
+  public get mutations() : Record<string, any> { return this._mutations; }
 
   constructor(args: TileArguments<C>) {
     if (typeof (args.ids as TileIdsProperties).tile === 'number') {
@@ -74,30 +74,30 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     return instance;
   }
   public mutate(mutation: Mutation) : void {
-    mergeDeep(this.mutables, mutation);
+    mergeDeep(this.mutations, mutation);
   }
 
   public abstract export() : TileSnapshot<C>;
   protected exportSnapshot() : TileSnapshot<C> {
-    return this.exportMutables(this.exportConstants()) as TileSnapshot<C>;
+    return this.exportMutations(this.exportConstants()) as TileSnapshot<C>;
   }
   protected exportConstants(object: object = {}) : TileConstants<C> {
     demangleProperties(object, [
       ['ids', demangleTileIds(this.ids)],
       ['coords', demangleCoords<C>(this.coords)],
       ['decls', this._style !== undefined ? demangleTileStyleDecls(this.decls) : false],
-      ['mutables', this.mutables]
+      ['mutations', this.mutations]
     ]);
     return object as TileConstants<C>;
   }
-  protected exportMutables(object: object = {}) : Mutables {
+  protected exportMutations(object: object = {}) : Mutations {
     demangleProperties(object, [
-      ['mutables', this.mutables]
+      ['mutations', this.mutations]
     ]);
-    return object as Mutables;
+    return object as Mutations;
   }
   public report() : Mutation {
-    return this.mutables;
+    return this.mutations;
   }
 
   protected abstract createStyle(decls: CustomTileStyleDecls) : TileStyle;

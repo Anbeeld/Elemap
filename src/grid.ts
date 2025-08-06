@@ -1,11 +1,11 @@
 import { AbstractTile, TileArguments, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, CartesianCoords, mergeDeep, Mutables, Mutation, SignedArray, SignedTable, Coords } from "./utils.js";
+import { Size, GridOrientation, GridOffset, CartesianCoords, mergeDeep, Mutations, Mutation, SignedArray, SignedTable, Coords } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
 import { demangleProperties, demangleGridIds, demangleGridStyleSchema, demangleProperty } from "./mangle.js";
 
 // Snapshot and mutation types
-export type GridSnapshot = GridConstants & Mutables;
+export type GridSnapshot = GridConstants & Mutations;
 type GridConstants = {
   ids: GridIdsProperties,
   orientation: GridOrientation,
@@ -34,7 +34,7 @@ interface GridElements {
   contourHover: HTMLElement;
 }
 
-export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implements GridConstants, Mutables {
+export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implements GridConstants, Mutations {
   protected _ids: GridIds;
   protected set ids(value: GridIds) { this._ids = value; }
   public get ids() : GridIds { return this._ids; }
@@ -119,9 +119,9 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected set elements(value: GridElements) { this._elements = value; }
   public get elements() : GridElements|undefined { return this._elements; }
 
-  protected _mutables: Record<string, any> = {};
-  protected set mutables(value: Record<string, any>) { this._mutables = value; }
-  public get mutables() : Record<string, any> { return this._mutables; }
+  protected _mutations: Record<string, any> = {};
+  protected set mutations(value: Record<string, any>) { this._mutations = value; }
+  public get mutations() : Record<string, any> { return this._mutations; }
 
   constructor(args: GridArguments) {
     if (typeof (args.ids as GridIdsProperties).grid === 'number') {
@@ -146,12 +146,12 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return instance;
   }
   public mutate(mutation: Mutation) : void {
-    mergeDeep(this.mutables, mutation);
+    mergeDeep(this.mutations, mutation);
   }
 
   public abstract export() : GridSnapshot;
   protected exportSnapshot() : GridSnapshot {
-    return this.exportMutables(this.exportConstants()) as GridSnapshot;
+    return this.exportMutations(this.exportConstants()) as GridSnapshot;
   }
   protected exportConstants(object: object = {}) : GridConstants {
     let tiles: SignedTable<TileSnapshot> = new SignedArray<SignedArray<TileSnapshot>>();
@@ -172,14 +172,14 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     ]);
     return object as GridConstants;
   }
-  protected exportMutables(object: object = {}) : Mutables {
+  protected exportMutations(object: object = {}) : Mutations {
     demangleProperties(object, [
-      ['mutables', this.mutables]
+      ['mutations', this.mutations]
     ]);
-    return object as Mutables;
+    return object as Mutations;
   }
   public report() : Mutation {
-    return this.mutables;
+    return this.mutations;
   }
 
   protected importTiles(snapshot: SignedTable<TileSnapshot>) : void {

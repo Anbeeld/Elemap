@@ -1,4 +1,4 @@
-import { mergeDeep, Mutables, Mutation, Position } from './utils.js';
+import { mergeDeep, Mutations, Mutation, Position } from './utils.js';
 import { demangleProperties, demangleContentIds, mangleContentSnapshot } from './mangle.js';
 import { Register, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties, TileIds } from './register.js';
 import { AbstractTile } from './tile.js';
@@ -7,7 +7,7 @@ import { AbstractGridMap } from './map.js';
 import { calc } from './style/utils.js';
 
 // Snapshot and mutation types
-export type ContentSnapshot = ContentConstants & Mutables;
+export type ContentSnapshot = ContentConstants & Mutations;
 export type ContentConstants = {
   ids: ContentIdsProperties,
   figure: string,
@@ -28,7 +28,7 @@ type ContentElements = {
   container?: HTMLElement
 }
 
-export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mutables {
+export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mutations {
   protected _ids: ContentIds;
   protected set ids(value: ContentIds) { this._ids = value; }
   public get ids() : ContentIds { return this._ids; }
@@ -54,9 +54,9 @@ export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mut
   protected set elements(value: ContentElements) { this._elements = value; }
   public get elements() : ContentElements { return this._elements; }
 
-  protected _mutables: Record<string, any> = {};
-  protected set mutables(value: Record<string, any>) { this._mutables = value; }
-  public get mutables() : Record<string, any> { return this._mutables; }
+  protected _mutations: Record<string, any> = {};
+  protected set mutations(value: Record<string, any>) { this._mutations = value; }
+  public get mutations() : Record<string, any> { return this._mutations; }
 
   constructor(args: ContentArguments) {
     if (typeof (args.ids as ContentIdsProperties).content === 'number') {
@@ -88,29 +88,29 @@ export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mut
     return instance;
   }
   public mutate(mutation: Mutation) : void {
-    mergeDeep(this.mutables, mutation);
+    mergeDeep(this.mutations, mutation);
   }
 
   public export() : ContentSnapshot {
-    return this.exportMutables(this.exportConstants()) as ContentSnapshot;
+    return this.exportMutations(this.exportConstants()) as ContentSnapshot;
   }
   protected exportConstants(object: object = {}) : ContentConstants {
     demangleProperties(object, [
       ['ids', demangleContentIds(this.ids)],
       ['figure', this.elements.figure.outerHTML],
       ['location', this.location ? this.location : undefined],
-      ['mutables', this.mutables]
+      ['mutations', this.mutations]
     ]);
     return object as ContentConstants;
   }
-  protected exportMutables(object: object = {}) : Mutables {
+  protected exportMutations(object: object = {}) : Mutations {
     demangleProperties(object, [
-      ['mutables', this.mutables]
+      ['mutations', this.mutations]
     ]);
-    return object as Mutables;
+    return object as Mutations;
   }
   public report() : Mutation {
-    return this.mutables;
+    return this.mutations;
   }
 
   public hover() : void {
