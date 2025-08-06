@@ -1,6 +1,6 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { HexagonTile, HexagonTileSnapshot } from "./tile.js";
-import { GridOffset, SignedTable, AxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToAxial, OrthogonalCoords, SignedArray, Size } from "../utils.js";
+import { GridOffset, SignedTable, AxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToAxial, OrthogonalCoords, SignedArray, Size, isOrthogonalCoords } from "../utils.js";
 import { TileArguments } from "src/tile.js";
 
 export type HexagonGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
@@ -27,14 +27,14 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return orthogonalCoordsToAxial(coords, this.orientation, this.offset);
   }
 
-  public override tileByCoords(coords: AxialCoords|[number, number]) : HexagonTile|undefined {
+  public override tileByCoords(coords: AxialCoords|OrthogonalCoords|[number, number]) : HexagonTile|undefined {
     if (Array.isArray(coords)) {
       coords = {
         q: coords[0],
         r: coords[1]
       };
     }
-    let orthogonalCoords = axialCoordsToOrthogonal(coords, this.orientation, this.offset);
+    let orthogonalCoords = isOrthogonalCoords(coords) ? coords as OrthogonalCoords : axialCoordsToOrthogonal(coords as AxialCoords, this.orientation, this.offset);
     if (!this.tiles[orthogonalCoords.y]) {
       return undefined;
     } else if (!this.tiles[orthogonalCoords.y]![orthogonalCoords.x]) {
@@ -52,14 +52,14 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return undefined;
   }
   
-  public createTile(coords: AxialCoords|[number, number]) : void {
+  public createTile(coords: AxialCoords|OrthogonalCoords|[number, number]) : void {
     if (Array.isArray(coords)) {
       coords = {
         q: coords[0],
         r: coords[1]
       };
     }
-    let orthogonalCoords = axialCoordsToOrthogonal(coords, this.orientation, this.offset);
+    let orthogonalCoords = isOrthogonalCoords(coords) ? coords as OrthogonalCoords : axialCoordsToOrthogonal(coords as AxialCoords, this.orientation, this.offset);
     if (!this.tiles[orthogonalCoords.y]) {
       this.tiles[orthogonalCoords.y] = new SignedArray<HexagonTile>();
     }
@@ -70,16 +70,24 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     });
   }
 
-  public createTiles(size: Size, coords: AxialCoords|[number, number]) : void {
+  public createTiles(size: Size, coords: AxialCoords|OrthogonalCoords|[number, number]) : void {
     if (Array.isArray(coords)) {
       coords = {
         q: coords[0],
         r: coords[1]
       };
     }
-    for (let q = coords.q; q < coords.q + size.width; q++) {
-      for (let r = coords.r; r < coords.r + size.height; r++) {
-        this.createTile({q, r});
+    if (isOrthogonalCoords(coords)) {
+      for (let x = coords.x; x < coords.x + size.width; x++) {
+        for (let y = coords.y; y < coords.y + size.height; y++) {
+          this.createTile(orthogonalCoordsToAxial({x, y}, this.orientation, this.offset));
+        }
+      }
+    } else {
+      for (let q = coords.q; q < coords.q + size.width; q++) {
+        for (let r = coords.r; r < coords.r + size.height; r++) {
+          this.createTile({q, r});
+        }
       }
     }
   }

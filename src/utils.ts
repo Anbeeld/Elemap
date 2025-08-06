@@ -41,6 +41,14 @@ export interface OrthogonalCoords extends Coords {
   y: number;
 }
 
+export function isAxialCoords(coords: Coords) : boolean {
+  return coords.q !== undefined && coords.r !== undefined;
+}
+
+export function isOrthogonalCoords(coords: Coords) : boolean {
+  return coords.x !== undefined && coords.y !== undefined;
+}
+
 export function getCoordsRow<C extends Coords>(coords: C) : number {
   if (coords.q !== undefined && coords.r !== undefined) {
     return coords.q;
