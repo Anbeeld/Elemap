@@ -1,18 +1,18 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { OrthogonalCoords } from '../utils.js';
+import { CartesianCoords } from '../utils.js';
 import { demangleProperty } from '../mangle.js';
 import { Register } from '../register.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';
 
-export type RectangleTileSnapshot = TileSnapshot<OrthogonalCoords>;
+export type RectangleTileSnapshot = TileSnapshot<CartesianCoords>;
 
-export class RectangleTile extends AbstractTile<OrthogonalCoords> {
-  constructor(args: TileArguments<OrthogonalCoords>) {
+export class RectangleTile extends AbstractTile<CartesianCoords> {
+  constructor(args: TileArguments<CartesianCoords>) {
     super(args);
   }
   
-  public override get orthogonalCoords() : OrthogonalCoords {
+  public override get cartesianCoords() : CartesianCoords {
     return this.coords;
   }
 

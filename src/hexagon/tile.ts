@@ -1,5 +1,5 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { AxialCoords, axialCoordsToOrthogonal, OrthogonalCoords } from '../utils.js';
+import { AxialCoords, axialCoordsToCartesian, CartesianCoords } from '../utils.js';
 import { demangleProperty } from '../mangle.js';
 import { Register } from '../register.js';
 import { TileStyleDecls } from '../style/schema.js';
@@ -12,11 +12,11 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
     super(args);
   }
 
-  public override get orthogonalCoords() : OrthogonalCoords {
-    let orthogonalCoords = axialCoordsToOrthogonal(this.coords, this.grid.orientation, this.grid.offset);
+  public override get cartesianCoords() : CartesianCoords {
+    let cartesianCoords = axialCoordsToCartesian(this.coords, this.grid.orientation, this.grid.offset);
     return {
-      x: orthogonalCoords.x,
-      y: orthogonalCoords.y
+      x: cartesianCoords.x,
+      y: cartesianCoords.y
     };
   }
 
@@ -50,11 +50,11 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
     demangleProperty(this.elements!.inner.dataset, 'elemapQ', this.coords.q.toString());
 
     if (this.elements!.outer) {
-      demangleProperty(this.elements!.outer.dataset, 'elemapX', this.orthogonalCoords.x.toString());
-      demangleProperty(this.elements!.outer.dataset, 'elemapY', this.orthogonalCoords.y.toString());
+      demangleProperty(this.elements!.outer.dataset, 'elemapX', this.cartesianCoords.x.toString());
+      demangleProperty(this.elements!.outer.dataset, 'elemapY', this.cartesianCoords.y.toString());
     }
-    demangleProperty(this.elements!.inner.dataset, 'elemapX', this.orthogonalCoords.x.toString());
-    demangleProperty(this.elements!.inner.dataset, 'elemapY', this.orthogonalCoords.y.toString());
+    demangleProperty(this.elements!.inner.dataset, 'elemapX', this.cartesianCoords.x.toString());
+    demangleProperty(this.elements!.inner.dataset, 'elemapY', this.cartesianCoords.y.toString());
   }
   
   public get selectors() {

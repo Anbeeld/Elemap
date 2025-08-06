@@ -117,9 +117,9 @@ export default abstract class TileStyle extends Style {
   }
 
   public get outerPosition() : Position {
-    return this.grid.tileOuterPosition(this.owner.orthogonalCoords);
+    return this.grid.tileOuterPosition(this.owner.cartesianCoords);
   }
   public get innerPosition() : Position {
-    return this.grid.tileInnerPosition(this.owner.orthogonalCoords);
+    return this.grid.tileInnerPosition(this.owner.cartesianCoords);
   }
 }

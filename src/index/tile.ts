@@ -3,7 +3,7 @@ import { demangleProperty, demangleCoords } from "../mangle.js";
 import { RectangleTile } from "../rectangle/tile.js";
 import { HexagonTile } from "../hexagon/tile.js";
 import { MapTypeStrings } from "./index.js";
-import { AxialCoords, Mutation, OrthogonalCoords } from "../utils.js";
+import { AxialCoords, Mutation, CartesianCoords } from "../utils.js";
 
 export type ElemapTileType<M> = 
   M extends "rectangle" ? RectangleTile :
@@ -11,7 +11,7 @@ export type ElemapTileType<M> =
   never;
 
 export type ElemapCoordsType<M> = 
-  M extends "rectangle" ? OrthogonalCoords :
+  M extends "rectangle" ? CartesianCoords :
   M extends "hexagon" ? AxialCoords :
   never;
 

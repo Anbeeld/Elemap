@@ -1,4 +1,4 @@
-import { AxialCoords, Mutation, OrthogonalCoords, Size } from "../utils.js";
+import { AxialCoords, Mutation, CartesianCoords, Size } from "../utils.js";
 import { mangleCoords, demangleProperty } from "../mangle.js";
 import { RectangleGrid } from "../rectangle/grid.js";
 import { HexagonGrid } from "../hexagon/grid.js";
@@ -11,7 +11,7 @@ export type ElemapGridType<M> =
   never;
 
 export type ElemapCoords<M> = 
-  M extends "rectangle" ? OrthogonalCoords :
+  M extends "rectangle" ? CartesianCoords :
   M extends "hexagon" ? AxialCoords :
   never;
 

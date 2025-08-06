@@ -1,6 +1,6 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { RectangleTile, RectangleTileSnapshot } from "./tile.js";
-import { OrthogonalCoords, SignedArray, SignedTable, Size} from "../utils.js";
+import { CartesianCoords, SignedArray, SignedTable, Size} from "../utils.js";
 import { TileArguments } from "src/tile.js";
 
 export type RectangleGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
@@ -19,15 +19,15 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     return this.exportSnapshot() as RectangleGridSnapshot;
   }
 
-  protected override tileFactory(args: TileArguments<OrthogonalCoords>): RectangleTile {
+  protected override tileFactory(args: TileArguments<CartesianCoords>): RectangleTile {
     return new RectangleTile(args);
   }
   protected override tileImport(snapshot: RectangleTileSnapshot) { return RectangleTile.import(snapshot); }
-  protected override tileCoordsFromOrthogonal(coords: OrthogonalCoords): OrthogonalCoords {
+  protected override tileCoordsFromCartesian(coords: CartesianCoords): CartesianCoords {
     return coords;
   }
 
-  public createTile(coords: OrthogonalCoords|[number, number]) : void {
+  public createTile(coords: CartesianCoords|[number, number]) : void {
     if (Array.isArray(coords)) {
       coords = {
         x: coords[0],
@@ -39,12 +39,12 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     }
     this.tiles[coords.y]![coords.x] = this.tileFactory({
       ids: this.ids,
-      coords: this.tileCoordsFromOrthogonal(coords),
+      coords: this.tileCoordsFromCartesian(coords),
       decls: false
     });
   }
 
-  public createTiles(size: Size, coords: OrthogonalCoords|[number, number]) : void {
+  public createTiles(size: Size, coords: CartesianCoords|[number, number]) : void {
     if (Array.isArray(coords)) {
       coords = {
         x: coords[0],
@@ -58,7 +58,7 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     }
   }
 
-  public override tileByCoords(coords: OrthogonalCoords|[number, number]) : RectangleTile|undefined {
+  public override tileByCoords(coords: CartesianCoords|[number, number]) : RectangleTile|undefined {
     if (Array.isArray(coords)) {
       coords = {
         x: coords[0],

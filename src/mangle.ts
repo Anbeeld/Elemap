@@ -5,7 +5,7 @@ import { ContentParameters } from './index/index.js';
 import { ContentIds, ContentIdsProperties, GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
 import { GridMapStyleSchema, GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
 import { TileSnapshot } from './tile.js';
-import { AxialCoords, Coords, OrthogonalCoords } from './utils.js';
+import { AxialCoords, Coords, CartesianCoords } from './utils.js';
 
 export function mangleProperty(object: any, name: string) : any {
   if (!object || !object.hasOwnProperty(name)) {
@@ -100,14 +100,14 @@ export function mangleAxialCoords(object: any) : AxialCoords {
   };
 }
 
-export function demangleOrthogonalCoords(orthogonal: OrthogonalCoords) : OrthogonalCoords {
+export function demangleCartesianCoords(cartesian: CartesianCoords) : CartesianCoords {
   let object = {};
-  demangleProperty(object, 'x', orthogonal.x);
-  demangleProperty(object, 'y', orthogonal.y);
+  demangleProperty(object, 'x', cartesian.x);
+  demangleProperty(object, 'y', cartesian.y);
   // @ts-ignore
   return object;
 }
-export function mangleOrthogonalCoords(object: any) : OrthogonalCoords {
+export function mangleCartesianCoords(object: any) : CartesianCoords {
   return {
     x: mangleProperty(object, 'x'),
     y: mangleProperty(object, 'y')
@@ -220,11 +220,11 @@ export function mangleCoords<C extends Coords>(coords: C) : C {
   if (mangleProperty(coords, 'q') !== undefined && mangleProperty(coords, 'r') !== undefined) {
     return mangleAxialCoords(coords) as unknown as C;
   }
-  return mangleOrthogonalCoords(coords) as unknown as C;
+  return mangleCartesianCoords(coords) as unknown as C;
 }
 export function demangleCoords<C extends Coords>(coords: C) : C {
   if (coords.q !== undefined && coords.r !== undefined) {
     return demangleAxialCoords(coords as unknown as AxialCoords) as unknown as C;
   }
-  return demangleOrthogonalCoords(coords as unknown as OrthogonalCoords) as unknown as C;
+  return demangleCartesianCoords(coords as unknown as CartesianCoords) as unknown as C;
 }

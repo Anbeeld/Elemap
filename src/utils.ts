@@ -36,7 +36,7 @@ export interface AxialCoords extends Coords {
   q: number;
 }
 
-export interface OrthogonalCoords extends Coords {
+export interface CartesianCoords extends Coords {
   x: number;
   y: number;
 }
@@ -45,7 +45,7 @@ export function isAxialCoords(coords: Coords) : boolean {
   return coords.q !== undefined && coords.r !== undefined;
 }
 
-export function isOrthogonalCoords(coords: Coords) : boolean {
+export function isCartesianCoords(coords: Coords) : boolean {
   return coords.x !== undefined && coords.y !== undefined;
 }
 
@@ -301,44 +301,44 @@ export type hexagonSizeDecls = {
   inner: hexagonSize
 }
 
-export function orthogonalCoordsToAxial(orthogonal: OrthogonalCoords, orientation: GridOrientation, offset: GridOffset) : AxialCoords {
+export function cartesianCoordsToAxial(cartesian: CartesianCoords, orientation: GridOrientation, offset: GridOffset) : AxialCoords {
   let axial: AxialCoords = {r: 0, q: 0};
   if (orientation === GridOrientation.Pointy) {
-    axial.r = orthogonal.y;
+    axial.r = cartesian.y;
     if (offset === GridOffset.Odd) {
-      axial.q = orthogonal.x - (orthogonal.y - (orthogonal.y & 1)) / 2;
+      axial.q = cartesian.x - (cartesian.y - (cartesian.y & 1)) / 2;
     } else {
-      axial.q = orthogonal.x - (orthogonal.y + (orthogonal.y & 1)) / 2;
+      axial.q = cartesian.x - (cartesian.y + (cartesian.y & 1)) / 2;
     }
   } else {
-    axial.q = orthogonal.x;
+    axial.q = cartesian.x;
     if (offset === GridOffset.Odd) {
-      axial.r = orthogonal.y - (orthogonal.x - (orthogonal.x & 1)) / 2;
+      axial.r = cartesian.y - (cartesian.x - (cartesian.x & 1)) / 2;
     } else {
-      axial.r = orthogonal.y - (orthogonal.x + (orthogonal.x & 1)) / 2;
+      axial.r = cartesian.y - (cartesian.x + (cartesian.x & 1)) / 2;
     }
   }
   return axial;
 }
 
-export function axialCoordsToOrthogonal(axial: AxialCoords, orientation: GridOrientation, offset: GridOffset) : OrthogonalCoords {
-  let orthogonal: OrthogonalCoords = {x: 0, y: 0};
+export function axialCoordsToCartesian(axial: AxialCoords, orientation: GridOrientation, offset: GridOffset) : CartesianCoords {
+  let cartesian: CartesianCoords = {x: 0, y: 0};
   if (orientation === GridOrientation.Pointy) {
-    orthogonal.y = axial.r;
+    cartesian.y = axial.r;
     if (offset === GridOffset.Odd) {
-      orthogonal.x = axial.q + (axial.r - (axial.r & 1)) / 2;
+      cartesian.x = axial.q + (axial.r - (axial.r & 1)) / 2;
     } else {
-      orthogonal.x = axial.q + (axial.r + (axial.r & 1)) / 2;
+      cartesian.x = axial.q + (axial.r + (axial.r & 1)) / 2;
     }
   } else {
-    orthogonal.x = axial.q;
+    cartesian.x = axial.q;
     if (offset === GridOffset.Odd) {
-      orthogonal.y = axial.r + (axial.q - (axial.q & 1)) / 2;
+      cartesian.y = axial.r + (axial.q - (axial.q & 1)) / 2;
     } else {
-      orthogonal.y = axial.r + (axial.q + (axial.q & 1)) / 2;
+      cartesian.y = axial.r + (axial.q + (axial.q & 1)) / 2;
     }
   }
-  return orthogonal;
+  return cartesian;
 }
 
 function isObject(item: any) {

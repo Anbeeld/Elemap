@@ -1,5 +1,5 @@
 import { AbstractTile, TileArguments, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, OrthogonalCoords, mergeDeep, Mutables, Mutation, SignedArray, SignedTable, Coords } from "./utils.js";
+import { Size, GridOrientation, GridOffset, CartesianCoords, mergeDeep, Mutables, Mutation, SignedArray, SignedTable, Coords } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
 import { GridStyleSchema } from "./style/schema.js";
 import { demangleProperties, demangleGridIds, demangleGridStyleSchema, demangleProperty } from "./mangle.js";
@@ -199,7 +199,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
   protected abstract tileFactory(args: TileArguments) : T;
   protected abstract tileImport(snapshot: TileSnapshot) : T;
-  protected abstract tileCoordsFromOrthogonal(coords: OrthogonalCoords) : Coords;
+  protected abstract tileCoordsFromCartesian(coords: CartesianCoords) : Coords;
 
   protected initElements() : void {
     if (!this.elements) {
@@ -281,7 +281,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     });
   }
 
-  public setContourPosition(position: OrthogonalCoords|false) {
+  public setContourPosition(position: CartesianCoords|false) {
     if (position === false) {
       this.elements!.contourHover.removeAttribute('style');
     } else {

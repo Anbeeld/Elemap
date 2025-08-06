@@ -1,6 +1,6 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { HexagonTile, HexagonTileSnapshot } from "./tile.js";
-import { GridOffset, SignedTable, AxialCoords, axialCoordsToOrthogonal, orthogonalCoordsToAxial, OrthogonalCoords, SignedArray, Size, isOrthogonalCoords } from "../utils.js";
+import { GridOffset, SignedTable, AxialCoords, axialCoordsToCartesian, cartesianCoordsToAxial, CartesianCoords, SignedArray, Size, isCartesianCoords } from "../utils.js";
 import { TileArguments } from "src/tile.js";
 
 export type HexagonGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
@@ -23,24 +23,24 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return new HexagonTile(args);
   }
   protected override tileImport(snapshot: HexagonTileSnapshot) { return HexagonTile.import(snapshot); }
-  protected override tileCoordsFromOrthogonal(coords: OrthogonalCoords): AxialCoords {
-    return orthogonalCoordsToAxial(coords, this.orientation, this.offset);
+  protected override tileCoordsFromCartesian(coords: CartesianCoords): AxialCoords {
+    return cartesianCoordsToAxial(coords, this.orientation, this.offset);
   }
 
-  public override tileByCoords(coords: AxialCoords|OrthogonalCoords|[number, number]) : HexagonTile|undefined {
+  public override tileByCoords(coords: AxialCoords|CartesianCoords|[number, number]) : HexagonTile|undefined {
     if (Array.isArray(coords)) {
       coords = {
         q: coords[0],
         r: coords[1]
       };
     }
-    let orthogonalCoords = isOrthogonalCoords(coords) ? coords as OrthogonalCoords : axialCoordsToOrthogonal(coords as AxialCoords, this.orientation, this.offset);
-    if (!this.tiles[orthogonalCoords.y]) {
+    let cartesianCoords = isCartesianCoords(coords) ? coords as CartesianCoords : axialCoordsToCartesian(coords as AxialCoords, this.orientation, this.offset);
+    if (!this.tiles[cartesianCoords.y]) {
       return undefined;
-    } else if (!this.tiles[orthogonalCoords.y]![orthogonalCoords.x]) {
+    } else if (!this.tiles[cartesianCoords.y]![cartesianCoords.x]) {
       return undefined;
     }
-    return this.tiles[orthogonalCoords.y]![orthogonalCoords.x];
+    return this.tiles[cartesianCoords.y]![cartesianCoords.x];
   }
   public override tileByElement(element: HTMLElement) : HexagonTile|undefined {
     if (element.hasAttribute('data-elemap-r') && element.hasAttribute('data-elemap-q')) {
@@ -52,35 +52,35 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return undefined;
   }
   
-  public createTile(coords: AxialCoords|OrthogonalCoords|[number, number]) : void {
+  public createTile(coords: AxialCoords|CartesianCoords|[number, number]) : void {
     if (Array.isArray(coords)) {
       coords = {
         q: coords[0],
         r: coords[1]
       };
     }
-    let orthogonalCoords = isOrthogonalCoords(coords) ? coords as OrthogonalCoords : axialCoordsToOrthogonal(coords as AxialCoords, this.orientation, this.offset);
-    if (!this.tiles[orthogonalCoords.y]) {
-      this.tiles[orthogonalCoords.y] = new SignedArray<HexagonTile>();
+    let cartesianCoords = isCartesianCoords(coords) ? coords as CartesianCoords : axialCoordsToCartesian(coords as AxialCoords, this.orientation, this.offset);
+    if (!this.tiles[cartesianCoords.y]) {
+      this.tiles[cartesianCoords.y] = new SignedArray<HexagonTile>();
     }
-    this.tiles[orthogonalCoords.y]![orthogonalCoords.x] = this.tileFactory({
+    this.tiles[cartesianCoords.y]![cartesianCoords.x] = this.tileFactory({
       ids: this.ids,
-      coords: this.tileCoordsFromOrthogonal(orthogonalCoords),
+      coords: this.tileCoordsFromCartesian(cartesianCoords),
       decls: false
     });
   }
 
-  public createTiles(size: Size, coords: AxialCoords|OrthogonalCoords|[number, number]) : void {
+  public createTiles(size: Size, coords: AxialCoords|CartesianCoords|[number, number]) : void {
     if (Array.isArray(coords)) {
       coords = {
         q: coords[0],
         r: coords[1]
       };
     }
-    if (isOrthogonalCoords(coords)) {
+    if (isCartesianCoords(coords)) {
       for (let x = coords.x; x < coords.x + size.width; x++) {
         for (let y = coords.y; y < coords.y + size.height; y++) {
-          this.createTile(orthogonalCoordsToAxial({x, y}, this.orientation, this.offset));
+          this.createTile(cartesianCoordsToAxial({x, y}, this.orientation, this.offset));
         }
       }
     } else {

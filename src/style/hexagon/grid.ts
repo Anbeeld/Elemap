@@ -1,6 +1,6 @@
 import { HexagonTile } from "../../hexagon/tile.js";
 import { Register } from "../../register.js";
-import { generateHexagonPath, GridOrientation, hexagonSize, hexagonSizeDecls, hexagonSizeRatio, OrthogonalCoords, Position, roundFloat } from "../../utils.js";
+import { generateHexagonPath, GridOrientation, hexagonSize, hexagonSizeDecls, hexagonSizeRatio, CartesianCoords, Position, roundFloat } from "../../utils.js";
 import GridStyle from "../grid.js";
 import { TileStyleDecls } from "../schema.js";
 import { calc, cssValueToNumber } from "../utils.js";
@@ -246,7 +246,7 @@ export default class HexagonGridStyle extends GridStyle {
     };
   }
   
-  public override tileOuterPosition(coords: OrthogonalCoords) : Position {
+  public override tileOuterPosition(coords: CartesianCoords) : Position {
     let i = coords.x - this.owner.extremes.x.min,
         j = coords.y - this.owner.extremes.y.min;
 
@@ -259,7 +259,7 @@ export default class HexagonGridStyle extends GridStyle {
     }
   }
 
-  public override tileInnerPosition(coords: OrthogonalCoords) : Position {
+  public override tileInnerPosition(coords: CartesianCoords) : Position {
     let tileOuterPosition = this.tileOuterPosition(coords);
     return {
       top: calc.add(tileOuterPosition.top, calc.div(this.spacing, 2)),
@@ -274,7 +274,7 @@ export default class HexagonGridStyle extends GridStyle {
         css +=
         this.selectors.tile + tile.selectors.data + `{` +
           // Tile indentation is already applied to the row positions
-          `left:${calc.sub(this.tileOuterPosition(tile.orthogonalCoords).left, this.owner.hasIndentation(tile.orthogonalCoords.y) ? this.tileIndentation.horizontal : 0)};` +
+          `left:${calc.sub(this.tileOuterPosition(tile.cartesianCoords).left, this.owner.hasIndentation(tile.cartesianCoords.y) ? this.tileIndentation.horizontal : 0)};` +
         `}`; 
       }
     }

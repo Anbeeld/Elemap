@@ -1,4 +1,4 @@
-import { Coords, getCoordsRow, mergeDeep, Mutables, Mutation, OrthogonalCoords } from './utils.js';
+import { Coords, getCoordsRow, mergeDeep, Mutables, Mutation, CartesianCoords } from './utils.js';
 import { demangleProperties, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords, mangleTileStyleDecls } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
@@ -49,7 +49,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected set coords(value: C) { this._coords = value; }
   public get coords() : C { return this._coords; }
   
-  public abstract get orthogonalCoords() : OrthogonalCoords;
+  public abstract get cartesianCoords() : CartesianCoords;
 
   protected rendered: boolean = false;
 
@@ -137,8 +137,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     if (this.style.mannequin && this.style.owner === this) {
       this.renderMannequin();
     } else {
-      let outer = this.grid.elements!.outerRows[getCoordsRow(this.orthogonalCoords)]!;
-      let inner = this.grid.elements!.innerRows[getCoordsRow(this.orthogonalCoords)]!;
+      let outer = this.grid.elements!.outerRows[getCoordsRow(this.cartesianCoords)]!;
+      let inner = this.grid.elements!.innerRows[getCoordsRow(this.cartesianCoords)]!;
 
       this.initElements();
 
@@ -196,11 +196,11 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     }
   }
 
-  protected get elementOffset() : OrthogonalCoords {
+  protected get elementOffset() : CartesianCoords {
     let grid = Register.grid.abstract(this.ids);
     if (grid) {
       let element = this.elements!.inner;
-      let offset: OrthogonalCoords = {x: 0, y: 0};
+      let offset: CartesianCoords = {x: 0, y: 0};
       while (element) {
         offset.x += element.offsetLeft;
         offset.y += element.offsetTop;
