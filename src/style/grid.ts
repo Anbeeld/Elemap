@@ -185,10 +185,6 @@ export default abstract class GridStyle extends Style {
     this.selectors.contour + `{` +
       `margin:${calc.div(this.spacing, 2)};` +
     `}` +
-    
-    this.selectors.contour + `>div{` + 
-      `border:none;` +
-    `}` +
 
     this.selectors.row + `{` +
       `height:${this.tile.size.outer.height};` +
