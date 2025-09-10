@@ -86,9 +86,7 @@ export class Content implements ContentConstants, Mutations {
     this.offset = args.offset;
   }
 
-  // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
-  public static abstract import(snapshot: ContentSnapshot) : Content;
-  protected static importSnapshot<T extends Content>(Content: new (args: ContentArguments) => T, snapshot: ContentSnapshot) : T {
+  public static import(snapshot: ContentSnapshot) : Content {
     let instance = new Content(mangleContentSnapshot(snapshot));
     instance.mutate(snapshot);
     return instance;
