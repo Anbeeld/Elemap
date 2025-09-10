@@ -1,6 +1,6 @@
 import { mergeDeep, Mutations, Mutation, Position } from './utils.js';
-import { demangleProperties, demangleContentIds, mangleContentSnapshot } from './mangle.js';
 import { Register, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties, TileIds } from './register.js';
+import { demangleProperties, demangleContentIds, mangleContentSnapshot, demangleContentLocationIds } from './mangle.js';
 import { AbstractTile } from './tile.js';
 import { ElemapTile } from './index/tile.js';
 import { AbstractGridMap } from './map.js';
@@ -20,7 +20,7 @@ export type ContentArguments = Omit<ContentConstants, 'figure'|'ids'> & {
   figure: HTMLElement|string
 };
 
-type ContentLocationIds = TileIdsProperties|ContentIdsProperties|undefined;
+export type ContentLocationIds = TileIdsProperties|ContentIdsProperties|undefined;
 type ContentLocation = AbstractTile|Content|undefined;
 
 type ContentElements = {
@@ -102,8 +102,8 @@ export class Content implements ContentConstants, Mutations {
     demangleProperties(object, [
       ['ids', demangleContentIds(this.ids)],
       ['figure', this.elements.figure.outerHTML],
-      ['location', this.location ? this.location : undefined],
-      ['mutations', this.mutations]
+      ['location', this.location ? demangleContentLocationIds(this.location) : undefined],
+      ['offset', this.offset]
     ]);
     return object as ContentConstants;
   }

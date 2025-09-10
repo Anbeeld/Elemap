@@ -1,6 +1,6 @@
 // import { GridSnapshot } from './grid.js';
 // import { GridMapSnapshot } from './map.js';
-import { ContentSnapshot } from './content.js';
+import { ContentLocationIds, ContentSnapshot } from './content.js';
 import { ContentParameters } from './index/index.js';
 import { ContentIds, ContentIdsProperties, GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
 import { GridMapStyleSchema, GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
@@ -84,6 +84,30 @@ export function mangleContentIds(object: any) : ContentIds {
     map: mangleProperty(object, 'map'),
     content: mangleProperty(object, 'content')
   };
+}
+
+export function demangleContentLocationIds(ids: ContentLocationIds) : ContentLocationIds {
+  let object = {};
+  if (ids) {
+    if ((ids as ContentIdsProperties).content) {
+      object = demangleContentIds(ids as ContentIdsProperties);
+    } else if ((ids as TileIdsProperties).tile) {
+      object = demangleTileIds(ids as TileIdsProperties);
+    }
+  }
+  // @ts-ignore
+  return object;
+}
+export function mangleContentLocationIds(object: any) : ContentLocationIds {
+  if (!object) {
+    return undefined;
+  } else if (mangleProperty(object, 'content')) {
+    return mangleContentIds(object);
+  } else if (mangleProperty(object, 'tile')) {
+    return mangleTileIds(object);
+  } else {
+    return undefined;
+  }
 }
 
 export function demangleAxialCoords(axial: AxialCoords) : AxialCoords {
@@ -202,7 +226,7 @@ export function mangleContentSnapshot(snapshot: any) : ContentSnapshot {
   return {
     ids: mangleContentIds(mangleProperty(snapshot, 'ids')),
     figure: mangleProperty(snapshot, 'figure'),
-    location: mangleProperty(snapshot, 'location'),
+    location: mangleContentLocationIds(mangleProperty(snapshot, 'location')),
     offset: mangleProperty(snapshot, 'offset'),
     mutations: mangleProperty(snapshot, 'mutations')
   };
