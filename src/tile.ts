@@ -85,8 +85,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     demangleProperties(object, [
       ['ids', demangleTileIds(this.ids)],
       ['coords', demangleCoords<C>(this.coords)],
-      ['decls', this._style !== undefined ? demangleTileStyleDecls(this.decls) : false],
-      ['mutations', this.mutations]
+      ['decls', this._style !== undefined ? demangleTileStyleDecls(this.decls) : false]
     ]);
     return object as TileConstants<C>;
   }
