@@ -28,16 +28,22 @@ type ContentElements = {
   container?: HTMLElement
 }
 
-export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mutations {
+export class Content implements ContentConstants, Mutations {
   protected _ids: ContentIds;
   protected set ids(value: ContentIds) { this._ids = value; }
   public get ids() : ContentIds { return this._ids; }
 
   public get map() { return Register.map.abstract(this.ids)!; }
 
+  protected _figure: string;
+  protected set figure(value: string) { this._figure = value; }
+  public get figure() : string { return this._figure; }
+
   protected _location: ContentLocationIds = undefined;
   protected set location(value: ContentLocationIds) { this._location = value; }
-  public get location() : ContentLocation {
+  public get location() : ContentLocationIds { return this._location; }
+
+  public get host() : ContentLocation {
     if (this._location instanceof ContentIds) {
       return Register.content(this._location)!;
     } else if (this._location instanceof TileIds) {
@@ -114,13 +120,13 @@ export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mut
   }
 
   public hover() : void {
-    if (this.location && typeof this.location.hover === 'function') {
-      this.location.hover();
+    if (this.host && typeof this.host.hover === 'function') {
+      this.host.hover();
     }
   }
   public unhover() : void {
-    if (this.location && typeof this.location.unhover === 'function') {
-      this.location.unhover();
+    if (this.host && typeof this.host.unhover === 'function') {
+      this.host.unhover();
     }
   }
   
@@ -133,10 +139,10 @@ export class Content implements Omit<ContentConstants, 'figure'|'location'>, Mut
   public render() : void {
     this.initElements();
 
-    if (this.location && this.location instanceof AbstractTile) {
-      let tileZeroPosition = this.location.style.grid.tileZeroPosition;
-      let locationPosition = this.location.style.innerPosition;
-      let size = this.location.style.size.inner;
+    if (this.host && this.host instanceof AbstractTile) {
+      let tileZeroPosition = this.host.style.grid.tileZeroPosition;
+      let locationPosition = this.host.style.innerPosition;
+      let size = this.host.style.size.inner;
       this.elements.container!.style.top = calc.add(tileZeroPosition.top, locationPosition.top, this.offset.top, calc.div(size.height, 2));
       this.elements.container!.style.left = calc.add(tileZeroPosition.left, locationPosition.left, this.offset.top, calc.div(size.width, 2));
     }
