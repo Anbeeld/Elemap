@@ -5,9 +5,10 @@ import { MapStyle, GridMapStyle } from './style/map.js';
 import { ContentIds, GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
 import { MapType, mergeDeep, Mutations, Mutation, } from './utils.js';
 import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleContentParams } from './mangle.js';
-import { Content } from './content.js';
+import { Content, ContentSnapshot } from './content.js';
 import { ElemapContent } from './index/content.js'
 import { ContentParameters } from './index/index.js';
+import { ElemapTile } from './index/tile.js';
 
 interface MapElements {
   container?: HTMLElement,
@@ -20,7 +21,8 @@ export type MapSnapshot = {
   type: MapType,
 } & MapConstants & Mutations;
 type MapConstants = {
-  ids: MapIdsProperties
+  ids: MapIdsProperties,
+  contents: ContentSnapshot[]
 };
 
 export type MapArguments = Omit<MapConstants, 'ids'> & {
@@ -63,6 +65,10 @@ export abstract class AbstractMap implements MapConstants, Mutations {
       this.ids = new MapIds(Register.id());
     }
     Register.add(this);
+
+    if (args.contents) {
+      this.importContents(args.contents);
+    }
   }
 
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
@@ -75,7 +81,8 @@ export abstract class AbstractMap implements MapConstants, Mutations {
   protected exportConstants(object: object = {}) : MapConstants {
     demangleProperties(object, [
       ['type', this.exportMapType()],
-      ['ids', demangleMapIds(this.ids)]
+      ['ids', demangleMapIds(this.ids)],
+      ['contents', this.contents.map(content => content.export())]
     ]);
     return object as MapConstants;
   }
@@ -88,6 +95,12 @@ export abstract class AbstractMap implements MapConstants, Mutations {
   protected abstract exportMapType() : string;
   public report() : Mutation {
     return this.mutations;
+  }
+  
+  protected importContents(snapshot: ContentSnapshot[]) : void {
+    for (let content of snapshot) {
+      this.contents.push(Content.import(content));
+    }
   }
 
   protected abstract initStyle(schema: GridMapStyleSchema) : void;
@@ -160,8 +173,16 @@ export abstract class AbstractMap implements MapConstants, Mutations {
   }
 
   public addContent(params: ContentParameters) : ElemapContent {
+    let mangledParams = mangleContentParams(params);
+    if (mangledParams.location instanceof ElemapTile) {
+      // @ts-ignore
+      mangledParams.location = (this as AbstractGridMap).grid.tileByCoords(mangledParams.location.coords)!.ids;
+    } else {
+      mangledParams.location = undefined;
+    }
+
     let content = new Content(Object.assign(
-      mangleContentParams(params),
+      mangledParams,
       {
         ids: this.ids,
         offset: params.offset || {top:'0', right:'0'},
@@ -229,7 +250,8 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
       ['type', this.exportMapType()],
       ['ids', demangleMapIds(this.ids)],
       ['grid', this.grid.export()],
-      ['schema', demangleGridMapStyleSchema(this.schema)]
+      ['schema', demangleGridMapStyleSchema(this.schema)],
+      ['contents', this.contents.map(content => content.export())]
     ]);
     return object as GridMapConstants;
   }

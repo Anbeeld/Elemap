@@ -16,6 +16,7 @@ export function configToGridMapArguments(config: Config) : GridMapArguments {
       schema: mangleGridStyleSchema(mangleProperty(configGrid, 'schema')),
       tiles: mangleProperty(configGrid, 'tiles')
     },
-    schema: modifyGridMapStyleSchema(mangleGridMapStyleSchema(mangleProperty(config, 'schema')) || {})
+    schema: modifyGridMapStyleSchema(mangleGridMapStyleSchema(mangleProperty(config, 'schema')) || {}),
+    contents: mangleProperty(config, 'contents') || []
   };
 }

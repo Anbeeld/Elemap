@@ -1,9 +1,7 @@
 import { mergeDeep, Mutations, Mutation, Position } from './utils.js';
-import { Register, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties, TileIds } from './register.js';
 import { demangleProperties, demangleContentIds, mangleContentSnapshot, demangleContentLocationIds } from './mangle.js';
+import { Register, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties } from './register.js';
 import { AbstractTile } from './tile.js';
-import { ElemapTile } from './index/tile.js';
-import { AbstractGridMap } from './map.js';
 import { calc } from './style/utils.js';
 
 // Snapshot and mutation types
@@ -44,10 +42,10 @@ export class Content implements ContentConstants, Mutations {
   public get location() : ContentLocationIds { return this._location; }
 
   public get host() : ContentLocation {
-    if (this._location instanceof ContentIds) {
-      return Register.content(this._location)!;
-    } else if (this._location instanceof TileIds) {
-      return Register.tile.abstract(this._location)!;
+    if ((this._location as ContentIdsProperties).content) {
+      return Register.content(this._location as ContentIdsProperties)!;
+    } else if ((this._location as TileIdsProperties).tile) {
+      return Register.tile.abstract(this._location as TileIdsProperties)!;
     }
     return undefined;
   }
@@ -79,9 +77,7 @@ export class Content implements ContentConstants, Mutations {
       this.elements = {figure: args.figure};
     }
 
-    if (args.location instanceof ElemapTile) {
-      this.location = (this.map as AbstractGridMap).grid.tileByCoords(args.location.coords)!.ids;
-    }
+    this.location = args.location;
     
     this.offset = args.offset;
   }
