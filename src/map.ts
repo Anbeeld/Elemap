@@ -112,6 +112,7 @@ export abstract class AbstractMap implements MapConstants, Mutations {
   public initRender(container?: HTMLElement) {
     if (container && this.elements.container !== container) {
       this.elements.container = container;
+      this.elements.container.innerHTML = '';
       this.elements.container.classList.add('elemap-' + this.ids.map + '-container');
     }
 
