@@ -135,7 +135,7 @@ export class Content implements ContentConstants, Mutations {
 
     if (this.host && this.host instanceof AbstractTile) {
       let tileZeroPosition = this.host.style.grid.tileZeroPosition;
-      let locationPosition = this.host.style.innerPosition;
+      let locationPosition = this.host.style.grid.tileInnerPosition(this.host.cartesianCoords);
       let size = this.host.style.size.inner;
       this.elements.container!.style.top = calc.add(tileZeroPosition.top, locationPosition.top, this.offset.top, calc.div(size.height, 2));
       this.elements.container!.style.left = calc.add(tileZeroPosition.left, locationPosition.left, this.offset.top, calc.div(size.width, 2));
