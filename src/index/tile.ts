@@ -1,5 +1,5 @@
 import { CustomTileStyleDecls } from "../style/schema.js";
-import { demangleProperty, demangleCoords } from "../mangle.js";
+import { demangleProperty, demangleCoords, mangleTileStyleDecls } from "../mangle.js";
 import { RectangleTile } from "../rectangle/tile.js";
 import { HexagonTile } from "../hexagon/tile.js";
 import { MapTypeStrings } from "./index.js";
@@ -79,6 +79,6 @@ export class ElemapTile<M extends MapTypeStrings> {
     demangleProperty(this, 'updateStyle', (decls: CustomTileStyleDecls, replace: boolean = false) => this.method__updateStyle(decls, replace));
   }
   private method__updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
-    this._.updateStyle(decls, replace);
+    this._.updateStyle(mangleTileStyleDecls(decls), replace);
   }
 }
