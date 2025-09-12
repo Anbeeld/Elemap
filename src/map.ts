@@ -148,10 +148,10 @@ export abstract class AbstractMap implements MapConstants, Mutations {
   public render(container?: HTMLElement) {
     this.elements = this.initElements();
     this.initRender(container);
+    this.style.render();
     for (let content of this.contents) {
       content.render();
     }
-    this.style.render();
   }
 
   public contentById(ids: ContentIds) : Content|undefined {
@@ -234,6 +234,11 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
       this.grid = new gridClass(Object.assign(args.grid, {ids: this.ids}));
     }
     this.initStyle(args.schema);
+
+    // Might want to configure the pipeline in a better way later
+    if (args.grid.tiles) {
+      this.grid.importTiles(args.grid.tiles);
+    }
   }
 
   protected static importSnapshot<M extends AbstractGridMap>(mapClass: new (args: GridMapArguments) => M, snapshot: GridMapSnapshot) : M {
@@ -266,9 +271,9 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     this.elements = this.initElements();
     this.initRender(container);
     this.grid.render(this.elements.map!);
+    this.style.render();
     for (let content of this.contents) {
       content.render();
     }
-    this.style.render();
   }
 }

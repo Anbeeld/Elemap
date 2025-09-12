@@ -132,10 +132,6 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
     this.orientation = args.orientation;
     this.offset = args.offset;
-
-    if (args.tiles) {
-      this.importTiles(args.tiles);
-    }
   }
 
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
@@ -182,7 +178,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return this.mutations;
   }
 
-  protected importTiles(snapshot: SignedTable<TileSnapshot>) : void {
+  public importTiles(snapshot: SignedTable<TileSnapshot>) : void {
     for (let [y, row] of snapshot) {
       for (let [x, tile] of row) {
         if (!this.tiles[y]) {

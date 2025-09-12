@@ -64,6 +64,10 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
       this.ids = new TileIds(args.ids, Register.id());
     }
     this.coords = args.coords;
+
+    if (args.decls && args.decls !== "mannequin") {
+      this.updateStyle(args.decls);
+    }
   }
 
   // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
