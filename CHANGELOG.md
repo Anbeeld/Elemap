@@ -1,3 +1,27 @@
+## 0.3.0
+
+- Implemented content system, where you can define external HTML elements as something located on the map, with a possibility to tie it to a specific tile or another content object. These too use the mutation system, so you can store data related to them in Elemap.
+- Creating grid map doesn't result in tiles automatically being added to it anymore.
+- Tiles and rows are not required to be strictly sequential anymore, storage and rendering of tiles with arbitrary coordinates is now fully supported.
+- Added createTile and createTiles grid methods, allowing to add tiles on the fly.
+- Removed size from map arguments as grid no longer has a fixed size nor creates tiles during the initiation.
+- Renamed orthogonal coords to carthesian.
+- Renamed mutables to mutations.
+- Grid tiles are now stored in a custom SignedArray object instead of plain array, with carthesian coordinates used as indices.
+- Removed tileByIndex method and replaced all the instances of accessing tiles by indices with carthesian coordinates.
+- tileByCoords method now takes either coords object or a [col, row] array. Hexagon map supports both axial and carthesian coords, but the array argument will always be converted to coords that are native to the map.
+- Hexagon tile HTML elements now have attributes with both axial and carthesian coordinates.
+- Map container HTML element is now saved between re-renders so it's not necessary to specify it every time after the first one.
+- Outer tile HTML elements now use absolute positioning inside the row.
+- Row HTML elements now use absolute positioning inside the grid.
+- Adjusted indentation and recess systems to work with absolute positioning of tile HTML elements.
+- Row HTML element width and grid HTML element height are now computed based on tile HTML element size data instead of using CSS max-content width due to migration to absolute positioning.
+- CSS of default tile style of a grid is computed by applying it to a special invisible tile HTML element called mannequin instead of a tile with zero indices.
+- Index classes are now defined in separate files.
+- Fixed column and row coordinates being swapped all around the code.
+- Fixed every render creating new style HTML elements instead of replacing innerHTML of the existing ones.
+- Various small fixes and adjustments.
+
 ## 0.2.0
 
 - Implemented import and export methods for map, grid and tile classes. You can use the export method of a map object to return its snapshot containing all the data of the map itself, as well as its grid and tiles associated with it. You can then import it via a static method of the main index class, which will create an identical map. Import and export preserve the ids and thus are not meant for cloning, but rather for saving the state between sessions and alike. You can also use export on the grid object, which will result in a snapshot with the grid and tiles data, and also on the individual tiles. Importing is limited to the map at the moment, creating all the objects at once.
