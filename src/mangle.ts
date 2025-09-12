@@ -1,7 +1,7 @@
 // import { GridSnapshot } from './grid.js';
 // import { GridMapSnapshot } from './map.js';
 import { ContentLocationIds, ContentSnapshot } from './content.js';
-import { ContentParameters } from './index/index.js';
+import { ContentParameters } from './index/map.js';
 import { ContentIds, ContentIdsProperties, GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
 import { GridMapStyleSchema, GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
 import { TileSnapshot } from './tile.js';

@@ -1,2 +1,2 @@
-import { Elemap } from './index/index.js';
+import { Elemap } from './index/map.js';
 export default Elemap;

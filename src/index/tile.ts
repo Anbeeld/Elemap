@@ -2,7 +2,7 @@ import { CustomTileStyleDecls } from "../style/schema.js";
 import { demangleProperty, demangleCoords, mangleTileStyleDecls } from "../mangle.js";
 import { RectangleTile } from "../rectangle/tile.js";
 import { HexagonTile } from "../hexagon/tile.js";
-import { MapTypeStrings } from "./index.js";
+import { MapTypeStrings } from "./map.js";
 import { AxialCoords, Mutation, CartesianCoords } from "../utils.js";
 
 export type ElemapTileType<M> = 

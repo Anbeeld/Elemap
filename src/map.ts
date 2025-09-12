@@ -7,7 +7,7 @@ import { MapType, mergeDeep, Mutations, Mutation, } from './utils.js';
 import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleContentParams } from './mangle.js';
 import { Content, ContentSnapshot } from './content.js';
 import { ElemapContent } from './index/content.js'
-import { ContentParameters } from './index/index.js';
+import { ContentParameters } from './index/map.js';
 import { ElemapTile } from './index/tile.js';
 
 interface MapElements {

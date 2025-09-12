@@ -2,7 +2,7 @@ import { AxialCoords, Mutation, CartesianCoords, Size } from "../utils.js";
 import { mangleCoords, demangleProperty } from "../mangle.js";
 import { RectangleGrid } from "../rectangle/grid.js";
 import { HexagonGrid } from "../hexagon/grid.js";
-import { MapTypeStrings } from "./index.js";
+import { MapTypeStrings } from "./map.js";
 import { ElemapTile, ElemapTileType } from "./tile.js";
 
 export type ElemapGridType<M> = 
