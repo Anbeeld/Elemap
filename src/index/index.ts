@@ -7,6 +7,7 @@ import { GridMapMutation, GridMapSnapshot } from "../map.js";
 import { ElemapGrid, ElemapGridType } from "./grid.js";
 import { ElemapContent } from "./content.js";
 import { ContentArguments } from "src/content.js";
+import { ContentIds } from "src/register.js";
 
 export type MapTypeStrings = `${MapType}`;
 
@@ -38,6 +39,9 @@ export class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     this.demangle__mutate();
     this.demangle__grid();
     this.demangle__addContent();
+    this.demangle__contentById();
+    this.demangle__contentByElement();
+
   }
 
   public static import(snapshot: GridMapSnapshot) {
@@ -106,6 +110,30 @@ export class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
   }
   private method__addContent(params: ContentParameters) {
     return this._.addContent(params);
+  }
+  
+  public contentById(ids: ContentIds) { return this.method__contentById(ids); }
+  private demangle__contentById() {
+    demangleProperty(this, 'contentById', (ids: ContentIds) => this.method__contentById(ids));
+  }
+  private method__contentById(ids: ContentIds) : ElemapContent|undefined {
+    let content = this._.contentById(ids);
+    if (content) {
+      return new ElemapContent(content);
+    }
+    return undefined;
+  }
+  
+  public contentByElement(element: HTMLElement) { return this.method__contentByElement(element); }
+  private demangle__contentByElement() {
+    demangleProperty(this, 'contentByElement', (element: HTMLElement) => this.method__contentByElement(element));
+  }
+  private method__contentByElement(element: HTMLElement) : ElemapContent|undefined {
+    let content = this._.contentByElement(element);
+    if (content) {
+      return new ElemapContent(content);
+    }
+    return undefined;
   }
 }
 
