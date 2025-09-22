@@ -70,8 +70,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     }
   }
 
-  // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
-  public static abstract import(snapshot: TileSnapshot) : AbstractTile;
+  // 'static' modifier cannot be used with 'abstract' modifier.
+  // public static abstract import(snapshot: TileSnapshot) : AbstractTile;
   protected static importSnapshot<T extends AbstractTile, C extends Coords>(tile: new (args: TileArguments<C>) => T, snapshot: TileSnapshot) : T {
     let instance = new tile(mangleTileSnapshot<C>(snapshot));
     instance.mutate(snapshot);

@@ -71,8 +71,8 @@ export abstract class AbstractMap implements MapConstants, Mutations {
     }
   }
 
-  // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
-  public static abstract import(snapshot: MapSnapshot) : AbstractMap;
+  // 'static' modifier cannot be used with 'abstract' modifier.
+  // public static abstract import(snapshot: MapSnapshot) : AbstractMap;
 
   public abstract export() : MapSnapshot;
   protected exportSnapshot() : MapSnapshot {

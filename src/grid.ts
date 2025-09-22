@@ -134,8 +134,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     this.offset = args.offset;
   }
 
-  // @ts-ignore 'static' modifier cannot be used with 'abstract' modifier.
-  public static abstract import(snapshot: GridSnapshot) : AbstractGrid;
+  // 'static' modifier cannot be used with 'abstract' modifier.
+  // public static abstract import(snapshot: GridSnapshot) : AbstractGrid;
   protected static importSnapshot<G extends AbstractGrid>(gridClass: new (args: GridArguments) => G, snapshot: GridSnapshot) : G {
     let instance = new gridClass(snapshot);
     instance.mutate(snapshot);
