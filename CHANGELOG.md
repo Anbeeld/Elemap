@@ -1,3 +1,7 @@
+## 0.3.1
+
+- Fixed errors in TypeScript definition files.
+
 ## 0.3.0
 
 - Implemented content system, where you can define external HTML elements as something located on the map, with a possibility to tie it to a specific tile or another content object. These too use the mutation system, so you can store data related to them in Elemap.
