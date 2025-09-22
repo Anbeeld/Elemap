@@ -1,7 +1,7 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { HexagonTile, HexagonTileSnapshot } from "./tile.js";
 import { GridOffset, SignedTable, AxialCoords, axialCoordsToCartesian, cartesianCoordsToAxial, CartesianCoords, SignedArray, Size, isCartesianCoords } from "../utils.js";
-import { TileArguments } from "src/tile.js";
+import { TileArguments } from "../tile.js";
 
 export type HexagonGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
   tiles: SignedTable<HexagonTileSnapshot>

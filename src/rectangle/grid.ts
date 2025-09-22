@@ -1,7 +1,7 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { RectangleTile, RectangleTileSnapshot } from "./tile.js";
 import { CartesianCoords, SignedArray, SignedTable, Size} from "../utils.js";
-import { TileArguments } from "src/tile.js";
+import { TileArguments } from "../tile.js";
 
 export type RectangleGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
   tiles: SignedTable<RectangleTileSnapshot>

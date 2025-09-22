@@ -6,8 +6,8 @@ import { demangleProperty } from "../mangle.js";
 import { GridMapMutation, GridMapSnapshot } from "../map.js";
 import { ElemapGrid, ElemapGridType } from "./grid.js";
 import { ElemapContent } from "./content.js";
-import { ContentArguments } from "src/content.js";
-import { ContentIds } from "src/register.js";
+import { ContentArguments } from "../content.js";
+import { ContentIds } from "../register.js";
 
 export type MapTypeStrings = `${MapType}`;
 

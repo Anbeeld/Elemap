@@ -1,4 +1,4 @@
-import { DeepPartial } from "src/utils.js";
+import { DeepPartial } from "../utils.js";
 
 /* MAP STYLE DECLARATION TYPES */
 export type MapStyleDecls = {

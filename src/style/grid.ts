@@ -3,7 +3,7 @@ import { GridStyleDecls, GridStyleSchema, TileStyleDecls } from "./schema.js";
 import TileStyle from "./tile.js";
 import Style from "./style.js";
 import { calc } from "./utils.js";
-import { CartesianCoords, Position } from "src/utils.js";
+import { CartesianCoords, Position } from "../utils.js";
 
 type GridComputed = {
   outer: CSSStyleDeclaration,
