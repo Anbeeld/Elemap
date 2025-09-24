@@ -3,7 +3,7 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { ContentIds, GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
-import { MapType, mergeDeep, Mutations, Mutation, } from './utils.js';
+import { MapType, mergeDeep, Mutations, Mutation, signedTablefromObject, } from './utils.js';
 import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleContentParams } from './mangle.js';
 import { Content, ContentSnapshot } from './content.js';
 import { ElemapContent } from './index/content.js'
@@ -237,7 +237,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
 
     // Might want to configure the pipeline in a better way later
     if (args.grid.tiles) {
-      this.grid.importTiles(args.grid.tiles);
+      this.grid.importTiles(signedTablefromObject(args.grid.tiles));
     }
   }
 

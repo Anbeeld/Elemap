@@ -431,6 +431,26 @@ export class SignedArray<V> {
 
 export class SignedTable<V> extends SignedArray<SignedArray<V>> {}
 
+export function signedArrayfromObject<V>(object: any) {
+  let signedArray = new SignedArray<V>();
+  if (isObject(object)) {
+    for (const key in object) {
+      signedArray[Number(key)] = object[key];
+    }
+  }
+  return signedArray;
+}
+
+export function signedTablefromObject<V>(object: any): SignedTable<V> {
+  let signedTable = new SignedTable<V>();
+  if (isObject(object)) {
+    for (const key in object) {
+      signedTable[Number(key)] = signedArrayfromObject(object[key]);
+    }
+  }
+  return signedTable;
+}
+
 export function isNumeric(str: string) {
   if (typeof str !== "string") {
     return false;
