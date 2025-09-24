@@ -88,7 +88,7 @@ export default abstract class GridStyle extends Style {
 
     this.selectors.tile + `{` +
       `pointer-events:auto;` + 
-      `float:left;` + // To collapse margins
+      `float:left;` + // Prevent collapsing margins
     `}` +
 
     this.selectors.outerGrid + `{` +

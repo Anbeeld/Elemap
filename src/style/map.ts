@@ -120,6 +120,7 @@ export abstract class MapStyle extends Style {
       `position:relative;` +
       `width:max-content;` +
       `z-index:10;` +
+      `display: flex;` + // Prevent collapsing inner grid margins if outer map padding is 0
     `}` +
 
     this.selectors.content + `{` +
