@@ -1,3 +1,10 @@
+## 0.3.2
+
+- Fixed hexagon indentation applied to various elements even when it's not warranted by overall composition of tiles.
+- Fixed incorrect position of some elements if the outer map schema has padding set to zero.
+- Fixed tile importing not working if tiles are stored as a plain object.
+- Rendering now reuses style elements if they have a matching class.
+
 ## 0.3.1
 
 - Fixed errors in TypeScript definition files.
