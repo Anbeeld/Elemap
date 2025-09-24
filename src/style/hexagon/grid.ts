@@ -184,6 +184,7 @@ export default class HexagonGridStyle extends GridStyle {
   private shouldApplyIndentation() : boolean {
     let anyTileHasIndentation = false;
     let anyTileDoesNotHaveIndentation = false;
+    
     for (let row of this.owner.tiles.values) {
       for (let tile of row.values) {
         if (this.tileHasIndentation(tile.cartesianCoords)) {
@@ -199,11 +200,32 @@ export default class HexagonGridStyle extends GridStyle {
     return anyTileHasIndentation && anyTileDoesNotHaveIndentation;
   }
 
-  private tileHasIndentation(coords: CartesianCoords) : boolean {
+  private hasEdgeIndentation() : boolean {
+    let extremes = this.owner.extremes;
+
+    for (let row of this.owner.tiles.values) {
+      for (let tile of row.values) {
+        let hasIndentation = this.tileHasIndentation(tile.cartesianCoords);
+        if (hasIndentation === 'horizontal') {
+          if (tile.cartesianCoords.x === extremes.x.max) {
+            return true;
+          }
+        } else if (hasIndentation === 'vertical') {
+          if (tile.cartesianCoords.y === extremes.y.max) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private tileHasIndentation(coords: CartesianCoords) : 'horizontal'|'vertical'|false {
     if (this.owner.orientation === GridOrientation.Pointy) {
-      return (this.owner.offset === 'even' && coords.y % 2 === 0) || (this.owner.offset === 'odd' && coords.y % 2 !== 0);
+      return (this.owner.offset === 'even' && coords.y % 2 === 0) || (this.owner.offset === 'odd' && coords.y % 2 !== 0) ? 'horizontal' : false;
     } else {
-      return (this.owner.offset === 'even' && coords.x % 2 === 0) || (this.owner.offset === 'odd' && coords.x % 2 !== 0);
+      return (this.owner.offset === 'even' && coords.x % 2 === 0) || (this.owner.offset === 'odd' && coords.x % 2 !== 0) ? 'vertical' : false;
     }
   }
 
@@ -271,8 +293,8 @@ export default class HexagonGridStyle extends GridStyle {
 
   protected override get gridSize() : {width: string, height: string} {
     return {
-      width: calc.add(this.rowSize.width, this.shouldApplyIndentation() ? this.tileIndentation.horizontal : 0),
-      height: calc.add(calc.sub(calc.mult(this.tile.size.outer.height, this.owner.size.height), calc.mult(this.tileRecess.vertical, this.owner.size.height - 1)), this.shouldApplyIndentation() ? this.tileIndentation.vertical : 0)
+      width: calc.add(this.rowSize.width, this.shouldApplyIndentation() && this.hasEdgeIndentation() ? this.tileIndentation.horizontal : 0),
+      height: calc.add(calc.sub(calc.mult(this.tile.size.outer.height, this.owner.size.height), calc.mult(this.tileRecess.vertical, this.owner.size.height - 1)), this.shouldApplyIndentation() && this.hasEdgeIndentation() ? this.tileIndentation.vertical : 0)
     };
   }
   
