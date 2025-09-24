@@ -125,8 +125,17 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     }
     if (this._style !== undefined && !this.style.mannequin) {
       if (!this.elements.style) {
+        let headStyles = document.head.getElementsByTagName('style');
+        for (let style of headStyles) {
+          if (style.classList.contains('elemap-' + this.ids.map + '-css-tile-' + this.ids.tile)) {
+            this.elements.style = style;
+          }
+        }
+      }
+      if (!this.elements.style) {
         this.elements.style = document.createElement('style');
         this.elements.style.classList.add('elemap-' + this.ids.map + '-css-tile-' + this.ids.tile);
+        document.head.appendChild(this.elements.style);
       }
       if (!this.elements.outer && (this.decls.outer.length || this.decls.hover.outer.length)) {
         this.elements.outer = document.createElement('div');
@@ -148,7 +157,6 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
 
       if (this.elements!.style) {
         this.elements.style.innerHTML = this.style.core + this.style.schema + this.style.generated;
-        document.head.appendChild(this.elements.style);
       }
       if (this.elements!.outer) {
         if (!outer.contains(this.elements!.outer)) {

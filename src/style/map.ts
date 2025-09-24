@@ -48,18 +48,37 @@ export abstract class MapStyle extends Style {
     if (this.elements) {
       return this.elements;
     }
+
+    let elementStyleCore, elementStyleSchema, elementStyleGenerated;
+
+    let headStyles = document.head.getElementsByTagName('style');
+    for (let style of headStyles) {
+      if (style.classList.contains(this.owner.classes.base + '-css-core')) {
+        elementStyleCore = style;
+      } else if (style.classList.contains(this.owner.classes.base + '-css-schema')) {
+        elementStyleSchema = style;
+      } else if (style.classList.contains(this.owner.classes.base + '-css-generated')) {
+        elementStyleGenerated = style;
+      }
+    }
     
-    let elementStyleCore = document.createElement('style');
-    elementStyleCore.classList.add(this.owner.classes.base + '-css-core');
-    document.head.appendChild(elementStyleCore);
+    if (!elementStyleCore) {
+      elementStyleCore = document.createElement('style');
+      elementStyleCore.classList.add(this.owner.classes.base + '-css-core');
+      document.head.appendChild(elementStyleCore);
+    }
 
-    let elementStyleSchema = document.createElement('style');
-    elementStyleSchema.classList.add(this.owner.classes.base + '-css-schema');
-    document.head.appendChild(elementStyleSchema);
+    if (!elementStyleSchema) {
+      elementStyleSchema = document.createElement('style');
+      elementStyleSchema.classList.add(this.owner.classes.base + '-css-schema');
+      document.head.appendChild(elementStyleSchema);
+    }
 
-    let elementStyleGenerated = document.createElement('style');
-    elementStyleGenerated.classList.add(this.owner.classes.base + '-css-generated');
-    document.head.appendChild(elementStyleGenerated);
+    if (!elementStyleGenerated) {
+      elementStyleGenerated = document.createElement('style');
+      elementStyleGenerated.classList.add(this.owner.classes.base + '-css-generated');
+      document.head.appendChild(elementStyleGenerated);
+    }
 
     return {
       core: elementStyleCore,
