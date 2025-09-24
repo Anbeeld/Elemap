@@ -181,8 +181,38 @@ export default class HexagonGridStyle extends GridStyle {
     }
   }
 
+  private shouldApplyIndentation() : boolean {
+    let anyTileHasIndentation = false;
+    let anyTileDoesNotHaveIndentation = false;
+    for (let row of this.owner.tiles.values) {
+      for (let tile of row.values) {
+        if (this.tileHasIndentation(tile.cartesianCoords)) {
+          anyTileHasIndentation = true;
+        } else {
+          anyTileDoesNotHaveIndentation = true;
+        }
+      }
+      if (anyTileHasIndentation && anyTileDoesNotHaveIndentation) {
+        break;
+      }
+    }
+    return anyTileHasIndentation && anyTileDoesNotHaveIndentation;
+  }
+
+  private tileHasIndentation(coords: CartesianCoords) : boolean {
+    if (this.owner.orientation === GridOrientation.Pointy) {
+      return (this.owner.offset === 'even' && coords.y % 2 === 0) || (this.owner.offset === 'odd' && coords.y % 2 !== 0);
+    } else {
+      return (this.owner.offset === 'even' && coords.x % 2 === 0) || (this.owner.offset === 'odd' && coords.x % 2 !== 0);
+    }
+  }
+
   private cssTileIndentation() : string {
     let css = ``;
+    if (!this.shouldApplyIndentation()) {
+      return css;
+    }
+
     let extremes = this.owner.extremes;
     if (this.owner.orientation === GridOrientation.Pointy) {
       for (let y = extremes.y.min; y <= extremes.y.max; y++) {
@@ -241,8 +271,8 @@ export default class HexagonGridStyle extends GridStyle {
 
   protected override get gridSize() : {width: string, height: string} {
     return {
-      width: calc.add(this.rowSize.width, this.tileIndentation.horizontal),
-      height: calc.add(calc.sub(calc.mult(this.tile.size.outer.height, this.owner.size.height), calc.mult(this.tileRecess.vertical, this.owner.size.height - 1)), this.tileIndentation.vertical)
+      width: calc.add(this.rowSize.width, this.shouldApplyIndentation() ? this.tileIndentation.horizontal : 0),
+      height: calc.add(calc.sub(calc.mult(this.tile.size.outer.height, this.owner.size.height), calc.mult(this.tileRecess.vertical, this.owner.size.height - 1)), this.shouldApplyIndentation() ? this.tileIndentation.vertical : 0)
     };
   }
   
@@ -254,8 +284,8 @@ export default class HexagonGridStyle extends GridStyle {
     let leftPerTile = calc.sub(this.tile.size.outer.width, this.tileRecess.horizontal);
 
     return {
-      top: calc.add(calc.mult(j, topPerTile), calc.mult((this.owner.hasIndentation(coords.x) ? 1 : 0), this.tileIndentation.vertical)),
-      left: calc.add(calc.mult(i, leftPerTile), calc.mult((this.owner.hasIndentation(coords.y) ? 1 : 0), this.tileIndentation.horizontal))
+      top: calc.add(calc.mult(j, topPerTile), calc.mult((this.owner.hasIndentation(coords.x) && this.shouldApplyIndentation() ? 1 : 0), this.tileIndentation.vertical)),
+      left: calc.add(calc.mult(i, leftPerTile), calc.mult((this.owner.hasIndentation(coords.y) && this.shouldApplyIndentation() ? 1 : 0), this.tileIndentation.horizontal))
     }
   }
 
@@ -274,7 +304,7 @@ export default class HexagonGridStyle extends GridStyle {
         css +=
         this.selectors.tile + tile.selectors.data + `{` +
           // Tile indentation is already applied to the row positions
-          `left:${calc.sub(this.tileOuterPosition(tile.cartesianCoords).left, this.owner.hasIndentation(tile.cartesianCoords.y) ? this.tileIndentation.horizontal : 0)};` +
+          `left:${calc.sub(this.tileOuterPosition(tile.cartesianCoords).left, this.owner.hasIndentation(tile.cartesianCoords.y) && this.shouldApplyIndentation() ? this.tileIndentation.horizontal : 0)};` +
         `}`; 
       }
     }
