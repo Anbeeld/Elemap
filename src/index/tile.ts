@@ -2,8 +2,7 @@ import { CustomTileStyleDecls } from "../style/schema.js";
 import { demangleProperty, demangleCoords, mangleTileStyleDecls } from "../mangle.js";
 import { RectangleTile } from "../rectangle/tile.js";
 import { HexagonTile } from "../hexagon/tile.js";
-import { MapTypeStrings } from "./map.js";
-import { AxialCoords, Mutation, CartesianCoords } from "../utils.js";
+import { AxialCoords, Mutation, CartesianCoords, MapType } from "../utils.js";
 
 export type ElemapTileType<M> = 
   M extends "rectangle" ? RectangleTile :
@@ -15,7 +14,7 @@ export type ElemapCoordsType<M> =
   M extends "hexagon" ? AxialCoords :
   never;
 
-export class ElemapTile<M extends MapTypeStrings> {
+export class ElemapTile<M extends MapType> {
   private _: ElemapTileType<M>;
 
   constructor(tile: ElemapTileType<M>) {

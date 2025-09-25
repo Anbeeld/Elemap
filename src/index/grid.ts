@@ -1,8 +1,7 @@
-import { AxialCoords, Mutation, CartesianCoords, Size } from "../utils.js";
+import { AxialCoords, Mutation, CartesianCoords, Size, MapType } from "../utils.js";
 import { mangleCoords, demangleProperty } from "../mangle.js";
 import { RectangleGrid } from "../rectangle/grid.js";
 import { HexagonGrid } from "../hexagon/grid.js";
-import { MapTypeStrings } from "./map.js";
 import { ElemapTile, ElemapTileType } from "./tile.js";
 
 export type ElemapGridType<M> = 
@@ -15,7 +14,7 @@ export type ElemapCoords<M> =
   M extends "hexagon" ? AxialCoords :
   never;
 
-export class ElemapGrid<M extends MapTypeStrings> {
+export class ElemapGrid<M extends MapType> {
   private _: ElemapGridType<M>;
 
   constructor(grid: ElemapGridType<M>) {

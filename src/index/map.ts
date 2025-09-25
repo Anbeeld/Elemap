@@ -9,18 +9,16 @@ import { ElemapContent } from "./content.js";
 import { ContentArguments } from "../content.js";
 import { ContentIds } from "../register.js";
 
-export type MapTypeStrings = `${MapType}`;
-
 type ElemapType<M> = 
-  M extends "rectangle" ? RectangleMap :
-  M extends "hexagon" ? HexagonMap :
+  M extends MapType.Rectangle ? RectangleMap :
+  M extends MapType.Hexagon ? HexagonMap :
   never;
 
 export type ContentParameters = Omit<ContentArguments, 'ids'|'offset'> & {
   offset?: Position
 };
 
-export class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
+export class Elemap<M extends MapType = MapType.Rectangle> {
   private _: ElemapType<M>;
 
   constructor(type?: M, config?: Config) {
@@ -41,7 +39,6 @@ export class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     this.demangle__addContent();
     this.demangle__contentById();
     this.demangle__contentByElement();
-
   }
 
   public static import(snapshot: GridMapSnapshot) {
@@ -136,6 +133,13 @@ export class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
     return undefined;
   }
 
+  // For TypeScript - exporting enums as get methods
+  public static get MapType() {
+    return {
+      Rectangle: MapType.Rectangle,
+      Hexagon: MapType.Hexagon
+    }
+  }
   public static get GridOrientation() {
     return {
       Pointy: GridOrientation.Pointy,
