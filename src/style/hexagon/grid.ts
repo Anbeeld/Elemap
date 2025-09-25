@@ -274,12 +274,14 @@ export default class HexagonGridStyle extends GridStyle {
 
   protected override get generateRowPositions() : string {
     let css = ``;
-    let i = 0;
-    for (let y of this.owner.tiles.keys) {
+    let extremes = this.owner.extremes;
+    for (let y = extremes.y.min; y <= extremes.y.max; y++) {
+      if (!this.owner.tiles[y]) {
+        continue;
+      }
       css += this.selectors.row + `[data-elemap-y="${y}"]{` +
-        `top:${calc.sub(calc.mult(i, this.tile.size.outer.height), calc.mult(this.tileRecess.vertical, i))};` +
+        `top:${calc.sub(calc.mult(y - extremes.y.min, this.tile.size.outer.height), calc.mult(this.tileRecess.vertical, y - extremes.y.min))};` +
       `}`;
-      i++;
     }
     return css;
   }

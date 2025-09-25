@@ -226,12 +226,14 @@ export default abstract class GridStyle extends Style {
 
   protected get generateRowPositions() : string {
     let css = ``;
-    let i = 0;
-    for (let y of this.owner.tiles.keys) {
+    let extremes = this.owner.extremes;
+    for (let y = extremes.y.min; y <= extremes.y.max; y++) {
+      if (!this.owner.tiles[y]) {
+        continue;
+      }
       css += this.selectors.row + `[data-elemap-y="${y}"]{` +
-        `top:${calc.mult(i, this.tile.size.outer.height)};` +
+        `top:${calc.mult(y - extremes.y.min, this.tile.size.outer.height)};` +
       `}`;
-      i++;
     }
     return css;
   }
