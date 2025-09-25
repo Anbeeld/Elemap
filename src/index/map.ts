@@ -1,7 +1,7 @@
 import RectangleMap from "../rectangle/map.js";
 import HexagonMap from "../hexagon/map.js";
 import { Config, configToGridMapArguments } from "../config.js";
-import { MapType, Position } from "../utils.js";
+import { GridOffset, GridOrientation, MapType, Position } from "../utils.js";
 import { demangleProperty } from "../mangle.js";
 import { GridMapMutation, GridMapSnapshot } from "../map.js";
 import { ElemapGrid, ElemapGridType } from "./grid.js";
@@ -134,6 +134,19 @@ export class Elemap<M extends MapTypeStrings = `${MapType.Rectangle}`> {
       return new ElemapContent(content);
     }
     return undefined;
+  }
+
+  public static get GridOrientation() {
+    return {
+      Pointy: GridOrientation.Pointy,
+      Flat: GridOrientation.Flat
+    }
+  }
+  public static get GridOffset() {
+    return {
+      Odd: GridOffset.Odd,
+      Even: GridOffset.Even
+    }
   }
 }
 
