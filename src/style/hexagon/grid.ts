@@ -341,10 +341,25 @@ export default class HexagonGridStyle extends GridStyle {
   }
 
   protected override get gridSize() : {width: string, height: string} {
-    return {
-      width: calc.add(this.rowSize.width, this.shouldApplyIndentation() && this.hasStartIndentation() && this.hasEndIndentation() ? this.tileIndentation.horizontal : 0),
-      height: calc.add(calc.sub(calc.mult(this.tile.size.outer.height, this.owner.size.height), calc.mult(this.tileRecess.vertical, this.owner.size.height - 1)), this.shouldApplyIndentation() && this.hasStartIndentation() && this.hasEndIndentation() ? this.tileIndentation.vertical : 0)
-    };
+    let width = this.rowSize.width;
+    if (this.owner.orientation === GridOrientation.Pointy && this.shouldApplyIndentation()) {
+      if (this.hasStartIndentation() && this.hasEndIndentation()) {
+        width = calc.add(width, this.tileIndentation.horizontal);
+      } else if (!this.hasStartIndentation() && !this.hasEndIndentation()) {
+        width = calc.sub(width, this.tileIndentation.horizontal);
+      }
+    }
+
+    let height = calc.sub(calc.mult(this.tile.size.outer.height, this.owner.size.height), calc.mult(this.tileRecess.vertical, this.owner.size.height - 1));
+    if (this.owner.orientation === GridOrientation.Flat && this.shouldApplyIndentation()) {
+      if (this.hasStartIndentation() && this.hasEndIndentation()) {
+        height = calc.add(height, this.tileIndentation.vertical);
+      } else if (!this.hasStartIndentation() && !this.hasEndIndentation()) {
+        height = calc.sub(height, this.tileIndentation.vertical);
+      }
+    }
+
+    return {width, height};
   }
   
   public override tileOuterPosition(coords: CartesianCoords) : Position {
