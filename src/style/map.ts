@@ -185,6 +185,39 @@ export abstract class GridMapStyle extends MapStyle {
     this.elements.generated.innerHTML = this.generated + this.grid.generated + this.grid.tile.generated;
 
     this.grid.renderSpecificTiles();
+
+    let headStyles = document.head.getElementsByTagName('style');
+    let headStylesArray = Array.from(headStyles);
+    for (let style of headStylesArray) {
+      for (let className of style.classList) {
+        if (className.startsWith(this.owner.classes.base + '-css-')) {
+          let isRelevantElement = false;
+
+          if (style === this.elements.core || style === this.elements.schema || style === this.elements.generated) {
+            isRelevantElement = true;
+          }
+
+          if (!isRelevantElement) {
+            for (let row of this.grid.owner.tiles.values) {
+              for (let tile of row.values) {
+                if (style === tile.elements.style) {
+                  isRelevantElement = true;
+                  break;
+                }
+              }
+              if (isRelevantElement) {
+                break;
+              }
+            }
+          }
+
+          if (!isRelevantElement) {
+            style.remove();
+            console.log(className);
+          }
+        }
+      }
+    }
   }
 
   protected override compute() : void {
