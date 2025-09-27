@@ -241,6 +241,21 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
     container.innerHTML = '';
 
+    for (let row in this.elements!.outerRows) {
+      for (let element of this.elements!.outerRows[row]!.children) {
+        if (!this.tileByElement(element as HTMLElement)) {
+          this.elements!.outerRows[row]!.removeChild(element);
+        }
+      }
+    }
+    for (let row in this.elements!.innerRows) {
+      for (let element of this.elements!.innerRows[row]!.children) {
+        if (!this.tileByElement(element as HTMLElement)) {
+          this.elements!.innerRows[row]!.removeChild(element);
+        }
+      }
+    }
+
     for (let [y, row] of this.tiles) {
       if (typeof this.elements!.outerRows[y] === 'undefined') {
         this.elements!.outerRows[y] = document.createElement('div');
