@@ -1,6 +1,17 @@
+## 0.3.3
+
+- Creating tiles does not replace existing ones by default now, instead it can be enforced using a new optional "replace" argument in tile creating functions.
+- Fixed row positions calculated sequentially, leading to incorrect positioning of tiles if there are empty rows between them.
+- Fixed hexagon indentation applied to first tiles in a row or a column when there's no non-indented tiles at matching coordinates, resulting in additional margin between a map and a grid.
+- Pseudo-exported GridOrientation and GridOffset enums as static getter methods of the index class, allowing to use them for configuration in TypeScript.
+- Map type is now set by MapType enum in TypeScript instead of its string counterpart, with enum being pseudo-exported as a static getter method of the index class.
+- tileByElement method now actually checks if the HTML element is listed as being owned by the tile, instead of just having the same coordinates.
+- Rendering of tile specific styles is now performed after generic ones, preventing a number of issues.
+- HTML elements and styles belonging to tiles that no longer exist are now removed on re-rendering.
+
 ## 0.3.2
 
-- Fixed hexagon indentation applied to various elements even when it's not warranted by overall composition of tiles.
+- Fixed hexagon indentation applied to various elements when it's not warranted by overall composition of tiles.
 - Fixed incorrect position of some elements if the outer map schema has padding set to zero.
 - Fixed tile importing not working if tiles are stored as a plain object.
 - Rendering now reuses style elements if they have a matching class.

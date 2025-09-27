@@ -213,7 +213,6 @@ export abstract class GridMapStyle extends MapStyle {
 
           if (!isRelevantElement) {
             style.remove();
-            console.log(className);
           }
         }
       }
