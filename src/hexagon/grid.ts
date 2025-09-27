@@ -52,7 +52,7 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return undefined;
   }
   
-  public createTile(coords: AxialCoords|CartesianCoords|[number, number]) : void {
+  public createTile(coords: AxialCoords|CartesianCoords|[number, number], replace: boolean) : void {
     if (Array.isArray(coords)) {
       coords = {
         q: coords[0],
@@ -63,14 +63,16 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     if (!this.tiles[cartesianCoords.y]) {
       this.tiles[cartesianCoords.y] = new SignedArray<HexagonTile>();
     }
-    this.tiles[cartesianCoords.y]![cartesianCoords.x] = this.tileFactory({
-      ids: this.ids,
-      coords: this.tileCoordsFromCartesian(cartesianCoords),
-      decls: false
-    });
+    if (replace || !this.tiles[cartesianCoords.y]![cartesianCoords.x]) {
+      this.tiles[cartesianCoords.y]![cartesianCoords.x] = this.tileFactory({
+        ids: this.ids,
+        coords: this.tileCoordsFromCartesian(cartesianCoords),
+        decls: false
+      });
+    }
   }
 
-  public createTiles(size: Size, coords: AxialCoords|CartesianCoords|[number, number]) : void {
+  public createTiles(size: Size, coords: AxialCoords|CartesianCoords|[number, number], replace: boolean) : void {
     if (Array.isArray(coords)) {
       coords = {
         q: coords[0],
@@ -80,13 +82,13 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     if (isCartesianCoords(coords)) {
       for (let x = coords.x; x < coords.x + size.width; x++) {
         for (let y = coords.y; y < coords.y + size.height; y++) {
-          this.createTile(cartesianCoordsToAxial({x, y}, this.orientation, this.offset));
+          this.createTile(cartesianCoordsToAxial({x, y}, this.orientation, this.offset), replace);
         }
       }
     } else {
       for (let q = coords.q; q < coords.q + size.width; q++) {
         for (let r = coords.r; r < coords.r + size.height; r++) {
-          this.createTile({q, r});
+          this.createTile({q, r}, replace);
         }
       }
     }

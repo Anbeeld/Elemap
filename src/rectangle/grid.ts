@@ -27,7 +27,7 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     return coords;
   }
 
-  public createTile(coords: CartesianCoords|[number, number]) : void {
+  public createTile(coords: CartesianCoords|[number, number], replace: boolean) : void {
     if (Array.isArray(coords)) {
       coords = {
         x: coords[0],
@@ -37,14 +37,16 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     if (!this.tiles[coords.y]) {
       this.tiles[coords.y] = new SignedArray<RectangleTile>();
     }
-    this.tiles[coords.y]![coords.x] = this.tileFactory({
-      ids: this.ids,
-      coords: this.tileCoordsFromCartesian(coords),
-      decls: false
-    });
+    if (replace || !this.tiles[coords.y]![coords.x]) {
+      this.tiles[coords.y]![coords.x] = this.tileFactory({
+        ids: this.ids,
+        coords: this.tileCoordsFromCartesian(coords),
+        decls: false
+      });
+    }
   }
 
-  public createTiles(size: Size, coords: CartesianCoords|[number, number]) : void {
+  public createTiles(size: Size, coords: CartesianCoords|[number, number], replace: boolean) : void {
     if (Array.isArray(coords)) {
       coords = {
         x: coords[0],
@@ -53,7 +55,7 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     }
     for (let x = coords.x; x < coords.x + size.width; x++) {
       for (let y = coords.y; y < coords.y + size.height; y++) {
-        this.createTile({x, y});
+        this.createTile({x, y}, replace);
       }
     }
   }

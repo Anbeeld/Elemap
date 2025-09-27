@@ -189,9 +189,9 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     }
   }
 
-  public abstract createTile(coords: Coords|[number, number]) : void;
+  public abstract createTile(coords: Coords|[number, number], replace: boolean) : void;
 
-  public abstract createTiles(size: Size, coords: Coords|[number, number]) : void;
+  public abstract createTiles(size: Size, coords: Coords|[number, number], replace: boolean) : void;
 
   protected abstract tileFactory(args: TileArguments) : T;
   protected abstract tileImport(snapshot: TileSnapshot) : T;
