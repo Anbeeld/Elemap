@@ -299,4 +299,12 @@ export default abstract class GridStyle extends Style {
       left: calc.add(this.map.computed.map.paddingLeft, calc.div(this.spacing, 2))
     }
   }
+
+  public renderSpecificTiles() : void {
+    for (let row of this.owner.tiles.values) {
+      for (let tile of row.values) {
+        tile.renderSpecific();
+      }
+    }
+  }
 }

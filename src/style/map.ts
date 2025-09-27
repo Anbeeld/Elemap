@@ -183,6 +183,8 @@ export abstract class GridMapStyle extends MapStyle {
     this.compute();
 
     this.elements.generated.innerHTML = this.generated + this.grid.generated + this.grid.tile.generated;
+
+    this.grid.renderSpecificTiles();
   }
 
   protected override compute() : void {
