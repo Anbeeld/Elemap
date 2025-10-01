@@ -1,3 +1,15 @@
+## 0.3.4
+
+- Renamed mutations to extensions, and mutate method to extend.
+- Replaced report method with extensions getter method.
+- createTile method now returns an object of the tile index class if it was created, or false if it wasn't. Same goes for createTiles method, but this one returns an array of them.
+- Fixed TypeScript createTile method missing "replace" argument.
+- Fixed getter methods of index classes returning any in TypeScript.
+- Fixed carthesian coords not allowed in TypeScript for accessing hexagon map tiles.
+- Fixed some types used in index classes still checking map type by string instead of MapType enum.
+- Fixed incorrect naming scheme for internal types of the extension system.
+- Renamed internal SomethingConstants types to SomethingProperties.
+
 ## 0.3.3
 
 - Creating tiles does not replace existing ones by default now, instead it can be enforced using a new optional "replace" argument in tile creating functions.
