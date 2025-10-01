@@ -1,4 +1,4 @@
-import { Register, StyleIds } from "../register.js";
+import { Registry, StyleIds } from "../registry.js";
 // import { GridMapStyleSchema } from "./set.js";
 
 export default abstract class Style {
@@ -10,7 +10,7 @@ export default abstract class Style {
 
   public constructor() {}
 
-  public get owner() : any { return Register.map.abstract(this.ids.owner)!; }
+  public get owner() : any { return Registry.map.abstract(this.ids.owner)!; }
 
   public get selectors() {
     return {

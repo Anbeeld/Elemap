@@ -1,4 +1,4 @@
-import { MapIds, Register, MapStyleIds } from "../register.js";
+import { MapIds, Registry, MapStyleIds } from "../registry.js";
 import { MapStyleDecls, GridMapStyleSchema, GridStyleSchema } from "./schema.js";
 import Style from "./style.js";
 import GridStyle from "./grid.js";
@@ -33,7 +33,7 @@ export abstract class MapStyle extends Style {
 
   public constructor(mapIds: MapIds, decls: GridMapStyleSchema) {
     super();
-    this.ids = new MapStyleIds(mapIds, Register.id());
+    this.ids = new MapStyleIds(mapIds, Registry.id());
     this.decls = decls.map;
   }
 
@@ -162,7 +162,7 @@ export abstract class GridMapStyle extends MapStyle {
   protected set grid(value: GridStyle) { this._grid = value; }
   public get grid() : GridStyle { return this._grid; }
 
-  public override get owner() { return Register.map.grid(this.ids.owner)!; }
+  public override get owner() { return Registry.map.grid(this.ids.owner)!; }
 
   public constructor(mapIds: MapIds, decls: GridMapStyleSchema) {
     super(mapIds, decls);

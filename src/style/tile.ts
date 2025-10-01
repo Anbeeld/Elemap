@@ -1,5 +1,5 @@
 import { Position, TileSizeSet } from "../utils.js";
-import { TileStyleIds, GridStyleIds, Register, TileIds } from "../register.js";
+import { TileStyleIds, GridStyleIds, Registry, TileIds } from "../registry.js";
 import { TileStyleDecls } from "./schema.js";
 import Style from "./style.js";
 import { calc } from "./utils.js";
@@ -14,9 +14,9 @@ export default abstract class TileStyle extends Style {
   protected set ids(value: TileStyleIds) { this._ids = value; }
   public get ids() : TileStyleIds { return this._ids; }
 
-  public override get owner() { return Register.tile.abstract(this.ids.owner)!; }
+  public override get owner() { return Registry.tile.abstract(this.ids.owner)!; }
 
-  public get grid() { return Register.style.grid(this.ids.owner)!; }
+  public get grid() { return Registry.style.grid(this.ids.owner)!; }
 
   public mannequin: boolean;
 
@@ -44,7 +44,7 @@ export default abstract class TileStyle extends Style {
 
   public constructor(ownerIds: TileIds, gridIds: GridStyleIds, decls: TileStyleDecls, mannequin: boolean = false) {
     super();
-    this.ids = new TileStyleIds(ownerIds, gridIds, Register.id());
+    this.ids = new TileStyleIds(ownerIds, gridIds, Registry.id());
     this.mannequin = mannequin;
     this.decls = decls;
   }

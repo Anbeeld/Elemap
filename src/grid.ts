@@ -1,6 +1,6 @@
 import { AbstractTile, TileArguments, TileSnapshot } from "./tile.js";
 import { Size, GridOrientation, GridOffset, CartesianCoords, mergeDeep, Mutations, Mutation, SignedArray, SignedTable, Coords } from "./utils.js";
-import { GridIds, GridIdsProperties, MapIdsProperties, Register, TileIds } from "./register.js";
+import { GridIds, GridIdsProperties, MapIdsProperties, Registry, TileIds } from "./registry.js";
 import { GridStyleSchema } from "./style/schema.js";
 import { demangleProperties, demangleGridIds, demangleGridStyleSchema, demangleProperty } from "./mangle.js";
 
@@ -91,7 +91,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return undefined;
   }
 
-  public get style() { return Register.map.grid(this.ids)!.style.grid; }
+  public get style() { return Registry.map.grid(this.ids)!.style.grid; }
   public get schema() : GridStyleSchema { return {grid: this.style.decls, tile: this.style.tile.decls}; }
 
   public get classes() {
@@ -127,7 +127,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     if (typeof (args.ids as GridIdsProperties).grid === 'number') {
       this.ids = new GridIds(args.ids, (args.ids as GridIdsProperties).grid);
     } else {
-      this.ids = new GridIds(args.ids, Register.id());
+      this.ids = new GridIds(args.ids, Registry.id());
     }
 
     this.orientation = args.orientation;

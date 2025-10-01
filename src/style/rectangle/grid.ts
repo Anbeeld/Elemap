@@ -1,5 +1,5 @@
 import { RectangleTile } from "../../rectangle/tile.js";
-import { Register } from "../../register.js";
+import { Registry } from "../../registry.js";
 import { generateRectanglePath, roundFloat, TileSize } from "../../utils.js";
 import GridStyle from "../grid.js";
 import { TileStyleDecls } from "../schema.js";
@@ -7,7 +7,7 @@ import { calc, cssValueToNumber } from "../utils.js";
 import RectangleTileStyle from "./tile.js";
 
 export default class RectangleGridStyle extends GridStyle {
-  public override get owner() { return Register.grid.rectangle(this.ids.owner)!; }
+  public override get owner() { return Registry.grid.rectangle(this.ids.owner)!; }
 
   protected override _tile: RectangleTileStyle;
   protected override set tile(value: RectangleTileStyle) { this._tile = value; }

@@ -1,7 +1,7 @@
 import { Coords, getCoordsRow, mergeDeep, Mutations, Mutation, CartesianCoords } from './utils.js';
 import { demangleProperties, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
-import { GridIdsProperties, Register, TileIds, TileIdsProperties } from './register.js';
+import { GridIdsProperties, Registry, TileIds, TileIdsProperties } from './registry.js';
 import TileStyle from './style/tile.js';
 import { modifyTileStyleDecls, CustomTileStyleDecls, TileStyleDecls } from './style/schema.js';
 
@@ -28,7 +28,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   protected set ids(value: TileIds) { this._ids = value; }
   public get ids() : TileIds { return this._ids; }
 
-  public get grid() { return Register.grid.abstract(this.ids)!; }
+  public get grid() { return Registry.grid.abstract(this.ids)!; }
 
   protected _style: TileStyle|undefined;
   protected set style(value: TileStyle) { this._style = value; }
@@ -36,7 +36,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     if (this._style !== undefined) {
       return this._style;
     } else {
-      return Register.style.tile(this.ids)!;
+      return Registry.style.tile(this.ids)!;
     }
   }
   public get decls() : TileStyleDecls { return this.style.decls; }
@@ -61,7 +61,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     if (typeof (args.ids as TileIdsProperties).tile === 'number') {
       this.ids = new TileIds(args.ids, (args.ids as TileIdsProperties).tile);
     } else {
-      this.ids = new TileIds(args.ids, Register.id());
+      this.ids = new TileIds(args.ids, Registry.id());
     }
     this.coords = args.coords;
 
@@ -207,20 +207,20 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
   }
 
   public hover() : void {
-    let grid = Register.grid.abstract(this.ids);
+    let grid = Registry.grid.abstract(this.ids);
     if (grid) {
       grid.setContourPosition(this.elementOffset)
     }
   }
   public unhover() : void {
-    let grid = Register.grid.abstract(this.ids);
+    let grid = Registry.grid.abstract(this.ids);
     if (grid) {
       grid.setContourPosition(false);
     }
   }
 
   protected get elementOffset() : CartesianCoords {
-    let grid = Register.grid.abstract(this.ids);
+    let grid = Registry.grid.abstract(this.ids);
     if (grid) {
       let element = this.elements!.inner;
       let offset: CartesianCoords = {x: 0, y: 0};

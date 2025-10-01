@@ -1,7 +1,7 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
 import { CartesianCoords } from '../utils.js';
 import { demangleProperty } from '../mangle.js';
-import { Register } from '../register.js';
+import { Registry } from '../registry.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';
 
@@ -29,7 +29,7 @@ export class RectangleTile extends AbstractTile<CartesianCoords> {
     if (this._style !== undefined) {
       return this._style;
     } else {
-      return Register.style.tile(this.ids)!;
+      return Registry.style.tile(this.ids)!;
     }
   }
 

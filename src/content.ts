@@ -1,6 +1,6 @@
 import { mergeDeep, Mutations, Mutation, Position } from './utils.js';
 import { demangleProperties, demangleContentIds, mangleContentSnapshot, demangleContentLocationIds } from './mangle.js';
-import { Register, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties } from './register.js';
+import { Registry, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties } from './registry.js';
 import { AbstractTile } from './tile.js';
 import { calc } from './style/utils.js';
 
@@ -31,7 +31,7 @@ export class Content implements ContentConstants, Mutations {
   protected set ids(value: ContentIds) { this._ids = value; }
   public get ids() : ContentIds { return this._ids; }
 
-  public get map() { return Register.map.abstract(this.ids)!; }
+  public get map() { return Registry.map.abstract(this.ids)!; }
 
   protected _figure: string;
   protected set figure(value: string) { this._figure = value; }
@@ -43,9 +43,9 @@ export class Content implements ContentConstants, Mutations {
 
   public get host() : ContentLocation {
     if ((this._location as ContentIdsProperties).content) {
-      return Register.content(this._location as ContentIdsProperties)!;
+      return Registry.content(this._location as ContentIdsProperties)!;
     } else if ((this._location as TileIdsProperties).tile) {
-      return Register.tile.abstract(this._location as TileIdsProperties)!;
+      return Registry.tile.abstract(this._location as TileIdsProperties)!;
     }
     return undefined;
   }
@@ -66,7 +66,7 @@ export class Content implements ContentConstants, Mutations {
     if (typeof (args.ids as ContentIdsProperties).content === 'number') {
       this.ids = new ContentIds(args.ids, (args.ids as ContentIdsProperties).content);
     } else {
-      this.ids = new ContentIds(args.ids, Register.id());
+      this.ids = new ContentIds(args.ids, Registry.id());
     }
 
     if (typeof args.figure === 'string') {

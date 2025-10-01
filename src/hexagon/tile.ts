@@ -1,7 +1,7 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
 import { AxialCoords, axialCoordsToCartesian, CartesianCoords } from '../utils.js';
 import { demangleProperty } from '../mangle.js';
-import { Register } from '../register.js';
+import { Registry } from '../registry.js';
 import { TileStyleDecls } from '../style/schema.js';
 import HexagonTileStyle from '../style/hexagon/tile.js';
 
@@ -33,7 +33,7 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
     if (this._style !== undefined) {
       return this._style;
     } else {
-      return Register.style.tile(this.ids)!;
+      return Registry.style.tile(this.ids)!;
     }
   }
 

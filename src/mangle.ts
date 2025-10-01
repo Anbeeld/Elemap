@@ -2,7 +2,7 @@
 // import { GridMapSnapshot } from './map.js';
 import { ContentLocationIds, ContentSnapshot } from './content.js';
 import { ContentParameters } from './index/map.js';
-import { ContentIds, ContentIdsProperties, GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './register.js';
+import { ContentIds, ContentIdsProperties, GridIds, GridIdsProperties, MapIds, MapIdsProperties, TileIds, TileIdsProperties } from './registry.js';
 import { GridMapStyleSchema, GridStyleDecls, GridStyleSchema, MapStyleDecls, TileStyleDecls } from './style/schema.js';
 import { TileSnapshot } from './tile.js';
 import { AxialCoords, Coords, CartesianCoords } from './utils.js';

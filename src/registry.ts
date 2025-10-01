@@ -79,21 +79,21 @@ export class TileStyleIds extends GridStyleIds {
   }
 }
 
-export class Register {
+export class Registry {
   private static _id: number = 0;
-  public static id() : number { return Register._id++; }
+  public static id() : number { return Registry._id++; }
   
   private static maps: Map<number, AbstractMap> = new Map();
   public static add(map: AbstractMap) : void {
-    Register.maps.set(map.ids.map, map);
+    Registry.maps.set(map.ids.map, map);
   }
 
   public static map = {
     abstract: (ids: MapIds) : AbstractMap|undefined => {
-      return Register.maps.get(ids.map);
+      return Registry.maps.get(ids.map);
     },
     grid: (ids: MapIds) : AbstractGridMap|undefined => {
-      let map = Register.map.abstract(ids);
+      let map = Registry.map.abstract(ids);
       if (map && map instanceof AbstractGridMap) {
         return map;
       }
@@ -103,21 +103,21 @@ export class Register {
 
   public static grid = {
     abstract: (ids: MapIds) : AbstractGrid|undefined => {
-      let map = Register.map.abstract(ids);
+      let map = Registry.map.abstract(ids);
       if (map && map instanceof AbstractGridMap) {
         return map.grid;
       }
       return undefined;
     },
     rectangle: (ids: MapIds) : RectangleGrid|undefined => {
-      let map = Register.map.abstract(ids);
+      let map = Registry.map.abstract(ids);
       if (map && map instanceof AbstractGridMap) {
         return map.grid;
       }
       return undefined;
     },
     hexagon: (ids: MapIds) : HexagonGrid|undefined => {
-      let map = Register.map.abstract(ids);
+      let map = Registry.map.abstract(ids);
       if (map && map instanceof AbstractGridMap) {
         return map.grid;
       }
@@ -127,7 +127,7 @@ export class Register {
 
   public static tile = {
     abstract: (ids: TileIds) : AbstractTile|undefined => {
-      let grid = Register.grid.abstract(ids);
+      let grid = Registry.grid.abstract(ids);
       if (grid) {
         return grid.tileById(ids);
       }
@@ -136,7 +136,7 @@ export class Register {
   }
 
   public static content(ids: ContentIds) : Content|undefined {
-    let map = Register.map.abstract(ids);
+    let map = Registry.map.abstract(ids);
     if (map) {
       return map.contentById(ids);
     }
@@ -146,7 +146,7 @@ export class Register {
   public static style = {
     map: {
       grid: (ids: MapIds) : GridMapStyle|undefined => {
-        let map = Register.map.abstract(ids);
+        let map = Registry.map.abstract(ids);
         if (map && map instanceof AbstractGridMap) {
           return map.style;
         }
@@ -154,14 +154,14 @@ export class Register {
       }
     },
     grid: (ids: MapIds) : GridStyle|undefined => {
-      let map = Register.map.abstract(ids);
+      let map = Registry.map.abstract(ids);
       if (map && map instanceof AbstractGridMap) {
         return map.style.grid;
       }
       return undefined;
     },
     tile: (ids: MapIds) : TileStyle|undefined => {
-      let map = Register.map.abstract(ids);
+      let map = Registry.map.abstract(ids);
       if (map && map instanceof AbstractGridMap) {
         if (map.style.grid && map.style.grid instanceof GridStyle) {
           return map.style.grid.tile;

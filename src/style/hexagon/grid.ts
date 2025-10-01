@@ -1,5 +1,5 @@
 import { HexagonTile } from "../../hexagon/tile.js";
-import { Register } from "../../register.js";
+import { Registry } from "../../registry.js";
 import { generateHexagonPath, GridOrientation, hexagonSize, hexagonSizeDecls, hexagonSizeRatio, CartesianCoords, Position, roundFloat } from "../../utils.js";
 import GridStyle from "../grid.js";
 import { TileStyleDecls } from "../schema.js";
@@ -7,7 +7,7 @@ import { calc, cssValueToNumber } from "../utils.js";
 import HexagonTileStyle from "./tile.js";
 
 export default class HexagonGridStyle extends GridStyle {
-  public override get owner() { return Register.grid.hexagon(this.ids.owner)!; }
+  public override get owner() { return Registry.grid.hexagon(this.ids.owner)!; }
 
   protected override _tile: HexagonTileStyle;
   protected override set tile(value: HexagonTileStyle) { this._tile = value; }

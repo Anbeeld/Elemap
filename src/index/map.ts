@@ -7,7 +7,7 @@ import { GridMapMutation, GridMapSnapshot } from "../map.js";
 import { ElemapGrid, ElemapGridType } from "./grid.js";
 import { ElemapContent } from "./content.js";
 import { ContentArguments } from "../content.js";
-import { ContentIds } from "../register.js";
+import { ContentIds } from "../registry.js";
 
 type ElemapType<M> = 
   M extends MapType.Rectangle ? RectangleMap :

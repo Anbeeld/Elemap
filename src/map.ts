@@ -2,7 +2,7 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
-import { ContentIds, GridIdsProperties, MapIds, MapIdsProperties, Register } from './register.js';
+import { ContentIds, GridIdsProperties, MapIds, MapIdsProperties, Registry } from './registry.js';
 import { MapType, mergeDeep, Mutations, Mutation, signedTablefromObject, } from './utils.js';
 import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleContentParams } from './mangle.js';
 import { Content, ContentSnapshot } from './content.js';
@@ -62,9 +62,9 @@ export abstract class AbstractMap implements MapConstants, Mutations {
     if (args.ids && typeof args.ids.map === 'number') {
       this.ids = new MapIds(args.ids.map);
     } else {
-      this.ids = new MapIds(Register.id());
+      this.ids = new MapIds(Registry.id());
     }
-    Register.add(this);
+    Registry.add(this);
 
     if (args.contents) {
       this.importContents(args.contents);

@@ -1,4 +1,4 @@
-import { GridIds, GridStyleIds, MapStyleIds, Register } from "../register.js";
+import { GridIds, GridStyleIds, MapStyleIds, Registry } from "../registry.js";
 import { GridStyleDecls, GridStyleSchema, TileStyleDecls } from "./schema.js";
 import TileStyle from "./tile.js";
 import Style from "./style.js";
@@ -16,8 +16,8 @@ export default abstract class GridStyle extends Style {
   protected set ids(value: GridStyleIds) { this._ids = value; }
   public get ids() : GridStyleIds { return this._ids; }
 
-  public override get owner() { return Register.grid.abstract(this.ids.owner)!; }
-  public get map() { return Register.style.map.grid(this.ids.owner)!; }
+  public override get owner() { return Registry.grid.abstract(this.ids.owner)!; }
+  public get map() { return Registry.style.map.grid(this.ids.owner)!; }
 
   protected _decls: GridStyleDecls;
   protected set decls(value: GridStyleDecls) { this._decls = value; }
@@ -33,7 +33,7 @@ export default abstract class GridStyle extends Style {
 
   public constructor(ownerIds: GridIds, mapIds: MapStyleIds, decls: GridStyleSchema) {
     super();
-    this.ids = new GridStyleIds(ownerIds, mapIds, Register.id());
+    this.ids = new GridStyleIds(ownerIds, mapIds, Registry.id());
     this.initTile(decls.tile);
     this.decls = decls.grid;
   }
