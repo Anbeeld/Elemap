@@ -5,13 +5,13 @@ import { HexagonTile } from "../hexagon/tile.js";
 import { AxialCoords, Extensions, CartesianCoords, MapType } from "../utils.js";
 
 export type ElemapTileType<M> = 
-  M extends "rectangle" ? RectangleTile :
-  M extends "hexagon" ? HexagonTile :
+  M extends MapType.Rectangle ? RectangleTile :
+  M extends MapType.Hexagon ? HexagonTile :
   never;
 
 export type ElemapCoordsType<M> = 
-  M extends "rectangle" ? CartesianCoords :
-  M extends "hexagon" ? AxialCoords :
+  M extends MapType.Rectangle ? CartesianCoords :
+  M extends MapType.Hexagon ? AxialCoords :
   never;
 
 export class ElemapTile<M extends MapType> {
