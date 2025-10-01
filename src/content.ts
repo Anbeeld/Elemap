@@ -1,11 +1,11 @@
-import { mergeDeep, Extensions, Extension, Position } from './utils.js';
+import { mergeDeep, Extendable, Extensions, Position } from './utils.js';
 import { demangleProperties, demangleContentIds, mangleContentSnapshot, demangleContentLocationIds } from './mangle.js';
 import { Registry, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties } from './registry.js';
 import { AbstractTile } from './tile.js';
 import { calc } from './style/utils.js';
 
 // Snapshot and extension types
-export type ContentSnapshot = ContentConstants & Extensions;
+export type ContentSnapshot = ContentConstants & Extendable;
 export type ContentConstants = {
   ids: ContentIdsProperties,
   figure: string,
@@ -26,7 +26,7 @@ type ContentElements = {
   container?: HTMLElement
 }
 
-export class Content implements ContentConstants, Extensions {
+export class Content implements ContentConstants, Extendable {
   protected _ids: ContentIds;
   protected set ids(value: ContentIds) { this._ids = value; }
   public get ids() : ContentIds { return this._ids; }
@@ -87,7 +87,7 @@ export class Content implements ContentConstants, Extensions {
     instance.extend(snapshot);
     return instance;
   }
-  public extend(extension: Extension) : void {
+  public extend(extension: Extensions) : void {
     mergeDeep(this.extensions, extension);
   }
 
@@ -103,11 +103,11 @@ export class Content implements ContentConstants, Extensions {
     ]);
     return object as ContentConstants;
   }
-  protected exportExtensions(object: object = {}) : Extensions {
+  protected exportExtensions(object: object = {}) : Extendable {
     demangleProperties(object, [
       ['extensions', this.extensions]
     ]);
-    return object as Extensions;
+    return object as Extendable;
   }
 
   public hover() : void {

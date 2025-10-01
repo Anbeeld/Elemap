@@ -3,7 +3,7 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { ContentIds, GridIdsProperties, MapIds, MapIdsProperties, Registry } from './registry.js';
-import { MapType, mergeDeep, Extensions, Extension, signedTablefromObject, } from './utils.js';
+import { MapType, mergeDeep, Extendable, Extensions, signedTablefromObject, } from './utils.js';
 import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleContentParams } from './mangle.js';
 import { Content, ContentSnapshot } from './content.js';
 import { ElemapContent } from './index/content.js'
@@ -19,7 +19,7 @@ interface MapElements {
 // Snapshot and extension types
 export type MapSnapshot = {
   type: MapType,
-} & MapConstants & Extensions;
+} & MapConstants & Extendable;
 type MapConstants = {
   ids: MapIdsProperties,
   contents: ContentSnapshot[]
@@ -29,7 +29,7 @@ export type MapArguments = Omit<MapConstants, 'ids'> & {
   ids: MapIdsProperties | undefined
 };
 
-export abstract class AbstractMap implements MapConstants, Extensions {
+export abstract class AbstractMap implements MapConstants, Extendable {
   protected _ids: MapIds;
   protected set ids(value: MapIds) { this._ids = value; }
   public get ids() : MapIds { return this._ids; }
@@ -86,11 +86,11 @@ export abstract class AbstractMap implements MapConstants, Extensions {
     ]);
     return object as MapConstants;
   }
-  protected exportExtensions(object: object = {}) : Extensions {
+  protected exportExtensions(object: object = {}) : Extendable {
     demangleProperties(object, [
       ['extensions', this.extensions]
     ]);
-    return object as Extensions;
+    return object as Extendable;
   }
   protected abstract exportMapType() : string;
   
@@ -194,12 +194,12 @@ export abstract class AbstractMap implements MapConstants, Extensions {
 export type GridMapSnapshot = {
   type: MapType,
 } & GridMapConstants & GridMapExtensions;
-export type GridMapExtension = Extension;
+export type GridMapExtension = Extensions;
 type GridMapConstants = MapConstants & {
   grid: GridSnapshot,
   schema: GridMapStyleSchema
 };
-type GridMapExtensions = Extensions;
+type GridMapExtensions = Extendable;
 
 export type GridMapArguments = Omit<GridMapConstants, 'ids' | 'grid'> & {
   ids: MapIdsProperties | undefined,

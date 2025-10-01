@@ -1,11 +1,11 @@
 import { AbstractTile, TileArguments, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, CartesianCoords, mergeDeep, Extensions, Extension, SignedArray, SignedTable, Coords } from "./utils.js";
+import { Size, GridOrientation, GridOffset, CartesianCoords, mergeDeep, Extendable, Extensions, SignedArray, SignedTable, Coords } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Registry, TileIds } from "./registry.js";
 import { GridStyleSchema } from "./style/schema.js";
 import { demangleProperties, demangleGridIds, demangleGridStyleSchema, demangleProperty } from "./mangle.js";
 
 // Snapshot and extension types
-export type GridSnapshot = GridConstants & Extensions;
+export type GridSnapshot = GridConstants & Extendable;
 type GridConstants = {
   ids: GridIdsProperties,
   orientation: GridOrientation,
@@ -34,7 +34,7 @@ interface GridElements {
   contourHover: HTMLElement;
 }
 
-export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implements GridConstants, Extensions {
+export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implements GridConstants, Extendable {
   protected _ids: GridIds;
   protected set ids(value: GridIds) { this._ids = value; }
   public get ids() : GridIds { return this._ids; }
@@ -141,7 +141,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     instance.extend(snapshot);
     return instance;
   }
-  public extend(extension: Extension) : void {
+  public extend(extension: Extensions) : void {
     mergeDeep(this.extensions, extension);
   }
 
@@ -168,11 +168,11 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     ]);
     return object as GridConstants;
   }
-  protected exportExtensions(object: object = {}) : Extensions {
+  protected exportExtensions(object: object = {}) : Extendable {
     demangleProperties(object, [
       ['extensions', this.extensions]
     ]);
-    return object as Extensions;
+    return object as Extendable;
   }
 
   public importTiles(snapshot: SignedTable<TileSnapshot>) : void {

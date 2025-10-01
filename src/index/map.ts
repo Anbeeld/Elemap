@@ -56,7 +56,7 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
   }
 
   public set extensions(value: any) { value; }
-  public get extensions() { return this.method__extensions(); }
+  public get extensions() : Extensions { return this.method__extensions(); }
   private demangle__extensions() {
     demangleProperty(this, 'extensions', {
       set: (value: any) => { value; },
@@ -86,7 +86,7 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
   }
 
   public set grid(value: any) { value; }
-  public get grid() { return this.method__grid(); }
+  public get grid() : ElemapGrid<M>|undefined { return this.method__grid(); }
   private demangle__grid() {
     demangleProperty(this, 'grid', {
       set: (value: any) => { value; },

@@ -1,4 +1,4 @@
-import { Extension } from '../utils.js';
+import { Extensions } from '../utils.js';
 import { Content } from '../content.js';
 import { demangleProperty } from '../mangle.js';
 
@@ -13,13 +13,13 @@ export class ElemapContent {
     this.demangle__extensions();
   }
   
-  public extend(extension: Extension) : void {
+  public extend(extension: Extensions) : void {
     return this.method__extend(extension);
   }
   private demangle__extend() {
-    demangleProperty(this, 'extend', (extension: Extension) => this.method__extend(extension));
+    demangleProperty(this, 'extend', (extension: Extensions) => this.method__extend(extension));
   }
-  private method__extend(extension: Extension) {
+  private method__extend(extension: Extensions) {
     return this._.extend(extension);
   }
 

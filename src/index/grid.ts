@@ -1,4 +1,4 @@
-import { AxialCoords, Extension, CartesianCoords, Size, MapType } from "../utils.js";
+import { AxialCoords, Extensions, CartesianCoords, Size, MapType } from "../utils.js";
 import { mangleCoords, demangleProperty } from "../mangle.js";
 import { RectangleGrid } from "../rectangle/grid.js";
 import { HexagonGrid } from "../hexagon/grid.js";
@@ -51,13 +51,13 @@ export class ElemapGrid<M extends MapType> {
     return this._.extensions;
   }
 
-  public extend(extension: Extension) : void {
+  public extend(extension: Extensions) : void {
     return this.method__extend(extension);
   }
   private demangle__extend() {
-    demangleProperty(this, 'extend', (extension: Extension) => this.method__extend(extension));
+    demangleProperty(this, 'extend', (extension: Extensions) => this.method__extend(extension));
   }
-  private method__extend(extension: Extension) {
+  private method__extend(extension: Extensions) {
     return this._.extend(extension);
   }
 

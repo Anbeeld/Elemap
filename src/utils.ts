@@ -379,8 +379,8 @@ export type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>;
 } : T;
 
-export type Extension = Record<string, any>;
-export type Extensions = { extensions: Extension };
+export type Extensions = Record<string, any>;
+export type Extendable = { extensions: Extensions };
 
 export class SignedArray<V> {
   [key: number]: V

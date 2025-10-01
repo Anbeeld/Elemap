@@ -1,4 +1,4 @@
-import { Coords, getCoordsRow, mergeDeep, Extensions, Extension, CartesianCoords } from './utils.js';
+import { Coords, getCoordsRow, mergeDeep, Extendable, Extensions, CartesianCoords } from './utils.js';
 import { demangleProperties, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Registry, TileIds, TileIdsProperties } from './registry.js';
@@ -6,7 +6,7 @@ import TileStyle from './style/tile.js';
 import { modifyTileStyleDecls, CustomTileStyleDecls, TileStyleDecls } from './style/schema.js';
 
 // Snapshot and extension types
-export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & Extensions;
+export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & Extendable;
 export type TileConstants<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   coords: C,
@@ -23,7 +23,7 @@ type TileElements = {
   style?: HTMLElement
 }
 
-export abstract class AbstractTile<C extends Coords = Coords> implements TileConstants<C>, Extensions {
+export abstract class AbstractTile<C extends Coords = Coords> implements TileConstants<C>, Extendable {
   protected _ids: TileIds;
   protected set ids(value: TileIds) { this._ids = value; }
   public get ids() : TileIds { return this._ids; }
@@ -77,7 +77,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     instance.extend(snapshot);
     return instance;
   }
-  public extend(extension: Extension) : void {
+  public extend(extension: Extensions) : void {
     mergeDeep(this.extensions, extension);
   }
 
@@ -93,11 +93,11 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     ]);
     return object as TileConstants<C>;
   }
-  protected exportExtensions(object: object = {}) : Extensions {
+  protected exportExtensions(object: object = {}) : Extendable {
     demangleProperties(object, [
       ['extensions', this.extensions]
     ]);
-    return object as Extensions;
+    return object as Extendable;
   }
 
   protected abstract createStyle(decls: CustomTileStyleDecls) : TileStyle;
