@@ -27,7 +27,7 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     return coords;
   }
 
-  public createTile(coords: CartesianCoords|[number, number], replace: boolean) : void {
+  public createTile(coords: CartesianCoords|[number, number], replace: boolean) : CartesianCoords|false {
     if (Array.isArray(coords)) {
       coords = {
         x: coords[0],
@@ -43,7 +43,9 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
         coords: this.tileCoordsFromCartesian(coords),
         decls: false
       });
+      return coords;
     }
+    return false;
   }
 
   public createTiles(size: Size, coords: CartesianCoords|[number, number], replace: boolean) : void {

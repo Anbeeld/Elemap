@@ -186,7 +186,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     }
   }
 
-  public abstract createTile(coords: Coords|[number, number], replace: boolean) : void;
+  public abstract createTile(coords: Coords|[number, number], replace: boolean) : Coords|false;
 
   public abstract createTiles(size: Size, coords: Coords|[number, number], replace: boolean) : void;
 

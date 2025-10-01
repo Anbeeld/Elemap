@@ -79,15 +79,19 @@ export class ElemapGrid<M extends MapType> {
     return undefined;
   }
 
-  public createTile(coords: ElemapCoords<M>|[number, number], replace: boolean = false) : void {
+  public createTile(coords: AccessCoords<M>|[number, number], replace: boolean = false) : ElemapTile<M>|false {
     return this.method__createTile(coords, replace);
   }
   private demangle__createTile() {
-    demangleProperty(this, 'createTile', (coords: ElemapCoords<M>|[number, number], replace: boolean = false) => this.method__createTile(coords, replace));
+    demangleProperty(this, 'createTile', (coords: AccessCoords<M>|[number, number], replace: boolean = false) => this.method__createTile(coords, replace));
   }
-  private method__createTile(coords: ElemapCoords<M>|[number, number], replace: boolean) {
+  private method__createTile(coords: AccessCoords<M>|[number, number], replace: boolean) : ElemapTile<M>|false {
     // @ts-ignore coords &
-    return this._.createTile(coords, replace);
+    let result = this._.createTile(coords, replace);
+    if (result) {
+      return this.method__tileByCoords(result as AccessCoords<M>) || false;
+    }
+    return false;
   }
 
   public createTiles(size: Size, coords: ElemapCoords<M>|[number, number] = [0, 0], replace: boolean = false) : void {

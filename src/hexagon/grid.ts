@@ -57,7 +57,7 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return undefined;
   }
   
-  public createTile(coords: AxialCoords|CartesianCoords|[number, number], replace: boolean) : void {
+  public createTile(coords: AxialCoords|CartesianCoords|[number, number], replace: boolean) : AxialCoords|CartesianCoords|false {
     if (Array.isArray(coords)) {
       coords = {
         q: coords[0],
@@ -74,7 +74,9 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
         coords: this.tileCoordsFromCartesian(cartesianCoords),
         decls: false
       });
+      return coords;
     }
+    return false;
   }
 
   public createTiles(size: Size, coords: AxialCoords|CartesianCoords|[number, number], replace: boolean) : void {
