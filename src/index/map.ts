@@ -1,7 +1,7 @@
 import RectangleMap from "../rectangle/map.js";
 import HexagonMap from "../hexagon/map.js";
 import { Config, configToGridMapArguments } from "../config.js";
-import { GridOffset, GridOrientation, MapType, Position } from "../utils.js";
+import { Extensions, GridOffset, GridOrientation, MapType, Position } from "../utils.js";
 import { demangleProperty } from "../mangle.js";
 import { GridMapExtension, GridMapSnapshot } from "../map.js";
 import { ElemapGrid, ElemapGridType } from "./grid.js";
@@ -55,11 +55,11 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
     return this._.export();
   }
 
-  public set extensions(value: any) { value; }
-  public get extensions() : Extensions { return this.method__extensions(); }
+  public set extensions(value: Extensions) { value; }
+  public get extensions() { return this.method__extensions(); }
   private demangle__extensions() {
     demangleProperty(this, 'extensions', {
-      set: (value: any) => { value; },
+      set: (value: Extensions) => { value; },
       get: () => this.method__extensions()
     });
   }
@@ -85,11 +85,11 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
     this._.render(container);
   }
 
-  public set grid(value: any) { value; }
-  public get grid() : ElemapGrid<M>|undefined { return this.method__grid(); }
+  public set grid(value: ElemapGrid<M>|undefined) { value; }
+  public get grid() { return this.method__grid(); }
   private demangle__grid() {
     demangleProperty(this, 'grid', {
-      set: (value: any) => { value; },
+      set: (value: ElemapGrid<M>|undefined) => { value; },
       get: () => this.method__grid()
     });
   }

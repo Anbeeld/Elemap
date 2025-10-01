@@ -28,11 +28,11 @@ export class ElemapTile<M extends MapType> {
     this.demangle__updateStyle();
   }
 
-  public set coords(value: any) { value; }
+  public set coords(value: ElemapCoordsType<M>) { value; }
   public get coords() { return this.method__coords(); }
   private demangle__coords() {
     demangleProperty(this, 'coords', {
-      set: (value: any) => { value; },
+      set: (value: ElemapCoordsType<M>) => { value; },
       get: () => this.method__coords()
     });
   }
@@ -51,11 +51,11 @@ export class ElemapTile<M extends MapType> {
     return this._.export();
   }
 
-  public set extensions(value: any) { value; }
+  public set extensions(value: Extensions) { value; }
   public get extensions() { return this.method__extensions(); }
   private demangle__extensions() {
     demangleProperty(this, 'extensions', {
-      set: (value: any) => { value; },
+      set: (value: Extensions) => { value; },
       get: () => this.method__extensions()
     });
   }

@@ -39,11 +39,11 @@ export class ElemapGrid<M extends MapType> {
     return this._.export();
   }
 
-  public set extensions(value: any) { value; }
+  public set extensions(value: Extensions) { value; }
   public get extensions() { return this.method__extensions(); }
   private demangle__extensions() {
     demangleProperty(this, 'extensions', {
-      set: (value: any) => { value; },
+      set: (value: Extensions) => { value; },
       get: () => this.method__extensions()
     });
   }
