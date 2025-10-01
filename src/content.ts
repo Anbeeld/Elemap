@@ -58,9 +58,9 @@ export class Content implements ContentConstants, Extendable {
   protected set elements(value: ContentElements) { this._elements = value; }
   public get elements() : ContentElements { return this._elements; }
 
-  protected _extensions: Record<string, any> = {};
-  protected set extensions(value: Record<string, any>) { this._extensions = value; }
-  public get extensions() : Record<string, any> { return this._extensions; }
+  protected _extensions: Extensions = {};
+  protected set extensions(value: Extensions) { this._extensions = value; }
+  public get extensions() : Extensions { return this._extensions; }
 
   constructor(args: ContentArguments) {
     if (typeof (args.ids as ContentIdsProperties).content === 'number') {

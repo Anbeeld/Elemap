@@ -50,9 +50,9 @@ export abstract class AbstractMap implements MapConstants, Extendable {
     };
   }
 
-  protected _extensions: Record<string, any> = {};
-  protected set extensions(value: Record<string, any>) { this._extensions = value; }
-  public get extensions() : Record<string, any> { return this._extensions; }
+  protected _extensions: Extensions = {};
+  protected set extensions(value: Extensions) { this._extensions = value; }
+  public get extensions() : Extensions { return this._extensions; }
 
   protected _contents: Content[] = [];
   protected set contents(value: Content[]) { this._contents = value; }

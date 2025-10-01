@@ -119,9 +119,9 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected set elements(value: GridElements) { this._elements = value; }
   public get elements() : GridElements|undefined { return this._elements; }
 
-  protected _extensions: Record<string, any> = {};
-  protected set extensions(value: Record<string, any>) { this._extensions = value; }
-  public get extensions() : Record<string, any> { return this._extensions; }
+  protected _extensions: Extensions = {};
+  protected set extensions(value: Extensions) { this._extensions = value; }
+  public get extensions() : Extensions { return this._extensions; }
 
   constructor(args: GridArguments) {
     if (typeof (args.ids as GridIdsProperties).grid === 'number') {
