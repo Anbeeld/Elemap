@@ -5,8 +5,8 @@ import { GridStyleSchema } from "./style/schema.js";
 import { demangleProperties, demangleGridIds, demangleGridStyleSchema, demangleProperty } from "./mangle.js";
 
 // Snapshot and extension types
-export type GridSnapshot = GridConstants & Extendable;
-type GridConstants = {
+export type GridSnapshot = GridProperties & Extendable;
+type GridProperties = {
   ids: GridIdsProperties,
   orientation: GridOrientation,
   offset: GridOffset,
@@ -14,7 +14,7 @@ type GridConstants = {
   tiles: SignedTable<TileSnapshot>
 };
 
-export type GridArguments = Omit<GridConstants, 'ids'> & {
+export type GridArguments = Omit<GridProperties, 'ids'> & {
   ids: MapIdsProperties | GridIdsProperties
 };
 
@@ -34,7 +34,7 @@ interface GridElements {
   contourHover: HTMLElement;
 }
 
-export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implements GridConstants, Extendable {
+export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implements GridProperties, Extendable {
   protected _ids: GridIds;
   protected set ids(value: GridIds) { this._ids = value; }
   public get ids() : GridIds { return this._ids; }
@@ -147,9 +147,9 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
   public abstract export() : GridSnapshot;
   protected exportSnapshot() : GridSnapshot {
-    return this.exportExtensions(this.exportConstants()) as GridSnapshot;
+    return this.exportExtensions(this.exportProperties()) as GridSnapshot;
   }
-  protected exportConstants(object: object = {}) : GridConstants {
+  protected exportProperties(object: object = {}) : GridProperties {
     let tiles: SignedTable<TileSnapshot> = new SignedArray<SignedArray<TileSnapshot>>();
     for (let [y, row] of this.tiles) {
       tiles[y] = new SignedArray<TileSnapshot>();
@@ -166,7 +166,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       ['schema', demangleGridStyleSchema(this.schema)],
       ['tiles', tiles]
     ]);
-    return object as GridConstants;
+    return object as GridProperties;
   }
   protected exportExtensions(object: object = {}) : Extendable {
     demangleProperties(object, [

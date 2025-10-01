@@ -5,15 +5,15 @@ import { AbstractTile } from './tile.js';
 import { calc } from './style/utils.js';
 
 // Snapshot and extension types
-export type ContentSnapshot = ContentConstants & Extendable;
-export type ContentConstants = {
+export type ContentSnapshot = ContentProperties & Extendable;
+export type ContentProperties = {
   ids: ContentIdsProperties,
   figure: string,
   location: ContentLocationIds,
   offset: Position
 };
 
-export type ContentArguments = Omit<ContentConstants, 'figure'|'ids'> & {
+export type ContentArguments = Omit<ContentProperties, 'figure'|'ids'> & {
   ids: ContentIdsProperties|MapIdsProperties,
   figure: HTMLElement|string
 };
@@ -26,7 +26,7 @@ type ContentElements = {
   container?: HTMLElement
 }
 
-export class Content implements ContentConstants, Extendable {
+export class Content implements ContentProperties, Extendable {
   protected _ids: ContentIds;
   protected set ids(value: ContentIds) { this._ids = value; }
   public get ids() : ContentIds { return this._ids; }
@@ -92,16 +92,16 @@ export class Content implements ContentConstants, Extendable {
   }
 
   public export() : ContentSnapshot {
-    return this.exportExtensions(this.exportConstants()) as ContentSnapshot;
+    return this.exportExtensions(this.exportProperties()) as ContentSnapshot;
   }
-  protected exportConstants(object: object = {}) : ContentConstants {
+  protected exportProperties(object: object = {}) : ContentProperties {
     demangleProperties(object, [
       ['ids', demangleContentIds(this.ids)],
       ['figure', this.elements.figure.outerHTML],
       ['location', this.location ? demangleContentLocationIds(this.location) : undefined],
       ['offset', this.offset]
     ]);
-    return object as ContentConstants;
+    return object as ContentProperties;
   }
   protected exportExtensions(object: object = {}) : Extendable {
     demangleProperties(object, [

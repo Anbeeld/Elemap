@@ -6,14 +6,14 @@ import TileStyle from './style/tile.js';
 import { modifyTileStyleDecls, CustomTileStyleDecls, TileStyleDecls } from './style/schema.js';
 
 // Snapshot and extension types
-export type TileSnapshot<C extends Coords = Coords> = TileConstants<C> & Extendable;
-export type TileConstants<C extends Coords = Coords> = {
+export type TileSnapshot<C extends Coords = Coords> = TileProperties<C> & Extendable;
+export type TileProperties<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   coords: C,
   decls: TileStyleDecls | "mannequin" | false // false = use grid default tile style
 };
 
-export type TileArguments<C extends Coords = Coords> = Omit<TileConstants<C>, 'ids'> & {
+export type TileArguments<C extends Coords = Coords> = Omit<TileProperties<C>, 'ids'> & {
   ids: GridIdsProperties | TileIdsProperties
 };
 
@@ -23,7 +23,7 @@ type TileElements = {
   style?: HTMLElement
 }
 
-export abstract class AbstractTile<C extends Coords = Coords> implements TileConstants<C>, Extendable {
+export abstract class AbstractTile<C extends Coords = Coords> implements TileProperties<C>, Extendable {
   protected _ids: TileIds;
   protected set ids(value: TileIds) { this._ids = value; }
   public get ids() : TileIds { return this._ids; }
@@ -83,15 +83,15 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
 
   public abstract export() : TileSnapshot<C>;
   protected exportSnapshot() : TileSnapshot<C> {
-    return this.exportExtensions(this.exportConstants()) as TileSnapshot<C>;
+    return this.exportExtensions(this.exportProperties()) as TileSnapshot<C>;
   }
-  protected exportConstants(object: object = {}) : TileConstants<C> {
+  protected exportProperties(object: object = {}) : TileProperties<C> {
     demangleProperties(object, [
       ['ids', demangleTileIds(this.ids)],
       ['coords', demangleCoords<C>(this.coords)],
       ['decls', this._style !== undefined ? demangleTileStyleDecls(this.decls) : false]
     ]);
-    return object as TileConstants<C>;
+    return object as TileProperties<C>;
   }
   protected exportExtensions(object: object = {}) : Extendable {
     demangleProperties(object, [
