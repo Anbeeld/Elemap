@@ -1,4 +1,4 @@
-import { Mutation } from '../utils.js';
+import { Extension } from '../utils.js';
 import { Content } from '../content.js';
 import { demangleProperty } from '../mangle.js';
 
@@ -9,18 +9,18 @@ export class ElemapContent {
     this._ = content;
 
     // For JavaScript - ensure methods are available by their original names
-    this.demangle__mutate();
+    this.demangle__extend();
     this.demangle__report();
   }
   
-  public mutate(mutation: Mutation) : void {
-    return this.method__mutate(mutation);
+  public extend(extension: Extension) : void {
+    return this.method__extend(extension);
   }
-  private demangle__mutate() {
-    demangleProperty(this, 'mutate', (mutation: Mutation) => this.method__mutate(mutation));
+  private demangle__extend() {
+    demangleProperty(this, 'extend', (extension: Extension) => this.method__extend(extension));
   }
-  private method__mutate(mutation: Mutation) {
-    return this._.mutate(mutation);
+  private method__extend(extension: Extension) {
+    return this._.extend(extension);
   }
 
   public report() {

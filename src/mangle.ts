@@ -218,7 +218,7 @@ export function mangleTileSnapshot<C extends Coords>(snapshot: any) : TileSnapsh
     ids: mangleTileIds(mangleProperty(snapshot, 'ids')),
     coords: mangleCoords<C>(mangleProperty(snapshot, 'coords')),
     decls: mangleProperty(snapshot, 'decls') ? mangleTileStyleDecls(mangleProperty(snapshot, 'decls')) : false,
-    mutations: mangleProperty(snapshot, 'mutations')
+    extensions: mangleProperty(snapshot, 'extensions')
   };
 }
 
@@ -228,7 +228,7 @@ export function mangleContentSnapshot(snapshot: any) : ContentSnapshot {
     figure: mangleProperty(snapshot, 'figure'),
     location: mangleContentLocationIds(mangleProperty(snapshot, 'location')),
     offset: mangleProperty(snapshot, 'offset'),
-    mutations: mangleProperty(snapshot, 'mutations')
+    extensions: mangleProperty(snapshot, 'extensions')
   };
 }
 

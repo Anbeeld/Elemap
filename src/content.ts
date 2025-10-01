@@ -1,11 +1,11 @@
-import { mergeDeep, Mutations, Mutation, Position } from './utils.js';
+import { mergeDeep, Extensions, Extension, Position } from './utils.js';
 import { demangleProperties, demangleContentIds, mangleContentSnapshot, demangleContentLocationIds } from './mangle.js';
 import { Registry, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties } from './registry.js';
 import { AbstractTile } from './tile.js';
 import { calc } from './style/utils.js';
 
-// Snapshot and mutation types
-export type ContentSnapshot = ContentConstants & Mutations;
+// Snapshot and extension types
+export type ContentSnapshot = ContentConstants & Extensions;
 export type ContentConstants = {
   ids: ContentIdsProperties,
   figure: string,
@@ -26,7 +26,7 @@ type ContentElements = {
   container?: HTMLElement
 }
 
-export class Content implements ContentConstants, Mutations {
+export class Content implements ContentConstants, Extensions {
   protected _ids: ContentIds;
   protected set ids(value: ContentIds) { this._ids = value; }
   public get ids() : ContentIds { return this._ids; }
@@ -58,9 +58,9 @@ export class Content implements ContentConstants, Mutations {
   protected set elements(value: ContentElements) { this._elements = value; }
   public get elements() : ContentElements { return this._elements; }
 
-  protected _mutations: Record<string, any> = {};
-  protected set mutations(value: Record<string, any>) { this._mutations = value; }
-  public get mutations() : Record<string, any> { return this._mutations; }
+  protected _extensions: Record<string, any> = {};
+  protected set extensions(value: Record<string, any>) { this._extensions = value; }
+  public get extensions() : Record<string, any> { return this._extensions; }
 
   constructor(args: ContentArguments) {
     if (typeof (args.ids as ContentIdsProperties).content === 'number') {
@@ -84,15 +84,15 @@ export class Content implements ContentConstants, Mutations {
 
   public static import(snapshot: ContentSnapshot) : Content {
     let instance = new Content(mangleContentSnapshot(snapshot));
-    instance.mutate(snapshot);
+    instance.extend(snapshot);
     return instance;
   }
-  public mutate(mutation: Mutation) : void {
-    mergeDeep(this.mutations, mutation);
+  public extend(extension: Extension) : void {
+    mergeDeep(this.extensions, extension);
   }
 
   public export() : ContentSnapshot {
-    return this.exportMutations(this.exportConstants()) as ContentSnapshot;
+    return this.exportExtensions(this.exportConstants()) as ContentSnapshot;
   }
   protected exportConstants(object: object = {}) : ContentConstants {
     demangleProperties(object, [
@@ -103,14 +103,14 @@ export class Content implements ContentConstants, Mutations {
     ]);
     return object as ContentConstants;
   }
-  protected exportMutations(object: object = {}) : Mutations {
+  protected exportExtensions(object: object = {}) : Extensions {
     demangleProperties(object, [
-      ['mutations', this.mutations]
+      ['extensions', this.extensions]
     ]);
-    return object as Mutations;
+    return object as Extensions;
   }
-  public report() : Mutation {
-    return this.mutations;
+  public report() : Extension {
+    return this.extensions;
   }
 
   public hover() : void {

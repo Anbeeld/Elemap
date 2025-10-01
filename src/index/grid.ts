@@ -1,4 +1,4 @@
-import { AxialCoords, Mutation, CartesianCoords, Size, MapType } from "../utils.js";
+import { AxialCoords, Extension, CartesianCoords, Size, MapType } from "../utils.js";
 import { mangleCoords, demangleProperty } from "../mangle.js";
 import { RectangleGrid } from "../rectangle/grid.js";
 import { HexagonGrid } from "../hexagon/grid.js";
@@ -23,7 +23,7 @@ export class ElemapGrid<M extends MapType> {
     // For JavaScript - ensure methods are available by their original names
     this.demangle__export();
     this.demangle__report();
-    this.demangle__mutate();
+    this.demangle__extend();
     this.demangle__tileByCoords();
     this.demangle__createTile();
     this.demangle__createTiles();
@@ -49,14 +49,14 @@ export class ElemapGrid<M extends MapType> {
     return this._.report();
   }
 
-  public mutate(mutation: Mutation) : void {
-    return this.method__mutate(mutation);
+  public extend(extension: Extension) : void {
+    return this.method__extend(extension);
   }
-  private demangle__mutate() {
-    demangleProperty(this, 'mutate', (mutation: Mutation) => this.method__mutate(mutation));
+  private demangle__extend() {
+    demangleProperty(this, 'extend', (extension: Extension) => this.method__extend(extension));
   }
-  private method__mutate(mutation: Mutation) {
-    return this._.mutate(mutation);
+  private method__extend(extension: Extension) {
+    return this._.extend(extension);
   }
 
   public tileByCoords(coords: ElemapCoords<M>|[number, number]) { return this.method__tileByCoords(coords); }

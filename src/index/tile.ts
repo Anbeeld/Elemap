@@ -2,7 +2,7 @@ import { CustomTileStyleDecls } from "../style/schema.js";
 import { demangleProperty, demangleCoords, mangleTileStyleDecls } from "../mangle.js";
 import { RectangleTile } from "../rectangle/tile.js";
 import { HexagonTile } from "../hexagon/tile.js";
-import { AxialCoords, Mutation, CartesianCoords, MapType } from "../utils.js";
+import { AxialCoords, Extension, CartesianCoords, MapType } from "../utils.js";
 
 export type ElemapTileType<M> = 
   M extends "rectangle" ? RectangleTile :
@@ -24,7 +24,7 @@ export class ElemapTile<M extends MapType> {
     this.demangle__coords();
     this.demangle__export();
     this.demangle__report();
-    this.demangle__mutate();
+    this.demangle__extend();
     this.demangle__updateStyle();
   }
 
@@ -61,14 +61,14 @@ export class ElemapTile<M extends MapType> {
     return this._.report();
   }
 
-  public mutate(mutation: Mutation) : void {
-    return this.method__mutate(mutation);
+  public extend(extension: Extension) : void {
+    return this.method__extend(extension);
   }
-  private demangle__mutate() {
-    demangleProperty(this, 'mutate', (mutation: Mutation) => this.method__mutate(mutation));
+  private demangle__extend() {
+    demangleProperty(this, 'extend', (extension: Extension) => this.method__extend(extension));
   }
-  private method__mutate(mutation: Mutation) {
-    return this._.mutate(mutation);
+  private method__extend(extension: Extension) {
+    return this._.extend(extension);
   }
 
   public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {

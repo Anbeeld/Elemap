@@ -3,7 +3,7 @@ import HexagonMap from "../hexagon/map.js";
 import { Config, configToGridMapArguments } from "../config.js";
 import { GridOffset, GridOrientation, MapType, Position } from "../utils.js";
 import { demangleProperty } from "../mangle.js";
-import { GridMapMutation, GridMapSnapshot } from "../map.js";
+import { GridMapExtension, GridMapSnapshot } from "../map.js";
 import { ElemapGrid, ElemapGridType } from "./grid.js";
 import { ElemapContent } from "./content.js";
 import { ContentArguments } from "../content.js";
@@ -34,7 +34,7 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
     this.demangle__export();
     this.demangle__report();
     this.demangle__render();
-    this.demangle__mutate();
+    this.demangle__extend();
     this.demangle__grid();
     this.demangle__addContent();
     this.demangle__contentById();
@@ -65,14 +65,14 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
     return this._.report();
   }
 
-  public mutate(mutation: GridMapMutation) : void {
-    return this.method__mutate(mutation);
+  public extend(extension: GridMapExtension) : void {
+    return this.method__extend(extension);
   }
-  private demangle__mutate() {
-    demangleProperty(this, 'mutate', (mutation: GridMapMutation) => this.method__mutate(mutation));
+  private demangle__extend() {
+    demangleProperty(this, 'extend', (extension: GridMapExtension) => this.method__extend(extension));
   }
-  private method__mutate(mutation: GridMapMutation) {
-    return this._.mutate(mutation);
+  private method__extend(extension: GridMapExtension) {
+    return this._.extend(extension);
   }
   
   public render(container: HTMLElement) { this.method__render(container); }

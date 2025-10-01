@@ -3,7 +3,7 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { ContentIds, GridIdsProperties, MapIds, MapIdsProperties, Registry } from './registry.js';
-import { MapType, mergeDeep, Mutations, Mutation, signedTablefromObject, } from './utils.js';
+import { MapType, mergeDeep, Extensions, Extension, signedTablefromObject, } from './utils.js';
 import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleContentParams } from './mangle.js';
 import { Content, ContentSnapshot } from './content.js';
 import { ElemapContent } from './index/content.js'
@@ -16,10 +16,10 @@ interface MapElements {
   content: HTMLElement
 }
 
-// Snapshot and mutation types
+// Snapshot and extension types
 export type MapSnapshot = {
   type: MapType,
-} & MapConstants & Mutations;
+} & MapConstants & Extensions;
 type MapConstants = {
   ids: MapIdsProperties,
   contents: ContentSnapshot[]
@@ -29,7 +29,7 @@ export type MapArguments = Omit<MapConstants, 'ids'> & {
   ids: MapIdsProperties | undefined
 };
 
-export abstract class AbstractMap implements MapConstants, Mutations {
+export abstract class AbstractMap implements MapConstants, Extensions {
   protected _ids: MapIds;
   protected set ids(value: MapIds) { this._ids = value; }
   public get ids() : MapIds { return this._ids; }
@@ -50,9 +50,9 @@ export abstract class AbstractMap implements MapConstants, Mutations {
     };
   }
 
-  protected _mutations: Record<string, any> = {};
-  protected set mutations(value: Record<string, any>) { this._mutations = value; }
-  public get mutations() : Record<string, any> { return this._mutations; }
+  protected _extensions: Record<string, any> = {};
+  protected set extensions(value: Record<string, any>) { this._extensions = value; }
+  public get extensions() : Record<string, any> { return this._extensions; }
 
   protected _contents: Content[] = [];
   protected set contents(value: Content[]) { this._contents = value; }
@@ -76,7 +76,7 @@ export abstract class AbstractMap implements MapConstants, Mutations {
 
   public abstract export() : MapSnapshot;
   protected exportSnapshot() : MapSnapshot {
-    return  this.exportMutations(this.exportConstants()) as MapSnapshot;
+    return  this.exportExtensions(this.exportConstants()) as MapSnapshot;
   }
   protected exportConstants(object: object = {}) : MapConstants {
     demangleProperties(object, [
@@ -86,15 +86,15 @@ export abstract class AbstractMap implements MapConstants, Mutations {
     ]);
     return object as MapConstants;
   }
-  protected exportMutations(object: object = {}) : Mutations {
+  protected exportExtensions(object: object = {}) : Extensions {
     demangleProperties(object, [
-      ['mutations', this.mutations]
+      ['extensions', this.extensions]
     ]);
-    return object as Mutations;
+    return object as Extensions;
   }
   protected abstract exportMapType() : string;
-  public report() : Mutation {
-    return this.mutations;
+  public report() : Extension {
+    return this.extensions;
   }
   
   protected importContents(snapshot: ContentSnapshot[]) : void {
@@ -193,23 +193,23 @@ export abstract class AbstractMap implements MapConstants, Mutations {
   }
 }
 
-// Snapshot and mutation types
+// Snapshot and extension types
 export type GridMapSnapshot = {
   type: MapType,
-} & GridMapConstants & GridMapMutations;
-export type GridMapMutation = Mutation;
+} & GridMapConstants & GridMapExtensions;
+export type GridMapExtension = Extension;
 type GridMapConstants = MapConstants & {
   grid: GridSnapshot,
   schema: GridMapStyleSchema
 };
-type GridMapMutations = Mutations;
+type GridMapExtensions = Extensions;
 
 export type GridMapArguments = Omit<GridMapConstants, 'ids' | 'grid'> & {
   ids: MapIdsProperties | undefined,
   grid: Omit<GridArguments, 'ids'> & { ids: GridIdsProperties | undefined }
 };
 
-export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> extends AbstractMap implements GridMapConstants, GridMapMutations {
+export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> extends AbstractMap implements GridMapConstants, GridMapExtensions {
   public readonly grid: G;
 
   protected override _style: GridMapStyle;
@@ -243,11 +243,11 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
 
   protected static importSnapshot<M extends AbstractGridMap>(mapClass: new (args: GridMapArguments) => M, snapshot: GridMapSnapshot) : M {
     let instance = new mapClass(snapshot);
-    instance.mutate(snapshot);
+    instance.extend(snapshot);
     return instance;
   }
-  public mutate(mutation: GridMapMutation) : void {
-    mergeDeep(this.mutations, mutation);
+  public extend(extension: GridMapExtension) : void {
+    mergeDeep(this.extensions, extension);
   }
 
   protected override exportConstants(object: object = {}) : GridMapConstants {
@@ -260,11 +260,11 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     ]);
     return object as GridMapConstants;
   }
-  protected override exportMutations(object: object = {}) : GridMapMutations {
+  protected override exportExtensions(object: object = {}) : GridMapExtensions {
     demangleProperties(object, [
-      ['mutations', this.mutations]
+      ['extensions', this.extensions]
     ]);
-    return object as GridMapMutations;
+    return object as GridMapExtensions;
   }
 
   public override render(container: HTMLElement) {
