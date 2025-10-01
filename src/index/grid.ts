@@ -14,6 +14,11 @@ export type ElemapCoords<M> =
   M extends MapType.Hexagon ? AxialCoords :
   never;
 
+export type AccessCoords<M> = 
+  M extends MapType.Rectangle ? CartesianCoords :
+  M extends MapType.Hexagon ? CartesianCoords|AxialCoords :
+  never;
+
 export class ElemapGrid<M extends MapType> {
   private _: ElemapGridType<M>;
 
@@ -61,11 +66,11 @@ export class ElemapGrid<M extends MapType> {
     return this._.extend(extension);
   }
 
-  public tileByCoords(coords: ElemapCoords<M>|[number, number]) { return this.method__tileByCoords(coords); }
+  public tileByCoords(coords: AccessCoords<M>|[number, number]) { return this.method__tileByCoords(coords); }
   private demangle__tileByCoords() {
-    demangleProperty(this, 'tileByCoords', (coords: ElemapCoords<M>|[number, number]) => this.method__tileByCoords(coords));
+    demangleProperty(this, 'tileByCoords', (coords: AccessCoords<M>|[number, number]) => this.method__tileByCoords(coords));
   }
-  private method__tileByCoords(coords: ElemapCoords<M>|[number, number]) : ElemapTile<M>|undefined {
+  private method__tileByCoords(coords: AccessCoords<M>|[number, number]) : ElemapTile<M>|undefined {
     // @ts-ignore coords &
     let tile = this._.tileByCoords(Array.isArray(coords) ? coords : mangleCoords(coords));
     if (tile) {
