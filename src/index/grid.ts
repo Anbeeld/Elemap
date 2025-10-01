@@ -73,12 +73,12 @@ export class ElemapGrid<M extends MapType> {
   }
 
   public createTile(coords: ElemapCoords<M>|[number, number], replace: boolean = false) : void {
-    return this.method__createTile(coords);
+    return this.method__createTile(coords, replace);
   }
   private demangle__createTile() {
     demangleProperty(this, 'createTile', (coords: ElemapCoords<M>|[number, number], replace: boolean = false) => this.method__createTile(coords, replace));
   }
-  private method__createTile(coords: ElemapCoords<M>|[number, number], replace: boolean = false) {
+  private method__createTile(coords: ElemapCoords<M>|[number, number], replace: boolean) {
     // @ts-ignore coords &
     return this._.createTile(coords, replace);
   }
