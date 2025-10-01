@@ -87,21 +87,30 @@ export class ElemapGrid<M extends MapType> {
   }
   private method__createTile(coords: AccessCoords<M>|[number, number], replace: boolean) : ElemapTile<M>|false {
     // @ts-ignore coords &
-    let result = this._.createTile(coords, replace);
-    if (result) {
-      return this.method__tileByCoords(result as AccessCoords<M>) || false;
+    let createdTileCoords = this._.createTile(coords, replace);
+    if (createdTileCoords) {
+      return this.method__tileByCoords(createdTileCoords as AccessCoords<M>) || false;
     }
     return false;
   }
 
-  public createTiles(size: Size, coords: ElemapCoords<M>|[number, number] = [0, 0], replace: boolean = false) : void {
+  public createTiles(size: Size, coords: ElemapCoords<M>|[number, number] = [0, 0], replace: boolean = false) : (ElemapTile<M>|false)[] {
     return this.method__createTiles(size, coords, replace);
   }
   private demangle__createTiles() {
     demangleProperty(this, 'createTiles', (size: Size, coords: ElemapCoords<M>|[number, number] = [0, 0], replace: boolean = false) => this.method__createTiles(size, coords, replace));
   }
-  private method__createTiles(size: Size, coords: ElemapCoords<M>|[number, number], replace: boolean = false) {
+  private method__createTiles(size: Size, coords: ElemapCoords<M>|[number, number], replace: boolean = false) : (ElemapTile<M>|false)[] {
     // @ts-ignore coords &
-    return this._.createTiles(size, coords, replace);
+    let createdTilesCoords = this._.createTiles(size, coords, replace);
+    let createdTiles: (ElemapTile<M>|false)[] = [];
+    for (let createdTileCoords of createdTilesCoords) {
+      if (createdTileCoords) {
+        createdTiles.push(this.method__tileByCoords(createdTileCoords as AccessCoords<M>) || false);
+      } else {
+        createdTiles.push(false);
+      }
+    }
+    return createdTiles;
   }
 }

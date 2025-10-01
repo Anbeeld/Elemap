@@ -79,7 +79,8 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return false;
   }
 
-  public createTiles(size: Size, coords: AxialCoords|CartesianCoords|[number, number], replace: boolean) : void {
+  public createTiles(size: Size, coords: AxialCoords|CartesianCoords|[number, number], replace: boolean) : (AxialCoords|CartesianCoords|false)[] {
+    let createdTiles: (AxialCoords|CartesianCoords|false)[] = [];
     if (Array.isArray(coords)) {
       coords = {
         q: coords[0],
@@ -89,16 +90,17 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     if (isCartesianCoords(coords)) {
       for (let x = coords.x; x < coords.x + size.width; x++) {
         for (let y = coords.y; y < coords.y + size.height; y++) {
-          this.createTile(cartesianCoordsToAxial({x, y}, this.orientation, this.offset), replace);
+          createdTiles.push(this.createTile(cartesianCoordsToAxial({x, y}, this.orientation, this.offset), replace));
         }
       }
     } else {
       for (let q = coords.q; q < coords.q + size.width; q++) {
         for (let r = coords.r; r < coords.r + size.height; r++) {
-          this.createTile({q, r}, replace);
+          createdTiles.push(this.createTile({q, r}, replace));
         }
       }
     }
+    return createdTiles;
   }
 
   public hasIndentation(i: number) : boolean {
