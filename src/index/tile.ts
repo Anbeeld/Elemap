@@ -23,7 +23,7 @@ export class ElemapTile<M extends MapType> {
     // For JavaScript - ensure methods are available by their original names
     this.demangle__coords();
     this.demangle__export();
-    this.demangle__report();
+    this.demangle__extensions();
     this.demangle__extend();
     this.demangle__updateStyle();
   }
@@ -51,14 +51,16 @@ export class ElemapTile<M extends MapType> {
     return this._.export();
   }
 
-  public report() {
-    return this.method__report();
+  public set extensions(value: any) { value; }
+  public get extensions() { return this.method__extensions(); }
+  private demangle__extensions() {
+    demangleProperty(this, 'extensions', {
+      set: (value: any) => { value; },
+      get: () => this.method__extensions()
+    });
   }
-  private demangle__report() {
-    demangleProperty(this, 'report', () => this.method__report());
-  }
-  private method__report() {
-    return this._.report();
+  private method__extensions() {
+    return this._.extensions;
   }
 
   public extend(extension: Extension) : void {

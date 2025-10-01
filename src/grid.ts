@@ -174,9 +174,6 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     ]);
     return object as Extensions;
   }
-  public report() : Extension {
-    return this.extensions;
-  }
 
   public importTiles(snapshot: SignedTable<TileSnapshot>) : void {
     for (let [y, row] of snapshot) {

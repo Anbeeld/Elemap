@@ -109,9 +109,6 @@ export class Content implements ContentConstants, Extensions {
     ]);
     return object as Extensions;
   }
-  public report() : Extension {
-    return this.extensions;
-  }
 
   public hover() : void {
     if (this.host && typeof this.host.hover === 'function') {

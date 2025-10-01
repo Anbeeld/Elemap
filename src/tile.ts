@@ -99,9 +99,6 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TileCon
     ]);
     return object as Extensions;
   }
-  public report() : Extension {
-    return this.extensions;
-  }
 
   protected abstract createStyle(decls: CustomTileStyleDecls) : TileStyle;
 

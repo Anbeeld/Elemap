@@ -93,9 +93,6 @@ export abstract class AbstractMap implements MapConstants, Extensions {
     return object as Extensions;
   }
   protected abstract exportMapType() : string;
-  public report() : Extension {
-    return this.extensions;
-  }
   
   protected importContents(snapshot: ContentSnapshot[]) : void {
     for (let content of snapshot) {
