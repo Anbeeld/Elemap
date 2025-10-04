@@ -1,4 +1,4 @@
-import { AxialCoords, Extensions, CartesianCoords, Size, MapType } from "../utils.js";
+import { AxialCoords, Extensions, CartesianCoords, Size, MapType, SignedTable, SignedArray } from "../utils.js";
 import { mangleCoords, demangleProperty } from "../mangle.js";
 import { RectangleGrid } from "../rectangle/grid.js";
 import { HexagonGrid } from "../hexagon/grid.js";
@@ -32,6 +32,7 @@ export class ElemapGrid<M extends MapType> {
     this.demangle__tileByCoords();
     this.demangle__createTile();
     this.demangle__createTiles();
+    this.demangle__tiles();
   }
 
   public export() {
@@ -112,5 +113,24 @@ export class ElemapGrid<M extends MapType> {
       }
     }
     return createdTiles;
+  }
+  
+  public set tiles(value: SignedTable<ElemapTile<M>>) { value; }
+  public get tiles() : SignedTable<ElemapTile<M>> { return this.method__tiles(); }
+  private demangle__tiles() {
+    demangleProperty(this, 'tiles', {
+      set: (value: SignedTable<ElemapTile<M>>) => { value; },
+      get: () => this.method__tiles()
+    });
+  }
+  private method__tiles() : SignedTable<ElemapTile<M>> {
+    let tiles = new SignedTable<ElemapTile<M>>();
+    for (let [y, row] of this._.tiles) {
+      tiles[y] = new SignedArray<ElemapTile<M>>();
+      for (let [x, tile] of row) {
+        tiles[y][x] = new ElemapTile<M>(tile as ElemapTileType<M>);
+      }
+    }
+    return tiles;
   }
 }
