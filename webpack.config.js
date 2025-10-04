@@ -39,7 +39,33 @@ const webConfig = {
             passes: 2,
           },
           mangle: {
-            properties: true
+            properties: {
+              reserved: [
+                // common
+                'export',
+                'extensions',
+                'extend',
+
+                // map
+                'render',
+                'grid',
+                'addContent',
+                'contentById',
+                'contentByElement',
+                'import',
+
+                // grid
+                'tileByCoords',
+                'createTile',
+                'createTiles',
+                'tiles',
+
+                // tile
+                'coords',
+                'extensions',
+                'updateStyle',
+              ]
+            }
           }
         }
       }),
