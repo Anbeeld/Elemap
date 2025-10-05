@@ -64,6 +64,7 @@ const webConfig = {
                 'coords',
                 'extensions',
                 'updateStyle',
+                'elements',
               ]
             }
           }

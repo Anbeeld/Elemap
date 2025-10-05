@@ -1,5 +1,5 @@
 import { CustomTileStyleDecls } from "../style/schema.js";
-import { demangleCoords, mangleTileStyleDecls } from "../mangle.js";
+import { demangleCoords, demangleProperties, mangleTileStyleDecls } from "../mangle.js";
 import { RectangleTile } from "../rectangle/tile.js";
 import { HexagonTile } from "../hexagon/tile.js";
 import { AxialCoords, Extensions, CartesianCoords, MapType } from "../utils.js";
@@ -40,5 +40,14 @@ export class ElemapTile<M extends MapType> {
 
   public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
     this._.updateStyle(mangleTileStyleDecls(decls), replace);
+  }
+
+  public get elements() : { outer?: HTMLElement, inner?: HTMLElement } {
+    let elements = {};
+    demangleProperties(elements, [
+      ['outer', this._.elements.outer || undefined],
+      ['inner', this._.elements.inner || undefined]
+    ]);
+    return elements;
   }
 }

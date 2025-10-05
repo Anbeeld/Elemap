@@ -17,7 +17,7 @@ export type TileArguments<C extends Coords = Coords> = Omit<TileProperties<C>, '
   ids: GridIdsProperties | TileIdsProperties
 };
 
-type TileElements = {
+export type TileElements = {
   outer?: HTMLElement,
   inner: HTMLElement,
   style?: HTMLElement
