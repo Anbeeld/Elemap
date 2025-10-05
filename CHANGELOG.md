@@ -1,3 +1,10 @@
+## 0.3.5
+
+- Added tiles getter method to grid index class, returning SignedTable of index tile objects for all tiles the map has.
+- Added elements getter method to tile index class, returning its outer and inner HTML elements.
+- Grid frame HTML elements are now split into outer and inner, with the clip-path background attached to the inner one, allowing you to create a shadow for it using drop-shadow filter on the outer element.
+- Replaced overcomplicated demangling for JavaScript in index classes with reserved property names in the Webpack configuration.
+
 ## 0.3.4
 
 - Renamed mutations to extensions, and mutate method to extend.
