@@ -19,7 +19,8 @@ export type GridArguments = Omit<GridProperties, 'ids'> & {
 };
 
 interface GridElements {
-  frame: HTMLElement;
+  outerFrame: HTMLElement;
+  innerFrame: HTMLElement;
   outer: HTMLElement;
   inner: HTMLElement;
   outerRows: SignedArray<HTMLElement>;
@@ -99,6 +100,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     return {
       base: base,
       frame: base + `-frame`,
+      outerFrame: base + `-frame-outer`,
+      innerFrame: base + `-frame-inner`,
       grid: base + `-grid`,
       outerGrid: base + `-outer`,
       innerGrid: base + `-inner`,
@@ -197,7 +200,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected initElements() : void {
     if (!this.elements) {
       this.elements = {
-        frame: document.createElement('div'),
+        outerFrame: document.createElement('div'),
+        innerFrame: document.createElement('div'),
         outer: document.createElement('div'),
         inner: document.createElement('div'),
         outerRows: new SignedArray<HTMLElement>(),
@@ -212,7 +216,9 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
         }
       }
 
-      this.elements.frame.classList.add('elemap-' + this.ids.map + '-grid-frame');
+      this.elements.outerFrame.classList.add('elemap-' + this.ids.map + '-grid-frame-outer');
+      this.elements.innerFrame.classList.add('elemap-' + this.ids.map + '-grid-frame-inner');
+      this.elements.outerFrame.appendChild(this.elements.innerFrame);
 
       this.elements.outer.classList.add('elemap-' + this.ids.map + '-grid');
       this.elements.outer.classList.add('elemap-' + this.ids.map + '-grid-outer');
@@ -269,7 +275,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       }
     }
 
-    container.appendChild(this.elements!.frame);
+    container.appendChild(this.elements!.outerFrame);
     container.appendChild(this.elements!.outer);
     container.appendChild(this.elements!.inner);
     container.appendChild(this.elements!.contour);

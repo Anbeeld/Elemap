@@ -153,13 +153,13 @@ export function mangleMapStyleDecls(object: any) : MapStyleDecls {
 
 export function demangleGridStyleDecls(decls: GridStyleDecls) : GridStyleDecls {
   return demangleProperties({}, [
-    ['frame', decls.frame],
+    ['frame', demangleMapStyleDecls(decls.frame)],
     ['contour', decls.contour],
   ]);
 }
 export function mangleGridStyleDecls(object: any) : GridStyleDecls {
   return {
-    frame: mangleProperty(object, 'frame'),
+    frame: mangleMapStyleDecls(mangleProperty(object, 'frame')),
     contour: mangleProperty(object, 'contour'),
   };
 }

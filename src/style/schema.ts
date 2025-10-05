@@ -27,23 +27,31 @@ function modifyMapStyleDecls(custom: CustomMapStyleDecls, initial?: MapStyleDecl
 
 /* GRID STYLE DECLARATION TYPES */
 export type GridStyleDecls = {
-  frame: string,
+  frame: MapStyleDecls,
   contour: string
 };
 type CustomGridStyleDecls = Partial<GridStyleDecls>;
 
 /* GRID STYLE DECLARATION CONSTANTS */
 const defaultGridStyleDecls: GridStyleDecls = {
-  frame: 'background-color:#222222;',
+  frame: {
+    outer: '',
+    inner: 'background-color:#222222;',
+  },
   contour: 'border: 2px solid transparent;background-color:#f5f5f5;',
 };
 
 /* GRID STYLE DECLARATIONS MODIFICATION */
 function modifyGridStyleDecls(custom: CustomGridStyleDecls, initial?: GridStyleDecls) : GridStyleDecls {
   return {
-    frame:
-      (initial && initial.frame ? initial.frame : '') +
-      (custom.frame || ''),
+    frame: {
+      outer: 
+        (initial && initial.frame && initial.frame.outer ? initial.frame.outer : '') +
+        (custom.frame && custom.frame.outer ? custom.frame.outer : ''),
+      inner:
+        (initial && initial.frame && initial.frame.inner ? initial.frame.inner : '') +
+        (custom.frame && custom.frame.inner ? custom.frame.inner : ''),
+    },
     contour:
       (initial && initial.contour ? initial.contour : '') +
       (custom.contour || '')

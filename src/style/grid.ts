@@ -46,6 +46,8 @@ export default abstract class GridStyle extends Style {
     return {
       base: base,
       frame: grid + `-frame`,
+      outerFrame: grid + `-frame-outer`,
+      innerFrame: grid + `-frame-inner`,
       grid: grid,
       row: grid + `>div`,
       tile: grid + `>div>div`,
@@ -64,10 +66,19 @@ export default abstract class GridStyle extends Style {
 
   public get core() : string {
     return `` +
-    this.selectors.frame + `{` +
+    this.selectors.outerFrame + `{` +
       `display:block;` + 
       `position:absolute;` + 
       `z-index:50;` + 
+    `}` +
+
+    this.selectors.innerFrame + `{` +
+      `position:absolute;` +
+      `top:0;` +
+      `left:0;` +
+      `bottom:0;` +
+      `right:0;` +
+      `z-index:55;` +
     `}` +
 
     this.selectors.mannequin + `{` +
@@ -152,8 +163,12 @@ export default abstract class GridStyle extends Style {
   public get schema() : string {
     return `` +
 
-    this.selectors.frame + `{` + 
-      this.decls.frame +
+    this.selectors.outerFrame + `{` + 
+      this.decls.frame.outer +
+    `}` +
+
+    this.selectors.innerFrame + `{` + 
+      this.decls.frame.inner +
     `}` +
 
     this.selectors.contour + `>div{` + 
@@ -176,7 +191,7 @@ export default abstract class GridStyle extends Style {
       `height:${this.gridSize.height};` +
     `}` +
 
-    this.selectors.frame + absolutePosition +
+    this.selectors.outerFrame + absolutePosition +
 
     this.selectors.outerGrid + absolutePosition +
     
@@ -212,7 +227,7 @@ export default abstract class GridStyle extends Style {
 
 
     
-    this.selectors.frame + `{` +
+    this.selectors.innerFrame + `{` +
       `clip-path: path('${this.frameClipPath}');` +
     `}` +
 
