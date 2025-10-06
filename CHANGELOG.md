@@ -1,3 +1,8 @@
+## 0.3.6
+
+- Fixed createTile method requiring replace argument that should be optional.
+- Fixed incorrect applying of extensions when importing.
+
 ## 0.3.5
 
 - Added tiles getter method to grid index class, returning SignedTable of index tile objects for all tiles the map has.
