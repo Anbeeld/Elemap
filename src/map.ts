@@ -240,7 +240,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
 
   protected static importSnapshot<M extends AbstractGridMap>(mapClass: new (args: GridMapArguments) => M, snapshot: GridMapSnapshot) : M {
     let instance = new mapClass(snapshot);
-    instance.extend(snapshot);
+    instance.extend(snapshot.extensions);
     return instance;
   }
   public extend(extension: GridMapExtension) : void {

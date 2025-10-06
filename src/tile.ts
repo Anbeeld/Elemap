@@ -72,9 +72,10 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
 
   // 'static' modifier cannot be used with 'abstract' modifier.
   // public static abstract import(snapshot: TileSnapshot) : AbstractTile;
-  protected static importSnapshot<T extends AbstractTile, C extends Coords>(tile: new (args: TileArguments<C>) => T, snapshot: TileSnapshot) : T {
-    let instance = new tile(mangleTileSnapshot<C>(snapshot));
-    instance.extend(snapshot);
+  protected static importSnapshot<T extends AbstractTile, C extends Coords>(tile: new (args: TileArguments<C>) => T, snapshot: TileSnapshot) : T {    
+    let mangledSnapshot = mangleTileSnapshot(snapshot);
+    let instance = new tile(mangledSnapshot as unknown as TileArguments<C>);
+    instance.extend(mangledSnapshot.extensions);
     return instance;
   }
   public extend(extension: Extensions) : void {

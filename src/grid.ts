@@ -141,7 +141,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   // public static abstract import(snapshot: GridSnapshot) : AbstractGrid;
   protected static importSnapshot<G extends AbstractGrid>(gridClass: new (args: GridArguments) => G, snapshot: GridSnapshot) : G {
     let instance = new gridClass(snapshot);
-    instance.extend(snapshot);
+    instance.extend(snapshot.extensions);
     return instance;
   }
   public extend(extension: Extensions) : void {
