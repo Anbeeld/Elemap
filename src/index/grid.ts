@@ -47,7 +47,7 @@ export class ElemapGrid<M extends MapType> {
     return undefined;
   }
 
-  public createTile(coords: AccessCoords<M>|[number, number], replace: boolean) : ElemapTile<M>|false {
+  public createTile(coords: AccessCoords<M>|[number, number], replace: boolean = false) : ElemapTile<M>|false {
     // @ts-ignore coords &
     let createdTileCoords = this._.createTile(coords, replace);
     if (createdTileCoords) {
