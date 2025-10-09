@@ -34,8 +34,8 @@ export class ElemapGrid<M extends MapType> {
     return this._.extensions;
   }
 
-  public extend(extension: Extensions) {
-    return this._.extend(extension);
+  public extend(extensions: Extensions) {
+    return this._.extend(extensions);
   }
 
   public tileByCoords(coords: AccessCoords<M>|[number, number]) : ElemapTile<M>|undefined {

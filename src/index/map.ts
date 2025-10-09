@@ -42,8 +42,8 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
     return this._.extensions;
   }
 
-  public extend(extension: Extensions) {
-    return this._.extend(extension);
+  public extend(extensions: Extensions) {
+    return this._.extend(extensions);
   }
   
   public render(container: HTMLElement) : void {

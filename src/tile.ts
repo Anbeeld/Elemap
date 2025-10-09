@@ -78,8 +78,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
     instance.extend(mangledSnapshot.extensions);
     return instance;
   }
-  public extend(extension: Extensions) : void {
-    mergeDeep(this.extensions, extension);
+  public extend(extensions: Extensions) : void {
+    mergeDeep(this.extensions, extensions);
   }
 
   public abstract export() : TileSnapshot<C>;

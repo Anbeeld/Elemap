@@ -8,8 +8,8 @@ export class ElemapContent {
     this._ = content;
   }
   
-  public extend(extension: Extensions) {
-    return this._.extend(extension);
+  public extend(extensions: Extensions) {
+    return this._.extend(extensions);
   }
 
   public get extensions(): Extensions {

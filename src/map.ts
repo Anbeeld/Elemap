@@ -241,8 +241,8 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     instance.extend(snapshot.extensions);
     return instance;
   }
-  public extend(extension: Extensions) : void {
-    mergeDeep(this.extensions, extension);
+  public extend(extensions: Extensions) : void {
+    mergeDeep(this.extensions, extensions);
   }
 
   protected override exportProperties(object: object = {}) : GridMapProperties {

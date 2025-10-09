@@ -144,8 +144,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     instance.extend(snapshot.extensions);
     return instance;
   }
-  public extend(extension: Extensions) : void {
-    mergeDeep(this.extensions, extension);
+  public extend(extensions: Extensions) : void {
+    mergeDeep(this.extensions, extensions);
   }
 
   public abstract export() : GridSnapshot;
