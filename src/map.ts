@@ -193,20 +193,18 @@ export abstract class AbstractMap implements MapProperties, Extendable {
 // Snapshot and extension types
 export type GridMapSnapshot = {
   type: MapType,
-} & GridMapProperties & GridMapExtensions;
-export type GridMapExtension = Extensions;
+} & GridMapProperties & Extendable;
 type GridMapProperties = MapProperties & {
   grid: GridSnapshot,
   schema: GridMapStyleSchema
 };
-type GridMapExtensions = Extendable;
 
 export type GridMapArguments = Omit<GridMapProperties, 'ids' | 'grid'> & {
   ids: MapIdsProperties | undefined,
   grid: Omit<GridArguments, 'ids'> & { ids: GridIdsProperties | undefined }
 };
 
-export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> extends AbstractMap implements GridMapProperties, GridMapExtensions {
+export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> extends AbstractMap implements GridMapProperties, Extendable {
   public readonly grid: G;
 
   protected override _style: GridMapStyle;
@@ -243,7 +241,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     instance.extend(snapshot.extensions);
     return instance;
   }
-  public extend(extension: GridMapExtension) : void {
+  public extend(extension: Extensions) : void {
     mergeDeep(this.extensions, extension);
   }
 
@@ -257,11 +255,11 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     ]);
     return object as GridMapProperties;
   }
-  protected override exportExtensions(object: object = {}) : GridMapExtensions {
+  protected override exportExtensions(object: object = {}) : Extendable {
     demangleProperties(object, [
       ['extensions', this.extensions]
     ]);
-    return object as GridMapExtensions;
+    return object as Extendable;
   }
 
   public override render(container: HTMLElement) {
