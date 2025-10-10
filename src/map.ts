@@ -245,8 +245,8 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     mergeDeep(this.extensions, extensions);
   }
 
-  public shrink(paths: string[]) : void {
-    deleteExtensions(this.extensions, paths);
+  public shrink(extensions: string[]) : void {
+    deleteExtensions(this.extensions, extensions);
   }
 
   protected override exportProperties(object: object = {}) : GridMapProperties {

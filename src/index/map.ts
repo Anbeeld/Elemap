@@ -45,9 +45,9 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
   public extend(extensions: Extensions|ArrayOfExtensions) {
     return this._.extend(prepareExtensionsInput(extensions));
   }
-  
-  public shrink(paths: string[]) {
-    return this._.shrink(paths);
+
+  public shrink(extensions: string[]) {
+    return this._.shrink(extensions);
   }
   
   public render(container: HTMLElement) : void {

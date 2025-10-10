@@ -464,8 +464,8 @@ export function prepareExtensionsInput(extensions: Extensions|ArrayOfExtensions)
   if (extensions.constructor === Array) {
     let arrayOfExtensions = extensions;
     extensions = {};
-    for (let [path, value] of arrayOfExtensions) {
-      let props = path.split('.');
+    for (let [chain, value] of arrayOfExtensions) {
+      let props = chain.split('.');
       let current = extensions;
       for (let prop of props.slice(0, props.length - 1)) {
         if (!current[prop]) {
@@ -479,9 +479,9 @@ export function prepareExtensionsInput(extensions: Extensions|ArrayOfExtensions)
   return extensions;
 }
 
-export function deleteExtensions(extensions: Extensions, paths: string[]) : void {
-  for (let path of paths) {
-    let props = path.split('.');
+export function deleteExtensions(extensions: Extensions, chains: string[]) : void {
+  for (let chain of chains) {
+    let props = chain.split('.');
     let current = extensions;
     for (let prop of props.slice(0, props.length - 1)) {
       current = current[prop];

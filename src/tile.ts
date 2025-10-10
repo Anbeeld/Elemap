@@ -82,8 +82,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
     mergeDeep(this.extensions, extensions);
   }
   
-  public shrink(paths: string[]) : void {
-    deleteExtensions(this.extensions, paths);
+  public shrink(extensions: string[]) : void {
+    deleteExtensions(this.extensions, extensions);
   }
 
   public abstract export() : TileSnapshot<C>;

@@ -92,8 +92,8 @@ export class Content implements ContentProperties, Extendable {
     mergeDeep(this.extensions, extensions);
   }
   
-  public shrink(paths: string[]) : void {
-    deleteExtensions(this.extensions, paths);
+  public shrink(extensions: string[]) : void {
+    deleteExtensions(this.extensions, extensions);
   }
 
   public export() : ContentSnapshot {
