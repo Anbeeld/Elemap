@@ -1,3 +1,9 @@
+## 0.3.7
+
+- Added shrink method as an opposite to extend, which takes an array of property names or chains of names as strings (like category.product.attribute) and removes properties with these names from extensions.
+- Made it possible to pass extensions to extend method as an array, e.g. [["key1", "value1"], ["key2.key3.key4", "value2"]].
+- Fixed naming of some internal types and method arguments.
+
 ## 0.3.6
 
 - Fixed createTile method requiring replace argument that should be optional.
