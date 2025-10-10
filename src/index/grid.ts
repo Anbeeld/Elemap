@@ -1,4 +1,4 @@
-import { AxialCoords, Extensions, CartesianCoords, Size, MapType, SignedTable, SignedArray } from "../utils.js";
+import { AxialCoords, Extensions, CartesianCoords, Size, MapType, SignedTable, SignedArray, ArrayOfExtensions, prepareExtensionsInput } from "../utils.js";
 import { mangleCoords } from "../mangle.js";
 import { RectangleGrid } from "../rectangle/grid.js";
 import { HexagonGrid } from "../hexagon/grid.js";
@@ -19,6 +19,8 @@ export type AccessCoords<M> =
   M extends MapType.Hexagon ? CartesianCoords|AxialCoords :
   never;
 
+type ObjectOfExtensions = Extensions;
+
 export class ElemapGrid<M extends MapType> {
   private _: ElemapGridType<M>;
 
@@ -34,8 +36,8 @@ export class ElemapGrid<M extends MapType> {
     return this._.extensions;
   }
 
-  public extend(extensions: Extensions) {
-    return this._.extend(extensions);
+  public extend(extensions: ObjectOfExtensions|ArrayOfExtensions) {
+    return this._.extend(prepareExtensionsInput(extensions));
   }
 
   public tileByCoords(coords: AccessCoords<M>|[number, number]) : ElemapTile<M>|undefined {

@@ -1,7 +1,7 @@
 import RectangleMap from "../rectangle/map.js";
 import HexagonMap from "../hexagon/map.js";
 import { Config, configToGridMapArguments } from "../config.js";
-import { Extensions, GridOffset, GridOrientation, MapType, Position } from "../utils.js";
+import { Extensions, ArrayOfExtensions, GridOffset, GridOrientation, MapType, Position, prepareExtensionsInput } from "../utils.js";
 import { GridMapSnapshot } from "../map.js";
 import { ElemapGrid, ElemapGridType } from "./grid.js";
 import { ElemapContent } from "./content.js";
@@ -42,8 +42,8 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
     return this._.extensions;
   }
 
-  public extend(extensions: Extensions) {
-    return this._.extend(extensions);
+  public extend(extensions: Extensions|ArrayOfExtensions) {
+    return this._.extend(prepareExtensionsInput(extensions));
   }
   
   public render(container: HTMLElement) : void {

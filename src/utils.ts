@@ -381,6 +381,7 @@ export type DeepPartial<T> = T extends object ? {
 
 export type Extensions = Record<string, any>;
 export type Extendable = { extensions: Extensions };
+export type ArrayOfExtensions = [string, any][];
 
 export class SignedArray<V> {
   [key: number]: V
@@ -456,4 +457,23 @@ export function isNumeric(str: string) {
     return false;
   }
   return !isNaN(Number(str));
+}
+
+export function prepareExtensionsInput(extensions: Extensions|ArrayOfExtensions) {
+  if (extensions.constructor === Array) {
+    let arrayOfExtensions = extensions;
+    extensions = {};
+    for (let [path, value] of arrayOfExtensions) {
+      let props = path.split('.');
+      let current = extensions;
+      for (let prop of props.slice(0, props.length - 1)) {
+        if (!current[prop]) {
+          current[prop] = {};
+        }
+        current = current[prop];
+      }
+      current[props[props.length - 1]!] = value;
+    }
+  }
+  return extensions;
 }

@@ -1,4 +1,4 @@
-import { Extensions } from '../utils.js';
+import { ArrayOfExtensions, Extensions, prepareExtensionsInput } from '../utils.js';
 import { Content } from '../content.js';
 
 export class ElemapContent {
@@ -8,8 +8,8 @@ export class ElemapContent {
     this._ = content;
   }
   
-  public extend(extensions: Extensions) {
-    return this._.extend(extensions);
+  public extend(extensions: Extensions|ArrayOfExtensions) {
+    return this._.extend(prepareExtensionsInput(extensions));
   }
 
   public get extensions(): Extensions {
