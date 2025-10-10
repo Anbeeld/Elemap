@@ -1,5 +1,5 @@
 import { AbstractTile, TileArguments, TileSnapshot } from "./tile.js";
-import { Size, GridOrientation, GridOffset, CartesianCoords, mergeDeep, Extendable, Extensions, SignedArray, SignedTable, Coords } from "./utils.js";
+import { Size, GridOrientation, GridOffset, CartesianCoords, mergeDeep, Extendable, Extensions, SignedArray, SignedTable, Coords, deleteExtensions } from "./utils.js";
 import { GridIds, GridIdsProperties, MapIdsProperties, Registry, TileIds } from "./registry.js";
 import { GridStyleSchema } from "./style/schema.js";
 import { demangleProperties, demangleGridIds, demangleGridStyleSchema, demangleProperty } from "./mangle.js";
@@ -146,6 +146,10 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   }
   public extend(extensions: Extensions) : void {
     mergeDeep(this.extensions, extensions);
+  }
+  
+  public shrink(paths: string[]) : void {
+    deleteExtensions(this.extensions, paths);
   }
 
   public abstract export() : GridSnapshot;

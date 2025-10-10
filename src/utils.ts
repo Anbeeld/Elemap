@@ -379,9 +379,10 @@ export type DeepPartial<T> = T extends object ? {
   [P in keyof T]?: DeepPartial<T[P]>;
 } : T;
 
+export type Extension = [string, any];
 export type Extensions = Record<string, any>;
 export type Extendable = { extensions: Extensions };
-export type ArrayOfExtensions = [string, any][];
+export type ArrayOfExtensions = Extension[];
 
 export class SignedArray<V> {
   [key: number]: V
@@ -476,4 +477,15 @@ export function prepareExtensionsInput(extensions: Extensions|ArrayOfExtensions)
     }
   }
   return extensions;
+}
+
+export function deleteExtensions(extensions: Extensions, paths: string[]) : void {
+  for (let path of paths) {
+    let props = path.split('.');
+    let current = extensions;
+    for (let prop of props.slice(0, props.length - 1)) {
+      current = current[prop];
+    }
+    delete current[props[props.length - 1]!];
+  }
 }

@@ -11,6 +11,10 @@ export class ElemapContent {
   public extend(extensions: Extensions|ArrayOfExtensions) {
     return this._.extend(prepareExtensionsInput(extensions));
   }
+  
+  public shrink(paths: string[]) {
+    return this._.shrink(paths);
+  }
 
   public get extensions(): Extensions {
     return this._.extensions;

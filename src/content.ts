@@ -1,4 +1,4 @@
-import { mergeDeep, Extendable, Extensions, Position } from './utils.js';
+import { mergeDeep, Extendable, Extensions, Position, deleteExtensions } from './utils.js';
 import { demangleProperties, demangleContentIds, mangleContentSnapshot, demangleContentLocationIds } from './mangle.js';
 import { Registry, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties } from './registry.js';
 import { AbstractTile } from './tile.js';
@@ -90,6 +90,10 @@ export class Content implements ContentProperties, Extendable {
   }
   public extend(extensions: Extensions) : void {
     mergeDeep(this.extensions, extensions);
+  }
+  
+  public shrink(paths: string[]) : void {
+    deleteExtensions(this.extensions, paths);
   }
 
   public export() : ContentSnapshot {

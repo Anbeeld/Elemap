@@ -45,6 +45,7 @@ const webConfig = {
                 'export',
                 'extensions',
                 'extend',
+                'shrink',
 
                 // map
                 'render',

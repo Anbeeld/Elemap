@@ -37,6 +37,10 @@ export class ElemapTile<M extends MapType> {
   public extend(extensions: Extensions|ArrayOfExtensions) {
     return this._.extend(prepareExtensionsInput(extensions));
   }
+  
+  public shrink(paths: string[]) {
+    return this._.shrink(paths);
+  }
 
   public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
     this._.updateStyle(mangleTileStyleDecls(decls), replace);

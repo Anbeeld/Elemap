@@ -3,7 +3,7 @@ import { AbstractGrid, GridArguments, GridSnapshot } from './grid.js';
 import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { ContentIds, GridIdsProperties, MapIds, MapIdsProperties, Registry } from './registry.js';
-import { MapType, mergeDeep, Extendable, Extensions, signedTablefromObject, } from './utils.js';
+import { MapType, mergeDeep, Extendable, Extensions, signedTablefromObject, deleteExtensions, } from './utils.js';
 import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleContentParams } from './mangle.js';
 import { Content, ContentSnapshot } from './content.js';
 import { ElemapContent } from './index/content.js'
@@ -243,6 +243,10 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
   }
   public extend(extensions: Extensions) : void {
     mergeDeep(this.extensions, extensions);
+  }
+
+  public shrink(paths: string[]) : void {
+    deleteExtensions(this.extensions, paths);
   }
 
   protected override exportProperties(object: object = {}) : GridMapProperties {

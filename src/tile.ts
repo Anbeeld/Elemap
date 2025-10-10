@@ -1,4 +1,4 @@
-import { Coords, getCoordsRow, mergeDeep, Extendable, Extensions, CartesianCoords } from './utils.js';
+import { Coords, getCoordsRow, mergeDeep, Extendable, Extensions, CartesianCoords, deleteExtensions } from './utils.js';
 import { demangleProperties, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Registry, TileIds, TileIdsProperties } from './registry.js';
@@ -80,6 +80,10 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
   }
   public extend(extensions: Extensions) : void {
     mergeDeep(this.extensions, extensions);
+  }
+  
+  public shrink(paths: string[]) : void {
+    deleteExtensions(this.extensions, paths);
   }
 
   public abstract export() : TileSnapshot<C>;
