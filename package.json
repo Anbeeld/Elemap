@@ -1,6 +1,6 @@
 {
   "name": "elemap",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "Elemap is a zero-dependency TS library for creating interactive game maps, rendered using HTML elements and CSS.",
   "keywords": [
     "game",
