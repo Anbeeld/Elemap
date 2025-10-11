@@ -43,10 +43,10 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return this.tiles[cartesianCoords.y]![cartesianCoords.x];
   }
   public override tileByElement(element: HTMLElement) : HexagonTile|undefined {
-    if (element.hasAttribute('data-elemap-r') && element.hasAttribute('data-elemap-q')) {
+    if (element.hasAttribute('data-coords-r') && element.hasAttribute('data-coords-q')) {
       let tile = this.tileByCoords({
-        q: Number(element.getAttribute('data-elemap-q')!),
-        r: Number(element.getAttribute('data-elemap-r')!)
+        q: Number(element.getAttribute('data-coords-q')!),
+        r: Number(element.getAttribute('data-coords-r')!)
       });
       if (tile && tile.elements) {
         if ((tile.elements.inner && tile.elements.inner === element) || (tile.elements.outer && tile.elements.outer === element)) {

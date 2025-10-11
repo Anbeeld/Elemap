@@ -290,14 +290,14 @@ export default class HexagonGridStyle extends GridStyle {
     if (this.owner.orientation === GridOrientation.Pointy) {
       for (let y = extremes.y.min; y <= extremes.y.max; y++) {
         css +=
-        this.selectors.row + `[data-elemap-y="${y}"]{` +
+        this.selectors.row + `[data-coords-y="${y}"]{` +
           `left:${this.calcTileIndentation({x: extremes.x.min, y}).horizontal};` +
         `}`;
       }
     } else {
       for (let x = extremes.x.min; x <= extremes.x.max; x++) {
         css +=
-        this.selectors.tile + `[data-elemap-x="${x}"]{` +
+        this.selectors.tile + `[data-coords-x="${x}"]{` +
           `top:${this.calcTileIndentation({x, y: extremes.y.min}).vertical};` +
         `}`;
       }
@@ -326,7 +326,7 @@ export default class HexagonGridStyle extends GridStyle {
       if (!this.owner.tiles[y]) {
         continue;
       }
-      css += this.selectors.row + `[data-elemap-y="${y}"]{` +
+      css += this.selectors.row + `[data-coords-y="${y}"]{` +
         `top:${calc.sub(calc.mult(y - extremes.y.min, this.tile.size.outer.height), calc.mult(this.tileRecess.vertical, y - extremes.y.min))};` +
       `}`;
     }

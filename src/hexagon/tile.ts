@@ -43,23 +43,23 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
 
   protected override setCoordsAttributes() {    
     if (this.elements!.outer) {
-      demangleProperty(this.elements!.outer.dataset, 'elemapR', this.coords.r.toString());
-      demangleProperty(this.elements!.outer.dataset, 'elemapQ', this.coords.q.toString());
+      demangleProperty(this.elements!.outer.dataset, 'coordsR', this.coords.r.toString());
+      demangleProperty(this.elements!.outer.dataset, 'coordsQ', this.coords.q.toString());
     }
-    demangleProperty(this.elements!.inner.dataset, 'elemapR', this.coords.r.toString());
-    demangleProperty(this.elements!.inner.dataset, 'elemapQ', this.coords.q.toString());
+    demangleProperty(this.elements!.inner.dataset, 'coordsR', this.coords.r.toString());
+    demangleProperty(this.elements!.inner.dataset, 'coordsQ', this.coords.q.toString());
 
     if (this.elements!.outer) {
-      demangleProperty(this.elements!.outer.dataset, 'elemapX', this.cartesianCoords.x.toString());
-      demangleProperty(this.elements!.outer.dataset, 'elemapY', this.cartesianCoords.y.toString());
+      demangleProperty(this.elements!.outer.dataset, 'coordsX', this.cartesianCoords.x.toString());
+      demangleProperty(this.elements!.outer.dataset, 'coordsY', this.cartesianCoords.y.toString());
     }
-    demangleProperty(this.elements!.inner.dataset, 'elemapX', this.cartesianCoords.x.toString());
-    demangleProperty(this.elements!.inner.dataset, 'elemapY', this.cartesianCoords.y.toString());
+    demangleProperty(this.elements!.inner.dataset, 'coordsX', this.cartesianCoords.x.toString());
+    demangleProperty(this.elements!.inner.dataset, 'coordsY', this.cartesianCoords.y.toString());
   }
   
   public get selectors() {
     return {
-      data: `[data-elemap-r="${this.coords.r}"][data-elemap-q="${this.coords.q}"]`
+      data: `[data-coords-r="${this.coords.r}"][data-coords-q="${this.coords.q}"]`
     };
   }
 }

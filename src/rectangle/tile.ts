@@ -39,16 +39,16 @@ export class RectangleTile extends AbstractTile<CartesianCoords> {
 
   protected override setCoordsAttributes() {
     if (this.elements!.outer) {
-      demangleProperty(this.elements!.outer.dataset, 'elemapX', this.coords.x.toString());
-      demangleProperty(this.elements!.outer.dataset, 'elemapY', this.coords.y.toString());
+      demangleProperty(this.elements!.outer.dataset, 'coordsX', this.coords.x.toString());
+      demangleProperty(this.elements!.outer.dataset, 'coordsY', this.coords.y.toString());
     }
-    demangleProperty(this.elements!.inner.dataset, 'elemapX', this.coords.x.toString());
-    demangleProperty(this.elements!.inner.dataset, 'elemapY', this.coords.y.toString());
+    demangleProperty(this.elements!.inner.dataset, 'coordsX', this.coords.x.toString());
+    demangleProperty(this.elements!.inner.dataset, 'coordsY', this.coords.y.toString());
   }
   
   public get selectors() {
     return {
-      data: `[data-elemap-x="${this.coords.x}"][data-elemap-y="${this.coords.y}"]`
+      data: `[data-coords-x="${this.coords.x}"][data-coords-y="${this.coords.y}"]`
     };
   }
 }

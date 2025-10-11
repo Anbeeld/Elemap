@@ -278,12 +278,12 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     for (let [y, row] of this.tiles) {
       if (typeof this.elements!.outerRows[y] === 'undefined') {
         this.elements!.outerRows[y] = document.createElement('div');
-        demangleProperty(this.elements!.outerRows[y].dataset, 'elemapY', y.toString());
+        demangleProperty(this.elements!.outerRows[y].dataset, 'coordsY', y.toString());
         this.elements!.outer.appendChild(this.elements!.outerRows[y]);
       }
       if (typeof this.elements!.innerRows[y] === 'undefined') {
         this.elements!.innerRows[y] = document.createElement('div');
-        demangleProperty(this.elements!.innerRows[y].dataset, 'elemapY', y.toString());
+        demangleProperty(this.elements!.innerRows[y].dataset, 'coordsY', y.toString());
         this.elements!.inner.appendChild(this.elements!.innerRows[y]);
       }
       for (let tile of row.values) {

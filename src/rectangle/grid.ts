@@ -79,10 +79,10 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     return this.tiles[coords.y]![coords.x];
   }
   public override tileByElement(element: HTMLElement) : RectangleTile|undefined {
-    if (element.hasAttribute('data-elemap-x') && element.hasAttribute('data-elemap-y')) {
+    if (element.hasAttribute('data-coords-x') && element.hasAttribute('data-coords-y')) {
       let tile = this.tileByCoords({
-        x: Number(element.getAttribute('data-elemap-x')!),
-        y: Number(element.getAttribute('data-elemap-y')!)
+        x: Number(element.getAttribute('data-coords-x')!),
+        y: Number(element.getAttribute('data-coords-y')!)
       });
       if (tile && tile.elements) {
         if ((tile.elements.inner && tile.elements.inner === element) || (tile.elements.outer && tile.elements.outer === element)) {

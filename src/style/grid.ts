@@ -247,7 +247,7 @@ export default abstract class GridStyle extends Style {
       if (!this.owner.tiles[y]) {
         continue;
       }
-      css += this.selectors.row + `[data-elemap-y="${y}"]{` +
+      css += this.selectors.row + `[data-coords-y="${y}"]{` +
         `top:${calc.mult(y - extremes.y.min, this.tile.size.outer.height)};` +
       `}`;
     }
