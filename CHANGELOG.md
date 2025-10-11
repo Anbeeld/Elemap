@@ -1,3 +1,10 @@
+## 0.3.8
+
+- Improved addContent argument structure, with location now supporting various types from tile index class to an array of coordinates.
+- Added contents getter to map index class to return all currently existing content objects.
+- Added deleteContent method to map index class.
+- Added ids getter for all index classes.
+
 ## 0.3.7
 
 - Added shrink method as an opposite to extend, which takes an array of property names or chains of names as strings (like category.product.attribute) and removes properties with these names from extensions.
