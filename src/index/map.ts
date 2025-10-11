@@ -3,10 +3,10 @@ import HexagonMap from "../hexagon/map.js";
 import { Config, configToGridMapArguments } from "../config.js";
 import { Extensions, ArrayOfExtensions, GridOffset, GridOrientation, MapType, Position, prepareExtensionsInput } from "../utils.js";
 import { GridMapSnapshot } from "../map.js";
-import { ElemapGrid, ElemapGridType } from "./grid.js";
+import { AccessCoords, ElemapGrid, ElemapGridType } from "./grid.js";
 import { ElemapContent } from "./content.js";
-import { ContentArguments } from "../content.js";
 import { ContentIds } from "../registry.js";
+import { ElemapTile } from "./tile.js";
 import { demangleMapIds } from "../mangle.js";
 
 type ElemapType<M> = 
@@ -14,7 +14,9 @@ type ElemapType<M> =
   M extends MapType.Hexagon ? HexagonMap :
   never;
 
-export type ContentParameters = Omit<ContentArguments, 'ids'|'offset'> & {
+export type ContentParameters<M extends MapType = MapType.Rectangle> = {
+  figure: HTMLElement|string,
+  location?: ElemapTile<M>|ElemapContent|AccessCoords<M>|[number, number],
   offset?: Position
 };
 

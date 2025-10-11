@@ -170,21 +170,23 @@ export abstract class AbstractMap implements MapProperties, Extendable {
   }
 
   public addContent(params: ContentParameters) : ElemapContent {
-    let mangledParams = mangleContentParams(params);
-    if (mangledParams.location instanceof ElemapTile) {
-      // @ts-ignore
-      mangledParams.location = (this as AbstractGridMap).grid.tileByCoords(mangledParams.location.coords)!.ids;
+    params = mangleContentParams(params);
+
+    let location;
+    if (!params.location) {
+      location = undefined;
+    } else if ((params.location instanceof ElemapContent || params.location instanceof ElemapTile)) {
+      location = params.location.ids;
     } else {
-      mangledParams.location = undefined;
+      location = (this as unknown as AbstractGridMap).grid.tileByCoords(params.location)!.ids;
     }
 
-    let content = new Content(Object.assign(
-      mangledParams,
-      {
-        ids: this.ids,
-        offset: params.offset || {top:'0', right:'0'},
-      }
-    ));
+    let content = new Content({
+      ids: this.ids,
+      location: location,
+      figure: params.figure,
+      offset: params.offset || {top:'0', right:'0', bottom:'0', left:'0'},
+    });
     this.contents.push(content);
     return new ElemapContent(content);
   }
