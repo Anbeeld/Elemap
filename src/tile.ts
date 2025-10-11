@@ -60,6 +60,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
   constructor(args: TileArguments<C>) {
     if (typeof (args.ids as TileIdsProperties).tile === 'number') {
       this.ids = new TileIds(args.ids, (args.ids as TileIdsProperties).tile);
+      Registry.update(this.ids.tile);
     } else {
       this.ids = new TileIds(args.ids, Registry.id());
     }

@@ -67,6 +67,7 @@ export abstract class AbstractMap implements MapProperties, Extendable {
   constructor(args: MapArguments) {
     if (args.ids && typeof args.ids.map === 'number') {
       this.ids = new MapIds(args.ids.map);
+      Registry.update(this.ids.map);
     } else {
       this.ids = new MapIds(Registry.id());
     }

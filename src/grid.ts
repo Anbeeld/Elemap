@@ -132,6 +132,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   constructor(args: GridArguments) {
     if (typeof (args.ids as GridIdsProperties).grid === 'number') {
       this.ids = new GridIds(args.ids, (args.ids as GridIdsProperties).grid);
+      Registry.update(this.ids.grid);
     } else {
       this.ids = new GridIds(args.ids, Registry.id());
     }

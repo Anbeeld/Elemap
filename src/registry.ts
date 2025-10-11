@@ -88,6 +88,12 @@ export class Registry {
     Registry.maps.set(map.ids.map, map);
   }
 
+  public static update(id: number) : void {
+    if (id > Registry._id) {
+      Registry._id = id;
+    }
+  }
+
   public static map = {
     abstract: (ids: MapIds) : AbstractMap|undefined => {
       return Registry.maps.get(ids.map);

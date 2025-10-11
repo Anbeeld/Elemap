@@ -66,6 +66,7 @@ export class Content implements ContentProperties, Extendable {
   constructor(args: ContentArguments) {
     if (typeof (args.ids as ContentIdsProperties).content === 'number') {
       this.ids = new ContentIds(args.ids, (args.ids as ContentIdsProperties).content);
+      Registry.update(this.ids.content);
     } else {
       this.ids = new ContentIds(args.ids, Registry.id());
     }
