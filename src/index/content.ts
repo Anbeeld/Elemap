@@ -1,5 +1,6 @@
 import { ArrayOfExtensions, Extensions, prepareExtensionsInput } from '../utils.js';
 import { Content } from '../content.js';
+import { demangleContentIds } from '../mangle.js';
 
 export class ElemapContent {
   private _: Content;
@@ -9,7 +10,7 @@ export class ElemapContent {
   }
 
   public get ids() {
-    return this._.ids;
+    return demangleContentIds(this._.ids);
   }
   
   public extend(extensions: Extensions|ArrayOfExtensions) {

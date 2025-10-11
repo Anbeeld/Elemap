@@ -7,6 +7,7 @@ import { ElemapGrid, ElemapGridType } from "./grid.js";
 import { ElemapContent } from "./content.js";
 import { ContentArguments } from "../content.js";
 import { ContentIds } from "../registry.js";
+import { demangleMapIds } from "../mangle.js";
 
 type ElemapType<M> = 
   M extends MapType.Rectangle ? RectangleMap :
@@ -31,7 +32,7 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
   }
 
   public get ids() {
-    return this._.ids;
+    return demangleMapIds(this._.ids);
   }
 
   public static import(snapshot: GridMapSnapshot) {

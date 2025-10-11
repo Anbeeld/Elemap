@@ -1,5 +1,5 @@
 import { AxialCoords, Extensions, CartesianCoords, Size, MapType, SignedTable, SignedArray, ArrayOfExtensions, prepareExtensionsInput } from "../utils.js";
-import { mangleCoords } from "../mangle.js";
+import { demangleGridIds, mangleCoords } from "../mangle.js";
 import { RectangleGrid } from "../rectangle/grid.js";
 import { HexagonGrid } from "../hexagon/grid.js";
 import { ElemapTile, ElemapTileType } from "./tile.js";
@@ -29,7 +29,7 @@ export class ElemapGrid<M extends MapType> {
   }
 
   public get ids() {
-    return this._.ids;
+    return demangleGridIds(this._.ids);
   }
 
   public export() {
