@@ -100,7 +100,7 @@ export class Content implements ContentProperties, Extendable {
   protected exportProperties(object: object = {}) : ContentProperties {
     demangleProperties(object, [
       ['ids', demangleContentIds(this.ids)],
-      ['figure', this.elements.figure.outerHTML],
+      ['figure', this.elements && this.elements.figure ? this.elements.figure.outerHTML : this.figure],
       ['location', this.location ? demangleContentLocationIds(this.location) : undefined],
       ['offset', this.offset]
     ]);
