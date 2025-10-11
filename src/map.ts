@@ -4,7 +4,7 @@ import { GridMapStyleSchema } from './style/schema.js';
 import { MapStyle, GridMapStyle } from './style/map.js';
 import { ContentIds, GridIdsProperties, MapIds, MapIdsProperties, Registry } from './registry.js';
 import { MapType, mergeDeep, Extendable, Extensions, signedTablefromObject, deleteExtensions, } from './utils.js';
-import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleContentParams } from './mangle.js';
+import { demangleProperties, demangleMapIds, demangleGridMapStyleSchema, mangleContentParams, demangleProperty } from './mangle.js';
 import { Content, ContentSnapshot } from './content.js';
 import { ElemapContent } from './index/content.js'
 import { ContentParameters } from './index/map.js';
@@ -43,11 +43,17 @@ export abstract class AbstractMap implements MapProperties, Extendable {
   public get style() : MapStyle { return this._style; }
 
   public get classes() {
+    let base = `elemap-`;
     return {
-      base: `elemap-${this.ids.map}`,
-      container: `elemap-${this.ids.map}-container`,
-      map: `elemap-${this.ids.map}-map`
+      base: base,
+      container: base + `container`,
+      map: base + `map`,
+      content: base + `content`
     };
+  }
+
+  public addIdToDataset(element: HTMLElement) {
+    demangleProperty(element.dataset, 'mapId', this.ids.map.toString());
   }
 
   protected _extensions: Extensions = {};
@@ -107,10 +113,12 @@ export abstract class AbstractMap implements MapProperties, Extendable {
       return this.elements;
     } else {
       let elementMap = document.createElement('div');
-      elementMap.classList.add(`elemap-${this.ids.map}-map`);
+      elementMap.classList.add(this.classes.map);
+      this.addIdToDataset(elementMap);
 
       let elementContent = document.createElement('div');
-      elementContent.classList.add(`elemap-${this.ids.map}-content`);
+      elementContent.classList.add(this.classes.content);
+      this.addIdToDataset(elementContent);
 
       return {
         map: elementMap,
@@ -123,18 +131,20 @@ export abstract class AbstractMap implements MapProperties, Extendable {
     if (container && this.elements.container !== container) {
       this.elements.container = container;
       this.elements.container.innerHTML = '';
-      this.elements.container.classList.add('elemap-' + this.ids.map + '-container');
+      this.elements.container.classList.add(this.classes.container);
+      this.addIdToDataset(this.elements.container);
     }
 
     if (!this.elements.container) {
       throw new Error('No container found.');
     }
 
-    for (let element of document.getElementsByClassName('elemap-' + this.ids.map + '-container')) {
+    for (let element of document.getElementsByClassName(this.classes.container)) {
       if (element === this.elements.container) {
         continue;
       }
-      element.classList.remove('elemap-' + this.ids.map + '-container');
+      element.classList.remove(this.classes.container);
+      element.removeAttribute('data-map-id');
     }
 
     this.elements.container.appendChild(this.elements.map);

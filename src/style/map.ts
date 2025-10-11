@@ -31,6 +31,8 @@ export abstract class MapStyle extends Style {
   protected set computed(value: MapComputed) { this._computed = value; }
   public get computed() : MapComputed { return this._computed; }
 
+  public override get owner() { return Registry.map.grid(this.ids.owner)!; }
+
   public constructor(mapIds: MapIds, decls: GridMapStyleSchema) {
     super();
     this.ids = new MapStyleIds(mapIds, Registry.id());
@@ -49,30 +51,33 @@ export abstract class MapStyle extends Style {
 
     let headStyles = document.head.getElementsByTagName('style');
     for (let style of headStyles) {
-      if (style.classList.contains(this.owner.classes.base + '-css-core')) {
+      if (style.classList.contains(this.owner.classes.base + 'css-core') && style.hasAttribute('data-map-id') && style.getAttribute('data-map-id') === this.ids.owner.map.toString()) {
         elementStyleCore = style;
-      } else if (style.classList.contains(this.owner.classes.base + '-css-schema')) {
+      } else if (style.classList.contains(this.owner.classes.base + 'css-schema') && style.hasAttribute('data-map-id') && style.getAttribute('data-map-id') === this.ids.owner.map.toString()) {
         elementStyleSchema = style;
-      } else if (style.classList.contains(this.owner.classes.base + '-css-generated')) {
+      } else if (style.classList.contains(this.owner.classes.base + 'css-generated') && style.hasAttribute('data-map-id') && style.getAttribute('data-map-id') === this.ids.owner.map.toString()) {
         elementStyleGenerated = style;
       }
     }
 
     if (!elementStyleCore) {
       elementStyleCore = document.createElement('style');
-      elementStyleCore.classList.add(this.owner.classes.base + '-css-core');
+      elementStyleCore.classList.add(this.owner.classes.base + 'css-core');
+      this.owner.addIdToDataset(elementStyleCore);
       document.head.appendChild(elementStyleCore);
     }
 
     if (!elementStyleSchema) {
       elementStyleSchema = document.createElement('style');
-      elementStyleSchema.classList.add(this.owner.classes.base + '-css-schema');
+      elementStyleSchema.classList.add(this.owner.classes.base + 'css-schema');
+      this.owner.addIdToDataset(elementStyleSchema);
       document.head.appendChild(elementStyleSchema);
     }
 
     if (!elementStyleGenerated) {
       elementStyleGenerated = document.createElement('style');
-      elementStyleGenerated.classList.add(this.owner.classes.base + '-css-generated');
+      elementStyleGenerated.classList.add(this.owner.classes.base + 'css-generated');
+      this.owner.addIdToDataset(elementStyleGenerated);
       document.head.appendChild(elementStyleGenerated);
     }
 
@@ -97,11 +102,12 @@ export abstract class MapStyle extends Style {
   }
 
   public override get selectors() {
+    let id = '[data-map-id="' + this.ids.owner.map + '"]';
     return {
-      base: `.elemap-${this.ids.owner.map}`,
-      container: `.elemap-${this.ids.owner.map}-container`,
-      map: `.elemap-${this.ids.owner.map}-map`,
-      content: `.elemap-${this.ids.owner.map}-content`
+      base: `.elemap`,
+      container: `.elemap-container` + id,
+      map: `.elemap-map` + id,
+      content: `.elemap-content` + id
     };
   }
 
@@ -169,8 +175,6 @@ export abstract class GridMapStyle extends MapStyle {
   protected set grid(value: GridStyle) { this._grid = value; }
   public get grid() : GridStyle { return this._grid; }
 
-  public override get owner() { return Registry.map.grid(this.ids.owner)!; }
-
   public constructor(mapIds: MapIds, decls: GridMapStyleSchema) {
     super(mapIds, decls);
     this.initGrid(decls as GridStyleSchema);
@@ -197,7 +201,7 @@ export abstract class GridMapStyle extends MapStyle {
     let headStylesArray = Array.from(headStyles);
     for (let style of headStylesArray) {
       for (let className of style.classList) {
-        if (className.startsWith(this.owner.classes.base + '-css-')) {
+        if (className.startsWith(this.owner.classes.base + 'css-')) {
           let isRelevantElement = false;
 
           if (style === this.elements.core || style === this.elements.schema || style === this.elements.generated) {

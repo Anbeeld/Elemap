@@ -14,7 +14,7 @@ export default abstract class Style {
 
   public get selectors() {
     return {
-      base: `.elemap-${this.ids.owner.map}`
+      base: `.elemap`
     };
   }
 

@@ -41,24 +41,25 @@ export default abstract class GridStyle extends Style {
   public abstract initTile(decls: TileStyleDecls) : void;
 
   public override get selectors() {
-    let base = `.elemap-${this.ids.owner.map}`;
+    let base = `.elemap`;
     let grid = base + `-grid`;
+    let id = '[data-map-id="' + this.ids.owner.map + '"]';
     return {
       base: base,
-      frame: grid + `-frame`,
-      outerFrame: grid + `-frame-outer`,
-      innerFrame: grid + `-frame-inner`,
-      grid: grid,
-      row: grid + `>div`,
-      tile: grid + `>div>div`,
-      outerGrid: grid + `-outer`,
-      innerGrid: grid + `-inner`,
-      outerRow: grid + `-outer>div`,
-      innerRow: grid + `-inner>div`,
-      outerTile: grid + `-outer>div>div`,
-      innerTile: grid + `-inner>div>div`,
-      contour: grid + `-contour`,
-      mannequin: base + `-mannequin`
+      frame: grid + `-frame` + id,
+      outerFrame: grid + `-frame-outer` + id,
+      innerFrame: grid + `-frame-inner` + id,
+      grid: grid + id,
+      row: grid + id + `>div`,
+      tile: grid + id + `>div>div`,
+      outerGrid: grid + `-outer` + id,
+      innerGrid: grid + `-inner` + id,
+      outerRow: grid + `-outer` + id + `>div`,
+      innerRow: grid + `-inner` + id + `>div`,
+      outerTile: grid + `-outer` + id + `>div>div`,
+      innerTile: grid + `-inner` + id + `>div>div`,
+      contour: grid + `-contour` + id,
+      mannequin: base + `-mannequin` + id
     }
   }
 

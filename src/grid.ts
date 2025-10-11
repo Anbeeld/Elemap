@@ -40,6 +40,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   protected set ids(value: GridIds) { this._ids = value; }
   public get ids() : GridIds { return this._ids; }
 
+  public get map() { return Registry.map.grid(this.ids)!; }
+
   public get size() : Size {
     return {
       width: this.extremes.x.max - this.extremes.x.min + 1,
@@ -96,16 +98,17 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
   public get schema() : GridStyleSchema { return {grid: this.style.decls, tile: this.style.tile.decls}; }
 
   public get classes() {
-    let base = `elemap-${this.ids.map}`;
+    let base = `elemap-`;
+    let grid = base + `grid`;
     return {
-      base: base,
-      frame: base + `-frame`,
-      outerFrame: base + `-frame-outer`,
-      innerFrame: base + `-frame-inner`,
-      grid: base + `-grid`,
-      outerGrid: base + `-outer`,
-      innerGrid: base + `-inner`,
-      contour: base + `-contour`
+      frame: grid + `-frame`,
+      outerFrame: grid + `-frame-outer`,
+      innerFrame: grid + `-frame-inner`,
+      grid: grid,
+      outerGrid: grid + `-outer`,
+      innerGrid: grid + `-inner`,
+      contour: grid + `-contour`,
+      mannequin: base + `mannequin`
     }
   }
   public get selectors() { return this.style.selectors; }
@@ -220,23 +223,31 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
         }
       }
 
-      this.elements.outerFrame.classList.add('elemap-' + this.ids.map + '-grid-frame-outer');
-      this.elements.innerFrame.classList.add('elemap-' + this.ids.map + '-grid-frame-inner');
+      this.elements.outerFrame.classList.add(this.classes.outerFrame);
+      this.map.addIdToDataset(this.elements.outerFrame);
+
+      this.elements.innerFrame.classList.add(this.classes.innerFrame);
+      this.map.addIdToDataset(this.elements.innerFrame);
       this.elements.outerFrame.appendChild(this.elements.innerFrame);
 
-      this.elements.outer.classList.add('elemap-' + this.ids.map + '-grid');
-      this.elements.outer.classList.add('elemap-' + this.ids.map + '-grid-outer');
+      this.elements.outer.classList.add(this.classes.grid);
+      this.elements.outer.classList.add(this.classes.outerGrid);
+      this.map.addIdToDataset(this.elements.outer);
 
-      this.elements.inner.classList.add('elemap-' + this.ids.map + '-grid');
-      this.elements.inner.classList.add('elemap-' + this.ids.map + '-grid-inner');
+      this.elements.inner.classList.add(this.classes.grid);
+      this.elements.inner.classList.add(this.classes.innerGrid);
+      this.map.addIdToDataset(this.elements.inner);
 
-      this.elements.contour.classList.add('elemap-' + this.ids.map + '-grid-contour');
+      this.elements.contour.classList.add(this.classes.contour);
       this.elements.contour.appendChild(this.elements.contourHover);
+      this.map.addIdToDataset(this.elements.contour);
 
-      this.elements.mannequin.outerRow.classList.add('elemap-' + this.ids.map + '-mannequin');
+      this.elements.mannequin.outerRow.classList.add(this.classes.mannequin);
+      this.map.addIdToDataset(this.elements.mannequin.outerRow);
       this.elements.outer.appendChild(this.elements.mannequin.outerRow);
 
-      this.elements.mannequin.innerRow.classList.add('elemap-' + this.ids.map + '-mannequin');
+      this.elements.mannequin.innerRow.classList.add(this.classes.mannequin);
+      this.map.addIdToDataset(this.elements.mannequin.innerRow);
       this.elements.inner.appendChild(this.elements.mannequin.innerRow);
 
       this.style.tile.owner.render();

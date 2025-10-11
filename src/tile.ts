@@ -1,5 +1,5 @@
 import { Coords, getCoordsRow, mergeDeep, Extendable, Extensions, CartesianCoords, deleteExtensions } from './utils.js';
-import { demangleProperties, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords } from './mangle.js';
+import { demangleProperties, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords, demangleProperty } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Registry, TileIds, TileIdsProperties } from './registry.js';
 import TileStyle from './style/tile.js';
@@ -163,8 +163,10 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
       }
     }
 
-    this.elements!.outer!.classList.add('elemap-' + this.ids.map + '-mannequin');
-    this.elements!.inner.classList.add('elemap-' + this.ids.map + '-mannequin');
+    this.elements!.outer!.classList.add(this.grid.classes.mannequin);
+    this.grid.map.addIdToDataset(this.elements!.outer!);
+    this.elements!.inner.classList.add(this.grid.classes.mannequin);
+    this.grid.map.addIdToDataset(this.elements!.inner);
 
     if (!outer.contains(this.elements!.outer!)) {
       outer.appendChild(this.elements!.outer!);
@@ -179,14 +181,16 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
       if (!this.elements.style) {
         let headStyles = document.head.getElementsByTagName('style');
         for (let style of headStyles) {
-          if (style.classList.contains('elemap-' + this.ids.map + '-css-tile-' + this.ids.tile)) {
+          if (style.classList.contains('elemap-' + this.ids.map + '-css-tile-' + this.ids.tile) && style.hasAttribute('data-map-id') && style.getAttribute('data-map-id') === this.ids.map.toString() && style.hasAttribute('data-tile-id') && style.getAttribute('data-tile-id') === this.ids.tile.toString()) {
             this.elements.style = style;
           }
         }
 
         if (!this.elements.style) {
           this.elements.style = document.createElement('style');
-          this.elements.style.classList.add('elemap-' + this.ids.map + '-css-tile-' + this.ids.tile);
+          this.elements.style.classList.add('elemap-css-tile');
+          this.grid.map.addIdToDataset(this.elements.style);
+          this.addIdToDataset(this.elements.style);
           document.head.appendChild(this.elements.style);
         }
       }
@@ -206,6 +210,10 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
     if (this.elements!.style) {
       this.elements.style.innerHTML = this.style.core + this.style.schema + this.style.generated;
     }
+  }
+
+  public addIdToDataset(element: HTMLElement) {
+    demangleProperty(element.dataset, 'tileId', this.ids.tile.toString());
   }
 
   public hover() : void {
