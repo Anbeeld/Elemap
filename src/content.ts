@@ -1,4 +1,4 @@
-import { mergeDeep, Extendable, Extensions, Position, deleteExtensions } from './utils.js';
+import { mergeDeep, Extendable, Extensions, Position, deleteExtensions, getElementSelector } from './utils.js';
 import { demangleProperties, demangleContentIds, mangleContentSnapshot, demangleContentLocationIds } from './mangle.js';
 import { Registry, ContentIds, ContentIdsProperties, MapIdsProperties, TileIdsProperties } from './registry.js';
 import { AbstractTile } from './tile.js';
@@ -23,7 +23,7 @@ type ContentLocation = AbstractTile|Content|undefined;
 
 type ContentElements = {
   figure: HTMLElement,
-  container?: HTMLElement
+  container: HTMLElement
 }
 
 export class Content implements ContentProperties, Extendable {
@@ -70,11 +70,9 @@ export class Content implements ContentProperties, Extendable {
     }
 
     if (typeof args.figure === 'string') {
-      let figureWrapper = document.createElement('div');
-      figureWrapper.innerHTML = args.figure;
-      this.elements = {figure: figureWrapper.children[0] as HTMLElement};
+      this.figure = args.figure;
     } else {
-      this.elements = {figure: args.figure};
+      this.figure = getElementSelector(args.figure);
     }
 
     this.location = args.location;
@@ -127,8 +125,24 @@ export class Content implements ContentProperties, Extendable {
   }
   
   protected initElements() : void {
-    if (!this.elements.container) {
-      this.elements.container = document.createElement('div')
+    if (this.elements) {
+      return;
+    }
+
+    let figureElement;
+    try {
+      figureElement = document.querySelector(this.figure);
+    } catch(error) {}
+
+    if (!figureElement) {
+      let figureWrapper = document.createElement('div');
+      figureWrapper.innerHTML = this.figure;
+      figureElement = figureWrapper.children[0] as HTMLElement;
+    }
+
+    this.elements = {
+      figure: figureElement as HTMLElement,
+      container: document.createElement('div')
     }
   }
 
