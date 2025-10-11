@@ -190,6 +190,14 @@ export abstract class AbstractMap implements MapProperties, Extendable {
     this.contents.push(content);
     return new ElemapContent(content);
   }
+
+  public deleteContent(ids: ContentIds) : void {
+    for (let i = 0; i < this.contents.length; i++) {
+      if (this.contents[i]!.ids.content === ids.content) {
+        this.contents.splice(i, 1);
+      }
+    }
+  }
 }
 
 // Snapshot and extension types

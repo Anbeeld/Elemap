@@ -72,6 +72,10 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
   public addContent(params: ContentParameters) {
     return this._.addContent(params);
   }
+
+  public deleteContent(ids: ContentIds) {
+    return this._.deleteContent(ids);
+  }
   
   public contentById(ids: ContentIds) : ElemapContent|undefined {
     let content = this._.contentById(ids);

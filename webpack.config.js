@@ -52,6 +52,7 @@ const webConfig = {
                 'render',
                 'grid',
                 'addContent',
+                'deleteContent',
                 'contentById',
                 'contentByElement',
                 'import',
