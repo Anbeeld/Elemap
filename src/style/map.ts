@@ -130,10 +130,15 @@ export abstract class MapStyle extends Style {
     `}` +
 
     this.selectors.content + `>div{` +
-      `width: 0px;height: 0px;position: absolute;overflow:visible` +
+      `width:0px;` +
+      `height:0px;` +
+      `position:absolute;` +
+      `overflow:visible` +
     `}` +
     this.selectors.content + `>div>*{` +
-      `position: absolute;transform: translate(-50%, -100%);` +
+      `position:absolute;` +
+      `transform:translate(-50%, -100%);` +
+      `pointer-events:auto;` +
     `}`;
   }
 

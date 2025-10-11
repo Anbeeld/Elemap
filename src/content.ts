@@ -140,6 +140,9 @@ export class Content implements ContentProperties, Extendable {
       figureElement = figureWrapper.children[0] as HTMLElement;
     }
 
+    figureElement.addEventListener('mouseover', () => this.hover(), false);
+    figureElement.addEventListener('mouseout', () => this.unhover(), false);
+
     this.elements = {
       figure: figureElement as HTMLElement,
       container: document.createElement('div')
