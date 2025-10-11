@@ -169,8 +169,8 @@ export abstract class AbstractMap implements MapProperties, Extendable {
     return undefined;
   }
 
-  public addContent(params: ContentParameters) : ElemapContent {
-    params = mangleContentParams(params);
+  public addContent<M extends MapType>(params: ContentParameters<M>) : ElemapContent {
+    params = mangleContentParams(params) as ContentParameters<M>;
 
     let location;
     if (!params.location) {
