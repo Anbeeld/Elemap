@@ -30,6 +30,10 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
     }
   }
 
+  public get ids() {
+    return this._.ids;
+  }
+
   public static import(snapshot: GridMapSnapshot) {
     return new Elemap(snapshot.type, snapshot);
   }

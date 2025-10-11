@@ -21,6 +21,10 @@ export class ElemapTile<M extends MapType> {
     this._ = tile;
   }
 
+  public get ids() {
+    return this._.ids;
+  }
+
   public get coords() : ElemapCoordsType<M> {
     // @ts-ignore
     return demangleCoords(this._.coords);

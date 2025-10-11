@@ -42,6 +42,7 @@ const webConfig = {
             properties: {
               reserved: [
                 // common
+                'ids',
                 'export',
                 'extensions',
                 'extend',

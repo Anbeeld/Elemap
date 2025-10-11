@@ -28,6 +28,10 @@ export class ElemapGrid<M extends MapType> {
     this._ = grid;
   }
 
+  public get ids() {
+    return this._.ids;
+  }
+
   public export() {
     return this._.export();
   }

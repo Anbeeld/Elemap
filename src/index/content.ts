@@ -7,6 +7,10 @@ export class ElemapContent {
   constructor(content: Content) {
     this._ = content;
   }
+
+  public get ids() {
+    return this._.ids;
+  }
   
   public extend(extensions: Extensions|ArrayOfExtensions) {
     return this._.extend(prepareExtensionsInput(extensions));
