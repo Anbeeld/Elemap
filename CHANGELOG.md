@@ -1,3 +1,8 @@
+## 0.3.9
+
+- Fixed content system not working in Node environment due to handling of HTML elements in the constructor.
+- Fixed missing generics in addContent argument. 
+
 ## 0.3.8
 
 - Improved addContent argument structure, with location now supporting various types from tile index class to an array of coordinates.
