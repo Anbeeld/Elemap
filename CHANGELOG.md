@@ -1,3 +1,7 @@
+## 0.3.10
+
+- Fixed content export failing if its HTML elements were not initialized yet.
+
 ## 0.3.9
 
 - Fixed content system not working in Node environment due to handling of HTML elements in the constructor.
