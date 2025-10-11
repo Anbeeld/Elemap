@@ -86,6 +86,14 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
     }
     return undefined;
   }
+    
+  public get contents() : ElemapContent[] {
+    let contents = [];
+    for (let content of this._.contents) {
+      contents.push(new ElemapContent(content));
+    }
+    return contents;
+  }
 
   // For TypeScript - exporting enums as get methods
   public static get MapType() {

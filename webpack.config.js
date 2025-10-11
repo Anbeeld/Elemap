@@ -55,6 +55,7 @@ const webConfig = {
                 'contentById',
                 'contentByElement',
                 'import',
+                'contents',
 
                 // grid
                 'tileByCoords',
