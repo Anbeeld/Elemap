@@ -3,5 +3,6 @@ examples/
 dist/
 src/
 tests/
+tsconfig.json
 webpack.config.js
 *.tgz
