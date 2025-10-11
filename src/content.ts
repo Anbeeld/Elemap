@@ -22,8 +22,9 @@ export type ContentLocationIds = TileIdsProperties|ContentIdsProperties|undefine
 type ContentLocation = AbstractTile|Content|undefined;
 
 type ContentElements = {
+  position: HTMLElement,
+  container: HTMLElement,
   figure: HTMLElement,
-  container: HTMLElement
 }
 
 export class Content implements ContentProperties, Extendable {
@@ -129,23 +130,30 @@ export class Content implements ContentProperties, Extendable {
       return;
     }
 
-    let figureElement;
+    let position = document.createElement('div');
+    let container = document.createElement('div');
+    position.appendChild(container);
+
+    let figure;
     try {
-      figureElement = document.querySelector(this.figure);
+      figure = document.querySelector(this.figure);
     } catch(error) {}
 
-    if (!figureElement) {
+    if (!figure) {
       let figureWrapper = document.createElement('div');
       figureWrapper.innerHTML = this.figure;
-      figureElement = figureWrapper.children[0] as HTMLElement;
+      figure = figureWrapper.children[0] as HTMLElement;
     }
 
-    figureElement.addEventListener('mouseover', () => this.hover(), false);
-    figureElement.addEventListener('mouseout', () => this.unhover(), false);
+    figure.addEventListener('mouseover', () => this.hover(), false);
+    figure.addEventListener('mouseout', () => this.unhover(), false);
+
+    container.appendChild(figure);
 
     this.elements = {
-      figure: figureElement as HTMLElement,
-      container: document.createElement('div')
+      position,
+      container,
+      figure: figure as HTMLElement,
     }
   }
 
@@ -156,16 +164,12 @@ export class Content implements ContentProperties, Extendable {
       let tileZeroPosition = this.host.style.grid.tileZeroPosition;
       let locationPosition = this.host.style.grid.tileInnerPosition(this.host.cartesianCoords);
       let size = this.host.style.size.inner;
-      this.elements.container!.style.top = calc.add(tileZeroPosition.top, locationPosition.top, this.offset.top, calc.div(size.height, 2));
-      this.elements.container!.style.left = calc.add(tileZeroPosition.left, locationPosition.left, this.offset.top, calc.div(size.width, 2));
+      this.elements.position.style.top = calc.add(tileZeroPosition.top, locationPosition.top, this.offset.top, calc.div(size.height, 2));
+      this.elements.position.style.left = calc.add(tileZeroPosition.left, locationPosition.left, this.offset.top, calc.div(size.width, 2));
     }
 
-    if (!this.elements.container!.contains(this.elements.figure)) {
-      this.elements.container!.appendChild(this.elements.figure);
-    }
-
-    if (!this.map.elements.content.contains(this.elements.container!)) {
-      this.map.elements.content.appendChild(this.elements.container!);
+    if (!this.map.elements.content.contains(this.elements.position)) {
+      this.map.elements.content.appendChild(this.elements.position);
     }
   }
 }
