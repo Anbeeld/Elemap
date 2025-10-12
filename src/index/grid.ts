@@ -40,12 +40,12 @@ export class ElemapGrid<M extends MapType> {
     return this._.extensions;
   }
 
-  public extend(extensions: ObjectOfExtensions|ArrayOfExtensions) {
-    return this._.extend(prepareExtensionsInput(extensions));
+  public addExtensions(extensions: ObjectOfExtensions|ArrayOfExtensions) {
+    return this._.addExtensions(prepareExtensionsInput(extensions));
   }
   
-  public shrink(extensions: string[]) {
-    return this._.shrink(extensions);
+  public deleteExtensions(extensions: string[]) {
+    return this._.deleteExtensions(extensions);
   }
 
   public tileByCoords(coords: AccessCoords<M>|[number, number]) : ElemapTile<M>|undefined {

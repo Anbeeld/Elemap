@@ -263,14 +263,14 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
 
   protected static importSnapshot<M extends AbstractGridMap>(mapClass: new (args: GridMapArguments) => M, snapshot: GridMapSnapshot) : M {
     let instance = new mapClass(snapshot);
-    instance.extend(snapshot.extensions);
+    instance.addExtensions(snapshot.extensions);
     return instance;
   }
-  public extend(extensions: Extensions) : void {
+  public addExtensions(extensions: Extensions) : void {
     mergeDeep(this.extensions, extensions);
   }
 
-  public shrink(extensions: string[]) : void {
+  public deleteExtensions(extensions: string[]) : void {
     deleteExtensions(this.extensions, extensions);
   }
 

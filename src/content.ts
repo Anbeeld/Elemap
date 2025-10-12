@@ -85,14 +85,14 @@ export class Content implements ContentProperties, Extendable {
   public static import(snapshot: ContentSnapshot) : Content {
     let mangledSnapshot = mangleContentSnapshot(snapshot);
     let instance = new Content(mangledSnapshot);
-    instance.extend(mangledSnapshot.extensions);
+    instance.addExtensions(mangledSnapshot.extensions);
     return instance;
   }
-  public extend(extensions: Extensions) : void {
+  public addExtensions(extensions: Extensions) : void {
     mergeDeep(this.extensions, extensions);
   }
   
-  public shrink(extensions: string[]) : void {
+  public deleteExtensions(extensions: string[]) : void {
     deleteExtensions(this.extensions, extensions);
   }
 

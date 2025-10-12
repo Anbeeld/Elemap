@@ -85,14 +85,14 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
   protected static importSnapshot<T extends AbstractTile, C extends Coords>(tile: new (args: TileArguments<C>) => T, snapshot: TileSnapshot) : T {    
     let mangledSnapshot = mangleTileSnapshot(snapshot);
     let instance = new tile(mangledSnapshot as unknown as TileArguments<C>);
-    instance.extend(mangledSnapshot.extensions);
+    instance.addExtensions(mangledSnapshot.extensions);
     return instance;
   }
-  public extend(extensions: Extensions) : void {
+  public addExtensions(extensions: Extensions) : void {
     mergeDeep(this.extensions, extensions);
   }
   
-  public shrink(extensions: string[]) : void {
+  public deleteExtensions(extensions: string[]) : void {
     deleteExtensions(this.extensions, extensions);
   }
 
@@ -239,7 +239,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
     if (!this.visible) {
       return;
     }
-    
+
     let grid = Registry.grid.abstract(this.ids);
     if (grid) {
       grid.setContourPosition(this.elementOffset)
