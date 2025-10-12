@@ -521,3 +521,23 @@ export function getElementSelector(elem: HTMLElement) : string {
 
   return `${getElementSelector(parentNode as HTMLElement)} > ${str}`;
 }
+
+export function rectangeNeighbors(coords: CartesianCoords) : CartesianCoords[] {
+  return [
+    { x: coords.x + 1, y: coords.y },
+    { x: coords.x - 1, y: coords.y },
+    { x: coords.x, y: coords.y + 1 },
+    { x: coords.x, y: coords.y - 1 }
+  ];
+}
+
+export function hexagonNeighbors(coords: AxialCoords) : AxialCoords[] {
+  return [
+    { q: coords.q + 1, r: coords.r - 1 },
+    { q: coords.q + 1, r: coords.r },
+    { q: coords.q, r: coords.r + 1 },
+    { q: coords.q - 1, r: coords.r + 1 },
+    { q: coords.q - 1, r: coords.r },
+    { q: coords.q, r: coords.r - 1 },
+  ];
+}

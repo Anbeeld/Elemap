@@ -1,9 +1,10 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { CartesianCoords } from '../utils.js';
+import { CartesianCoords, rectangeNeighbors } from '../utils.js';
 import { demangleProperty } from '../mangle.js';
 import { Registry } from '../registry.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
 import { TileStyleDecls } from '../style/schema.js';
+import { RectangleGrid } from './grid.js';
 
 export type RectangleTileSnapshot = TileSnapshot<CartesianCoords>;
 
@@ -50,5 +51,17 @@ export class RectangleTile extends AbstractTile<CartesianCoords> {
     return {
       data: `[data-coords-x="${this.coords.x}"][data-coords-y="${this.coords.y}"]`
     };
+  }
+
+  public override get neighbors() : RectangleTile[] {
+    let neighborCoords = rectangeNeighbors(this.coords);
+    let neighbors: RectangleTile[] = [];
+    for (let coords of neighborCoords) {
+      let tile = (this.grid as RectangleGrid).tileByCoords(coords);
+      if (tile) {
+        neighbors.push(tile);
+      }
+    }
+    return neighbors;
   }
 }

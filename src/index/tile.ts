@@ -62,4 +62,12 @@ export class ElemapTile<M extends MapType> {
   public toggleVisibility(state?: boolean) : boolean {
     return this._.toggleVisibility(state);
   }
+
+  public get neighbors() : ElemapTile<M>[] {
+    let neighbors = [];
+    for (let neighbor of this._.neighbors) {
+      neighbors.push(new ElemapTile<M>(neighbor as ElemapTileType<M>));
+    }
+    return neighbors;
+  }
 }

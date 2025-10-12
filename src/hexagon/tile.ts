@@ -1,9 +1,10 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { AxialCoords, axialCoordsToCartesian, CartesianCoords } from '../utils.js';
+import { AxialCoords, axialCoordsToCartesian, CartesianCoords, hexagonNeighbors } from '../utils.js';
 import { demangleProperty } from '../mangle.js';
 import { Registry } from '../registry.js';
 import { TileStyleDecls } from '../style/schema.js';
 import HexagonTileStyle from '../style/hexagon/tile.js';
+import { HexagonGrid } from './grid.js';
 
 export type HexagonTileSnapshot = TileSnapshot<AxialCoords>;
 
@@ -61,5 +62,17 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
     return {
       data: `[data-coords-r="${this.coords.r}"][data-coords-q="${this.coords.q}"]`
     };
+  }
+  
+  public override get neighbors() : HexagonTile[] {
+    let neighborCoords = hexagonNeighbors(this.coords);
+    let neighbors: HexagonTile[] = [];
+    for (let coords of neighborCoords) {
+      let tile = (this.grid as HexagonGrid).tileByCoords(coords);
+      if (tile) {
+        neighbors.push(tile);
+      }
+    }
+    return neighbors;
   }
 }

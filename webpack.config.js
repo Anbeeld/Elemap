@@ -70,6 +70,7 @@ const webConfig = {
                 'updateStyle',
                 'elements',
                 'toggleVisibility',
+                'neighbors',
               ]
             }
           }

@@ -285,4 +285,6 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
     }
     return this.visible;
   }
+
+  public abstract get neighbors() : AbstractTile[];
 }
