@@ -173,7 +173,10 @@ export abstract class AbstractMap implements MapProperties, Extendable {
 
   public contentByElement(element: HTMLElement) : Content|undefined {
     for (let content of this.contents) {
-      if (content.elements.figure === element) {
+      if (content.elements &&
+          ((content.elements.figure && content.elements.figure === element)
+          || (content.elements.position && content.elements.position === element)
+          || (content.elements.container && content.elements.container === element))) {
         return content;
       }
     }
@@ -202,12 +205,13 @@ export abstract class AbstractMap implements MapProperties, Extendable {
     return new ElemapContent(content);
   }
 
-  public deleteContent(ids: ContentIds) : void {
-    for (let i = 0; i < this.contents.length; i++) {
-      if (this.contents[i]!.ids.content === ids.content) {
-        this.contents.splice(i, 1);
-      }
+  public deleteContent(reference: ContentIds|HTMLElement) : boolean {
+    let content = this.contentByElement(reference as HTMLElement) || this.contentById(reference as ContentIds);
+    if (content) {
+      this.contents.splice(this.contents.indexOf(content), 1);
+      return true;
     }
+    return false;
   }
 }
 
