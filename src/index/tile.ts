@@ -58,4 +58,8 @@ export class ElemapTile<M extends MapType> {
     ]);
     return elements;
   }
+
+  public toggleVisibility(state?: boolean) : boolean {
+    return this._.toggleVisibility(state);
+  }
 }

@@ -10,7 +10,8 @@ export type TileSnapshot<C extends Coords = Coords> = TileProperties<C> & Extend
 export type TileProperties<C extends Coords = Coords> = {
   ids: TileIdsProperties,
   coords: C,
-  decls: TileStyleDecls | "mannequin" | false // false = use grid default tile style
+  decls: TileStyleDecls | "mannequin" | false, // false = use grid default tile style
+  visible?: boolean
 };
 
 export type TileArguments<C extends Coords = Coords> = Omit<TileProperties<C>, 'ids'> & {
@@ -52,6 +53,10 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
   public abstract get cartesianCoords() : CartesianCoords;
 
   protected rendered: boolean = false;
+  
+  protected _visible: boolean = true;
+  protected set visible(value: boolean) { this._visible = value; }
+  public get visible() : boolean { return this._visible; }
 
   protected _extensions: Extensions = {};
   protected set extensions(value: Extensions) { this._extensions = value; }
@@ -65,6 +70,10 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
       this.ids = new TileIds(args.ids, Registry.id());
     }
     this.coords = args.coords;
+
+    if (args.visible === false) {
+      this.visible = args.visible;
+    }
 
     if (args.decls && args.decls !== "mannequin") {
       this.updateStyle(args.decls);
@@ -95,7 +104,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
     demangleProperties(object, [
       ['ids', demangleTileIds(this.ids)],
       ['coords', demangleCoords<C>(this.coords)],
-      ['decls', this._style !== undefined ? demangleTileStyleDecls(this.decls) : false]
+      ['decls', this._style !== undefined ? demangleTileStyleDecls(this.decls) : false],
+      ['visible', this.visible]
     ]);
     return object as TileProperties<C>;
   }
@@ -148,6 +158,14 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
       if (!inner.contains(this.elements!.inner)) {
         inner.appendChild(this.elements!.inner);
       }
+    }
+
+    if (!this.visible) {
+      this.elements.outer?.classList.add(this.grid.classes.tileHidden);
+      this.elements.inner.classList.add(this.grid.classes.tileHidden);
+    } else {
+      this.elements.outer?.classList.remove(this.grid.classes.tileHidden);
+      this.elements.inner.classList.remove(this.grid.classes.tileHidden);
     }
 
     this.rendered = true;
@@ -218,6 +236,10 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
   }
 
   public hover() : void {
+    if (!this.visible) {
+      return;
+    }
+    
     let grid = Registry.grid.abstract(this.ids);
     if (grid) {
       grid.setContourPosition(this.elementOffset)
@@ -254,4 +276,13 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
   }
 
   public abstract get selectors() : {[key: string]: string};
+
+  public toggleVisibility(state?: boolean) : boolean {
+    if (state !== undefined) {
+      this.visible = state;
+    } else {
+      this.visible = !this.visible;
+    }
+    return this.visible;
+  }
 }

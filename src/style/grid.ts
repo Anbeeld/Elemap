@@ -59,7 +59,8 @@ export default abstract class GridStyle extends Style {
       outerTile: grid + `-outer` + id + `>div>div`,
       innerTile: grid + `-inner` + id + `>div>div`,
       contour: grid + `-contour` + id,
-      mannequin: base + `-mannequin` + id
+      mannequin: base + `-mannequin` + id,
+      tileHidden: base + `-tile-hidden`
     }
   }
 
@@ -87,7 +88,7 @@ export default abstract class GridStyle extends Style {
     `}` +
 
     this.selectors.grid + `{` +
-      `overflow:hidden;` +
+      `overflow:visible;` +
     `}` +
 
     this.selectors.row + `{` +
@@ -158,6 +159,10 @@ export default abstract class GridStyle extends Style {
       `display:block;` +
       `position:absolute;` +
       `z-index:220;` +
+    `}` +
+    
+    this.selectors.tileHidden + `{` +
+      `opacity: 0;` +
     `}`;
   }
 

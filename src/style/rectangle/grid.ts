@@ -44,7 +44,7 @@ export default class RectangleGridStyle extends GridStyle {
     let extremes = this.owner.extremes;
     for (let y = extremes.y.min; y <= extremes.y.max; y++) {
       for (let x = extremes.x.min; x <= extremes.x.max; x++) {
-        if (!this.owner.tiles[y] || !this.owner.tiles[y]![x]) {
+        if (!this.owner.tiles[y] || !this.owner.tiles[y]![x] || !this.owner.tiles[y]![x]!.visible) {
           continue;
         }
         if (path !== '') {

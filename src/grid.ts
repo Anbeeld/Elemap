@@ -108,7 +108,8 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       outerGrid: grid + `-outer`,
       innerGrid: grid + `-inner`,
       contour: grid + `-contour`,
-      mannequin: base + `mannequin`
+      mannequin: base + `mannequin`,
+      tileHidden: base + `tile-hidden`
     }
   }
   public get selectors() { return this.style.selectors; }

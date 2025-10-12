@@ -69,6 +69,7 @@ const webConfig = {
                 'extensions',
                 'updateStyle',
                 'elements',
+                'toggleVisibility',
               ]
             }
           }

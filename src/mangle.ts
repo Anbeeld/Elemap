@@ -218,6 +218,7 @@ export function mangleTileSnapshot<C extends Coords>(snapshot: any) : TileSnapsh
     ids: mangleTileIds(mangleProperty(snapshot, 'ids')),
     coords: mangleCoords<C>(mangleProperty(snapshot, 'coords')),
     decls: mangleProperty(snapshot, 'decls') ? mangleTileStyleDecls(mangleProperty(snapshot, 'decls')) : false,
+    visible: mangleProperty(snapshot, 'visible'),
     extensions: mangleProperty(snapshot, 'extensions')
   };
 }
