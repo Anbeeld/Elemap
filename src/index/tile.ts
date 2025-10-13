@@ -70,4 +70,12 @@ export class ElemapTile<M extends MapType> {
     }
     return neighbors;
   }
+
+  public get diagonals() : ElemapTile<M>[] {
+    let diagonals = [];
+    for (let diagonal of this._.diagonals) {
+      diagonals.push(new ElemapTile<M>(diagonal as ElemapTileType<M>));
+    }
+    return diagonals;
+  }
 }

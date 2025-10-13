@@ -287,4 +287,6 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
   }
 
   public abstract get neighbors() : AbstractTile[];
+
+  public abstract get diagonals() : AbstractTile[];
 }

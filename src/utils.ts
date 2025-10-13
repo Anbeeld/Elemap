@@ -524,10 +524,19 @@ export function getElementSelector(elem: HTMLElement) : string {
 
 export function rectangeNeighbors(coords: CartesianCoords) : CartesianCoords[] {
   return [
-    { x: coords.x + 1, y: coords.y },
-    { x: coords.x - 1, y: coords.y },
     { x: coords.x, y: coords.y + 1 },
-    { x: coords.x, y: coords.y - 1 }
+    { x: coords.x + 1, y: coords.y },
+    { x: coords.x, y: coords.y - 1 },
+    { x: coords.x - 1, y: coords.y },
+  ];
+}
+
+export function rectangeDiagonals(coords: CartesianCoords) : CartesianCoords[] {
+  return [
+    { x: coords.x + 1, y: coords.y - 1 },
+    { x: coords.x + 1, y: coords.y + 1 },
+    { x: coords.x - 1, y: coords.y + 1 },
+    { x: coords.x - 1, y: coords.y - 1 },
   ];
 }
 

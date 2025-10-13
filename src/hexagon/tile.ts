@@ -75,4 +75,8 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
     }
     return neighbors;
   }
+
+  public override get diagonals() : HexagonTile[] {
+    return [];
+  }
 }

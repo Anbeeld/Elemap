@@ -71,6 +71,7 @@ const webConfig = {
                 'elements',
                 'toggleVisibility',
                 'neighbors',
+                'diagonals',
               ]
             }
           }
