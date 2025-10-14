@@ -142,6 +142,7 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
       this.elements = {
         inner: document.createElement('div')
       }
+      this.elements.inner.classList.add(this.grid.classes.tile);
     }
   }
   protected abstract setCoordsAttributes() : void;
@@ -189,6 +190,10 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
       }
     }
 
+    this.elements.inner.classList.add(this.grid.classes.tile);
+    
+    this.elements.outer!.classList.add(this.grid.classes.tile);
+
     this.elements!.outer!.classList.add(this.grid.classes.mannequin);
     this.grid.map.addIdToDataset(this.elements!.outer!);
     this.elements!.inner.classList.add(this.grid.classes.mannequin);
@@ -223,6 +228,8 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
 
       if (!this.elements.outer && (this.decls.outer.length || this.decls.hover.outer.length)) {
         this.elements.outer = document.createElement('div');
+
+        this.elements.outer!.classList.add(this.grid.classes.tile);
 
         let outer = this.grid.elements!.outerRows[getCoordsRow(this.cartesianCoords)]!;
         this.setCoordsAttributes();

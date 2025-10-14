@@ -109,6 +109,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       innerGrid: grid + `-inner`,
       contour: grid + `-contour`,
       mannequin: base + `mannequin`,
+      tile: base + `tile`,
       tileHidden: base + `tile-hidden`
     }
   }
