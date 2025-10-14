@@ -63,17 +63,24 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
       data: `[data-coords-r="${this.coords.r}"][data-coords-q="${this.coords.q}"]`
     };
   }
+
+  public override get neighborCoords() : AxialCoords[] {
+    return hexagonNeighbors(this.coords);
+  }
   
   public override get neighbors() : HexagonTile[] {
-    let neighborCoords = hexagonNeighbors(this.coords);
     let neighbors: HexagonTile[] = [];
-    for (let coords of neighborCoords) {
+    for (let coords of this.neighborCoords) {
       let tile = (this.grid as HexagonGrid).tileByCoords(coords);
       if (tile) {
         neighbors.push(tile);
       }
     }
     return neighbors;
+  }
+
+  public override get diagonalCoords() : AxialCoords[] {
+    return [];
   }
 
   public override get diagonals() : HexagonTile[] {

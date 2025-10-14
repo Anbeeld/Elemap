@@ -53,10 +53,13 @@ export class RectangleTile extends AbstractTile<CartesianCoords> {
     };
   }
 
+  public override get neighborCoords(): CartesianCoords[] {
+    return rectangeNeighbors(this.coords);
+  }
+
   public override get neighbors() : RectangleTile[] {
-    let neighborCoords = rectangeNeighbors(this.coords);
     let neighbors: RectangleTile[] = [];
-    for (let coords of neighborCoords) {
+    for (let coords of this.neighborCoords) {
       let tile = (this.grid as RectangleGrid).tileByCoords(coords);
       if (tile) {
         neighbors.push(tile);
@@ -65,10 +68,13 @@ export class RectangleTile extends AbstractTile<CartesianCoords> {
     return neighbors;
   }
 
+  public override get diagonalCoords() : CartesianCoords[] {
+    return rectangeDiagonals(this.coords);
+  }
+
   public override get diagonals() : RectangleTile[] {
-    let diagonalCoords = rectangeDiagonals(this.coords);
     let diagonals: RectangleTile[] = [];
-    for (let coords of diagonalCoords) {
+    for (let coords of this.diagonalCoords) {
       let tile = (this.grid as RectangleGrid).tileByCoords(coords);
       if (tile) {
         diagonals.push(tile);

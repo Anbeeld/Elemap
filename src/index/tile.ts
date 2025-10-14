@@ -63,12 +63,28 @@ export class ElemapTile<M extends MapType> {
     return this._.toggleVisibility(state);
   }
 
+  public get neighborCoords() : ElemapCoordsType<M>[] {
+    let neighborCoords = [];
+    for (let neighborCoord of this._.neighborCoords) {
+      neighborCoords.push(demangleCoords(neighborCoord) as ElemapCoordsType<M>);
+    }
+    return neighborCoords;
+  }
+
   public get neighbors() : ElemapTile<M>[] {
     let neighbors = [];
     for (let neighbor of this._.neighbors) {
       neighbors.push(new ElemapTile<M>(neighbor as ElemapTileType<M>));
     }
     return neighbors;
+  }
+
+  public get diagonalCoords() : ElemapCoordsType<M>[] {
+    let diagonalCoords = [];
+    for (let diagonalCoord of this._.diagonalCoords) {
+      diagonalCoords.push(demangleCoords(diagonalCoord) as ElemapCoordsType<M>);
+    }
+    return diagonalCoords;
   }
 
   public get diagonals() : ElemapTile<M>[] {
