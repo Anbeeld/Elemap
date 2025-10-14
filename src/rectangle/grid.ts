@@ -1,6 +1,6 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { RectangleTile, RectangleTileSnapshot } from "./tile.js";
-import { CartesianCoords, SignedArray, SignedTable, Size} from "../utils.js";
+import { CartesianCoords, normalizeSize, SignedArray, SignedTable, Size} from "../utils.js";
 import { TileArguments } from "../tile.js";
 
 export type RectangleGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
@@ -48,7 +48,8 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     return false;
   }
 
-  public createTiles(size: Size, coords: CartesianCoords|[number, number], replace: boolean) :  (CartesianCoords|false)[] {
+  public createTiles(coords: CartesianCoords|[number, number], size: Size, replace: boolean) :  (CartesianCoords|false)[] {
+    size = normalizeSize(size);
     let createdTiles: (CartesianCoords|false)[] = [];
     if (Array.isArray(coords)) {
       coords = {
@@ -113,6 +114,7 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
   }
 
   public override deleteTiles(coords: CartesianCoords|[number, number], size: Size): boolean[] {
+    size = normalizeSize(size);
     let deletedTiles: boolean[] = [];
     if (Array.isArray(coords)) {
       coords = {

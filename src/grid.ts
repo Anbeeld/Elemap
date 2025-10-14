@@ -200,7 +200,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
 
   public abstract createTile(coords: Coords|[number, number], replace: boolean) : Coords|false;
 
-  public abstract createTiles(size: Size, coords: Coords|[number, number], replace: boolean) : (Coords|false)[];
+  public abstract createTiles(coords: Coords|[number, number], size: Size, replace: boolean) : (Coords|false)[];
 
   protected abstract tileFactory(args: TileArguments) : T;
   protected abstract tileImport(snapshot: TileSnapshot) : T;

@@ -1,6 +1,6 @@
 import { AbstractGrid, GridArguments, GridSnapshot } from "../grid.js";
 import { HexagonTile, HexagonTileSnapshot } from "./tile.js";
-import { GridOffset, SignedTable, AxialCoords, axialCoordsToCartesian, cartesianCoordsToAxial, CartesianCoords, SignedArray, Size, isCartesianCoords } from "../utils.js";
+import { GridOffset, SignedTable, AxialCoords, axialCoordsToCartesian, cartesianCoordsToAxial, CartesianCoords, SignedArray, Size, isCartesianCoords, normalizeSize } from "../utils.js";
 import { TileArguments } from "../tile.js";
 
 export type HexagonGridSnapshot = Omit<GridSnapshot, 'tiles'> & {
@@ -79,7 +79,8 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return false;
   }
 
-  public createTiles(size: Size, coords: AxialCoords|CartesianCoords|[number, number], replace: boolean) : (AxialCoords|CartesianCoords|false)[] {
+  public createTiles(coords: AxialCoords|CartesianCoords|[number, number], size: Size, replace: boolean) : (AxialCoords|CartesianCoords|false)[] {
+    size = normalizeSize(size);
     let createdTiles: (AxialCoords|CartesianCoords|false)[] = [];
     if (Array.isArray(coords)) {
       coords = {
@@ -131,6 +132,7 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
   }
 
   public override deleteTiles(coords: AxialCoords|CartesianCoords|[number, number], size: Size) : boolean[] {
+    size = normalizeSize(size);
     let deletedTiles: boolean[] = [];
     if (Array.isArray(coords)) {
       coords = {

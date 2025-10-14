@@ -66,7 +66,7 @@ export class ElemapGrid<M extends MapType> {
     return false;
   }
 
-  public createTiles(size: Size, coords: ElemapCoords<M>|[number, number], replace: boolean = false) : (ElemapTile<M>|false)[] {
+  public createTiles(coords: ElemapCoords<M>|[number, number], size: Size, replace: boolean = false) : (ElemapTile<M>|false)[] {
     // @ts-ignore coords &
     let createdTilesCoords = this._.createTiles(size, coords, replace);
     let createdTiles: (ElemapTile<M>|false)[] = [];

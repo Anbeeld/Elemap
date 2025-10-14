@@ -1,9 +1,15 @@
 import { cssValueToNumber } from './style/utils.js';
 
-export type Size = {
-  width: number,
-  height: number
-};
+type SizeAsObject = { width: number, height: number };  
+type SizeAsArray = [number, number];
+export type Size = SizeAsObject|SizeAsArray;
+
+export function normalizeSize(size: Size) : SizeAsObject {
+  if (Array.isArray(size)) {
+    return { width: size[0], height: size[1] }
+  }
+  return size;
+}
 
 export type Position = {
   top: string,
