@@ -92,4 +92,39 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     }
     return undefined;
   }
+  
+  public override prepareCoordsInput(coords: CartesianCoords|[number, number]) : CartesianCoords {
+    if (Array.isArray(coords)) {
+      coords = {
+        x: coords[0],
+        y: coords[1]
+      };
+    }
+    return coords;
+  }
+  
+  public override deleteTile(coords: CartesianCoords|[number, number]) : boolean {
+    let tile = this.tileByCoords(coords);
+    if (tile) {
+      this.tiles.delete([tile.coords.y, tile.coords.x]);
+      return true;
+    }
+    return false;
+  }
+
+  public override deleteTiles(coords: CartesianCoords|[number, number], size: Size): boolean[] {
+    let deletedTiles: boolean[] = [];
+    if (Array.isArray(coords)) {
+      coords = {
+        x: coords[0],
+        y: coords[1]
+      };
+    }
+    for (let x = coords.x; x < coords.x + size.width; x++) {
+      for (let y = coords.y; y < coords.y + size.height; y++) {
+        deletedTiles.push(this.deleteTile({x, y}));
+      }
+    }
+    return deletedTiles;
+  }
 }

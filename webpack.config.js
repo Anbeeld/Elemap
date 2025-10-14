@@ -63,6 +63,8 @@ const webConfig = {
                 'createTile',
                 'createTiles',
                 'tiles',
+                'deleteTile',
+                'deleteTiles',
 
                 // tile
                 'coords',

@@ -110,4 +110,39 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
       return i % 2 === 0;
     }
   }
+
+  public override prepareCoordsInput(coords: AxialCoords|CartesianCoords|[number, number]) : AxialCoords|CartesianCoords {
+    if (Array.isArray(coords)) {
+      coords = {
+        q: coords[0],
+        r: coords[1]
+      };
+    }
+    return coords;
+  }
+  
+  public override deleteTile(coords: AxialCoords|CartesianCoords|[number, number]) : boolean {
+    let tile = this.tileByCoords(coords);
+    if (tile) {
+      this.tiles.delete([tile.coords.r, tile.coords.q]);
+      return true;
+    }
+    return false;
+  }
+
+  public override deleteTiles(coords: AxialCoords|CartesianCoords|[number, number], size: Size) : boolean[] {
+    let deletedTiles: boolean[] = [];
+    if (Array.isArray(coords)) {
+      coords = {
+        q: coords[0],
+        r: coords[1]
+      };
+    }
+    for (let q = coords.q; q < coords.q + size.width; q++) {
+      for (let r = coords.r; r < coords.r + size.height; r++) {
+        deletedTiles.push(this.deleteTile({q, r}));
+      }
+    }
+    return deletedTiles;
+  }
 }

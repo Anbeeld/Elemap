@@ -90,4 +90,14 @@ export class ElemapGrid<M extends MapType> {
     }
     return tiles;
   }
+
+  public deleteTile(coords: AccessCoords<M>|[number, number]) : boolean {
+    // @ts-ignore coords &
+    return this._.deleteTile(Array.isArray(coords) ? coords : mangleCoords(coords));
+  }
+
+  public deleteTiles(coords: AccessCoords<M>|[number, number], size: Size) : boolean[] {
+    // @ts-ignore coords &
+    return this._.deleteTiles(Array.isArray(coords) ? coords : mangleCoords(coords), size);
+  }
 }

@@ -320,4 +320,10 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       this.elements!.contourHover.style.transform = `translate(${position.x}px, ${position.y}px)`;
     }
   }
+
+  public abstract prepareCoordsInput(coords: Coords|[number, number]) : Coords;
+
+  public abstract deleteTile(coords: Coords|[number, number]) : boolean;
+
+  public abstract deleteTiles(coords: Coords|[number, number], size: Size) : boolean[];
 }
