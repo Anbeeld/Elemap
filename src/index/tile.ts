@@ -78,4 +78,8 @@ export class ElemapTile<M extends MapType> {
     }
     return diagonals;
   }
+
+  public deleteStyle(decls: CustomTileStyleDecls) : void {
+    this._.deleteStyle(mangleTileStyleDecls(decls));
+  }
 }

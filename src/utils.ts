@@ -580,3 +580,11 @@ export function hexagonNeighbors(coords: AxialCoords) : AxialCoords[] {
     { q: coords.q, r: coords.r - 1 },
   ];
 }
+
+function escapeRegExp(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
+export function replaceAll(str: string, find: string, replace: string) {
+  return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+}

@@ -1,4 +1,4 @@
-import { DeepPartial } from "../utils.js";
+import { DeepPartial, replaceAll } from "../utils.js";
 
 /* MAP STYLE DECLARATION TYPES */
 export type MapStyleDecls = {
@@ -79,21 +79,48 @@ const defaultTileStyleDecls: TileStyleDecls = {
 }
 
 /* TILE STYLE DECLARATIONS MODIFICATION */
-export function modifyTileStyleDecls(custom: CustomTileStyleDecls, initial?: TileStyleDecls) : TileStyleDecls {
-  return {
-    outer:
-      (initial && initial.outer ? initial.outer : '') +
-      (custom.outer || ''),
-    inner:
-      (initial && initial.inner ? initial.inner : '') +
-      (custom.inner || ''),
-    hover: {
+export function modifyTileStyleDecls(custom: CustomTileStyleDecls, initial?: TileStyleDecls, deleteMode?: boolean) : TileStyleDecls {
+  if (deleteMode === true) {
+    return {
       outer:
-        (initial && initial.hover && initial.hover.outer ? initial.hover.outer : '') +
-        (custom.hover && custom.hover.outer ? custom.hover.outer : ''),
+        custom.outer ?
+          (custom.outer === 'clear' ? '' :
+          initial && initial.outer ? replaceAll(initial.outer, custom.outer, '') : '') :
+          initial && initial.outer ? initial.outer : '',
       inner:
-        (initial && initial.hover && initial.hover.inner ? initial.hover.inner : '') +
-        (custom.hover && custom.hover.inner ? custom.hover.inner : ''),
+        custom.inner ?
+          (custom.inner === 'clear' ? '' :
+          initial && initial.inner ? replaceAll(initial.inner, custom.inner, '') : '') :
+          initial && initial.inner ? initial.inner : '',
+      hover: {
+        outer: 
+          custom.hover && custom.hover.outer ?
+            (custom.hover.outer === 'clear' ? '' :
+            initial && initial.hover && initial.hover.outer ? replaceAll(initial.hover.outer, custom.hover.outer, '') : '') :
+            initial && initial.hover && initial.hover.outer ? initial.hover.outer : '',
+        inner:
+          custom.hover && custom.hover.inner ?
+            (custom.hover.inner === 'clear' ? '' :
+            initial && initial.hover && initial.hover.inner ? replaceAll(initial.hover.inner, custom.hover.inner, '') : '') :
+            initial && initial.hover && initial.hover.inner ? initial.hover.inner : '',
+      }
+    };
+  } else {
+    return {
+      outer:
+        (initial && initial.outer ? initial.outer : '') +
+        (custom.outer || ''),
+      inner:
+        (initial && initial.inner ? initial.inner : '') +
+        (custom.inner || ''),
+      hover: {
+        outer:
+          (initial && initial.hover && initial.hover.outer ? initial.hover.outer : '') +
+          (custom.hover && custom.hover.outer ? custom.hover.outer : ''),
+        inner:
+          (initial && initial.hover && initial.hover.inner ? initial.hover.inner : '') +
+          (custom.hover && custom.hover.inner ? custom.hover.inner : ''),
+      }
     }
   }
 }

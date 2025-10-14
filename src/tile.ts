@@ -123,10 +123,16 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
       this.style = this.createStyle(modifyTileStyleDecls(decls));
     } else {
       this.style = this.createStyle(modifyTileStyleDecls(decls, this.decls));
-    }    
+    }
 
     if (this.rendered) {
       this.render();
+    }
+  }
+
+  public deleteStyle(decls: CustomTileStyleDecls) : void {
+    if (this._style) {
+      this.style = this.createStyle(modifyTileStyleDecls(decls, this.decls, true));
     }
   }
 
