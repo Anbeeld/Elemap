@@ -43,6 +43,9 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
         coords: this.tileCoordsFromCartesian(coords),
         decls: false
       });
+      if (this.map.renderOnChange && this.map.rendered) {
+        this.map.render();
+      }
       return coords;
     }
     return false;
@@ -60,6 +63,11 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     for (let x = coords.x; x < coords.x + size.width; x++) {
       for (let y = coords.y; y < coords.y + size.height; y++) {
         createdTiles.push(this.createTile({x, y}, replace));
+      }
+    }
+    if (createdTiles.length > 0) {
+      if (this.map.renderOnChange && this.map.rendered) {
+        this.map.render();
       }
     }
     return createdTiles;
@@ -108,6 +116,9 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     let tile = this.tileByCoords(coords);
     if (tile) {
       this.tiles.delete([tile.coords.y, tile.coords.x]);
+      if (this.map.renderOnChange && this.map.rendered) {
+        this.map.render();
+      }
       return true;
     }
     return false;
@@ -125,6 +136,11 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     for (let x = coords.x; x < coords.x + size.width; x++) {
       for (let y = coords.y; y < coords.y + size.height; y++) {
         deletedTiles.push(this.deleteTile({x, y}));
+      }
+    }
+    if (deletedTiles.length > 0) {
+      if (this.map.renderOnChange && this.map.rendered) {
+        this.map.render();
       }
     }
     return deletedTiles;

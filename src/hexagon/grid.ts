@@ -74,6 +74,9 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
         coords: this.tileCoordsFromCartesian(cartesianCoords),
         decls: false
       });
+      if (this.map.renderOnChange && this.map.rendered) {
+        this.map.render();
+      }
       return coords;
     }
     return false;
@@ -101,6 +104,11 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
         }
       }
     }
+    if (createdTiles.length > 0) {
+      if (this.map.renderOnChange && this.map.rendered) {
+        this.map.render();
+      }
+    }
     return createdTiles;
   }
 
@@ -126,6 +134,9 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     let tile = this.tileByCoords(coords);
     if (tile) {
       this.tiles.delete([tile.coords.r, tile.coords.q]);
+      if (this.map.renderOnChange && this.map.rendered) {
+        this.map.render();
+      }
       return true;
     }
     return false;
@@ -143,6 +154,11 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     for (let q = coords.q; q < coords.q + size.width; q++) {
       for (let r = coords.r; r < coords.r + size.height; r++) {
         deletedTiles.push(this.deleteTile({q, r}));
+      }
+    }
+    if (deletedTiles.length > 0) {
+      if (this.map.renderOnChange && this.map.rendered) {
+        this.map.render();
       }
     }
     return deletedTiles;

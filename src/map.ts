@@ -63,6 +63,14 @@ export abstract class AbstractMap implements MapProperties, Extendable {
   protected _contents: Content[] = [];
   protected set contents(value: Content[]) { this._contents = value; }
   public get contents() : Content[] { return this._contents; }
+  
+  protected _renderOnChange: boolean = false;
+  protected set renderOnChange(value: boolean) { this._renderOnChange = value; }
+  public get renderOnChange() : boolean { return this._renderOnChange; }
+  
+  protected _rendered: boolean = false;
+  protected set rendered(value: boolean) { this._rendered = value; }
+  public get rendered() : boolean { return this._rendered; }
 
   constructor(args: MapArguments) {
     if (args.ids && typeof args.ids.map === 'number') {
@@ -157,6 +165,7 @@ export abstract class AbstractMap implements MapProperties, Extendable {
     this.elements = this.initElements();
     this.initRender(container);
     this.style.render();
+    this.rendered = true;
     for (let content of this.contents) {
       content.render();
     }
@@ -202,6 +211,11 @@ export abstract class AbstractMap implements MapProperties, Extendable {
       offset: params.offset || {top:'0', right:'0', bottom:'0', left:'0'},
     });
     this.contents.push(content);
+
+    if (this.renderOnChange && this.rendered) {
+      content.render();
+    }
+
     return new ElemapContent(content);
   }
 
@@ -212,6 +226,15 @@ export abstract class AbstractMap implements MapProperties, Extendable {
       return true;
     }
     return false;
+  }
+
+  public toggleRenderOnChange(value?: boolean) : boolean {
+    if (value !== undefined) {
+      this.renderOnChange = value;
+    } else {
+      this.renderOnChange = !this.renderOnChange;
+    }
+    return this.renderOnChange;
   }
 }
 
@@ -291,7 +314,7 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     return object as Extendable;
   }
 
-  public override render(container: HTMLElement) {
+  public override render(container?: HTMLElement) {
     this.elements = this.initElements();
     this.initRender(container);
     this.grid.render(this.elements.map!);
@@ -299,5 +322,6 @@ export abstract class AbstractGridMap<G extends AbstractGrid = AbstractGrid> ext
     for (let content of this.contents) {
       content.render();
     }
+    this.rendered = true;
   }
 }

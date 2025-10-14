@@ -131,8 +131,9 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
       }
     }
 
-    if (this.rendered) {
+    if (this.grid.map.renderOnChange && this.rendered) {
       this.render();
+      this.renderSpecific();
     }
   }
 
@@ -289,6 +290,11 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
     } else {
       this.visible = !this.visible;
     }
+
+    if (this.grid.map.renderOnChange && this.rendered) {
+      this.grid.map.render();
+    }
+
     return this.visible;
   }
 

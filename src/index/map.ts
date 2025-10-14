@@ -120,4 +120,8 @@ export class Elemap<M extends MapType = MapType.Rectangle> {
       Even: GridOffset.Even
     }
   }
+
+  public toggleRenderOnChange(value?: boolean) : boolean {
+    return this._.toggleRenderOnChange(value);
+  }
 }
