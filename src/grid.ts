@@ -109,6 +109,7 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       innerGrid: grid + `-inner`,
       contour: grid + `-contour`,
       mannequin: base + `mannequin`,
+      row: base + `row`,
       tile: base + `tile`,
       tileHidden: base + `tile-hidden`
     }
@@ -246,10 +247,12 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
       this.map.addIdToDataset(this.elements.contour);
 
       this.elements.mannequin.outerRow.classList.add(this.classes.mannequin);
+      this.elements.mannequin.outerRow.classList.add(this.classes.row);
       this.map.addIdToDataset(this.elements.mannequin.outerRow);
       this.elements.outer.appendChild(this.elements.mannequin.outerRow);
 
       this.elements.mannequin.innerRow.classList.add(this.classes.mannequin);
+      this.elements.mannequin.innerRow.classList.add(this.classes.row);
       this.map.addIdToDataset(this.elements.mannequin.innerRow);
       this.elements.inner.appendChild(this.elements.mannequin.innerRow);
 
@@ -280,11 +283,13 @@ export abstract class AbstractGrid<T extends AbstractTile = AbstractTile> implem
     for (let [y, row] of this.tiles) {
       if (typeof this.elements!.outerRows[y] === 'undefined') {
         this.elements!.outerRows[y] = document.createElement('div');
+        this.elements!.outerRows[y].classList.add(this.classes.row);
         demangleProperty(this.elements!.outerRows[y].dataset, 'coordsY', y.toString());
         this.elements!.outer.appendChild(this.elements!.outerRows[y]);
       }
       if (typeof this.elements!.innerRows[y] === 'undefined') {
         this.elements!.innerRows[y] = document.createElement('div');
+        this.elements!.innerRows[y].classList.add(this.classes.row);
         demangleProperty(this.elements!.innerRows[y].dataset, 'coordsY', y.toString());
         this.elements!.inner.appendChild(this.elements!.innerRows[y]);
       }

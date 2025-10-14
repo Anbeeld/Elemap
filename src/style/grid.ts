@@ -50,12 +50,12 @@ export default abstract class GridStyle extends Style {
       outerFrame: grid + `-frame-outer` + id,
       innerFrame: grid + `-frame-inner` + id,
       grid: grid + id,
-      row: grid + id + `>div`,
+      row: grid + id + ` .` + this.owner.classes.row,
       tile: grid + id + ` .` + this.owner.classes.tile,
       outerGrid: grid + `-outer` + id,
       innerGrid: grid + `-inner` + id,
-      outerRow: grid + `-outer` + id + `>div`,
-      innerRow: grid + `-inner` + id + `>div`,
+      outerRow: grid + `-outer` + id + ` .` + this.owner.classes.row,
+      innerRow: grid + `-inner` + id + ` .` + this.owner.classes.row,
       outerTile: grid + `-outer` + id + ` .` + this.owner.classes.tile,
       innerTile: grid + `-inner` + id + ` .` + this.owner.classes.tile,
       contour: grid + `-contour` + id,
@@ -84,7 +84,7 @@ export default abstract class GridStyle extends Style {
     `}` +
 
     this.selectors.mannequin + `{` +
-      `display:none;` +
+      `display:none!important;` +
     `}` +
 
     this.selectors.grid + `{` +
