@@ -1,4 +1,4 @@
-import { Coords, getCoordsRow, mergeDeep, Extendable, Extensions, CartesianCoords, deleteExtensions } from './utils.js';
+import { Coords, getCoordsRow, mergeDeep, Extendable, Extensions, CartesianCoords, deleteExtensions, UpdateStyleMode } from './utils.js';
 import { demangleProperties, demangleTileIds, demangleTileStyleDecls, mangleTileSnapshot, demangleCoords, demangleProperty } from './mangle.js';
 import { cssValueToNumber } from './style/utils.js';
 import { GridIdsProperties, Registry, TileIds, TileIdsProperties } from './registry.js';
@@ -118,21 +118,21 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
 
   protected abstract createStyle(decls: CustomTileStyleDecls) : TileStyle;
 
-  public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
-    if (this._style === undefined || replace) {
-      this.style = this.createStyle(modifyTileStyleDecls(decls));
+  public updateStyle(decls: CustomTileStyleDecls, mode: UpdateStyleMode = 'add') : void {
+    if (mode === 'remove') {
+      if (this._style) {
+        this.style = this.createStyle(modifyTileStyleDecls(decls, this.decls, true));
+      }
     } else {
-      this.style = this.createStyle(modifyTileStyleDecls(decls, this.decls));
+      if (this._style === undefined || mode === 'replace') {
+        this.style = this.createStyle(modifyTileStyleDecls(decls));
+      } else {
+        this.style = this.createStyle(modifyTileStyleDecls(decls, this.decls));
+      }
     }
 
     if (this.rendered) {
       this.render();
-    }
-  }
-
-  public deleteStyle(decls: CustomTileStyleDecls) : void {
-    if (this._style) {
-      this.style = this.createStyle(modifyTileStyleDecls(decls, this.decls, true));
     }
   }
 

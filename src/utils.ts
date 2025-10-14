@@ -588,3 +588,5 @@ function escapeRegExp(str: string) {
 export function replaceAll(str: string, find: string, replace: string) {
   return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
 }
+
+export type UpdateStyleMode = 'add'|'replace'|'remove';

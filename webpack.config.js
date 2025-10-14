@@ -74,7 +74,6 @@ const webConfig = {
                 'toggleVisibility',
                 'neighbors',
                 'diagonals',
-                'deleteStyle',
               ]
             }
           }

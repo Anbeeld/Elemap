@@ -2,7 +2,7 @@ import { CustomTileStyleDecls } from "../style/schema.js";
 import { demangleCoords, demangleProperties, demangleTileIds, mangleTileStyleDecls } from "../mangle.js";
 import { RectangleTile } from "../rectangle/tile.js";
 import { HexagonTile } from "../hexagon/tile.js";
-import { AxialCoords, Extensions, CartesianCoords, MapType, ArrayOfExtensions, prepareExtensionsInput } from "../utils.js";
+import { AxialCoords, Extensions, CartesianCoords, MapType, ArrayOfExtensions, prepareExtensionsInput, UpdateStyleMode } from "../utils.js";
 
 export type ElemapTileType<M> = 
   M extends MapType.Rectangle ? RectangleTile :
@@ -46,8 +46,8 @@ export class ElemapTile<M extends MapType> {
     return this._.deleteExtensions(extensions);
   }
 
-  public updateStyle(decls: CustomTileStyleDecls, replace: boolean = false) : void {
-    this._.updateStyle(mangleTileStyleDecls(decls), replace);
+  public updateStyle(decls: CustomTileStyleDecls, mode: UpdateStyleMode = 'add') : void {
+    this._.updateStyle(mangleTileStyleDecls(decls), mode);
   }
 
   public get elements() : { outer?: HTMLElement, inner?: HTMLElement } {
@@ -77,9 +77,5 @@ export class ElemapTile<M extends MapType> {
       diagonals.push(new ElemapTile<M>(diagonal as ElemapTileType<M>));
     }
     return diagonals;
-  }
-
-  public deleteStyle(decls: CustomTileStyleDecls) : void {
-    this._.deleteStyle(mangleTileStyleDecls(decls));
   }
 }
