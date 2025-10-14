@@ -103,7 +103,7 @@ export class ElemapTile<M extends MapType> {
     return this._.distanceToCoords(coords, diagonals);
   }
 
-  public alignedWithCoords(coords: ElemapCoordsType<M>|[number, number], diagonals: boolean = false) : number {
+  public alignedWithCoords(coords: ElemapCoordsType<M>|[number, number], diagonals: boolean = false) : boolean {
     if (!Array.isArray(coords)) {
       coords = demangleCoords(coords) as ElemapCoordsType<M>;
     }
