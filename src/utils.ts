@@ -429,9 +429,35 @@ export class SignedArray<V> {
   public get length() : number {
     return this.keys.length;
   }
+
+  public delete(key: number) : boolean {
+    if (key in this.keys) {
+      delete this[key];
+      return true;
+    }
+    return false;
+  }
 }
 
-export class SignedTable<V> extends SignedArray<SignedArray<V>> {}
+export class SignedTable<V> extends SignedArray<SignedArray<V>> {
+  public override delete(key: number|[number, number]) : boolean {
+    if (typeof key === 'number') {
+      if (key in this.keys) {
+        delete this[key];
+        return true;
+      }
+      return false;
+    }
+    if (key[0] in this.keys && key[1] in this[key[0]]!.keys) {
+      delete this[key[0]]![key[1]];
+      if (this[key[0]]!.length === 0) {
+        delete this[key[0]];
+      }
+      return true;
+    }
+    return false;
+  }
+}
 
 export function signedArrayfromObject<V>(object: any) {
   let signedArray = new SignedArray<V>();
