@@ -8,7 +8,10 @@
     "hexagon"
   ],
   "homepage": "https://anbeeld.com/elemap",
-  "repository": "github:Anbeeld/Elemap",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Anbeeld/Elemap.git"
+  },
   "bugs": {
     "url": "https://github.com/Anbeeld/Elemap/issues",
     "email": "anbeeld@gmail.com"
