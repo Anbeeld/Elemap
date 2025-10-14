@@ -1,3 +1,26 @@
+## 0.4.0
+
+- Renamed extend into addExtentions and shrink into deleteExtentions to make them consistent with other method names.
+- Added renderOnChange property and toggleRenderOnChange method to map class, false by default. Setting it to true will mean the map will re-render after every change that affects its visual representation, if the map was already rendered manually at least once before that.
+- Added deleteTile and deleteTiles method to grid class, with same argument system as for creation methods.
+- Added visible property and toggleVisibility method to tile class, true by default. Setting it to false allows to render tile elements without them being visible in any way except for grid size if the tile is on the edge.
+- Added neighbors getter method to tile class, returning existing tiles that are adjacent to this one, as well as diagonals method to return diagonally adjacent tiles for rectangle grids.
+- Added neighborCoords getter method to tile class, returning all coords that are adjacent to coords of this tile, as well as diagonalCoords method to return diagonally adjacent coords for rectangle grids.
+- Added distanceToCoords method to tile class, returning distance in num of tiles to specified coords, with optional diagonals arguments for rectangle grids.
+- Added alignedWithCoords method to tile class, returning true if specified coords are located in a straight line relative to this tile, with optional diagonals arguments for rectangle grids.
+- updateStyle method of tile class now support removing styles, with replace argument being swapped for mode: "add"|"replace"|"remove". If mode is set to remove and current style has declarations matching the ones passes in decls argument, these declarations will be removed from the style. Alternatively, passing "clear" string in declaration will result in removing all current declarations in that category.
+- createTiles method now takes coords as a first argument and size as a second, swapping them.
+- deleteContent method can now take HTML elements to find the element, and returns a boolean indicating if it was successfuly deleted or not.
+- Size argument now also supports arrays of two numbers, where first one is width and second one is height.
+- Added delete method to SignedArray and SignedTable classes.
+- Fixed pointer events being disabled on content HTML elements.
+- Hovering content that is located on a tile now hovers that tile as well.
+- Split container HTML element of content class into position and container.
+- Added elemap-row class to row HTML elements and elemap-tile class to tile HTML elements to make it easier to target them with selectors.
+- Moved ID imprinting on HTML elements from class names to data attributes.
+- Changed coordinates data attributes naming template from data-elemap-x to data-coords-x.
+- Fixed registry current ID not updating after importing, leading to IDs being reused if the imported snapshot contains IDs higher than the registry's current.
+
 ## 0.3.10
 
 - Fixed content export failing if its HTML elements were not initialized yet.

@@ -14,12 +14,16 @@ It goes well with my other library, [Tilted](https://github.com/anbeeld/Tilted),
 
 ## Features
 
-- Multiple types of maps tiles supported, including rectangle (square/irregular) and hexagon (pointy/flat, odd/even) at the moment.
-- HTML & CSS rendering, meaning you can easily alter, modify and extend the map, with simple JS being enough to add any required interaction.
-- Tile shapes are set using clip-path to ensure correct mouse behaviour.
+- Multiple types of maps tiles supported: rectangle (square/irregular) and hexagon (pointy/flat, odd/even).
+- Support of arbitrary map shapes, as tiles are not required to be put sequentually and can be hidden.
+- Various methods to work with the grid, like creating new tiles, getting tile neighbors, and so on.
+- HTML & CSS rendering, meaning you can easily modify the map and extend its functionality with JS.
 - Spacing between tiles, outline on hover, rounded corners, and more included by default.
 - Styling system based around CSS with the ability to set custom visuals for each tile.
-- Import and export, as well as the mutation system to store arbitrary data in Elemap objects.
+- Tile shapes are set using clip-path to ensure correct mouse behaviour.
+- Content system, allowing to set external HTML elements as related to the map or even a specific tile.
+- Extension system to store arbitrary data related to the map right in its object.
+- Export and import functionality, allowing you to retrieve the map data and recreate it if needed.
 
 ## Installation
 
@@ -41,13 +45,12 @@ More sophisticated documentation will be provided in the future.
 
 ## Future plans
 
-- Allow for maps of arbitrary forms by disabling unneeded tiles.
-- Provide methods to place HTML elements on tiles, move them between tiles and so on.
-- Implement granular re-rendering of a certain tile(s) and a mechanism to refresh map if some elements were removed from DOM.
-- Add methods for distance and pathfinding calculations.
-- Add plain map (without tile grid) and more tile types.
+- Fix severely lacking error handling and validation of user input.
+- Add a rich set of methods to work with tiles and content, like moving it between tiles and so on.
+- Implement more granular re-rendering of map HTML elements.
+- Add tile calculations such as pathfinding, range, rotation, etc.
+- Add plain map (without tile grid) and more tile types, including arbitrary shapes.
 - Provide clear usage documentation.
-- Improve styling system for better validation of provided config and more options to alter map visuals.
 - Ensure best possible performance.
 - Improve overall code quality.
 - ...more to come
