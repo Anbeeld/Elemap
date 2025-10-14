@@ -78,6 +78,7 @@ const webConfig = {
                 'diagonalCoords',
                 'diagonals',
                 'distanceToCoords',
+                'alignedWithCoords',
               ]
             }
           }

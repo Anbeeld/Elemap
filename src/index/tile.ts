@@ -102,4 +102,12 @@ export class ElemapTile<M extends MapType> {
     // @ts-ignore
     return this._.distanceToCoords(coords, diagonals);
   }
+
+  public alignedWithCoords(coords: ElemapCoordsType<M>|[number, number], diagonals: boolean = false) : number {
+    if (!Array.isArray(coords)) {
+      coords = demangleCoords(coords) as ElemapCoordsType<M>;
+    }
+    // @ts-ignore
+    return this._.alignedWithCoords(coords, diagonals);
+  }
 }

@@ -602,3 +602,23 @@ export function axialDistance(a: AxialCoords, b: AxialCoords) {
           + Math.abs(a.q + a.r - b.q - b.r)
           + Math.abs(a.r - b.r)) / 2;
 }
+
+export function alignedCarthesianCoords(a: CartesianCoords, b: CartesianCoords, diagonals: boolean) : boolean {
+  if (a.x === b.x || a.y === b.y) {
+    return true;
+  }
+
+  if (diagonals) {
+    const dx = Math.abs(a.x - b.x);
+    const dy = Math.abs(a.y - b.y);
+    if (dx === dy) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export function alignedAxialCoords(a: AxialCoords, b: AxialCoords) : boolean {
+  return a.q === b.q || a.r === b.r || (a.q + a.r) === (b.q + b.r);
+}

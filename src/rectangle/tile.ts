@@ -1,5 +1,5 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { CartesianCoords, carthesianDistance, rectangeDiagonals, rectangeNeighbors } from '../utils.js';
+import { alignedCarthesianCoords, CartesianCoords, carthesianDistance, rectangeDiagonals, rectangeNeighbors } from '../utils.js';
 import { demangleProperty } from '../mangle.js';
 import { Registry } from '../registry.js';
 import RectangleTileStyle from '../style/rectangle/tile.js';
@@ -86,5 +86,10 @@ export class RectangleTile extends AbstractTile<CartesianCoords> {
   public override distanceToCoords(coords: CartesianCoords|[number, number], diagonals: boolean) : number {
     coords = this.grid.prepareCoordsInput(coords) as CartesianCoords;
     return carthesianDistance(this.coords, coords, diagonals);
+  }
+
+  public override alignedWithCoords(coords: CartesianCoords|[number, number], diagonals: boolean) : boolean {
+    coords = this.grid.prepareCoordsInput(coords) as CartesianCoords;
+    return alignedCarthesianCoords(this.coords, coords, diagonals);
   }
 }

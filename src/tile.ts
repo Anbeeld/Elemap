@@ -304,4 +304,5 @@ export abstract class AbstractTile<C extends Coords = Coords> implements TilePro
   public abstract get diagonals() : AbstractTile[];
 
   public abstract distanceToCoords(coords: Coords|[number, number], diagonals: boolean) : number;
+  public abstract alignedWithCoords(coords: Coords|[number, number], diagonals: boolean) : boolean;
 }
