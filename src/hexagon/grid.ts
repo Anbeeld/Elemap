@@ -79,7 +79,7 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return false;
   }
 
-  public createTiles(coords: AxialCoords|CartesianCoords|[number, number], size: Size, replace: boolean) : (AxialCoords|CartesianCoords|false)[] {
+  public createTiles(coords: AxialCoords|CartesianCoords|[number, number], size: Size|[number, number], replace: boolean) : (AxialCoords|CartesianCoords|false)[] {
     size = normalizeSize(size);
     let createdTiles: (AxialCoords|CartesianCoords|false)[] = [];
     if (Array.isArray(coords)) {
@@ -131,7 +131,7 @@ export class HexagonGrid extends AbstractGrid<HexagonTile> {
     return false;
   }
 
-  public override deleteTiles(coords: AxialCoords|CartesianCoords|[number, number], size: Size) : boolean[] {
+  public override deleteTiles(coords: AxialCoords|CartesianCoords|[number, number], size: Size|[number, number]) : boolean[] {
     size = normalizeSize(size);
     let deletedTiles: boolean[] = [];
     if (Array.isArray(coords)) {

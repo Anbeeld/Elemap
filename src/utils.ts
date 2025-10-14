@@ -1,10 +1,8 @@
 import { cssValueToNumber } from './style/utils.js';
 
-type SizeAsObject = { width: number, height: number };  
-type SizeAsArray = [number, number];
-export type Size = SizeAsObject|SizeAsArray;
+export type Size = { width: number, height: number };
 
-export function normalizeSize(size: Size) : SizeAsObject {
+export function normalizeSize(size: Size|[number, number]) : Size {
   if (Array.isArray(size)) {
     return { width: size[0], height: size[1] }
   }

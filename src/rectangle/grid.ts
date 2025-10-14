@@ -48,7 +48,7 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     return false;
   }
 
-  public createTiles(coords: CartesianCoords|[number, number], size: Size, replace: boolean) :  (CartesianCoords|false)[] {
+  public createTiles(coords: CartesianCoords|[number, number], size: Size|[number, number], replace: boolean) :  (CartesianCoords|false)[] {
     size = normalizeSize(size);
     let createdTiles: (CartesianCoords|false)[] = [];
     if (Array.isArray(coords)) {
@@ -113,7 +113,7 @@ export class RectangleGrid extends AbstractGrid<RectangleTile> {
     return false;
   }
 
-  public override deleteTiles(coords: CartesianCoords|[number, number], size: Size): boolean[] {
+  public override deleteTiles(coords: CartesianCoords|[number, number], size: Size|[number, number]): boolean[] {
     size = normalizeSize(size);
     let deletedTiles: boolean[] = [];
     if (Array.isArray(coords)) {

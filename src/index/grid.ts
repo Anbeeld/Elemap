@@ -66,9 +66,9 @@ export class ElemapGrid<M extends MapType> {
     return false;
   }
 
-  public createTiles(coords: ElemapCoords<M>|[number, number], size: Size, replace: boolean = false) : (ElemapTile<M>|false)[] {
+  public createTiles(coords: ElemapCoords<M>|[number, number], size: Size|[number, number], replace: boolean = false) : (ElemapTile<M>|false)[] {
     // @ts-ignore coords &
-    let createdTilesCoords = this._.createTiles(size, coords, replace);
+    let createdTilesCoords = this._.createTiles(coords, size, replace);
     let createdTiles: (ElemapTile<M>|false)[] = [];
     for (let createdTileCoords of createdTilesCoords) {
       if (createdTileCoords) {
@@ -96,7 +96,7 @@ export class ElemapGrid<M extends MapType> {
     return this._.deleteTile(Array.isArray(coords) ? coords : mangleCoords(coords));
   }
 
-  public deleteTiles(coords: AccessCoords<M>|[number, number], size: Size) : boolean[] {
+  public deleteTiles(coords: AccessCoords<M>|[number, number], size: Size|[number, number]) : boolean[] {
     // @ts-ignore coords &
     return this._.deleteTiles(Array.isArray(coords) ? coords : mangleCoords(coords), size);
   }
