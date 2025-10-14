@@ -77,6 +77,7 @@ const webConfig = {
                 'neighbors',
                 'diagonalCoords',
                 'diagonals',
+                'distanceToCoords',
               ]
             }
           }

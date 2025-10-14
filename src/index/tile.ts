@@ -94,4 +94,12 @@ export class ElemapTile<M extends MapType> {
     }
     return diagonals;
   }
+
+  public distanceToCoords(coords: ElemapCoordsType<M>|[number, number], diagonals: boolean = false) : number {
+    if (!Array.isArray(coords)) {
+      coords = demangleCoords(coords) as ElemapCoordsType<M>;
+    }
+    // @ts-ignore
+    return this._.distanceToCoords(coords, diagonals);
+  }
 }

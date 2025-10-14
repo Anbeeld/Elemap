@@ -590,3 +590,15 @@ export function replaceAll(str: string, find: string, replace: string) {
 }
 
 export type UpdateStyleMode = 'add'|'replace'|'remove';
+
+export function carthesianDistance(a: CartesianCoords, b : CartesianCoords, diagonals: boolean) : number {
+  let dx = Math.abs(a.x - b.x);
+  let dy = Math.abs(a.y - b.y);
+  return diagonals ? Math.max(dx, dy) : dx + dy;
+}
+
+export function axialDistance(a: AxialCoords, b: AxialCoords) {
+  return (Math.abs(a.q - b.q) 
+          + Math.abs(a.q + a.r - b.q - b.r)
+          + Math.abs(a.r - b.r)) / 2;
+}

@@ -1,5 +1,5 @@
 import { AbstractTile, TileArguments, TileSnapshot } from '../tile.js';
-import { AxialCoords, axialCoordsToCartesian, CartesianCoords, hexagonNeighbors } from '../utils.js';
+import { AxialCoords, axialCoordsToCartesian, axialDistance, CartesianCoords, cartesianCoordsToAxial, hexagonNeighbors, isCartesianCoords } from '../utils.js';
 import { demangleProperty } from '../mangle.js';
 import { Registry } from '../registry.js';
 import { TileStyleDecls } from '../style/schema.js';
@@ -85,5 +85,13 @@ export class HexagonTile extends AbstractTile<AxialCoords> {
 
   public override get diagonals() : HexagonTile[] {
     return [];
+  }
+
+  public override distanceToCoords(coords: AxialCoords|CartesianCoords|[number, number]) : number {
+    coords = this.grid.prepareCoordsInput(coords) as AxialCoords|CartesianCoords;
+    if (isCartesianCoords(coords)) {
+      coords = cartesianCoordsToAxial(coords as CartesianCoords, this.grid.orientation, this.grid.offset);
+    }
+    return axialDistance(this.coords, coords as AxialCoords);
   }
 }
